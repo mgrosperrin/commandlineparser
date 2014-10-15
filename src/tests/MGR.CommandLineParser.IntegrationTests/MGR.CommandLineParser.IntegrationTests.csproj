@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7FD4CEB3-040B-4581-9B7C-EF8CB99B0951}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MGR.CommandLineParser.IntegrationTests</RootNamespace>
+    <AssemblyName>MGR.CommandLineParser.IntegrationTests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="xunit">
+      <HintPath>..\..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\CommonFiles\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\CommonFiles\VersionAssemblyInfo.cs">
+      <Link>Properties\VersionAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Commands\DeleteCommand.cs" />
+    <Compile Include="Commands\InstallCommand.cs" />
+    <Compile Include="Commands\IntTestCommand.cs" />
+    <Compile Include="Commands\ListCommand.cs" />
+    <Compile Include="Commands\PackCommand.cs" />
+    <Compile Include="Commands\PublishCommand.cs" />
+    <Compile Include="Commands\PushCommand.cs" />
+    <Compile Include="Commands\SetApiKeyCommand.cs" />
+    <Compile Include="Commands\SourcesCommand.cs" />
+    <Compile Include="Commands\SpecCommand.cs" />
+    <Compile Include="Commands\UpdateCommand.cs" />
+    <Compile Include="ParsingTests\ErrorParsingTests.cs" />
+    <Compile Include="ParsingTests\ParseCommandTests\ParseDeleteCommandTests.cs" />
+    <Compile Include="ParsingTests\ParseCommandTests\ParseInstallCommandTests.cs" />
+    <Compile Include="ParsingTests\ParseCommandTests\ParseIntTestCommandTests.cs" />
+    <Compile Include="ParsingTests\ParseCommandTests\ParseListCommandTests.cs" />
+    <Compile Include="ParsingTests\ParseCommandTests\ParsePackCommandTests.cs" />
+    <Compile Include="ParsingTests\ParseCommandTests\ParsePublishCommandTests.cs" />
+    <Compile Include="ParsingTests\ParseCommandTests\ParsePushCommandTests.cs" />
+    <Compile Include="ParsingTests\ParseCommandTests\ParseSetApiKeyCommandTests.cs" />
+    <Compile Include="ParsingTests\ParseCommandTests\ParseSourcesCommandTests.cs" />
+    <Compile Include="ParsingTests\ParseCommandTests\ParseSpecCommandTests.cs" />
+    <Compile Include="ParsingTests\ParseCommandTests\ParseUpdateCommandTests.cs" />
+    <Compile Include="ParsingTests\ParseUniqueCommandTests\ParseUniqueIntTestCommandTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MGR.CommandLineParser\MGR.CommandLineParser.csproj">
+      <Project>{ef6019c2-2c4d-4874-bbbf-d76ca30f7e8d}</Project>
+      <Name>MGR.CommandLineParser</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
