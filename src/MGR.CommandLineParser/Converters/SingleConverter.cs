@@ -27,7 +27,7 @@ namespace MGR.CommandLineParser.Converters
         {
             try
             {
-                return Single.Parse(value, CultureInfo.CurrentCulture);
+                return Single.Parse(value, CultureInfo.CurrentUICulture);
             }
             catch (FormatException exception)
             {

@@ -31,7 +31,7 @@ namespace MGR.CommandLineParser.Converters
         {
             try
             {
-                return DateTime.Parse(value, CultureInfo.CurrentCulture);
+                return DateTime.Parse(value, CultureInfo.CurrentUICulture);
             }
             catch (FormatException exception)
             {

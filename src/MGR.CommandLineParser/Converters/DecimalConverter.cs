@@ -29,7 +29,7 @@ namespace MGR.CommandLineParser.Converters
         {
             try
             {
-                return Decimal.Parse(value, CultureInfo.CurrentCulture);
+                return Decimal.Parse(value, CultureInfo.CurrentUICulture);
             }
             catch (FormatException exception)
             {

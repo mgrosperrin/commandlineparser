@@ -29,7 +29,7 @@ namespace MGR.CommandLineParser.Converters
         {
             try
             {
-                return Byte.Parse(value, CultureInfo.CurrentCulture);
+                return Byte.Parse(value, CultureInfo.CurrentUICulture);
             }
             catch (FormatException exception)
             {
