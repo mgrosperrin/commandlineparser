@@ -13,7 +13,8 @@
 [Rr]eleases/
 x64/
 x86/
-build/
+build/*
+!build/nuget.*
 bld/
 [Bb]in/
 [Oo]bj/
