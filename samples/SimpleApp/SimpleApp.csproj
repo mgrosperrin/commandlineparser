@@ -87,7 +87,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MGR.CommandLineParser\MGR.CommandLineParser.csproj">
+    <ProjectReference Include="..\..\src\MGR.CommandLineParser\MGR.CommandLineParser.csproj">
       <Project>{ef6019c2-2c4d-4874-bbbf-d76ca30f7e8d}</Project>
       <Name>MGR.CommandLineParser</Name>
     </ProjectReference>
