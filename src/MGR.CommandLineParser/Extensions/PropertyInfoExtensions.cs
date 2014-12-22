@@ -41,14 +41,14 @@ namespace System.Reflection
             {
                 throw new ArgumentNullException("options");
             }
+            if (propertySource.ShouldBeIgnored())
+            {
+                return null;
+            }
             if (!propertySource.IsValidOptionProperty())
             {
                 throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "The option '{0}' of the command '{1}' must be writable or implements ICollection<T>.",
                                                                    propertySource.Name, commandMetadataTemplate.Name));
-            }
-            if (propertySource.ShouldBeIgnored())
-            {
-                return null;
             }
             var metadata = new OptionMetadataTemplate(propertySource, commandMetadataTemplate);
 
