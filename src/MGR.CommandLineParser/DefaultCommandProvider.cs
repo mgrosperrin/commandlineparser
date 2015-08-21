@@ -17,41 +17,45 @@ namespace MGR.CommandLineParser
             _commands.Clear();
             using (var catalog = new AggregateCatalog())
             {
-                string thisDirectory = new Uri(Path.GetDirectoryName(typeof(DefaultCommandProvider).Assembly.CodeBase)).AbsolutePath ?? string.Empty;
-                Assembly entryAssembly = Assembly.GetEntryAssembly();
-                if (entryAssembly != null) // could be null in test context or if the main executable is not .Net
+                var directory = Path.GetDirectoryName(typeof (DefaultCommandProvider).Assembly.CodeBase);
+                if (!string.IsNullOrEmpty(directory))
                 {
-                    string entryDirectory = Path.GetDirectoryName(entryAssembly.CodeBase);
-                    if (thisDirectory.Equals(entryDirectory, StringComparison.OrdinalIgnoreCase))
+                    string thisDirectory = new Uri(directory).AbsolutePath;
+                    Assembly entryAssembly = Assembly.GetEntryAssembly();
+                    if (entryAssembly != null) // could be null in test context or if the main executable is not .Net
                     {
-                        catalog.Catalogs.Add(new AssemblyCatalog(entryAssembly));
+                        string entryDirectory = Path.GetDirectoryName(entryAssembly.CodeBase);
+                        if (thisDirectory.Equals(entryDirectory, StringComparison.OrdinalIgnoreCase))
+                        {
+                            catalog.Catalogs.Add(new AssemblyCatalog(entryAssembly));
+                        }
                     }
-                }
-                foreach (var item in Directory.EnumerateFiles(thisDirectory, "*.dll", SearchOption.AllDirectories))
-                {
-                    try
+                    foreach (var item in Directory.EnumerateFiles(thisDirectory, "*.dll", SearchOption.AllDirectories))
                     {
-                        catalog.Catalogs.Add(new AssemblyCatalog(item));
+                        try
+                        {
+                            catalog.Catalogs.Add(new AssemblyCatalog(item));
+                        }
+                        catch (BadImageFormatException)
+                        {
+                            // Ignore if the dll wasn't a valid assembly
+                        }
                     }
-                    catch (BadImageFormatException)
+                    foreach (var item in Directory.EnumerateFiles(thisDirectory, "*.exe", SearchOption.AllDirectories))
                     {
-                        // Ignore if the dll wasn't a valid assembly
+                        try
+                        {
+                            catalog.Catalogs.Add(new AssemblyCatalog(item));
+                        }
+                        catch (BadImageFormatException)
+                        {
+                            // Ignore if the dll wasn't a valid assembly
+                        }
                     }
-                }
-                foreach (var item in Directory.EnumerateFiles(thisDirectory, "*.exe", SearchOption.AllDirectories))
-                {
-                    try
+                    using (var container = new CompositionContainer(catalog))
                     {
-                        catalog.Catalogs.Add(new AssemblyCatalog(item));
-                    }
-                    catch (BadImageFormatException)
-                    {
-                        // Ignore if the dll wasn't a valid assembly
-                    }
-                }
-                using (var container = new CompositionContainer(catalog))
-                {
-                    _commands.AddRange(container.GetExportedValues<ICommand>());
+                        _commands.AddRange(container.GetExportedValues<ICommand>());
+                    } 
                 }
             }
         }
