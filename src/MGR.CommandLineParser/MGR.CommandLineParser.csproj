@@ -85,6 +85,7 @@
     <Compile Include="Converters\UriConverter.cs" />
     <Compile Include="DefaultCommandProvider.cs" />
     <Compile Include="DefaultConsole.cs" />
+    <Compile Include="DefaultServiceResolver.cs" />
     <Compile Include="Extensions\CommandExtensions.cs" />
     <Compile Include="Extensions\ConverterAttributeExtensions.cs" />
     <Compile Include="Extensions\ConverterExtensions.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="ICommandProvider.cs" />
     <Compile Include="IConsole.cs" />
     <Compile Include="IParserOptions.cs" />
+    <Compile Include="IServiceResolver.cs" />
     <Compile Include="Properties\JetBrains.Annotations.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="ParserOptions.cs" />
@@ -103,6 +105,7 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="ReadOnlyParserOptions.cs" />
+    <Compile Include="ServiceProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Strings.fr-fr.resx" />
