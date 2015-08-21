@@ -12,7 +12,7 @@ namespace MGR.CommandLineParser
     /// <summary>
     /// Represents a parser.
     /// </summary>
-    public sealed class Parser
+    public sealed class Parser : IParser
     {
         #region Public static methods
 
@@ -20,7 +20,7 @@ namespace MGR.CommandLineParser
         /// Creates a new instance of <see cref="Parser"/> with the default options.
         /// </summary>
         /// <returns>A new instance of <see cref="Parser"/>.</returns>
-        public static Parser Create()
+        public static IParser Create()
         {
             return Create(new ParserOptions());
         }
@@ -30,7 +30,7 @@ namespace MGR.CommandLineParser
         /// </summary>
         /// <param name="options">The <see cref="ParserOptions"/> to use to initialize the parser.</param>
         /// <returns>A new instance of <see cref="Parser"/>.</returns>
-        public static Parser Create(ParserOptions options)
+        public static IParser Create(ParserOptions options)
         {
             return new Parser(options);
         }
@@ -41,7 +41,7 @@ namespace MGR.CommandLineParser
         /// <param name="console">The custom <see cref="IConsole"/>.</param>
         /// <returns>A new instance of <see cref="Parser"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="console"/> is null.</exception>
-        public static Parser WithCustomConsole(IConsole console)
+        public static IParser WithCustomConsole(IConsole console)
         {
             if (console == null)
             {
@@ -56,7 +56,7 @@ namespace MGR.CommandLineParser
         /// <param name="commandProvider">The custom <see cref="ICommandProvider"/>.</param>
         /// <returns>A new instance of <see cref="Parser"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="commandProvider"/> is null.</exception>
-        public static Parser WithCustomCommandProvider(ICommandProvider commandProvider)
+        public static IParser WithCustomCommandProvider(ICommandProvider commandProvider)
         {
             if (commandProvider == null)
             {
@@ -84,7 +84,7 @@ namespace MGR.CommandLineParser
         /// <param name="console">The new <see cref="IConsole"/>.</param>
         /// <returns>The <see cref="Parser"/> with the new <see cref="IConsole"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="console"/> is null.</exception>
-        public Parser DefineConsole(IConsole console)
+        public IParser DefineConsole(IConsole console)
         {
             if (console == null)
             {
@@ -108,7 +108,7 @@ namespace MGR.CommandLineParser
         /// <param name="commandProvider">The new <see cref="ICommandProvider"/>.</param>
         /// <returns>The <see cref="Parser"/> with the new <see cref="ICommandProvider"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="commandProvider"/> is null.</exception>
-        public Parser DefineCommandProvider(ICommandProvider commandProvider)
+        public IParser DefineCommandProvider(ICommandProvider commandProvider)
         {
             if (commandProvider == null)
             {
@@ -132,7 +132,7 @@ namespace MGR.CommandLineParser
         /// <param name="logo">The new logo.</param>
         /// <returns>The <see cref="Parser"/> with the new logo.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="logo"/> is null.</exception>
-        public Parser DefineLogo(string logo)
+        public IParser DefineLogo(string logo)
         {
             if (logo == null)
             {
@@ -155,7 +155,7 @@ namespace MGR.CommandLineParser
         /// <param name="commandLineName">The new name of the executable to run.</param>
         /// <returns>The <see cref="Parser"/> with the new <see cref="ICommandProvider"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="commandLineName"/> is null.</exception>
-        public Parser DefineCommandLineName(string commandLineName)
+        public IParser DefineCommandLineName(string commandLineName)
         {
             if (commandLineName == null)
             {
@@ -179,7 +179,7 @@ namespace MGR.CommandLineParser
         /// <param name="converter">The new <see cref="IConverter"/>.</param>
         /// <returns>The <see cref="Parser"/> with the new <see cref="IConverter"/> added to the <seealso cref="Converters"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="converter"/> is null.</exception>
-        public Parser DefineConverter(IConverter converter)
+        public IParser DefineConverter(IConverter converter)
         {
             if (converter == null)
             {
@@ -196,7 +196,7 @@ namespace MGR.CommandLineParser
         /// <param name="overwrite">true to overwrites existing <see cref="IConverter"/>.</param>
         /// <returns>The <see cref="Parser"/> with the new <see cref="ICommandProvider"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="converter"/> is null.</exception>
-        public Parser DefineConverter(IConverter converter, bool overwrite)
+        public IParser DefineConverter(IConverter converter, bool overwrite)
         {
             if (converter == null)
             {

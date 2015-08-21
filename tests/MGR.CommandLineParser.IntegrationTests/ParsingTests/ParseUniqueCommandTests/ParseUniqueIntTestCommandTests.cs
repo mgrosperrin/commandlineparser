@@ -11,7 +11,7 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseUniqueCommand
         public void ParseWithValidArgs()
         {
             // Arrange
-            Parser parser = Parser.Create();
+            IParser parser = Parser.Create();
             IEnumerable<string> args = new[] {"-Strvalue:custom value", "-i", "42", "Custom argument value", "-b"};
             var expectedReturnCode = CommandResultCode.Ok;
             string expectedStrValue = "custom value";
@@ -38,7 +38,7 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseUniqueCommand
         public void ParseWithValidListArgs()
         {
             // Arrange
-            Parser parser = Parser.Create();
+            IParser parser = Parser.Create();
             IEnumerable<string> args = new[]
                 {"-Strvalue:custom value", "-i", "42", "-il", "42", "Custom argument value", "-b"};
             var expectedReturnCode = CommandResultCode.Ok;
@@ -68,7 +68,7 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseUniqueCommand
         public void ParseWithInvalidArgs()
         {
             // Arrange
-            Parser parser = Parser.Create();
+            IParser parser = Parser.Create();
             IEnumerable<string> args = new[] {"-i", "42", "Custom argument value", "-b"};
             var expectedReturnCode = CommandResultCode.CommandParameterNotValid;
             int expectedNbOfArguments = 1;

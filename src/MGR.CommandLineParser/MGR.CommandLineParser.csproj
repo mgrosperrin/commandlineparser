@@ -95,6 +95,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ICommandProvider.cs" />
     <Compile Include="IConsole.cs" />
+    <Compile Include="IParser.cs" />
     <Compile Include="IParserOptions.cs" />
     <Compile Include="IServiceResolver.cs" />
     <Compile Include="Properties\JetBrains.Annotations.cs" />

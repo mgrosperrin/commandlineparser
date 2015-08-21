@@ -10,7 +10,7 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests
         public void ParseWithoutParameter()
         {
             // Arrange
-            Parser parser = Parser.Create();
+            IParser parser = Parser.Create();
             IEnumerable<string> args = null;
             CommandResultCode expectedReturnCode = CommandResultCode.NoArgs;
 
@@ -27,7 +27,7 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests
         public void ParseWithEmptyParameter()
         {
             // Arrange
-            Parser parser = Parser.Create();
+            IParser parser = Parser.Create();
             IEnumerable<string> args = new List<string>();
             CommandResultCode expectedReturnCode = CommandResultCode.NoCommandName;
 
@@ -44,7 +44,7 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests
         public void ParseWithBadCommandName()
         {
             // Arrange
-            Parser parser = Parser.Create();
+            IParser parser = Parser.Create();
             IEnumerable<string> args = new[] {"NotValid", "-option:true"};
             CommandResultCode expectedReturnCode = CommandResultCode.NoCommandFound;
 
