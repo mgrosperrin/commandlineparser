@@ -7,7 +7,6 @@ namespace MGR.CommandLineParser
 {
     internal sealed class ReadOnlyParserOptions : IParserOptions
     {
-        public IConsole Console { get; private set; }
 
         public ICommandProvider CommandProvider { get; private set; }
 
@@ -21,9 +20,8 @@ namespace MGR.CommandLineParser
         {
             if (options == null)
             {
-                throw new ArgumentNullException("options");
+                throw new ArgumentNullException(nameof(options));
             }
-            Console = options.Console;
             CommandProvider = options.CommandProvider;
             Logo = options.Logo;
             CommandLineName = options.CommandLineName;

@@ -12,8 +12,6 @@ namespace MGR.CommandLineParser
         [NotNull]
         ICommandProvider CommandProvider { get; }
         [NotNull]
-        IConsole Console { get; }
-        [NotNull]
         IEnumerable<IConverter> Converters { get; }
         [NotNull]
         string Logo { get; }

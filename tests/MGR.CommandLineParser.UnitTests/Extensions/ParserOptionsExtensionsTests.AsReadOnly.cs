@@ -15,13 +15,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void ReadOnlyParserTest()
             {
                 // Arrange
-                var consoleMock = new Mock<IConsole>();
                 var commandProviderMock = new Mock<ICommandProvider>();
                 var parserOptionsMock = new Mock<IParserOptions>();
                 parserOptionsMock.SetupGet(mock => mock.CommandLineName).Returns("MyCommandLine");
                 parserOptionsMock.SetupGet(mock => mock.Logo).Returns("MySuperLogo");
                 parserOptionsMock.SetupGet(mock => mock.CommandProvider).Returns(commandProviderMock.Object);
-                parserOptionsMock.SetupGet(mock => mock.Console).Returns(consoleMock.Object);
                 parserOptionsMock.SetupGet(mock => mock.Converters).Returns(new List<IConverter>());
 
                 // Act
@@ -30,7 +28,6 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Assert
                 Assert.NotNull(actual);
                 Assert.IsType<ReadOnlyParserOptions>(actual);
-                Assert.Equal(consoleMock.Object, actual.Console);
                 Assert.Equal(commandProviderMock.Object, actual.CommandProvider);
                 Assert.Equal(0, actual.Converters.Count());
             }

@@ -9,10 +9,6 @@ namespace MGR.CommandLineParser
     public interface IParserOptions
     {
         /// <summary>
-        /// The implementation of <see cref="IConsole"/> used by the parser.
-        /// </summary>
-        IConsole Console { get; }
-        /// <summary>
         /// The implementation of <see cref="ICommandProvider"/> used by the parser.
         /// </summary>
         ICommandProvider CommandProvider { get; }

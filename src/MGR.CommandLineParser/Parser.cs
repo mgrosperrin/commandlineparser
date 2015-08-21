@@ -22,14 +22,6 @@ namespace MGR.CommandLineParser
             }
             return argsEnumerator.Current;
         }
-        
-        /// <summary>
-        /// Gets the <see cref="IConsole"/> used by the parser.
-        /// </summary>
-        public IConsole Console
-        {
-            get { return _options.Console; }
-        }
 
         /// <summary>
         /// Gets the <see cref="ICommandProvider"/> used by the parser.
@@ -133,11 +125,6 @@ namespace MGR.CommandLineParser
                 WriteHelp();
                 return new CommandResult<ICommand>(null, CommandResultCode.NoCommandFound);
             }
-            var commandBase = command as CommandBase;
-            if (commandBase != null)
-            {
-                commandBase.DefineConsole(_options.Console);
-            }
             var commandMetadata = command.ExtractMetadata(_options);
             ExtractCommandLineOptions(commandMetadata, argsEnumerator);
             Tuple<bool, List<ValidationResult>> validation = Validate(command);
@@ -171,13 +158,14 @@ namespace MGR.CommandLineParser
             var isValid = Validator.TryValidateObject(command, validationContext, results, true);
             if (!isValid)
             {
-                Console.WriteError("Command {0} : invalid arguments :", command.ExtractCommandName());
+                var console = ServiceResolver.Current.ResolveService<IConsole>();
+                console.WriteError("Command {0} : invalid arguments :", command.ExtractCommandName());
                 foreach (var validation in results)
                 {
-                    Console.WriteError(string.Format(CultureInfo.CurrentUICulture, "-{0} :", validation.ErrorMessage));
+                    console.WriteError(string.Format(CultureInfo.CurrentUICulture, "-{0} :", validation.ErrorMessage));
                     foreach (string memberName in validation.MemberNames)
                     {
-                        Console.WriteError(string.Format(CultureInfo.CurrentUICulture, "  -{0}", memberName));
+                        console.WriteError(string.Format(CultureInfo.CurrentUICulture, "  -{0}", memberName));
                     }
                 }
             }

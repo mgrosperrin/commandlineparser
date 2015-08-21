@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using MGR.CommandLineParser.Properties;
@@ -7,26 +6,66 @@ using MGR.CommandLineParser.Properties;
 namespace MGR.CommandLineParser.Command
 {
     /// <summary>
-    /// Defines the default implementation of the <see cref="IHelpCommand"/>.
+    ///     Defines the default implementation of the <see cref="IHelpCommand" />.
     /// </summary>
     public sealed class HelpCommand : CommandBase, IHelpCommand
     {
         /// <summary>
-        /// Name of the help command.
+        ///     Name of the help command.
         /// </summary>
         public const string Name = "Help";
+
+        private IParserOptions _options;
+
         /// <summary>
-        /// Gets or sets the <see cref="IHelpCommand"/> used by the parser.
+        ///     Gets or sets the <see cref="IHelpCommand" /> used by the parser.
         /// </summary>
         public static IHelpCommand Current { get; set; }
 
-        private IParserOptions _options;
         /// <summary>
-        /// Show detailled help for all commands.
+        ///     Show detailled help for all commands.
         /// </summary>
         public bool All { get; set; }
+
         /// <summary>
-        /// Executes the command.
+        ///     Writes help for the specified command. If the command is null, lists all available commands.
+        /// </summary>
+        /// <param name="command">The <see cref="ICommand" />.</param>
+        public void WriteHelp(ICommand command)
+        {
+            var console = ServiceResolver.Current.ResolveService<IConsole>();
+            if (command == null)
+            {
+                if (All)
+                {
+                    WriteHelpForAllCommand(console);
+                }
+                else
+                {
+                    WriteGeneralHelp(console);
+                }
+            }
+            else
+            {
+                WriteHelpForCommand(console, command);
+            }
+        }
+
+        /// <summary>
+        ///     Defines the parser options.
+        /// </summary>
+        /// <param name="options"><see cref="IParserOptions" />The options.</param>
+        public void DefineOptions(IParserOptions options)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+            _options = options;
+        }
+
+        /// <summary>
+        ///     Executes the command.
         /// </summary>
         /// <returns>Return 0 is everything was right, an negative error code otherwise.</returns>
         protected override int ExecuteCommand()
@@ -35,76 +74,42 @@ namespace MGR.CommandLineParser.Command
             WriteHelp(command);
             return 0;
         }
-        /// <summary>
-        /// Writes help for the specified command. If the command is null, lists all available commands.
-        /// </summary>
-        /// <param name="command">The <see cref="ICommand"/>.</param>
-        public void WriteHelp(ICommand command)
-        {
-            if (command == null)
-            {
-                if (All)
-                {
-                    WriteHelpForAllCommand();
-                }
-                else
-                {
-                    WriteGeneralHelp();
-                }
-            }
-            else
-            {
-                WriteHelpForCommand(command);
-            }
-        }
-        /// <summary>
-        /// Defines the parser options.
-        /// </summary>
-        /// <param name="options"><see cref="IParserOptions"/>The options.</param>
-        public void DefineOptions(IParserOptions options)
-        {
-            if (options == null)
-            {
-                throw new ArgumentNullException("options");
-            }
-            _options = options;
-        }
 
-        private void WriteHelpForAllCommand()
+        private void WriteHelpForAllCommand(IConsole console)
         {
-            WriteGeneralInformation();
+            WriteGeneralInformation(console);
             var commands = _options.CommandProvider.AllCommands;
             foreach (var command in commands)
             {
-                _options.Console.WriteLine(string.Format(CultureInfo.CurrentUICulture, Strings.HelpCommand_CommandTitleFormat, command.ExtractCommandName()));
-                WriteHelpForCommand(command);
+                console.WriteLine(string.Format(CultureInfo.CurrentUICulture, Strings.HelpCommand_CommandTitleFormat, command.ExtractCommandName()));
+                WriteHelpForCommand(console, command);
             }
         }
 
-        private void WriteHelpForCommand(ICommand command)
+        private void WriteHelpForCommand(IConsole console, ICommand command)
         {
             if (command == null)
             {
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
             }
             var metadata = command.ExtractMetadataTemplate(_options);
-            _options.Console.WriteLine(_options.Logo);
-            _options.Console.WriteLine(Strings.HelpCommand_CommandUsageFormat, _options.CommandLineName, metadata.Name, metadata.Usage);
-            _options.Console.WriteLine(metadata.Description);
-            _options.Console.WriteLine();
+            console.WriteLine(_options.Logo);
+            console.WriteLine(Strings.HelpCommand_CommandUsageFormat, _options.CommandLineName, metadata.Name, metadata.Usage);
+            console.WriteLine(metadata.Description);
+            console.WriteLine();
 
             if (metadata.Options.Any())
             {
-                _options.Console.WriteLine(Strings.HelpCommand_OptionsListTitle);
-                int maxOptionWidth = metadata.Options.Max(o => o.Name.Length) + 2;
-                int maxAltOptionWidth = metadata.Options.Max(o => (o.ShortName ?? String.Empty).Length);
+                console.WriteLine(Strings.HelpCommand_OptionsListTitle);
+                var maxOptionWidth = metadata.Options.Max(o => o.Name.Length) + 2;
+                var maxAltOptionWidth = metadata.Options.Max(o => (o.ShortName ?? string.Empty).Length);
                 foreach (var optionMetadata in metadata.Options)
                 {
-                    _options.Console.Write(" -{0, -" + (maxOptionWidth + 2) + "}", optionMetadata.Name + GetMultiValueIndicator(optionMetadata));
-                    _options.Console.Write(" {0, -" + (maxAltOptionWidth + 4) + "}", FormatShortName(optionMetadata.ShortName));
+                    console.Write(" -{0, -" + (maxOptionWidth + 2) + "}", optionMetadata.Name + GetMultiValueIndicator(optionMetadata));
+                    console.Write(" {0, -" + (maxAltOptionWidth + 4) + "}", FormatShortName(optionMetadata.ShortName));
 
-                    _options.Console.PrintJustified((10 + maxAltOptionWidth + maxOptionWidth), optionMetadata.Description);
-                    _options.Console.WriteLine();
+                    console.PrintJustified((10 + maxAltOptionWidth + maxOptionWidth), optionMetadata.Description);
+                    console.WriteLine();
                 }
             }
 
@@ -113,7 +118,7 @@ namespace MGR.CommandLineParser.Command
             {
                 foreach (var usage in usageCommand.Samples)
                 {
-                    _options.Console.WriteLine(usage);
+                    console.WriteLine(usage);
                 }
             }
         }
@@ -131,30 +136,30 @@ namespace MGR.CommandLineParser.Command
             return string.Empty;
         }
 
-        private void WriteGeneralHelp()
+        private void WriteGeneralHelp(IConsole console)
         {
-            WriteGeneralInformation();
+            WriteGeneralInformation(console);
 
-            List<CommandMetadataTemplate> metadatas = _options.CommandProvider.AllCommands.Select(command => command.ExtractCommandMetadataTemplate()).ToList();
-            int maxNameLength = metadatas.Max(m => m.Name.Length);
+            var metadatas = _options.CommandProvider.AllCommands.Select(command => command.ExtractCommandMetadataTemplate()).ToList();
+            var maxNameLength = metadatas.Max(m => m.Name.Length);
             foreach (var metadata in metadatas)
             {
-                _options.Console.Write(" {0, -" + maxNameLength + "}   ", metadata.Name);
+                console.Write(" {0, -" + maxNameLength + "}   ", metadata.Name);
                 // Starting index of the description
-                int descriptionPadding = maxNameLength + 4;
-                _options.Console.PrintJustified(descriptionPadding, metadata.Description);
-                _options.Console.WriteLine();
+                var descriptionPadding = maxNameLength + 4;
+                console.PrintJustified(descriptionPadding, metadata.Description);
+                console.WriteLine();
             }
         }
 
-        private void WriteGeneralInformation()
+        private void WriteGeneralInformation(IConsole console)
         {
-            _options.Console.WriteLine(_options.Logo);
-            _options.Console.WriteLine(Strings.HelpCommand_GlobalUsageFormat, string.Format(CultureInfo.CurrentUICulture, Strings.HelpCommand_GlobalCommandLineCommandFormat, _options.CommandLineName).Trim());
-            _options.Console.WriteLine(Strings.HelpCommand_GlobalHelpCommandUsageFormat, string.Format(CultureInfo.CurrentUICulture, "{0} {1}", _options.CommandLineName, Name).Trim());
-            _options.Console.WriteLine();
-            _options.Console.WriteLine(Strings.HelpCommand_GlobalHelp_AvailableCommands);
-            _options.Console.WriteLine();
+            console.WriteLine(_options.Logo);
+            console.WriteLine(Strings.HelpCommand_GlobalUsageFormat, string.Format(CultureInfo.CurrentUICulture, Strings.HelpCommand_GlobalCommandLineCommandFormat, _options.CommandLineName).Trim());
+            console.WriteLine(Strings.HelpCommand_GlobalHelpCommandUsageFormat, string.Format(CultureInfo.CurrentUICulture, "{0} {1}", _options.CommandLineName, Name).Trim());
+            console.WriteLine();
+            console.WriteLine(Strings.HelpCommand_GlobalHelp_AvailableCommands);
+            console.WriteLine();
         }
 
         private static string FormatShortName(string shortName)

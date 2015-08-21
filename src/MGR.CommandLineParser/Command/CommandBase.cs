@@ -11,16 +11,6 @@ namespace MGR.CommandLineParser.Command
     /// </summary>
     public abstract class CommandBase : ICommand
     {
-        private IConsole _console;
-
-        /// <summary>
-        ///   Gets the console used by the parser (if the command needs to writes something).
-        /// </summary>
-        protected IConsole Console
-        {
-            get { return _console; }
-        }
-
         /// <summary>
         ///   Initializes a new instance of a <see cref="CommandBase" /> .
         /// </summary>
@@ -59,14 +49,5 @@ namespace MGR.CommandLineParser.Command
         /// </summary>
         /// <returns> Return 0 is everything was right, an negative error code otherwise. </returns>
         protected abstract int ExecuteCommand();
-
-        internal void DefineConsole(IConsole console)
-        {
-            if (console == null)
-            {
-                throw new ArgumentNullException("console");
-            }
-            _console = console;
-        }
     }
 }
