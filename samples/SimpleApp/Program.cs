@@ -7,7 +7,9 @@ namespace SimpleApp
         private static int Main(string[] args)
         {
             string[] arguments = new[] { "pack", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "-Build", "-Properties", "Configuration=Release", "-Exclude", "Test", "-Symbols" };
-            var commandResult = Parser.Create().Parse(arguments);
+            var parserBuild = new ParserBuilder();
+            var parser = parserBuild.BuildParser();
+            var commandResult = parser.Parse(arguments);
             if (commandResult.IsValid)
             {
                 return commandResult.Execute();

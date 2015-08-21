@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using MGR.CommandLineParser.Converters;
 
 namespace MGR.CommandLineParser
@@ -69,7 +70,7 @@ namespace MGR.CommandLineParser
             return services;
         }
 
-        public static void RegisterService<T>(Func<T> serviceFactory)
+        public static void RegisterService<T>([NotNull]Func<T> serviceFactory)
         {
             var serviceType = typeof (T);
             if (SinglyRegistredServices.ContainsKey(serviceType))

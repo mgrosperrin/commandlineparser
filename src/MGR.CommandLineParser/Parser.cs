@@ -14,59 +14,6 @@ namespace MGR.CommandLineParser
     /// </summary>
     public sealed class Parser : IParser
     {
-        #region Public static methods
-
-        /// <summary>
-        /// Creates a new instance of <see cref="Parser"/> with the default options.
-        /// </summary>
-        /// <returns>A new instance of <see cref="Parser"/>.</returns>
-        public static IParser Create()
-        {
-            return Create(new ParserOptions());
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="Parser"/> with the specified <paramref name="options"/>.
-        /// </summary>
-        /// <param name="options">The <see cref="ParserOptions"/> to use to initialize the parser.</param>
-        /// <returns>A new instance of <see cref="Parser"/>.</returns>
-        public static IParser Create(ParserOptions options)
-        {
-            return new Parser(options);
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="Parser"/> with a custom <see cref="IConsole"/>.
-        /// </summary>
-        /// <param name="console">The custom <see cref="IConsole"/>.</param>
-        /// <returns>A new instance of <see cref="Parser"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="console"/> is null.</exception>
-        public static IParser WithCustomConsole(IConsole console)
-        {
-            if (console == null)
-            {
-                throw new ArgumentNullException("console");
-            }
-            return Create(new ParserOptions {Console = console});
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="Parser"/> with a custom <see cref="ICommandProvider"/>.
-        /// </summary>
-        /// <param name="commandProvider">The custom <see cref="ICommandProvider"/>.</param>
-        /// <returns>A new instance of <see cref="Parser"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="commandProvider"/> is null.</exception>
-        public static IParser WithCustomCommandProvider(ICommandProvider commandProvider)
-        {
-            if (commandProvider == null)
-            {
-                throw new ArgumentNullException("commandProvider");
-            }
-            return Create(new ParserOptions {CommandProvider = commandProvider});
-        }
-
-        #endregion
-
         private static string GetNextCommandLineItem(IEnumerator<string> argsEnumerator)
         {
             if (argsEnumerator == null || !argsEnumerator.MoveNext())
@@ -75,25 +22,7 @@ namespace MGR.CommandLineParser
             }
             return argsEnumerator.Current;
         }
-
-        #region Parser options customization
-
-        /// <summary>
-        /// Redefines a new custom <see cref="IConsole"/>.
-        /// </summary>
-        /// <param name="console">The new <see cref="IConsole"/>.</param>
-        /// <returns>The <see cref="Parser"/> with the new <see cref="IConsole"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="console"/> is null.</exception>
-        public IParser DefineConsole(IConsole console)
-        {
-            if (console == null)
-            {
-                throw new ArgumentNullException("console");
-            }
-            _options.Console = console;
-            return this;
-        }
-
+        
         /// <summary>
         /// Gets the <see cref="IConsole"/> used by the parser.
         /// </summary>
@@ -103,43 +32,11 @@ namespace MGR.CommandLineParser
         }
 
         /// <summary>
-        /// Redefines a new custom <see cref="ICommandProvider"/>.
-        /// </summary>
-        /// <param name="commandProvider">The new <see cref="ICommandProvider"/>.</param>
-        /// <returns>The <see cref="Parser"/> with the new <see cref="ICommandProvider"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="commandProvider"/> is null.</exception>
-        public IParser DefineCommandProvider(ICommandProvider commandProvider)
-        {
-            if (commandProvider == null)
-            {
-                throw new ArgumentNullException("commandProvider");
-            }
-            _options.CommandProvider = commandProvider;
-            return this;
-        }
-
-        /// <summary>
         /// Gets the <see cref="ICommandProvider"/> used by the parser.
         /// </summary>
         public ICommandProvider CommandProvider
         {
             get { return _options.CommandProvider; }
-        }
-
-        /// <summary>
-        /// Redefines a new custom logo.
-        /// </summary>
-        /// <param name="logo">The new logo.</param>
-        /// <returns>The <see cref="Parser"/> with the new logo.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="logo"/> is null.</exception>
-        public IParser DefineLogo(string logo)
-        {
-            if (logo == null)
-            {
-                throw new ArgumentNullException("logo");
-            }
-            _options.Logo = logo;
-            return this;
         }
         /// <summary>
         /// Gets the logo used by the parser.
@@ -147,22 +44,6 @@ namespace MGR.CommandLineParser
         public string Logo
         {
             get { return _options.Logo; }
-        }
-
-        /// <summary>
-        /// Redefines a new custom name of the executable to run.
-        /// </summary>
-        /// <param name="commandLineName">The new name of the executable to run.</param>
-        /// <returns>The <see cref="Parser"/> with the new <see cref="ICommandProvider"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="commandLineName"/> is null.</exception>
-        public IParser DefineCommandLineName(string commandLineName)
-        {
-            if (commandLineName == null)
-            {
-                throw new ArgumentNullException("commandLineName");
-            }
-            _options.CommandLineName = commandLineName;
-            return this;
         }
 
         /// <summary>
@@ -174,53 +55,18 @@ namespace MGR.CommandLineParser
         }
 
         /// <summary>
-        /// Add a new custom <see cref="IConverter"/> if no <see cref="IConverter"/> is defined with the same <seealso cref="IConverter.TargetType"/>.
-        /// </summary>
-        /// <param name="converter">The new <see cref="IConverter"/>.</param>
-        /// <returns>The <see cref="Parser"/> with the new <see cref="IConverter"/> added to the <seealso cref="Converters"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="converter"/> is null.</exception>
-        public IParser DefineConverter(IConverter converter)
-        {
-            if (converter == null)
-            {
-                throw new ArgumentNullException("converter");
-            }
-            DefineConverter(converter, true /* Default Value */);
-            return this;
-        }
-
-        /// <summary>
-        /// Add a new custom <see cref="IConverter"/> and possibly overwrites if an <see cref="IConverter"/> is defined with the same <seealso cref="IConverter.TargetType"/>.
-        /// </summary>
-        /// <param name="converter">The new <see cref="IConverter"/>.</param>
-        /// <param name="overwrite">true to overwrites existing <see cref="IConverter"/>.</param>
-        /// <returns>The <see cref="Parser"/> with the new <see cref="ICommandProvider"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="converter"/> is null.</exception>
-        public IParser DefineConverter(IConverter converter, bool overwrite)
-        {
-            if (converter == null)
-            {
-                throw new ArgumentNullException("converter");
-            }
-            _options.DefineConverter(converter, overwrite);
-            return this;
-        }
-
-        /// <summary>
         /// Gets the collection of <see cref="IConverter"/> used by the parser.
         /// </summary>
         public IEnumerable<IConverter> Converters
         {
             get { return _options.Converters.AsEnumerable(); }
         }
+        
+        private readonly IParserOptions _options;
 
-        #endregion
-
-        private readonly ParserOptions _options;
-
-        private Parser(ParserOptions options)
+        internal Parser(IParserOptions options)
         {
-            _options = options.ConsolidateOptions();
+            _options = options;
         }
 
         /// <summary>

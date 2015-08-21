@@ -98,6 +98,8 @@
     <Compile Include="IParser.cs" />
     <Compile Include="IParserOptions.cs" />
     <Compile Include="IServiceResolver.cs" />
+    <Compile Include="ParserBuilder.cs" />
+    <Compile Include="ParserBuilderOptions.cs" />
     <Compile Include="Properties\JetBrains.Annotations.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="ParserOptions.cs" />
@@ -106,7 +108,7 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="ReadOnlyParserOptions.cs" />
-    <Compile Include="ServiceProvider.cs" />
+    <Compile Include="ServiceResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Strings.fr-fr.resx" />

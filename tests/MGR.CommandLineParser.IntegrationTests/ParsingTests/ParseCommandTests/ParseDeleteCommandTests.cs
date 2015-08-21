@@ -12,7 +12,8 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
         public void ParseWithValidArgs()
         {
             // Arrange
-            IParser parser = Parser.Create();
+            var parserBuild = new ParserBuilder();
+            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] { "delete", "-Source:custom value", "-np", "-ApiKey", "MyApiKey", "Custom argument value", "b" };
             CommandResultCode expectedReturnCode = CommandResultCode.Ok;
             string expectedSource = "custom value";
@@ -42,7 +43,8 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
         public void ParseWithInValidArgs()
         {
             // Arrange
-            IParser parser = Parser.Create();
+            var parserBuild = new ParserBuilder();
+            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] { "delete", "-Source:custom value", "-pn", "ApiKey", "MyApiKey", "Custom argument value", "b" };
             string expectedMessageException = @"There is no option 'pn' for the command 'Delete'.";
 
