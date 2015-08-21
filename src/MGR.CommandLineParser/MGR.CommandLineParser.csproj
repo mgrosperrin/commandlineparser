@@ -95,6 +95,7 @@
     <Compile Include="ICommandProvider.cs" />
     <Compile Include="IConsole.cs" />
     <Compile Include="IParserOptions.cs" />
+    <Compile Include="Properties\JetBrains.Annotations.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="ParserOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
