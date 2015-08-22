@@ -60,19 +60,10 @@ namespace MGR.CommandLineParser
             }
         }
 
-        public IEnumerable<ICommand> AllCommands
-        {
-            get { return _commands.OrderBy(command => command.ExtractCommandName()).AsEnumerable(); }
-        }
+        public IEnumerable<ICommand> GetAllCommands() => _commands.OrderBy(command => command.ExtractCommandName()).AsEnumerable();
 
-        public IHelpCommand GetHelpCommand()
-        {
-            return GetCommand(HelpCommand.Name) as IHelpCommand;
-        }
+        public IHelpCommand GetHelpCommand() => GetCommand(HelpCommand.Name) as IHelpCommand;
 
-        public ICommand GetCommand(string commandName)
-        {
-            return _commands.SingleOrDefault(command => command.ExtractCommandName().Equals(commandName, StringComparison.OrdinalIgnoreCase));
-        }
+        public ICommand GetCommand(string commandName) => _commands.SingleOrDefault(command => command.ExtractCommandName().Equals(commandName, StringComparison.OrdinalIgnoreCase));
     }
 }

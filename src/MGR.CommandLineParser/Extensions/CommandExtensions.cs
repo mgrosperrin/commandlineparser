@@ -21,16 +21,16 @@ namespace MGR.CommandLineParser.Command
         {
             if (commandSource == null)
             {
-                throw new ArgumentNullException("commandSource");
+                throw new ArgumentNullException(nameof(commandSource));
             }
             return commandSource.ExtractCommandMetadataTemplate().Name;
         }
 
-        internal static CommandMetadataTemplate ExtractMetadataTemplate(this ICommand command, IParserOptions options)
+        internal static CommandMetadataTemplate ExtractMetadataTemplate(this ICommand command)
         {
             if (command == null)
             {
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
             }
             Type commandType = command.GetType();
             lock (CommandMetadataCacheLockObject)
@@ -40,7 +40,7 @@ namespace MGR.CommandLineParser.Command
                     var metadata = ExtractCommandMetadataTemplate(command);
                     foreach (PropertyInfo propInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != "Arguments"))
                     {
-                        OptionMetadataTemplate optionMetadata = propInfo.ExtractMetadata(metadata, options);
+                        OptionMetadataTemplate optionMetadata = propInfo.ExtractMetadata(metadata);
                         if (optionMetadata != null)
                         {
                             metadata.Options.Add(optionMetadata);
@@ -52,16 +52,16 @@ namespace MGR.CommandLineParser.Command
             }
         }
 
-        internal static CommandMetadata ExtractMetadata(this ICommand command, IParserOptions options)
+        internal static CommandMetadata ExtractMetadata(this ICommand command)
         {
-            return ExtractMetadataTemplate(command, options).ToCommandMetadata(command);
+            return ExtractMetadataTemplate(command).ToCommandMetadata(command);
         }
 
         internal static CommandMetadataTemplate ExtractCommandMetadataTemplate(this ICommand command)
         {
             if (command == null)
             {
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
             }
             lock (SimpleCommandMetadataCacheLockObject)
             {

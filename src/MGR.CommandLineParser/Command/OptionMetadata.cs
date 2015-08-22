@@ -54,12 +54,8 @@ namespace MGR.CommandLineParser.Command
             }
         }
 
-        internal void AssignValue(string option, IParserOptions options)
+        internal void AssignValue(string option)
         {
-            if (options == null)
-            {
-                throw new ArgumentNullException("options");
-            }
             if (!OptionType.IsAssignableFrom(Converter.TargetType))
             {
                 throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "The specified converter is not valid : target type is '{1}' and option type is '{0}'.", OptionType,

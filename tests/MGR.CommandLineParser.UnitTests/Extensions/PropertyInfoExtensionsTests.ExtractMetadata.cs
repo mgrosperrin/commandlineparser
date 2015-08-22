@@ -30,13 +30,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void IgnoredPropertyTests()
             {
                 // Arrange
-                string expectedName = TypeHelpers.ExtractPropertyName(() => IgnoredProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var expectedName = TypeHelpers.ExtractPropertyName(() => IgnoredProperty);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate {Name = "MyCommand"};
-                IParserOptions parserOptions = new ParserOptions();
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractMetadata(commandMetadata, parserOptions);
+                var actual = propertyInfo.ExtractMetadata(commandMetadata);
 
                 // Assert
                 Assert.Null(actual);
@@ -46,14 +45,13 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomPropertyTests()
             {
                 // Arrange
-                string expectedName = "MyCustomName";
-                string expectedShortName = "mcn";
-                PropertyInfo propertyInfo = GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomProperty));
+                var expectedName = "MyCustomName";
+                var expectedShortName = "mcn";
+                var propertyInfo = GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomProperty));
                 var commandMetadata = new CommandMetadataTemplate {Name = "MyCommand"};
-                IParserOptions parserOptions = new ParserOptions();
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractMetadata(commandMetadata, parserOptions);
+                var actual = propertyInfo.ExtractMetadata(commandMetadata);
 
                 // Assert
                 Assert.NotNull(actual);
@@ -68,33 +66,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 PropertyInfo propertyInfo = null;
-                IParserOptions parserOptions = new ParserOptions();
                 var commandMetadata = new CommandMetadataTemplate();
-                string expectedExceptionMessage = @"propertySource";
+                var expectedExceptionMessage = @"propertySource";
 
                 // Act
                 var actualException =
                     Assert.Throws<ArgumentNullException>(
-                        () => propertyInfo.ExtractMetadata(commandMetadata, parserOptions));
-
-                // Assert
-                Assert.Equal(expectedExceptionMessage, actualException.ParamName);
-            }
-
-            [Fact]
-            public void NullOptionsException()
-            {
-                // Arrange
-                PropertyInfo propertyInfo =
-                    GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => OriginalProperty));
-                IParserOptions parserOptions = null;
-                var commandMetadata = new CommandMetadataTemplate();
-                string expectedExceptionMessage = @"options";
-
-                // Act
-                var actualException =
-                    Assert.Throws<ArgumentNullException>(
-                        () => propertyInfo.ExtractMetadata(commandMetadata, parserOptions));
+                        // ReSharper disable once ExpressionIsAlwaysNull
+                        () => propertyInfo.ExtractMetadata(commandMetadata));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);
@@ -104,16 +83,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void NullMetadataException()
             {
                 // Arrange
-                PropertyInfo propertyInfo =
+                var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => OriginalProperty));
-                IParserOptions parserOptions = new ParserOptions();
                 CommandMetadataTemplate commandMetadata = null;
-                string expectedExceptionMessage = @"commandMetadataTemplate";
+                var expectedExceptionMessage = @"commandMetadataTemplate";
 
                 // Act
-                var actualException =
-                    Assert.Throws<ArgumentNullException>(
-                        () => propertyInfo.ExtractMetadata(commandMetadata, parserOptions));
+                // ReSharper disable once ExpressionIsAlwaysNull
+                var actualException = Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractMetadata(commandMetadata));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);
@@ -123,17 +100,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void NonWritablePropertyInfoException()
             {
                 // Arrange
-                PropertyInfo propertyInfo =
+                var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => NonWritableProperty));
-                IParserOptions parserOptions = new ParserOptions();
                 var commandMetadata = new CommandMetadataTemplate {Name = "MyCommand"};
-                string expectedExceptionMessage =
+                var expectedExceptionMessage =
                     "The option 'NonWritableProperty' of the command 'MyCommand' must be writable or implements ICollection<T>.";
 
                 // Act
-                var actualException =
-                    Assert.Throws<CommandLineParserException>(
-                        () => propertyInfo.ExtractMetadata(commandMetadata, parserOptions));
+                var actualException = Assert.Throws<CommandLineParserException>(() => propertyInfo.ExtractMetadata(commandMetadata));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.Message);

@@ -16,10 +16,11 @@ namespace MGR.CommandLineParser
         /// </summary>
         /// <remarks>The command provider should create new instance of commands only when the BuildCommands method is called.</remarks>
         void BuildCommands();
+
         /// <summary>
         /// Returns all commands instances.
         /// </summary>
-        IEnumerable<ICommand> AllCommands { get; }
+        IEnumerable<ICommand> GetAllCommands();
         /// <summary>
         /// Retrieve the instance of the <see cref="IHelpCommand"/>.
         /// </summary>

@@ -21,25 +21,21 @@ namespace System.Reflection
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             return source.CanWrite || source.PropertyType.IsMultiValuedType();
         }
 
         [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ICollection")]
-        internal static OptionMetadataTemplate ExtractMetadata(this PropertyInfo propertySource, CommandMetadataTemplate commandMetadataTemplate, IParserOptions options)
+        internal static OptionMetadataTemplate ExtractMetadata(this PropertyInfo propertySource, CommandMetadataTemplate commandMetadataTemplate)
         {
             if (propertySource == null)
             {
-                throw new ArgumentNullException("propertySource");
+                throw new ArgumentNullException(nameof(propertySource));
             }
             if (commandMetadataTemplate == null)
             {
-                throw new ArgumentNullException("commandMetadataTemplate");
-            }
-            if (options == null)
-            {
-                throw new ArgumentNullException("options");
+                throw new ArgumentNullException(nameof(commandMetadataTemplate));
             }
             if (propertySource.ShouldBeIgnored())
             {
@@ -56,7 +52,7 @@ namespace System.Reflection
 
             metadata = propertySource.ExtractRequiredMetadata(metadata);
 
-            metadata = propertySource.ExtractConverterMetadata(options, metadata);
+            metadata = propertySource.ExtractConverterMetadata(metadata);
 
             metadata = propertySource.ExtractDefaultValue(metadata);
 
@@ -65,25 +61,21 @@ namespace System.Reflection
 
         [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TValue"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TKey"),
          SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "KeyValueConverter"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "IDictionary")]
-        internal static OptionMetadataTemplate ExtractConverterMetadata(this PropertyInfo propertySource, IParserOptions options, OptionMetadataTemplate metadata)
+        internal static OptionMetadataTemplate ExtractConverterMetadata(this PropertyInfo propertySource, OptionMetadataTemplate metadata)
         {
             if (propertySource == null)
             {
-                throw new ArgumentNullException("propertySource");
-            }
-            if (options == null)
-            {
-                throw new ArgumentNullException("options");
+                throw new ArgumentNullException(nameof(propertySource));
             }
             if (metadata == null)
             {
-                throw new ArgumentNullException("metadata");
+                throw new ArgumentNullException(nameof(metadata));
             }
 
             var converterAttribute = propertySource.GetCustomAttributes(typeof(ConverterAttribute), true).FirstOrDefault() as ConverterAttribute;
             if (converterAttribute != null)
             {
-                IConverter converter = converterAttribute.BuildConverter();
+                var converter = converterAttribute.BuildConverter();
 
                 if (!converter.CanConvertTo(propertySource.PropertyType))
                 {
@@ -102,8 +94,8 @@ namespace System.Reflection
                         throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "The option '{0}' of the command '{1}' defined a Key/Value converter but its type is not System.Generic.IDictionary<TKey, TValue>.",
                                                                            metadata.Name, metadata.CommandMetadata.Name));
                     }
-                    Type keyType = propertySource.PropertyType.GetUnderlyingDictionaryType(true);
-                    IConverter keyConverter = converterKeyValuePairAttribute.BuildKeyConverter();
+                    var keyType = propertySource.PropertyType.GetUnderlyingDictionaryType(true);
+                    var keyConverter = converterKeyValuePairAttribute.BuildKeyConverter();
                     if (!keyType.IsAssignableFrom(keyConverter.TargetType))
                     {
                         throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture,
@@ -111,8 +103,8 @@ namespace System.Reflection
                                                                            metadata.Name, metadata.CommandMetadata.Name, keyType.FullName, keyConverter.TargetType.FullName));
                     }
 
-                    Type valueType = propertySource.PropertyType.GetUnderlyingDictionaryType(false);
-                    IConverter valueConverter = converterKeyValuePairAttribute.BuildValueConverter();
+                    var valueType = propertySource.PropertyType.GetUnderlyingDictionaryType(false);
+                    var valueConverter = converterKeyValuePairAttribute.BuildValueConverter();
                     if (!valueType.IsAssignableFrom(valueConverter.TargetType))
                     {
                         throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture,
@@ -123,10 +115,11 @@ namespace System.Reflection
                 }
                 else
                 {
+                    var converters = ServiceResolver.Current.ResolveServices<IConverter>().ToList();
                     if (propertySource.PropertyType.IsDictionaryType())
                     {
-                        Type keyType = propertySource.PropertyType.GetUnderlyingDictionaryType(true);
-                        IConverter keyConverter = (from kvp in options.Converters
+                        var keyType = propertySource.PropertyType.GetUnderlyingDictionaryType(true);
+                        var keyConverter = (from kvp in converters
                                                    where kvp.CanConvertTo(keyType)
                                                    select kvp).FirstOrDefault();
                         if (keyConverter == null)
@@ -135,8 +128,8 @@ namespace System.Reflection
                                                                                metadata.Name, metadata.CommandMetadata.Name, keyType.FullName));
                         }
 
-                        Type valueType = propertySource.PropertyType.GetUnderlyingDictionaryType(false);
-                        IConverter valueConverter = (from kvp in options.Converters
+                        var valueType = propertySource.PropertyType.GetUnderlyingDictionaryType(false);
+                        var valueConverter = (from kvp in converters
                                                      where kvp.CanConvertTo(valueType)
                                                      select kvp).FirstOrDefault();
                         if (valueConverter == null)
@@ -148,7 +141,7 @@ namespace System.Reflection
                     }
                     else
                     {
-                        IConverter converter = (from kvp in options.Converters
+                        var converter = (from kvp in converters
                                                 where kvp.CanConvertTo(propertySource.PropertyType)
                                                 select kvp).FirstOrDefault();
 
@@ -169,11 +162,11 @@ namespace System.Reflection
         {
             if (propertySource == null)
             {
-                throw new ArgumentNullException("propertySource");
+                throw new ArgumentNullException(nameof(propertySource));
             }
             if (metadata == null)
             {
-                throw new ArgumentNullException("metadata");
+                throw new ArgumentNullException(nameof(metadata));
             }
             var requiredAttribute = propertySource.GetCustomAttributes(typeof(RequiredAttribute), true).FirstOrDefault() as RequiredAttribute;
             if (requiredAttribute != null)
@@ -187,11 +180,11 @@ namespace System.Reflection
         {
             if (propertySource == null)
             {
-                throw new ArgumentNullException("propertySource");
+                throw new ArgumentNullException(nameof(propertySource));
             }
             if (metadata == null)
             {
-                throw new ArgumentNullException("metadata");
+                throw new ArgumentNullException(nameof(metadata));
             }
             var displayAttribute = propertySource.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
             if (displayAttribute == null)
@@ -202,7 +195,7 @@ namespace System.Reflection
             else
             {
                 metadata.Name = displayAttribute.GetName() ?? propertySource.Name;
-                string shortName = displayAttribute.GetShortName();
+                var shortName = displayAttribute.GetShortName();
                 if (!string.IsNullOrEmpty(shortName))
                 {
                     metadata.ShortName = shortName;
@@ -216,18 +209,18 @@ namespace System.Reflection
         {
             if (propertySource == null)
             {
-                throw new ArgumentNullException("propertySource");
+                throw new ArgumentNullException(nameof(propertySource));
             }
             if (metadata == null)
             {
-                throw new ArgumentNullException("metadata");
+                throw new ArgumentNullException(nameof(metadata));
             }
             if (!propertySource.PropertyType.IsMultiValuedType())
             {
                 var defaultValueAttribute = propertySource.GetCustomAttributes(typeof(DefaultValueAttribute), true).OfType<DefaultValueAttribute>().FirstOrDefault();
                 if (defaultValueAttribute != null)
                 {
-                    object defaultValue = defaultValueAttribute.Value;
+                    var defaultValue = defaultValueAttribute.Value;
                     if (defaultValue != null)
                     {
                         if (metadata.OptionType == defaultValue.GetType())
@@ -236,7 +229,7 @@ namespace System.Reflection
                         }
                         else
                         {
-                            object conververtedDefaultValue = metadata.Converter.Convert(defaultValue.ToString(), metadata.OptionType);
+                            var conververtedDefaultValue = metadata.Converter.Convert(defaultValue.ToString(), metadata.OptionType);
                             metadata.DefaultValue = conververtedDefaultValue;
                         }
                     }
@@ -254,7 +247,7 @@ namespace System.Reflection
         {
             if (propertySource == null)
             {
-                throw new ArgumentNullException("propertySource");
+                throw new ArgumentNullException(nameof(propertySource));
             }
             return propertySource.GetCustomAttributes(typeof(IgnoreOptionPropertyAttribute), true).Any();
         }

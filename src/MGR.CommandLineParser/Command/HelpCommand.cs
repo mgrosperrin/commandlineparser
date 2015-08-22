@@ -34,15 +34,16 @@ namespace MGR.CommandLineParser.Command
         public void WriteHelp(ICommand command)
         {
             var console = ServiceResolver.Current.ResolveService<IConsole>();
+            var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
             if (command == null)
             {
                 if (All)
                 {
-                    WriteHelpForAllCommand(console);
+                    WriteHelpForAllCommand(console, commandProvider);
                 }
                 else
                 {
-                    WriteGeneralHelp(console);
+                    WriteGeneralHelp(console, commandProvider);
                 }
             }
             else
@@ -70,15 +71,16 @@ namespace MGR.CommandLineParser.Command
         /// <returns>Return 0 is everything was right, an negative error code otherwise.</returns>
         protected override int ExecuteCommand()
         {
-            var command = _options.CommandProvider.GetCommand(Arguments.FirstOrDefault());
+            var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
+            var command = commandProvider.GetCommand(Arguments.FirstOrDefault());
             WriteHelp(command);
             return 0;
         }
 
-        private void WriteHelpForAllCommand(IConsole console)
+        private void WriteHelpForAllCommand(IConsole console, ICommandProvider commandProvider)
         {
             WriteGeneralInformation(console);
-            var commands = _options.CommandProvider.AllCommands;
+            var commands = commandProvider.GetAllCommands();
             foreach (var command in commands)
             {
                 console.WriteLine(string.Format(CultureInfo.CurrentUICulture, Strings.HelpCommand_CommandTitleFormat, command.ExtractCommandName()));
@@ -92,7 +94,7 @@ namespace MGR.CommandLineParser.Command
             {
                 throw new ArgumentNullException(nameof(command));
             }
-            var metadata = command.ExtractMetadataTemplate(_options);
+            var metadata = command.ExtractMetadataTemplate();
             console.WriteLine(_options.Logo);
             console.WriteLine(Strings.HelpCommand_CommandUsageFormat, _options.CommandLineName, metadata.Name, metadata.Usage);
             console.WriteLine(metadata.Description);
@@ -136,11 +138,11 @@ namespace MGR.CommandLineParser.Command
             return string.Empty;
         }
 
-        private void WriteGeneralHelp(IConsole console)
+        private void WriteGeneralHelp(IConsole console, ICommandProvider commandProvider)
         {
             WriteGeneralInformation(console);
 
-            var metadatas = _options.CommandProvider.AllCommands.Select(command => command.ExtractCommandMetadataTemplate()).ToList();
+            var metadatas = commandProvider.GetAllCommands().Select(command => command.ExtractCommandMetadataTemplate()).ToList();
             var maxNameLength = metadatas.Max(m => m.Name.Length);
             foreach (var metadata in metadatas)
             {

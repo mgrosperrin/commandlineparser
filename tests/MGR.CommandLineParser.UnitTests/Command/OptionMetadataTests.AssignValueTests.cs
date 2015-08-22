@@ -19,21 +19,13 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Arrange
                 var testCommand = new TestCommand();
                 testCommand.PropertyList = new List<int>();
-                var parserOptionsMock = new Mock<IParserOptions>();
-                parserOptionsMock.SetupGet(mock => mock.Converters)
-                    .Returns(new List<IConverter>
-                    {
-                        new Int32Converter(),
-                        new StringConverter(),
-                        new GuidConverter()
-                    });
-                CommandMetadata commandMetadata = testCommand.ExtractMetadata(parserOptionsMock.Object);
+                CommandMetadata commandMetadata = testCommand.ExtractMetadata();
                 int expected = 42;
                 int expectedLength = 1;
                 string option = "42";
 
                 // Act
-                commandMetadata.GetOption("PropertyList").AssignValue(option, parserOptionsMock.Object);
+                commandMetadata.GetOption("PropertyList").AssignValue(option);
 
                 // Assert
                 Assert.NotNull(testCommand.PropertyList);
@@ -48,22 +40,14 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Arrange
                 var testCommand = new TestCommand();
                 testCommand.PropertyDictionary = new Dictionary<string, Guid>();
-                var parserOptionsMock = new Mock<IParserOptions>();
-                parserOptionsMock.SetupGet(mock => mock.Converters)
-                    .Returns(new List<IConverter>
-                    {
-                        new Int32Converter(),
-                        new StringConverter(),
-                        new GuidConverter()
-                    });
-                CommandMetadata commandMetadata = testCommand.ExtractMetadata(parserOptionsMock.Object);
+                CommandMetadata commandMetadata = testCommand.ExtractMetadata();
                 string expectedKey = "keyTest";
                 Guid expectedValue = Guid.Parse("18591394-096C-476F-A8B7-71903E27DAB5");
                 int expectedLength = 1;
                 string option = "keyTest=18591394-096C-476F-A8B7-71903E27DAB5";
 
                 // Act
-                commandMetadata.GetOption("PropertyDictionary").AssignValue(option, parserOptionsMock.Object);
+                commandMetadata.GetOption("PropertyDictionary").AssignValue(option);
 
                 // Assert
                 Assert.NotNull(testCommand.PropertyDictionary);
@@ -80,20 +64,12 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Arrange
                 var testCommand = new TestCommand();
                 testCommand.PropertyList = new List<int>();
-                var parserOptionsMock = new Mock<IParserOptions>();
-                parserOptionsMock.SetupGet(mock => mock.Converters)
-                    .Returns(new List<IConverter>
-                    {
-                        new Int32Converter(),
-                        new StringConverter(),
-                        new GuidConverter()
-                    });
-                CommandMetadata commandMetadata = testCommand.ExtractMetadata(parserOptionsMock.Object);
+                CommandMetadata commandMetadata = testCommand.ExtractMetadata();
                 int expected = 42;
                 string option = "42";
 
                 // Act
-                commandMetadata.GetOption("PropertySimple").AssignValue(option, parserOptionsMock.Object);
+                commandMetadata.GetOption("PropertySimple").AssignValue(option);
 
                 // Assert
                 Assert.Equal(expected, testCommand.PropertySimple);
@@ -105,15 +81,7 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Arrange
                 var testCommand = new TestCommand();
                 testCommand.PropertyList = new List<int>();
-                var parserOptionsMock = new Mock<IParserOptions>();
-                parserOptionsMock.SetupGet(mock => mock.Converters)
-                    .Returns(new List<IConverter>
-                    {
-                        new Int32Converter(),
-                        new StringConverter(),
-                        new GuidConverter()
-                    });
-                CommandMetadata commandMetadata = testCommand.ExtractMetadata(parserOptionsMock.Object);
+                CommandMetadata commandMetadata = testCommand.ExtractMetadata();
                 OptionMetadata optionMetadata = commandMetadata.GetOption("PropertySimple");
                 optionMetadata.Converter = new BooleanConverter();
                 string expectedMessageException = string.Format(CultureInfo.CurrentUICulture,
@@ -123,27 +91,10 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Act
                 var actualException =
                     Assert.Throws<CommandLineParserException>(
-                        () => optionMetadata.AssignValue(string.Empty, parserOptionsMock.Object));
+                        () => optionMetadata.AssignValue(string.Empty));
 
                 // Assert
                 Assert.Equal(expectedMessageException, actualException.Message);
-            }
-
-            [Fact]
-            public void NullParserOptionsException()
-            {
-                // Arrange
-                IParserOptions nullOptions = null;
-                var optionMetadata = new OptionMetadata(new OptionMetadataTemplate(null, null),
-                    new CommandMetadata(new CommandMetadataTemplate(), new TestCommand()));
-                string expectedMessageException = @"options";
-
-                // Act
-                var actualException =
-                    Assert.Throws<ArgumentNullException>(() => optionMetadata.AssignValue(string.Empty, nullOptions));
-
-                // Assert
-                Assert.Equal(expectedMessageException, actualException.ParamName);
             }
 
             private class TestCommand : ICommand

@@ -22,38 +22,17 @@ namespace MGR.CommandLineParser
             }
             return argsEnumerator.Current;
         }
-
-        /// <summary>
-        /// Gets the <see cref="ICommandProvider"/> used by the parser.
-        /// </summary>
-        public ICommandProvider CommandProvider
-        {
-            get { return _options.CommandProvider; }
-        }
         /// <summary>
         /// Gets the logo used by the parser.
         /// </summary>
-        public string Logo
-        {
-            get { return _options.Logo; }
-        }
+        public string Logo => _options.Logo;
 
         /// <summary>
         /// Gets the name of the executable to run used in the help by the parser.
         /// </summary>
-        public string CommandLineName
-        {
-            get { return _options.CommandLineName; }
-        }
+        public string CommandLineName => _options.CommandLineName;
 
-        /// <summary>
-        /// Gets the collection of <see cref="IConverter"/> used by the parser.
-        /// </summary>
-        public IEnumerable<IConverter> Converters
-        {
-            get { return _options.Converters.AsEnumerable(); }
-        }
-        
+
         private readonly IParserOptions _options;
 
         internal Parser(IParserOptions options)
@@ -77,8 +56,9 @@ namespace MGR.CommandLineParser
             {
                 return new CommandResult<T>(default(T), CommandResultCode.NoArgs);
             }
-            _options.CommandProvider.BuildCommands();
-            foreach (var command in CommandProvider.AllCommands)
+            var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
+            commandProvider.BuildCommands();
+            foreach (var command in commandProvider.GetAllCommands())
             {
                 if (command.GetType() == typeof (T))
                 {
@@ -104,7 +84,8 @@ namespace MGR.CommandLineParser
             {
                 return new CommandResult<ICommand>(null, CommandResultCode.NoArgs);
             }
-            _options.CommandProvider.BuildCommands();
+            var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
+            commandProvider.BuildCommands();
             return ParseImpl(args);
         }
 
@@ -119,13 +100,15 @@ namespace MGR.CommandLineParser
                 WriteHelp();
                 return new CommandResult<ICommand>(null, CommandResultCode.NoCommandName);
             }
-            ICommand command = CommandProvider.GetCommand(commandName);
+            var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
+            commandProvider.BuildCommands();
+            ICommand command = commandProvider.GetCommand(commandName);
             if (command == null)
             {
                 WriteHelp();
                 return new CommandResult<ICommand>(null, CommandResultCode.NoCommandFound);
             }
-            var commandMetadata = command.ExtractMetadata(_options);
+            var commandMetadata = command.ExtractMetadata();
             ExtractCommandLineOptions(commandMetadata, argsEnumerator);
             Tuple<bool, List<ValidationResult>> validation = Validate(command);
             if (!validation.Item1)
@@ -140,7 +123,8 @@ namespace MGR.CommandLineParser
          SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "CommandLineParser")]
         private void DefineCurrentHelpCommand()
         {
-            var helpCommand = _options.CommandProvider.GetHelpCommand();
+            var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
+            var helpCommand = commandProvider.GetHelpCommand();
             if (helpCommand == null)
             {
                 throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, "Your implementation of MGR.CommandLineParser.ICommandProvider should provide an implementation of IHelpCommend for the command's name '{0}'.",
@@ -217,7 +201,7 @@ namespace MGR.CommandLineParser
                     throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "You should specified a value for the option '{1}' of the command '{0}'.", commandMetadata.Name, optionText));
                 }
 
-                option.AssignValue(value, _options);
+                option.AssignValue(value);
             }
         }
 
