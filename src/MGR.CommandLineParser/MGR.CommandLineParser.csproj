@@ -60,7 +60,6 @@
     <Compile Include="Command\HelpCommand.cs" />
     <Compile Include="Command\ICommand.cs" />
     <Compile Include="Command\IgnoreOptionPropertyAttribute.cs" />
-    <Compile Include="Command\IHelpCommand.cs" />
     <Compile Include="Command\ISampleCommand.cs" />
     <Compile Include="Command\LocalizableString.cs" />
     <Compile Include="Command\OptionMetadata.cs" />

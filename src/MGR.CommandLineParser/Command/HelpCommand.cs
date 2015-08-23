@@ -8,19 +8,12 @@ namespace MGR.CommandLineParser.Command
     /// <summary>
     ///     Defines the default implementation of the <see cref="IHelpCommand" />.
     /// </summary>
-    public sealed class HelpCommand : CommandBase, IHelpCommand
+    public sealed class HelpCommand : CommandBase
     {
         /// <summary>
         ///     Name of the help command.
         /// </summary>
         public const string Name = "Help";
-
-        private IParserOptions _options;
-
-        /// <summary>
-        ///     Gets or sets the <see cref="IHelpCommand" /> used by the parser.
-        /// </summary>
-        public static IHelpCommand Current { get; set; }
 
         /// <summary>
         ///     Show detailled help for all commands.
@@ -33,36 +26,22 @@ namespace MGR.CommandLineParser.Command
         /// <param name="command">The <see cref="ICommand" />.</param>
         public void WriteHelp(ICommand command)
         {
-            var console = ServiceResolver.Current.ResolveService<IConsole>();
-            var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
             if (command == null)
             {
+            var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
                 if (All)
                 {
-                    WriteHelpForAllCommand(console, commandProvider);
+                    WriteHelpForAllCommand(commandProvider);
                 }
                 else
                 {
-                    WriteGeneralHelp(console, commandProvider);
+                    WriteGeneralHelp(commandProvider);
                 }
             }
             else
             {
-                WriteHelpForCommand(console, command);
+                WriteHelpForCommand(command);
             }
-        }
-
-        /// <summary>
-        ///     Defines the parser options.
-        /// </summary>
-        /// <param name="options"><see cref="IParserOptions" />The options.</param>
-        public void DefineOptions(IParserOptions options)
-        {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-            _options = options;
         }
 
         /// <summary>
@@ -77,41 +56,41 @@ namespace MGR.CommandLineParser.Command
             return 0;
         }
 
-        private void WriteHelpForAllCommand(IConsole console, ICommandProvider commandProvider)
+        private void WriteHelpForAllCommand(ICommandProvider commandProvider)
         {
-            WriteGeneralInformation(console);
+            WriteGeneralInformation();
             var commands = commandProvider.GetAllCommands();
             foreach (var command in commands)
             {
-                console.WriteLine(string.Format(CultureInfo.CurrentUICulture, Strings.HelpCommand_CommandTitleFormat, command.ExtractCommandName()));
-                WriteHelpForCommand(console, command);
+                Console.WriteLine(string.Format(CultureInfo.CurrentUICulture, Strings.HelpCommand_CommandTitleFormat, command.ExtractCommandName()));
+                WriteHelpForCommand(command);
             }
         }
 
-        private void WriteHelpForCommand(IConsole console, ICommand command)
+        private void WriteHelpForCommand(ICommand command)
         {
             if (command == null)
             {
                 throw new ArgumentNullException(nameof(command));
             }
             var metadata = command.ExtractMetadataTemplate();
-            console.WriteLine(_options.Logo);
-            console.WriteLine(Strings.HelpCommand_CommandUsageFormat, _options.CommandLineName, metadata.Name, metadata.Usage);
-            console.WriteLine(metadata.Description);
-            console.WriteLine();
+            Console.WriteLine(ParserOptions.Logo);
+            Console.WriteLine(Strings.HelpCommand_CommandUsageFormat, ParserOptions.CommandLineName, metadata.Name, metadata.Usage);
+            Console.WriteLine(metadata.Description);
+            Console.WriteLine();
 
             if (metadata.Options.Any())
             {
-                console.WriteLine(Strings.HelpCommand_OptionsListTitle);
+                Console.WriteLine(Strings.HelpCommand_OptionsListTitle);
                 var maxOptionWidth = metadata.Options.Max(o => o.Name.Length) + 2;
                 var maxAltOptionWidth = metadata.Options.Max(o => (o.ShortName ?? string.Empty).Length);
                 foreach (var optionMetadata in metadata.Options)
                 {
-                    console.Write(" -{0, -" + (maxOptionWidth + 2) + "}", optionMetadata.Name + GetMultiValueIndicator(optionMetadata));
-                    console.Write(" {0, -" + (maxAltOptionWidth + 4) + "}", FormatShortName(optionMetadata.ShortName));
+                    Console.Write(" -{0, -" + (maxOptionWidth + 2) + "}", optionMetadata.Name + GetMultiValueIndicator(optionMetadata));
+                    Console.Write(" {0, -" + (maxAltOptionWidth + 4) + "}", FormatShortName(optionMetadata.ShortName));
 
-                    console.PrintJustified((10 + maxAltOptionWidth + maxOptionWidth), optionMetadata.Description);
-                    console.WriteLine();
+                    Console.PrintJustified((10 + maxAltOptionWidth + maxOptionWidth), optionMetadata.Description);
+                    Console.WriteLine();
                 }
             }
 
@@ -120,7 +99,7 @@ namespace MGR.CommandLineParser.Command
             {
                 foreach (var usage in usageCommand.Samples)
                 {
-                    console.WriteLine(usage);
+                    Console.WriteLine(usage);
                 }
             }
         }
@@ -138,30 +117,30 @@ namespace MGR.CommandLineParser.Command
             return string.Empty;
         }
 
-        private void WriteGeneralHelp(IConsole console, ICommandProvider commandProvider)
+        private void WriteGeneralHelp(ICommandProvider commandProvider)
         {
-            WriteGeneralInformation(console);
+            WriteGeneralInformation();
 
             var metadatas = commandProvider.GetAllCommands().Select(command => command.ExtractCommandMetadataTemplate()).ToList();
             var maxNameLength = metadatas.Max(m => m.Name.Length);
             foreach (var metadata in metadatas)
             {
-                console.Write(" {0, -" + maxNameLength + "}   ", metadata.Name);
+                Console.Write(" {0, -" + maxNameLength + "}   ", metadata.Name);
                 // Starting index of the description
                 var descriptionPadding = maxNameLength + 4;
-                console.PrintJustified(descriptionPadding, metadata.Description);
-                console.WriteLine();
+                Console.PrintJustified(descriptionPadding, metadata.Description);
+                Console.WriteLine();
             }
         }
 
-        private void WriteGeneralInformation(IConsole console)
+        private void WriteGeneralInformation()
         {
-            console.WriteLine(_options.Logo);
-            console.WriteLine(Strings.HelpCommand_GlobalUsageFormat, string.Format(CultureInfo.CurrentUICulture, Strings.HelpCommand_GlobalCommandLineCommandFormat, _options.CommandLineName).Trim());
-            console.WriteLine(Strings.HelpCommand_GlobalHelpCommandUsageFormat, string.Format(CultureInfo.CurrentUICulture, "{0} {1}", _options.CommandLineName, Name).Trim());
-            console.WriteLine();
-            console.WriteLine(Strings.HelpCommand_GlobalHelp_AvailableCommands);
-            console.WriteLine();
+            Console.WriteLine(ParserOptions.Logo);
+            Console.WriteLine(Strings.HelpCommand_GlobalUsageFormat, string.Format(CultureInfo.CurrentUICulture, Strings.HelpCommand_GlobalCommandLineCommandFormat, ParserOptions.CommandLineName).Trim());
+            Console.WriteLine(Strings.HelpCommand_GlobalHelpCommandUsageFormat, string.Format(CultureInfo.CurrentUICulture, "{0} {1}", ParserOptions.CommandLineName, Name).Trim());
+            Console.WriteLine();
+            Console.WriteLine(Strings.HelpCommand_GlobalHelp_AvailableCommands);
+            Console.WriteLine();
         }
 
         private static string FormatShortName(string shortName)

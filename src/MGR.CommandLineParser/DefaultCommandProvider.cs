@@ -10,11 +10,16 @@ namespace MGR.CommandLineParser
 {
     internal sealed class DefaultCommandProvider : ICommandProvider
     {
-        private readonly List<ICommand> _commands = new List<ICommand>();
+        private readonly Lazy<List<ICommand>> _commands;
 
-        public void BuildCommands()
+        public DefaultCommandProvider()
         {
-            _commands.Clear();
+            _commands = new Lazy<List<ICommand>>(BuildCommands);
+        }
+
+        private List<ICommand> BuildCommands()
+        {
+            var commands = new List<ICommand>();
             using (var catalog = new AggregateCatalog())
             {
                 var directory = Path.GetDirectoryName(typeof (DefaultCommandProvider).Assembly.CodeBase);
@@ -54,16 +59,17 @@ namespace MGR.CommandLineParser
                     }
                     using (var container = new CompositionContainer(catalog))
                     {
-                        _commands.AddRange(container.GetExportedValues<ICommand>());
+                        commands.AddRange(container.GetExportedValues<ICommand>());
                     } 
                 }
             }
+            return commands;
         }
 
-        public IEnumerable<ICommand> GetAllCommands() => _commands.OrderBy(command => command.ExtractCommandName()).AsEnumerable();
+        public IEnumerable<ICommand> GetAllCommands() => _commands.Value.OrderBy(command => command.ExtractCommandName()).AsEnumerable();
 
-        public IHelpCommand GetHelpCommand() => GetCommand(HelpCommand.Name) as IHelpCommand;
+        public HelpCommand GetHelpCommand() => GetCommand(HelpCommand.Name) as HelpCommand;
 
-        public ICommand GetCommand(string commandName) => _commands.SingleOrDefault(command => command.ExtractCommandName().Equals(commandName, StringComparison.OrdinalIgnoreCase));
+        public ICommand GetCommand(string commandName) => _commands.Value.FirstOrDefault(command => command.ExtractCommandName().Equals(commandName, StringComparison.OrdinalIgnoreCase));
     }
 }

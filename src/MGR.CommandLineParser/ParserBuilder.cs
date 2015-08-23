@@ -1,8 +1,11 @@
-﻿namespace MGR.CommandLineParser
+﻿using JetBrains.Annotations;
+
+namespace MGR.CommandLineParser
 {
     /// <summary>
     ///     Represents the constructor of a parser.
     /// </summary>
+    [PublicAPI]
     public sealed class ParserBuilder
     {
         private readonly ParserBuilderOptions _parserBuilderOptions = ParserBuilderOptions.Default;

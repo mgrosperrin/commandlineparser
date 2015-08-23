@@ -12,12 +12,6 @@ namespace MGR.CommandLineParser
     public interface ICommandProvider
     {
         /// <summary>
-        /// Retrieve and recreate new instances of the commands.
-        /// </summary>
-        /// <remarks>The command provider should create new instance of commands only when the BuildCommands method is called.</remarks>
-        void BuildCommands();
-
-        /// <summary>
         /// Returns all commands instances.
         /// </summary>
         IEnumerable<ICommand> GetAllCommands();
@@ -26,7 +20,7 @@ namespace MGR.CommandLineParser
         /// </summary>
         /// <returns>An <see cref="IHelpCommand"/> instance.</returns>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        IHelpCommand GetHelpCommand();
+        HelpCommand GetHelpCommand();
         /// <summary>
         /// Retrive the <see cref="ICommand"/> with the specified <paramref name="commandName"/>.
         /// </summary>

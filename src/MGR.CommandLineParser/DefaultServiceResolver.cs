@@ -86,7 +86,7 @@ namespace MGR.CommandLineParser
         public static void RegisterServices<T>(Func<IEnumerable<T>> servicesFactory)
         {
             var serviceType = typeof (T);
-            if (SinglyRegistredServices.ContainsKey(serviceType))
+            if (MultiplyRegistredServices.ContainsKey(serviceType))
             {
                 MultiplyRegistredServices[serviceType] = () => servicesFactory().OfType<object>();
             }

@@ -19,6 +19,7 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Arrange
                 var testCommand = new TestCommand();
                 testCommand.PropertyList = new List<int>();
+                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() });
                 CommandMetadata commandMetadata = testCommand.ExtractMetadata();
                 int expected = 42;
                 int expectedLength = 1;
@@ -40,11 +41,13 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Arrange
                 var testCommand = new TestCommand();
                 testCommand.PropertyDictionary = new Dictionary<string, Guid>();
+                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() });
                 CommandMetadata commandMetadata = testCommand.ExtractMetadata();
                 string expectedKey = "keyTest";
-                Guid expectedValue = Guid.Parse("18591394-096C-476F-A8B7-71903E27DAB5");
+                var guid = "18591394-096C-476F-A8B7-71903E27DAB5";
+                Guid expectedValue = Guid.Parse(guid);
                 int expectedLength = 1;
-                string option = "keyTest=18591394-096C-476F-A8B7-71903E27DAB5";
+                string option = "keyTest=" + guid;
 
                 // Act
                 commandMetadata.GetOption("PropertyDictionary").AssignValue(option);
@@ -64,6 +67,7 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Arrange
                 var testCommand = new TestCommand();
                 testCommand.PropertyList = new List<int>();
+                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() });
                 CommandMetadata commandMetadata = testCommand.ExtractMetadata();
                 int expected = 42;
                 string option = "42";
@@ -81,6 +85,7 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Arrange
                 var testCommand = new TestCommand();
                 testCommand.PropertyList = new List<int>();
+                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() });
                 CommandMetadata commandMetadata = testCommand.ExtractMetadata();
                 OptionMetadata optionMetadata = commandMetadata.GetOption("PropertySimple");
                 optionMetadata.Converter = new BooleanConverter();

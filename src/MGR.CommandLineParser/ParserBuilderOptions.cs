@@ -24,9 +24,11 @@ namespace MGR.CommandLineParser
 
         public IParserOptions ToParserOptions()
         {
-            var parserOptions = new ParserOptions();
-            parserOptions.CommandLineName = CommandLineName;
-            parserOptions.Logo = Logo;
+            var parserOptions = new ParserOptions
+            {
+                CommandLineName = CommandLineName,
+                Logo = Logo
+            };
 
             return parserOptions;
         }
