@@ -11,10 +11,7 @@ namespace MGR.CommandLineParser.Converters
         /// <summary>
         ///   The target type of the converter ( <see cref="decimal" /> )..
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (Decimal); }
-        }
+        public Type TargetType => typeof (decimal);
 
         /// <summary>
         ///   Convert the <paramref name="value" /> to an instance of <see cref="Decimal" /> .
@@ -29,11 +26,11 @@ namespace MGR.CommandLineParser.Converters
         {
             try
             {
-                return Decimal.Parse(value, CultureInfo.CurrentUICulture);
+                return decimal.Parse(value, CultureInfo.CurrentUICulture);
             }
             catch (FormatException exception)
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, CommonStrings.ExcConverterUnableConvertFormat, value, "Decimal"),
+                throw new CommandLineParserException(Constants.ExceptionMessages.FormatConverterUnableConvert(value, TargetType),
                                                      exception);
             }
         }

@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using JetBrains.Annotations;
 using MGR.CommandLineParser.Properties;
 
 namespace MGR.CommandLineParser.Command
 {
     /// <summary>
-    ///     Defines the default implementation of the <see cref="IHelpCommand" />.
+    ///     Defines the default implementation of the <see cref="HelpCommand" />.
     /// </summary>
+    [PublicAPI]
     public sealed class HelpCommand : CommandBase
     {
         /// <summary>
@@ -51,7 +53,7 @@ namespace MGR.CommandLineParser.Command
         protected override int ExecuteCommand()
         {
             var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
-            var command = commandProvider.GetCommand(Arguments.FirstOrDefault());
+            var command = commandProvider.GetCommand(Arguments.FirstOrDefault(), ParserOptions, Console);
             WriteHelp(command);
             return 0;
         }

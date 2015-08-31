@@ -10,10 +10,7 @@ namespace MGR.CommandLineParser.Converters
         /// <summary>
         /// The target type of the converter (<see cref="Uri"/>)..
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (Uri); }
-        }
+        public Type TargetType => typeof (Uri);
 
         /// <summary>
         /// Convert the <paramref name="value"/> to an instance of <see cref="Uri"/>.

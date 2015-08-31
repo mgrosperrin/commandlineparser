@@ -1,34 +1,32 @@
 ﻿using System;
-using System.Globalization;
 
 namespace MGR.CommandLineParser.Converters
 {
     /// <summary>
-    ///   Converter for the type <see cref="bool" /> .
+    ///     Converter for the type <see cref="bool" /> .
     /// </summary>
     public sealed class BooleanConverter : IConverter
     {
         /// <summary>
-        ///   The target type of the converter ( <see cref="bool" /> )..
+        ///     The target type of the converter ( <see cref="bool" /> )..
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (Boolean); }
-        }
+        public Type TargetType => typeof (bool);
 
 
         /// <summary>
-        ///   Convert the <paramref name="value" /> to an instance of <see cref="Boolean" /> .
+        ///     Convert the <paramref name="value" /> to an instance of <see cref="Boolean" /> .
         /// </summary>
         /// <param name="value"> The original value provided by the user. </param>
         /// <param name="concreteTargetType"> Not used. </param>
         /// <returns> The <see cref="Boolean" /> converted from the value. </returns>
         /// <remarks>
-        ///   The value can be '-', 'False' or 'false' to specify false, '+', 'True' or 'true' to specify true.
+        ///     The value can be '-', 'False' or 'false' to specify false, '+', 'True' or 'true' to specify true.
         /// </remarks>
-        /// <exception cref="CommandLineParserException">Thrown if the
-        ///   <paramref name="value" />
-        ///   is not valid.</exception>
+        /// <exception cref="CommandLineParserException">
+        ///     Thrown if the
+        ///     <paramref name="value" />
+        ///     is not valid.
+        /// </exception>
         public object Convert(string value, Type concreteTargetType)
         {
             if (string.IsNullOrEmpty(value))
@@ -45,12 +43,11 @@ namespace MGR.CommandLineParser.Converters
             }
             try
             {
-                return Boolean.Parse(value);
+                return bool.Parse(value);
             }
             catch (FormatException exception)
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, CommonStrings.ExcConverterUnableConvertFormat, value, "Boolean"),
-                                                     exception);
+                throw new CommandLineParserException(Constants.ExceptionMessages.FormatConverterUnableConvert(value, TargetType), exception);
             }
         }
     }

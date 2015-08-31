@@ -11,10 +11,7 @@ namespace MGR.CommandLineParser.Converters
         /// <summary>
         /// The target type of the converter (<see cref="long"/>)..
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (Int64); }
-        }
+        public Type TargetType => typeof (long);
 
         /// <summary>
         /// Convert the <paramref name="value"/> to an instance of <see cref="Int64"/>.
@@ -27,12 +24,11 @@ namespace MGR.CommandLineParser.Converters
         {
             try
             {
-                return Int64.Parse(value, CultureInfo.CurrentUICulture);
+                return long.Parse(value, CultureInfo.CurrentUICulture);
             }
             catch (FormatException exception)
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, CommonStrings.ExcConverterUnableConvertFormat, value, "Int64"),
-                                                     exception);
+                throw new CommandLineParserException(Constants.ExceptionMessages.FormatConverterUnableConvert(value, TargetType), exception);
             }
         }
     }

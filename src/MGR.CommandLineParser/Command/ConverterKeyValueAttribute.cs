@@ -28,20 +28,20 @@ namespace MGR.CommandLineParser.Command
         {
             if (keyConverterType == null)
             {
-                throw new ArgumentNullException("keyConverterType");
+                throw new ArgumentNullException(nameof(keyConverterType));
             }
             if (!typeof (IConverter).IsAssignableFrom(keyConverterType))
             {
-                throw new CommandLineParserException("The key converter type must implement MGR.CommandLineParser.Command.IConverter");
+                throw new CommandLineParserException(Constants.ExceptionMessages.ConverterKeyConverterTypeMustBeIConverter);
             }
             KeyConverterType = keyConverterType;
             if (valueConverterType == null)
             {
-                throw new ArgumentNullException("valueConverterType");
+                throw new ArgumentNullException(nameof(valueConverterType));
             }
             if (!typeof (IConverter).IsAssignableFrom(valueConverterType))
             {
-                throw new CommandLineParserException("The value converter type must implement MGR.CommandLineParser.Command.IConverter");
+                throw new CommandLineParserException(Constants.ExceptionMessages.ConverterValueConverterTypeMustBeIConverter);
             }
             ValueConverterType = valueConverterType;
         }

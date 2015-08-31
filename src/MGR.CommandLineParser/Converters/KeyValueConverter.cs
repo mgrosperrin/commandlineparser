@@ -12,32 +12,29 @@ namespace MGR.CommandLineParser.Converters
         {
             if (keyConverter == null)
             {
-                throw new ArgumentNullException("keyConverter");
+                throw new ArgumentNullException(nameof(keyConverter));
             }
             if (valueConverter == null)
             {
-                throw new ArgumentNullException("valueConverter");
+                throw new ArgumentNullException(nameof(valueConverter));
             }
             _keyConverter = keyConverter;
             _valueConverter = valueConverter;
         }
 
-        public Type TargetType
-        {
-            get { return typeof (KeyValuePair<,>).MakeGenericType(_keyConverter.TargetType, _valueConverter.TargetType); }
-        }
+        public Type TargetType => typeof (KeyValuePair<,>).MakeGenericType(_keyConverter.TargetType, _valueConverter.TargetType);
 
         public object Convert(string value, Type concreteTargetType)
         {
             if (string.IsNullOrEmpty(value))
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
-            int eqIndex = value.IndexOf("=", StringComparison.OrdinalIgnoreCase);
+            var eqIndex = value.IndexOf("=", StringComparison.OrdinalIgnoreCase);
             if (eqIndex > -1)
             {
-                object propertyKey = _keyConverter.Convert(value.Substring(0, eqIndex), _keyConverter.TargetType);
-                object propertyValue = _valueConverter.Convert(value.Substring(eqIndex + 1), _valueConverter.TargetType);
+                var propertyKey = _keyConverter.Convert(value.Substring(0, eqIndex), _keyConverter.TargetType);
+                var propertyValue = _valueConverter.Convert(value.Substring(eqIndex + 1), _valueConverter.TargetType);
                 return Tuple.Create(propertyKey, propertyValue);
             }
             return Tuple.Create(_keyConverter.Convert(value, _keyConverter.TargetType), (object) null);

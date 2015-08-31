@@ -12,11 +12,11 @@ namespace MGR.CommandLineParser.Command
         {
             if (commandMetadataTemplate == null)
             {
-                throw new ArgumentNullException("commandMetadataTemplate");
+                throw new ArgumentNullException(nameof(commandMetadataTemplate));
             }
             if (command == null)
             {
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
             }
             Name = commandMetadataTemplate.Name;
             Description = commandMetadataTemplate.Description;
@@ -25,22 +25,19 @@ namespace MGR.CommandLineParser.Command
             _options = new List<OptionMetadata>(commandMetadataTemplate.Options.Select(option => option.ToOptionMetadata(this)));
         }
 
-        internal readonly List<OptionMetadata> _options;
+        private readonly List<OptionMetadata> _options;
 
-        internal string Name { get; set; }
+        internal string Name { get; }
         internal string Description { get; set; }
         internal string Usage { get; set; }
 
-        internal IEnumerable<OptionMetadata> Options
-        {
-            get { return _options.AsEnumerable(); }
-        }
+        internal IEnumerable<OptionMetadata> Options => _options.AsEnumerable();
 
-        internal ICommand Command { get; private set; }
+        internal ICommand Command { get; }
 
         internal OptionMetadata GetOption(string optionName)
         {
-            OptionMetadata om = Options.FirstOrDefault(option => option.Name.Equals(optionName, StringComparison.OrdinalIgnoreCase));
+            var om = Options.FirstOrDefault(option => option.Name.Equals(optionName, StringComparison.OrdinalIgnoreCase));
             if (om != null)
             {
                 return om;

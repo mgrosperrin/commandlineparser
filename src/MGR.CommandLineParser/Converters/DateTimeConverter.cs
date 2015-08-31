@@ -12,10 +12,7 @@ namespace MGR.CommandLineParser.Converters
         /// <summary>
         ///   The target type of the converter ( <see cref="DateTime" /> )..
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (DateTime); }
-        }
+        public Type TargetType => typeof (DateTime);
 
         /// <summary>
         ///   Convert the <paramref name="value" /> to an instance of <see cref="DateTime" /> .
@@ -35,7 +32,7 @@ namespace MGR.CommandLineParser.Converters
             }
             catch (FormatException exception)
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, CommonStrings.ExcConverterUnableConvertFormat, value, "DateTime"),
+                throw new CommandLineParserException(Constants.ExceptionMessages.FormatConverterUnableConvert(value, TargetType),
                                                      exception);
             }
         }

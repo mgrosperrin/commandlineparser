@@ -11,10 +11,7 @@ namespace MGR.CommandLineParser.Converters
         /// <summary>
         ///   The target type of the converter ( <see cref="short" /> )..
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (Int16); }
-        }
+        public Type TargetType => typeof (short);
 
         /// <summary>
         ///   Convert the <paramref name="value" /> to an instance of <see cref="Int16" /> .
@@ -29,12 +26,11 @@ namespace MGR.CommandLineParser.Converters
         {
             try
             {
-                return Int16.Parse(value, CultureInfo.CurrentUICulture);
+                return short.Parse(value, CultureInfo.CurrentUICulture);
             }
             catch (FormatException exception)
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, CommonStrings.ExcConverterUnableConvertFormat, value, "Int16"),
-                                                     exception);
+                throw new CommandLineParserException(Constants.ExceptionMessages.FormatConverterUnableConvert(value, TargetType), exception);
             }
         }
     }

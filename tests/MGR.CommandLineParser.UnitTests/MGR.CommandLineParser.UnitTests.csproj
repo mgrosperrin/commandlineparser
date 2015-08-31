@@ -114,10 +114,6 @@
     <Compile Include="Extensions\ConverterExtensionsTests.CanConvertTo.cs">
       <DependentUpon>ConverterExtensionsTests.cs</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\ParserOptionsExtensionsTests.cs" />
-    <Compile Include="Extensions\ParserOptionsExtensionsTests.AsReadOnly.cs">
-      <DependentUpon>ParserOptionsExtensionsTests.cs</DependentUpon>
-    </Compile>
     <Compile Include="Extensions\PropertyInfoExtensionsTests.cs" />
     <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractConverterMetadata.cs">
       <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using JetBrains.Annotations;
 using MGR.CommandLineParser.Properties;
 
 namespace MGR.CommandLineParser.Command
@@ -35,6 +36,7 @@ namespace MGR.CommandLineParser.Command
         ///     Gets or sets the indicator for showing the help of the command.
         /// </summary>
         [Display(ShortName = "Command_HelpOption_ShortNameMessage", Description = "Command_HelpOption_DescriptionMessage", ResourceType = typeof (Strings))]
+        [PublicAPI]
         public bool Help { get; set; }
 
         /// <summary>
@@ -51,7 +53,7 @@ namespace MGR.CommandLineParser.Command
             if (Help)
             {
                 var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
-                commandProvider.GetHelpCommand().WriteHelp(this);
+                commandProvider.GetHelpCommand(ParserOptions, Console).WriteHelp(this);
                 return 0;
             }
             return ExecuteCommand();

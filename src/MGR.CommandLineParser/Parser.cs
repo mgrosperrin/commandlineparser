@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using MGR.CommandLineParser.Command;
+using MGR.CommandLineParser.Properties;
 
 namespace MGR.CommandLineParser
 {
@@ -12,11 +13,11 @@ namespace MGR.CommandLineParser
     /// </summary>
     internal sealed class Parser : IParser
     {
-        private readonly IParserOptions _options;
+        private readonly IParserOptions _parserOptions;
 
-        internal Parser(IParserOptions options)
+        internal Parser(IParserOptions parserOptions)
         {
-            _options = options;
+            _parserOptions = parserOptions;
         }
 
         /// <summary>
@@ -27,12 +28,12 @@ namespace MGR.CommandLineParser
         /// <summary>
         ///     Gets the logo used by the parser.
         /// </summary>
-        public string Logo => _options.Logo;
+        public string Logo => _parserOptions.Logo;
 
         /// <summary>
         ///     Gets the name of the executable to run used in the help by the parser.
         /// </summary>
-        public string CommandLineName => _options.CommandLineName;
+        public string CommandLineName => _parserOptions.CommandLineName;
 
         /// <summary>
         ///     Parse a command line considering a unique command.
@@ -90,16 +91,17 @@ namespace MGR.CommandLineParser
         {
             var argsEnumerator = args.GetEnumerator();
             var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
+            var console = ServiceResolver.Current.ResolveService<IConsole>();
             var commandName = GetCommandName(argsEnumerator);
             if (commandName == null)
             {
-                WriteHelp(commandProvider);
+                WriteHelp(commandProvider, console);
                 return new CommandResult<ICommand>(null, CommandResultCode.NoCommandName);
             }
-            var command = commandProvider.GetCommand(commandName);
+            var command = commandProvider.GetCommand(commandName, _parserOptions, console);
             if (command == null)
             {
-                WriteHelp(commandProvider);
+                WriteHelp(commandProvider, console);
                 return new CommandResult<ICommand>(null, CommandResultCode.NoCommandFound);
             }
             var commandMetadata = command.ExtractMetadata();
@@ -107,7 +109,7 @@ namespace MGR.CommandLineParser
             var validation = Validate(command);
             if (!validation.Item1)
             {
-                commandProvider.GetHelpCommand().WriteHelp(commandMetadata.Command);
+                commandProvider.GetHelpCommand(_parserOptions, console).WriteHelp(commandMetadata.Command);
                 return new CommandResult<ICommand>(command, CommandResultCode.CommandParameterNotValid, validation.Item2);
             }
             return new CommandResult<ICommand>(command, CommandResultCode.Ok);
@@ -122,7 +124,7 @@ namespace MGR.CommandLineParser
             if (!isValid)
             {
                 var console = ServiceResolver.Current.ResolveService<IConsole>();
-                console.WriteError("Command {0} : invalid arguments :", command.ExtractCommandName());
+                console.WriteError(Strings.Parser_CommandInvalidArgumentsFormat, command.ExtractCommandName());
                 foreach (var validation in results)
                 {
                     console.WriteError(string.Format(CultureInfo.CurrentUICulture, "-{0} :", validation.ErrorMessage));
@@ -145,7 +147,7 @@ namespace MGR.CommandLineParser
                     break;
                 }
 
-                if (!(argument.StartsWith("-", StringComparison.OrdinalIgnoreCase) || argument.StartsWith("/", StringComparison.OrdinalIgnoreCase)))
+                if (!(argument.StartsWith(StringComparison.OrdinalIgnoreCase, Constants.ArgumentStarter)))
                 {
                     commandMetadata.Command.Arguments.Add(argument);
                     continue;
@@ -153,7 +155,7 @@ namespace MGR.CommandLineParser
 
                 var optionText = argument.Substring(1);
                 string value = null;
-                var splitIndex = optionText.IndexOf(':');
+                var splitIndex = optionText.IndexOf(Constants.ArgumentSplitter);
                 if (splitIndex > 0)
                 {
                     value = optionText.Substring(splitIndex + 1);
@@ -163,12 +165,12 @@ namespace MGR.CommandLineParser
                 var option = commandMetadata.GetOption(optionText);
                 if (option == null)
                 {
-                    throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "There is no option '{1}' for the command '{0}'.", commandMetadata.Name, optionText));
+                    throw new CommandLineParserException(Constants.ExceptionMessages.FormatParserOptionNotFoundForCommand(commandMetadata.Name, optionText));
                 }
 
                 if (option.OptionType == typeof (bool))
                 {
-                    value = value ?? "true";
+                    value = value ?? bool.TrueString;
                 }
                 else
                 {
@@ -177,17 +179,16 @@ namespace MGR.CommandLineParser
 
                 if (value == null)
                 {
-                    throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "You should specified a value for the option '{1}' of the command '{0}'.", commandMetadata.Name,
-                        optionText));
+                    throw new CommandLineParserException(Constants.ExceptionMessages.FormatParserOptionValueRequired(commandMetadata.Name, optionText));
                 }
 
                 option.AssignValue(value);
             }
         }
 
-        private static void WriteHelp(ICommandProvider commandProvider)
+        private void WriteHelp(ICommandProvider commandProvider, IConsole console)
         {
-            commandProvider.GetHelpCommand().Execute();
+            commandProvider.GetHelpCommand(_parserOptions, console).Execute();
         }
 
         private string GetCommandName(IEnumerator<string> argsEnumerator)

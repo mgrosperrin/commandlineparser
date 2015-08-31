@@ -11,10 +11,7 @@ namespace MGR.CommandLineParser.Converters
         /// <summary>
         /// The target type of the converter (<see cref="int"/>)..
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (Int32); }
-        }
+        public Type TargetType => typeof (int);
 
         /// <summary>
         /// Convert the <paramref name="value"/> to an instance of <see cref="Int32"/>.
@@ -27,12 +24,11 @@ namespace MGR.CommandLineParser.Converters
         {
             try
             {
-                return Int32.Parse(value, CultureInfo.CurrentUICulture);
+                return int.Parse(value, CultureInfo.CurrentUICulture);
             }
             catch (FormatException exception)
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, CommonStrings.ExcConverterUnableConvertFormat, value, "Int32"),
-                                                     exception);
+                throw new CommandLineParserException(Constants.ExceptionMessages.FormatConverterUnableConvert(value, TargetType), exception);
             }
         }
     }

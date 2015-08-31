@@ -29,31 +29,23 @@ namespace MGR.CommandLineParser
         /// <summary>
         /// The resulting command.
         /// </summary>
-        public T Command
-        {
-            get { return _command; }
-        }
+        public T Command => _command;
+
         /// <summary>
         /// Defines if the command is in a valid state (parsing/validating the options).
         /// </summary>
-        public bool IsValid
-        {
-            get { return _returnCode == CommandResultCode.Ok; }
-        }
+        public bool IsValid => _returnCode == CommandResultCode.Ok;
+
         /// <summary>
         /// The return code of the parsing.
         /// </summary>
-        public CommandResultCode ReturnCode
-        {
-            get { return _returnCode; }
-        }
+        public CommandResultCode ReturnCode => _returnCode;
+
         /// <summary>
         /// The validation results. If there was no validation errors, the enumeration is empty.
         /// </summary>
-        public IEnumerable<ValidationResult> ValidationResults
-        {
-            get { return _validationResults.AsEnumerable(); }
-        }
+        public IEnumerable<ValidationResult> ValidationResults => _validationResults.AsEnumerable();
+
         /// <summary>
         /// Executes the underlying command.
         /// </summary>
@@ -63,7 +55,7 @@ namespace MGR.CommandLineParser
         {
             if (_command == null || !IsValid)
             {
-                throw new CommandLineParserException("The command is not in a valid state.");
+                throw new CommandLineParserException(Constants.ExceptionMessages.NoValidCommand);
             }
             return Command.Execute();
         }

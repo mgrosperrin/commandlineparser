@@ -12,10 +12,7 @@ namespace MGR.CommandLineParser.Converters
         /// <summary>
         /// The target type of the converter (<see cref="TimeSpan"/>).
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (TimeSpan); }
-        }
+        public Type TargetType => typeof (TimeSpan);
 
         /// <summary>
         /// Convert the <paramref name="value"/> to an instance of <see cref="TimeSpan"/>.
@@ -33,8 +30,7 @@ namespace MGR.CommandLineParser.Converters
             }
             catch (FormatException exception)
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, CommonStrings.ExcConverterUnableConvertFormat, value, "TimeSpan"),
-                                                     exception);
+                throw new CommandLineParserException(Constants.ExceptionMessages.FormatConverterUnableConvert(value, TargetType), exception);
             }
         }
     }

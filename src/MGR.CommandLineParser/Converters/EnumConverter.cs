@@ -11,10 +11,7 @@ namespace MGR.CommandLineParser.Converters
         /// <summary>
         ///   The target type of the converter ( <see cref="Enum" /> )..
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (Enum); }
-        }
+        public Type TargetType => typeof(Enum);
 
         /// <summary>
         ///   Convert the <paramref name="value" /> to an instance of <see cref="Enum" /> .
@@ -50,8 +47,7 @@ namespace MGR.CommandLineParser.Converters
             }
             catch (ArgumentException exception)
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, CommonStrings.ExcConverterUnableConvertFormat, value, concreteTargetType.Name),
-                                                     exception);
+                throw new CommandLineParserException(Constants.ExceptionMessages.FormatConverterUnableConvert(value, concreteTargetType), exception);
             }
         }
     }

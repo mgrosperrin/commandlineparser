@@ -13,11 +13,11 @@ namespace MGR.CommandLineParser.Command
         {
             if (optionMetadataTemplate == null)
             {
-                throw new ArgumentNullException("optionMetadataTemplate");
+                throw new ArgumentNullException(nameof(optionMetadataTemplate));
             }
             if (commandMetadata == null)
             {
-                throw new ArgumentNullException("commandMetadata");
+                throw new ArgumentNullException(nameof(commandMetadata));
             }
             Name = optionMetadataTemplate.Name;
             ShortName = optionMetadataTemplate.ShortName;
@@ -61,7 +61,7 @@ namespace MGR.CommandLineParser.Command
                 throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "The specified converter is not valid : target type is '{1}' and option type is '{0}'.", OptionType,
                                                                    Converter.TargetType));
             }
-            object convertedValue = Converter.Convert(option, OptionType);
+            var convertedValue = Converter.Convert(option, OptionType);
             AssignValueInternal(convertedValue);
         }
 
@@ -73,12 +73,12 @@ namespace MGR.CommandLineParser.Command
             }
             else
             {
-                MethodInfo miAdd = PropertyOption.PropertyType.GetMethod("Add");
+                var miAdd = PropertyOption.PropertyType.GetMethod("Add");
                 if (miAdd == null)
                 {
                     throw new InvalidOperationException();
                 }
-                object optionValue = PropertyOption.GetValue(Command, null);
+                var optionValue = PropertyOption.GetValue(Command, null);
                 if (optionValue == null)
                 {
                     if (PropertyOption.CanWrite)
@@ -99,7 +99,7 @@ namespace MGR.CommandLineParser.Command
                 }
                 else
                 {
-                    Tuple<object, object> targetTupleValue = (Tuple<object, object>) convertedValue;
+                    var targetTupleValue = (Tuple<object, object>) convertedValue;
                     miAdd.Invoke(PropertyOption.GetValue(Command, null), new[] {targetTupleValue.Item1, targetTupleValue.Item2});
                 }
             }
