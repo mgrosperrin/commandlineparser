@@ -11,10 +11,10 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new ByteConverter();
-            Type expectedType = typeof (Byte);
+            var expectedType = typeof (Byte);
 
             // Act
-            Type actualType = converter.TargetType;
+            var actualType = converter.TargetType;
 
             // Assert
             Assert.Equal(expectedType, actualType);
@@ -25,11 +25,11 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new ByteConverter();
-            string value = "42";
+            var value = "42";
             byte expectedValue = 42;
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actualValue = converter.Convert(value, converter.TargetType);
 
             // Assert
             Assert.NotNull(actualValue);
@@ -42,9 +42,9 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new ByteConverter();
-            string value = "Hello";
-            string expectedExceptionMessage = "Unable to parse 'Hello' to Byte.";
-            string expectedInnerExceptionMessage = "Input string was not in a correct format.";
+            var value = "Hello";
+            var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(byte));
+            var expectedInnerExceptionMessage = "Input string was not in a correct format.";
 
             // Act
             using (new LangageSwitcher("en-us"))

@@ -44,7 +44,7 @@ namespace MGR.CommandLineParser.UnitTests.Converters
             // Arrange
             IConverter converter = new TimeSpanConverter();
             string value = "Hello";
-            string expectedExceptionMessage = "Unable to parse 'Hello' to TimeSpan.";
+            string expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(TimeSpan));
             string expectedInnerExceptionMessage = "String was not recognized as a valid TimeSpan.";
 
             // Act

@@ -12,10 +12,10 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new KeyValueConverter(new StringConverter(), new Int32Converter());
-            Type expectedType = typeof (KeyValuePair<string, int>);
+            var expectedType = typeof (KeyValuePair<string, int>);
 
             // Act
-            Type actualType = converter.TargetType;
+            var actualType = converter.TargetType;
 
             // Assert
             Assert.Equal(expectedType, actualType);
@@ -26,12 +26,12 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new KeyValueConverter(new StringConverter(), new Int32Converter());
-            string value = "Test=42";
-            string expectedKeyValue = "Test";
-            int expectedValueValue = 42;
+            var value = "Test=42";
+            var expectedKeyValue = "Test";
+            var expectedValueValue = 42;
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actualValue = converter.Convert(value, converter.TargetType);
 
             // Assert
             Assert.NotNull(actualValue);
@@ -45,11 +45,11 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new KeyValueConverter(new StringConverter(), new Int32Converter());
-            string value = "Test";
-            string expectedKeyValue = "Test";
+            var value = "Test";
+            var expectedKeyValue = "Test";
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actualValue = converter.Convert(value, converter.TargetType);
 
             // Assert
             Assert.NotNull(actualValue);
@@ -63,9 +63,9 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new KeyValueConverter(new StringConverter(), new Int32Converter());
-            string value = "Hello=Hello";
-            string expectedExceptionMessage = "Unable to parse 'Hello' to Int32.";
-            string expectedInnerExceptionMessage = "Input string was not in a correct format.";
+            var value = "Hello=Hello";
+            var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert("Hello", typeof(int));
+            var expectedInnerExceptionMessage = "Input string was not in a correct format.";
 
             // Act
             using (new LangageSwitcher("en-us"))
@@ -84,7 +84,7 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         public void ArgumentNullExceptionForNullKeyConverter()
         {
             // Arrange
-            string expectedInnerExceptionMessage = @"keyConverter";
+            var expectedInnerExceptionMessage = @"keyConverter";
 
             // Act
             var actualException = Assert.Throws<ArgumentNullException>(() => new KeyValueConverter(null, new Int32Converter()));
@@ -97,7 +97,7 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         public void ArgumentNullExceptionForNullValueConverter()
         {
             // Arrange
-            string expectedInnerExceptionMessage = @"valueConverter";
+            var expectedInnerExceptionMessage = @"valueConverter";
 
             // Act
             var actualException = Assert.Throws<ArgumentNullException>(() => new KeyValueConverter(new StringConverter(), null));
@@ -111,8 +111,8 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new KeyValueConverter(new StringConverter(), new Int32Converter());
-            string expectedInnerExceptionMessage = @"value";
-            string value = string.Empty;
+            var expectedInnerExceptionMessage = @"value";
+            var value = string.Empty;
 
             // Act
             var actualException = Assert.Throws<ArgumentNullException>(() => converter.Convert(value, converter.TargetType));

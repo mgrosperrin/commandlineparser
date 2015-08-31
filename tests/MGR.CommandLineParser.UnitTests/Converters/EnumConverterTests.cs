@@ -11,10 +11,10 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new EnumConverter();
-            Type expectedType = typeof (Enum);
+            var expectedType = typeof (Enum);
 
             // Act
-            Type actualType = converter.TargetType;
+            var actualType = converter.TargetType;
 
             // Assert
             Assert.Equal(expectedType, actualType);
@@ -25,11 +25,11 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new EnumConverter();
-            string value = "1";
+            var value = "1";
             var expectedValue = AttributeTargets.Assembly;
 
             // Act
-            object actualValue = converter.Convert(value, typeof (AttributeTargets));
+            var actualValue = converter.Convert(value, typeof (AttributeTargets));
 
             // Assert
             Assert.NotNull(actualValue);
@@ -42,11 +42,11 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new EnumConverter();
-            string value = "Assembly";
+            var value = "Assembly";
             var expectedValue = AttributeTargets.Assembly;
 
             // Act
-            object actualValue = converter.Convert(value, typeof (AttributeTargets));
+            var actualValue = converter.Convert(value, typeof (AttributeTargets));
 
             // Assert
             Assert.NotNull(actualValue);
@@ -59,11 +59,11 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new EnumConverter();
-            string value = "Assembly, Class";
-            AttributeTargets expectedValue = AttributeTargets.Assembly | AttributeTargets.Class;
+            var value = "Assembly, Class";
+            var expectedValue = AttributeTargets.Assembly | AttributeTargets.Class;
 
             // Act
-            object actualValue = converter.Convert(value, typeof (AttributeTargets));
+            var actualValue = converter.Convert(value, typeof (AttributeTargets));
 
             // Assert
             Assert.NotNull(actualValue);
@@ -76,8 +76,8 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new EnumConverter();
-            string value = "10";
-            string expectedExceptionMessage = "The specified value '10' is not correct the type 'ConsoleModifiers'.";
+            var value = "10";
+            var expectedExceptionMessage = "The specified value '10' is not correct the type 'ConsoleModifiers'.";
 
             // Act
             var actualException = Assert.Throws<CommandLineParserException>(() => converter.Convert(value, typeof (ConsoleModifiers)));
@@ -91,9 +91,9 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new EnumConverter();
-            string value = "Hello";
-            string expectedExceptionMessage = "Unable to parse 'Hello' to Enum.";
-            string expectedInnerExceptionMessage = "enumType";
+            var value = "Hello";
+            var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(Enum));
+            var expectedInnerExceptionMessage = "enumType";
 
             // Act
             var actualException = Assert.Throws<CommandLineParserException>(() => converter.Convert(value, converter.TargetType));
@@ -110,8 +110,8 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new EnumConverter();
-            string value = "Hello";
-            string expectedExceptionMessage = @"concreteTargetType";
+            var value = "Hello";
+            var expectedExceptionMessage = @"concreteTargetType";
 
             // Act
             var actualException = Assert.Throws<ArgumentNullException>(() => converter.Convert(value, null));
@@ -125,8 +125,8 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new EnumConverter();
-            string value = "Hello";
-            string expectedExceptionMessage = "The specified concrete target type (Exception) is not an enum type.";
+            var value = "Hello";
+            var expectedExceptionMessage = "The specified concrete target type (Exception) is not an enum type.";
 
             // Act
             var actualException = Assert.Throws<CommandLineParserException>(() => converter.Convert(value, typeof (Exception)));

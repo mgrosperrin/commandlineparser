@@ -146,7 +146,7 @@ namespace MGR.CommandLineParser.UnitTests.Converters
             // Arrange
             IConverter converter = new BooleanConverter();
             string value = "Hello";
-            string expectedExceptionMessage = "Unable to parse 'Hello' to Boolean.";
+            string expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(bool));
             string expectedInnerExceptionMessage = "String was not recognized as a valid Boolean.";
 
             // Act

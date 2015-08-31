@@ -11,10 +11,10 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new GuidConverter();
-            Type expectedType = typeof (Guid);
+            var expectedType = typeof (Guid);
 
             // Act
-            Type actualType = converter.TargetType;
+            var actualType = converter.TargetType;
 
             // Assert
             Assert.Equal(expectedType, actualType);
@@ -25,11 +25,11 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new GuidConverter();
-            Guid expectedValue = Guid.NewGuid();
-            string value = expectedValue.ToString();
+            var expectedValue = Guid.NewGuid();
+            var value = expectedValue.ToString();
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actualValue = converter.Convert(value, converter.TargetType);
 
             // Assert
             Assert.NotNull(actualValue);
@@ -42,9 +42,9 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new GuidConverter();
-            string value = "Hello";
-            string expectedExceptionMessage = "Unable to parse 'Hello' to Guid.";
-            string expectedInnerExceptionMessage = "Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).";
+            var value = "Hello";
+            var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(Guid));
+            var expectedInnerExceptionMessage = "Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).";
 
             // Act
             using (new LangageSwitcher("en-us"))

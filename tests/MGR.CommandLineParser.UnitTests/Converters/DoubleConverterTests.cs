@@ -11,10 +11,10 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new DoubleConverter();
-            Type expectedType = typeof (Double);
+            var expectedType = typeof (Double);
 
             // Act
-            Type actualType = converter.TargetType;
+            var actualType = converter.TargetType;
 
             // Assert
             Assert.Equal(expectedType, actualType);
@@ -25,13 +25,13 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new DoubleConverter();
-            string value = "42,35";
-            double expectedValue = 42.35;
+            var value = "42,35";
+            var expectedValue = 42.35;
 
             // Act
             using (new LangageSwitcher("fr-fr"))
             {
-                object actualValue = converter.Convert(value, converter.TargetType);
+                var actualValue = converter.Convert(value, converter.TargetType);
 
                 // Assert
                 Assert.NotNull(actualValue);
@@ -45,9 +45,9 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new DoubleConverter();
-            string value = "Hello";
-            string expectedExceptionMessage = "Unable to parse 'Hello' to Double.";
-            string expectedInnerExceptionMessage = "Input string was not in a correct format.";
+            var value = "Hello";
+            var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(double));
+            var expectedInnerExceptionMessage = "Input string was not in a correct format.";
 
             // Act
             using (new LangageSwitcher("en-us"))

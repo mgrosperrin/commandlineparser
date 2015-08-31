@@ -11,10 +11,10 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new CharConverter();
-            Type expectedType = typeof (Char);
+            var expectedType = typeof (Char);
 
             // Act
-            Type actualType = converter.TargetType;
+            var actualType = converter.TargetType;
 
             // Assert
             Assert.Equal(expectedType, actualType);
@@ -25,11 +25,11 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new CharConverter();
-            string value = "c";
-            Char expectedValue = 'c';
+            var value = "c";
+            var expectedValue = 'c';
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actualValue = converter.Convert(value, converter.TargetType);
 
             // Assert
             Assert.NotNull(actualValue);
@@ -42,9 +42,9 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new CharConverter();
-            string value = "Hello";
-            string expectedExceptionMessage = "Unable to parse 'Hello' to Char.";
-            string expectedInnerExceptionMessage = "String must be exactly one character long.";
+            var value = "Hello";
+            var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(char));
+            var expectedInnerExceptionMessage = "String must be exactly one character long.";
 
             // Act
             using (new LangageSwitcher("en-us"))
