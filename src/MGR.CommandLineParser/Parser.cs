@@ -38,30 +38,34 @@ namespace MGR.CommandLineParser
         /// <summary>
         ///     Parse a command line considering a unique command.
         /// </summary>
-        /// <typeparam name="T">Used this unique type of command.</typeparam>
+        /// <typeparam name="TCommand">Used this unique type of command.</typeparam>
         /// <param name="args">The command line args.</param>
         /// <returns>The result of the parsing.</returns>
-        public CommandResult<T> Parse<T>(IEnumerable<string> args) where T : class, ICommand
+        public CommandResult<TCommand> Parse<TCommand>(IEnumerable<string> args) where TCommand : class, ICommand
         {
             if (args == null)
             {
-                return new CommandResult<T>(default(T), CommandResultCode.NoArgs);
+                return new CommandResult<TCommand>(default(TCommand), CommandResultCode.NoArgs);
             }
+            SetUniqueCommand<TCommand>();
+            var parsingResult = ParseImpl(args);
+            if (parsingResult.Command == null)
+            {
+                return new CommandResult<TCommand>(default(TCommand), parsingResult.ReturnCode);
+            }
+            return new CommandResult<TCommand>((TCommand) parsingResult.Command, parsingResult.ReturnCode, parsingResult.ValidationResults.ToList());
+        }
+        private void SetUniqueCommand<T>() where T : class, ICommand
+        {
             var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
             foreach (var command in commandProvider.GetAllCommands())
             {
-                if (command.GetType() == typeof (T))
+                if (command.GetType() == typeof(T))
                 {
                     UniqueCommand = command;
                     break;
                 }
             }
-            var parsingResult = ParseImpl(args);
-            if (parsingResult.Command == null)
-            {
-                return new CommandResult<T>(default(T), parsingResult.ReturnCode);
-            }
-            return new CommandResult<T>((T) parsingResult.Command, parsingResult.ReturnCode, parsingResult.ValidationResults.ToList());
         }
 
         /// <summary>
