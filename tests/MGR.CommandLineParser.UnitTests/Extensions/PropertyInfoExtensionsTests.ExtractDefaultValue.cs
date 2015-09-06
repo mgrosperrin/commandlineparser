@@ -14,6 +14,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
     {
         public class ExtractDefaultValue
         {
+            private const string GuidValue = "0DCC5598-E071-47ED-9BC1-5E4C3E923A49";
             public int OriginalProperty { get; set; }
 
             [Display(Name = "CustomName")]
@@ -23,7 +24,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             [DefaultValue("Test")]
             public string CustomStringProperty { get; set; }
 
-            [DefaultValue("0DCC5598-E071-47ED-9BC1-5E4C3E923A49")]
+            [DefaultValue(GuidValue)]
             public Guid CustomGuidProperty { get; set; }
 
             [DefaultValue("Test|Test2")]
@@ -85,7 +86,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomGuidProperty));
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, null);
                 optionMetadata.Converter = new GuidConverter();
-                var expected = new Guid("0DCC5598-E071-47ED-9BC1-5E4C3E923A49");
+                var expected = new Guid(GuidValue);
 
                 // Act
                 OptionMetadataTemplate actual = propertyInfo.ExtractDefaultValue(optionMetadata);
@@ -115,7 +116,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 PropertyInfo propertyInfo = null;
                 var optionMetadata = new OptionMetadataTemplate(null, null);
-                string expectedExceptionMessage = @"propertySource";
+                string expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =
@@ -131,12 +132,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 PropertyInfo propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => OriginalProperty));
-                OptionMetadataTemplate optionMetadata = null;
-                string expectedExceptionMessage = @"metadata";
+                OptionMetadataTemplate optionMetadataTemplate = null;
+                string expectedExceptionMessage = nameof(optionMetadataTemplate);
 
                 // Act
                 var actualException =
-                    Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractDefaultValue(optionMetadata));
+                    Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractDefaultValue(optionMetadataTemplate));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);

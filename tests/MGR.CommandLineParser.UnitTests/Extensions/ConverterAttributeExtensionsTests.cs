@@ -2,5 +2,6 @@
 {
     public partial class ConverterAttributeExtensionsTests
     {
+        private static readonly string SourceParameterName = "source";
     }
 }

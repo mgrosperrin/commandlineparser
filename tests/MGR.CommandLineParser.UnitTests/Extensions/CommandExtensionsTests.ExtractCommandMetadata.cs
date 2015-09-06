@@ -32,7 +32,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 ICommand myCommand = null;
-                string expectedExceptionMessage = @"command";
+                string expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =

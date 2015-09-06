@@ -26,20 +26,20 @@ namespace System.Reflection
         }
 
         [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ICollection")]
-        internal static OptionMetadataTemplate ExtractMetadata(this PropertyInfo propertySource, CommandMetadataTemplate commandMetadataTemplate)
+        internal static OptionMetadataTemplate ExtractMetadata(this PropertyInfo source, CommandMetadataTemplate commandMetadataTemplate)
         {
-            Guard.NotNull(propertySource, nameof(propertySource));
+            Guard.NotNull(source, nameof(source));
             Guard.NotNull(commandMetadataTemplate, nameof(commandMetadataTemplate));
 
-            if (propertySource.ShouldBeIgnored())
+            if (source.ShouldBeIgnored())
             {
                 return null;
             }
-            if (!propertySource.IsValidOptionProperty())
+            if (!source.IsValidOptionProperty())
             {
-                throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractMetadataPropertyShouldBeWritableOrICollection(propertySource.Name, commandMetadataTemplate.Name));
+                throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractMetadataPropertyShouldBeWritableOrICollection(source.Name, commandMetadataTemplate.Name));
             }
-            var metadata = CreateOptionMetadataTemplate(propertySource, commandMetadataTemplate);
+            var metadata = CreateOptionMetadataTemplate(source, commandMetadataTemplate);
             return metadata;
         }
         private static OptionMetadataTemplate CreateOptionMetadataTemplate(PropertyInfo source, CommandMetadataTemplate commandMetadataTemplate)
@@ -59,21 +59,21 @@ namespace System.Reflection
 
         [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TValue"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TKey"),
          SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "KeyValueConverter"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "IDictionary")]
-        internal static OptionMetadataTemplate ExtractConverterMetadata(this PropertyInfo propertySource, OptionMetadataTemplate metadata)
+        internal static OptionMetadataTemplate ExtractConverterMetadata(this PropertyInfo source, OptionMetadataTemplate optionMetadataTemplate)
         {
-            Guard.NotNull(propertySource, nameof(propertySource));
-            Guard.NotNull(metadata, nameof(metadata));
+            Guard.NotNull(source, nameof(source));
+            Guard.NotNull(optionMetadataTemplate, nameof(optionMetadataTemplate));
 
-            var converter = GetConverterFromAttribute(propertySource, metadata)
-    ?? GetKeyValueConverterFromAttribute(propertySource, metadata)
-    ?? FindConverter(propertySource, metadata);
+            var converter = GetConverterFromAttribute(source, optionMetadataTemplate)
+    ?? GetKeyValueConverterFromAttribute(source, optionMetadataTemplate)
+    ?? FindConverter(source, optionMetadataTemplate);
             if (converter == null)
             {
-                throw new CommandLineParserException(Constants.ExceptionMessages.ParserNoConverterFound(metadata.Name, metadata.CommandMetadata.Name, propertySource.PropertyType));
+                throw new CommandLineParserException(Constants.ExceptionMessages.ParserNoConverterFound(optionMetadataTemplate.Name, optionMetadataTemplate.CommandMetadata.Name, source.PropertyType));
             }
-            metadata.Converter = converter;
+            optionMetadataTemplate.Converter = converter;
 
-            return metadata;
+            return optionMetadataTemplate;
         }
         private static IConverter FindConverter(PropertyInfo propertyInfo, OptionMetadataTemplate optionMetadataTemplate)
         {
@@ -174,55 +174,55 @@ namespace System.Reflection
             return keyConverter;
         }
 
-        internal static OptionMetadataTemplate ExtractRequiredMetadata(this PropertyInfo propertySource, OptionMetadataTemplate metadata)
+        internal static OptionMetadataTemplate ExtractRequiredMetadata(this PropertyInfo source, OptionMetadataTemplate optionMetadataTemplate)
         {
-            Guard.NotNull(propertySource, nameof(propertySource));
-            Guard.NotNull(metadata, nameof(metadata));
+            Guard.NotNull(source, nameof(source));
+            Guard.NotNull(optionMetadataTemplate, nameof(optionMetadataTemplate));
 
-            var requiredAttribute = propertySource.GetCustomAttributes(typeof(RequiredAttribute), true).FirstOrDefault() as RequiredAttribute;
+            var requiredAttribute = source.GetCustomAttributes(typeof(RequiredAttribute), true).FirstOrDefault() as RequiredAttribute;
             if (requiredAttribute != null)
             {
-                metadata.IsRequired = true;
+                optionMetadataTemplate.IsRequired = true;
             }
-            return metadata;
+            return optionMetadataTemplate;
         }
 
-        internal static OptionMetadataTemplate ExtractDisplayMetadata(this PropertyInfo propertySource, OptionMetadataTemplate metadata)
+        internal static OptionMetadataTemplate ExtractDisplayMetadata(this PropertyInfo source, OptionMetadataTemplate optionMetadataTemplate)
         {
-            Guard.NotNull(propertySource, nameof(propertySource));
-            Guard.NotNull(metadata, nameof(metadata));
+            Guard.NotNull(source, nameof(source));
+            Guard.NotNull(optionMetadataTemplate, nameof(optionMetadataTemplate));
 
-            var displayAttribute = propertySource.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
+            var displayAttribute = source.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
             if (displayAttribute == null)
             {
-                metadata.Name = propertySource.Name;
-                metadata.ShortName = propertySource.Name;
+                optionMetadataTemplate.Name = source.Name;
+                optionMetadataTemplate.ShortName = source.Name;
             }
             else
             {
-                metadata.Name = displayAttribute.GetName() ?? propertySource.Name;
+                optionMetadataTemplate.Name = displayAttribute.GetName() ?? source.Name;
                 var shortName = displayAttribute.GetShortName();
                 if (!string.IsNullOrEmpty(shortName))
                 {
-                    metadata.ShortName = shortName;
+                    optionMetadataTemplate.ShortName = shortName;
                 }
-                metadata.Description = displayAttribute.GetDescription();
+                optionMetadataTemplate.Description = displayAttribute.GetDescription();
             }
-            return metadata;
+            return optionMetadataTemplate;
         }
 
-        internal static OptionMetadataTemplate ExtractDefaultValue(this PropertyInfo propertySource, OptionMetadataTemplate metadata)
+        internal static OptionMetadataTemplate ExtractDefaultValue(this PropertyInfo source, OptionMetadataTemplate optionMetadataTemplate)
         {
-            Guard.NotNull(propertySource, nameof(propertySource));
-            Guard.NotNull(metadata, nameof(metadata));
+            Guard.NotNull(source, nameof(source));
+            Guard.NotNull(optionMetadataTemplate, nameof(optionMetadataTemplate));
 
-            if (!propertySource.PropertyType.IsMultiValuedType())
+            if (!source.PropertyType.IsMultiValuedType())
             {
-                var defaultValueAttribute = propertySource.GetCustomAttributes(typeof(DefaultValueAttribute), true).OfType<DefaultValueAttribute>().FirstOrDefault();
+                var defaultValueAttribute = source.GetCustomAttributes(typeof(DefaultValueAttribute), true).OfType<DefaultValueAttribute>().FirstOrDefault();
                 var defaultValue = defaultValueAttribute?.Value;
-                metadata.DefaultValue = ConvertDefaultValue(metadata, defaultValue);
+                optionMetadataTemplate.DefaultValue = ConvertDefaultValue(optionMetadataTemplate, defaultValue);
             }
-            return metadata;
+            return optionMetadataTemplate;
         }
 
         private static object ConvertDefaultValue(OptionMetadataTemplate optionMetadataTemplate, object defaultValue)
@@ -241,13 +241,13 @@ namespace System.Reflection
         /// <summary>
         /// Indicates if the given <see cref="PropertyInfo"/> should be ignored as option by the parse.
         /// </summary>
-        /// <param name="propertySource">The <see cref="PropertyInfo"/>.</param>
+        /// <param name="source">The <see cref="PropertyInfo"/>.</param>
         /// <returns>true if the <see cref="PropertyInfo"/> should be ignored, false otherwise.</returns>
-        internal static bool ShouldBeIgnored(this PropertyInfo propertySource)
+        internal static bool ShouldBeIgnored(this PropertyInfo source)
         {
-            Guard.NotNull(propertySource, nameof(propertySource));
+            Guard.NotNull(source, nameof(source));
 
-            return propertySource.GetCustomAttributes(typeof(IgnoreOptionPropertyAttribute), true).Any();
+            return source.GetCustomAttributes(typeof(IgnoreOptionPropertyAttribute), true).Any();
         }
     }
 }

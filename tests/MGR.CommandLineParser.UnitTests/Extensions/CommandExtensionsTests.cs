@@ -2,5 +2,6 @@
 {
     public partial class CommandExtensionsTests
     {
+        private static readonly string SourceParameterName = "source";
     }
 }

@@ -8,17 +8,17 @@ namespace System.Reflection
 {
     internal static class AssemblyExtensions
     {
-        public static IEnumerable<Type> GetTypes(this IEnumerable<Assembly> assemblies, Func<Type, bool> predicate)
+        public static IEnumerable<Type> GetTypes(this IEnumerable<Assembly> source, Func<Type, bool> predicate)
         {
             Guard.NotNull(predicate, nameof(predicate));
 
             var result = new List<Type>();
-            if (assemblies == null)
+            if (source == null)
             {
                 return result;
             }
 
-            foreach (var assembly in assemblies.Where(assembly => assembly != null && !assembly.IsDynamic))
+            foreach (var assembly in source.Where(assembly => assembly != null && !assembly.IsDynamic))
             {
                 Type[] exportedTypes = null;
 
@@ -30,7 +30,10 @@ namespace System.Reflection
                 {
                     exportedTypes = ex.Types;
                 }
+
+#pragma warning disable CC0003 // Your catch maybe include some Exception
                 catch
+#pragma warning restore CC0003 // Your catch maybe include some Exception
                 {
                     // We deliberately ignore all other exceptions. 
                     continue;

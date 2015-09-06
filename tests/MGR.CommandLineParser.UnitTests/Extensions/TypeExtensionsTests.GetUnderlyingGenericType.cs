@@ -65,11 +65,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             }
 
             [Fact]
-            public void TestNullType()
+            public void NullTypeException()
             {
                 // Arrange
                 Type testedType = null;
-                string expectedExceptionMessage = @"type";
+                string expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException = Assert.Throws<ArgumentNullException>(() => testedType.GetUnderlyingGenericType());

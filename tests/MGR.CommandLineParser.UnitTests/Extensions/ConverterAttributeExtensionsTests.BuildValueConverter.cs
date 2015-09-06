@@ -45,7 +45,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 ConverterKeyValueAttribute converterAttribute = null;
-                string expectedExceptionMessage = @"source";
+                string expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =

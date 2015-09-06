@@ -9,36 +9,36 @@ namespace System
 {
     internal static class TypeExtensions
     {
-        internal static bool IsCollectionType(this Type type)
+        internal static bool IsCollectionType(this Type source)
         {
-            Guard.NotNull(type, nameof(type));
+            Guard.NotNull(source, nameof(source));
 
-            return type.GetCollectionType() != null && !type.IsDictionaryType();
+            return source.GetCollectionType() != null && !source.IsDictionaryType();
         }
 
-        internal static Type GetCollectionType(this Type type)
+        internal static Type GetCollectionType(this Type source)
         {
-            Guard.NotNull(type, nameof(type));
+            Guard.NotNull(source, nameof(source));
 
-            return GetInterfaceType(type, typeof (ICollection<>));
+            return GetInterfaceType(source, typeof (ICollection<>));
         }
 
-        public static Type GetUnderlyingGenericType(this Type type, int index = 0)
+        public static Type GetUnderlyingGenericType(this Type source, int index = 0)
         {
-            Guard.NotNull(type, nameof(type));
+            Guard.NotNull(source, nameof(source));
 
-            if (!type.IsGenericType)
+            if (!source.IsGenericType)
             {
                 return null;
             }
-            return type.GetGenericArguments()[index];
+            return source.GetGenericArguments()[index];
         }
 
-        public static Type GetUnderlyingCollectionType(this Type type, int index = 0)
+        public static Type GetUnderlyingCollectionType(this Type source, int index = 0)
         {
-            Guard.NotNull(type, nameof(type));
+            Guard.NotNull(source, nameof(source));
 
-            Type collectionType = type.GetCollectionType();
+            Type collectionType = source.GetCollectionType();
             if (collectionType == null)
             {
                 return null;
@@ -46,11 +46,11 @@ namespace System
             return collectionType.GetUnderlyingGenericType(index);
         }
 
-        public static Type GetUnderlyingDictionaryType(this Type type, bool key)
+        public static Type GetUnderlyingDictionaryType(this Type source, bool key)
         {
-            Guard.NotNull(type, nameof(type));
+            Guard.NotNull(source, nameof(source));
 
-            Type collectionType = type.GetDictionaryType();
+            Type collectionType = source.GetDictionaryType();
             if (collectionType == null)
             {
                 return null;
@@ -58,34 +58,34 @@ namespace System
             return collectionType.GetUnderlyingGenericType(key ? 0 : 1);
         }
 
-        public static bool IsMultiValuedType(this Type type)
+        public static bool IsMultiValuedType(this Type source)
         {
-            Guard.NotNull(type, nameof(type));
+            Guard.NotNull(source, nameof(source));
 
-            return type.IsCollectionType() || type.IsDictionaryType();
+            return source.IsCollectionType() || source.IsDictionaryType();
         }
 
-        public static bool IsDictionaryType(this Type type)
+        public static bool IsDictionaryType(this Type source)
         {
-            Guard.NotNull(type, nameof(type));
+            Guard.NotNull(source, nameof(source));
 
-            return type.GetDictionaryType() != null;
+            return source.GetDictionaryType() != null;
         }
 
-        public static Type GetDictionaryType(this Type type)
+        public static Type GetDictionaryType(this Type source)
         {
-            Guard.NotNull(type, nameof(type));
+            Guard.NotNull(source, nameof(source));
 
-            return type.GetInterfaceType(typeof (IDictionary<,>));
+            return source.GetInterfaceType(typeof (IDictionary<,>));
         }
 
-        private static Type GetInterfaceType(this Type type, Type interfaceType)
+        private static Type GetInterfaceType(this Type source, Type interfaceType)
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == interfaceType)
+            if (source.IsGenericType && source.GetGenericTypeDefinition() == interfaceType)
             {
-                return type;
+                return source;
             }
-            return (from t in type.GetInterfaces()
+            return (from t in source.GetInterfaces()
                     where t.IsGenericType && t.GetGenericTypeDefinition() == interfaceType
                     select t).SingleOrDefault();
         }

@@ -29,7 +29,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 ConverterAttribute converterAttribute = null;
-                string expectedExceptionMessage = @"source";
+                string expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException = Assert.Throws<ArgumentNullException>(() => converterAttribute.BuildConverter());

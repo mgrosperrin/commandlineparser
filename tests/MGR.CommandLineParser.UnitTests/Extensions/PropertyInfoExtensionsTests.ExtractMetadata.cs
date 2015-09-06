@@ -21,10 +21,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             [Converter(typeof (StringConverter))]
             public string CustomProperty { get; set; }
 
-            public int NonWritableProperty
-            {
-                get { return 0; }
-            }
+            public int NonWritableProperty => 0;
 
             [Fact]
             public void IgnoredPropertyTests()
@@ -67,7 +64,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 PropertyInfo propertyInfo = null;
                 var commandMetadata = new CommandMetadataTemplate();
-                var expectedExceptionMessage = @"propertySource";
+                var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =

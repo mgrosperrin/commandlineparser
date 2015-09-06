@@ -17,26 +17,26 @@ namespace MGR.CommandLineParser.Command
 
         private const string COMMAND_SUFFIX = "Command";
 
-        internal static string ExtractCommandName(this ICommand commandSource)
+        internal static string ExtractCommandName(this ICommand source)
         {
-            Guard.NotNull(commandSource, nameof(commandSource));
+            Guard.NotNull(source, nameof(source));
 
-            return commandSource.ExtractCommandMetadataTemplate().Name;
+            return source.ExtractCommandMetadataTemplate().Name;
         }
 
-        internal static CommandMetadataTemplate ExtractMetadataTemplate(this ICommand command)
+        internal static CommandMetadataTemplate ExtractMetadataTemplate(this ICommand source)
         {
-            Guard.NotNull(command, nameof(command));
+            Guard.NotNull(source, nameof(source));
 
-            Type commandType = command.GetType();
+            Type commandType = source.GetType();
             lock (CommandMetadataCacheLockObject)
             {
                 if (!CommandMetadataCache.ContainsKey(commandType))
                 {
-                    var metadata = ExtractCommandMetadataTemplate(command);
-                    foreach (PropertyInfo propInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != "Arguments"))
+                    var metadata = ExtractCommandMetadataTemplate(source);
+                    foreach (PropertyInfo propInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != nameof(ICommand.Arguments)))
                     {
-                        OptionMetadataTemplate optionMetadata = propInfo.ExtractMetadata(metadata);
+                        var optionMetadata = propInfo.ExtractMetadata(metadata);
                         if (optionMetadata != null)
                         {
                             metadata.Options.Add(optionMetadata);
@@ -48,21 +48,21 @@ namespace MGR.CommandLineParser.Command
             }
         }
 
-        internal static CommandMetadata ExtractMetadata(this ICommand command)
+        internal static CommandMetadata ExtractMetadata(this ICommand source)
         {
-            return ExtractMetadataTemplate(command).ToCommandMetadata(command);
+            return ExtractMetadataTemplate(source).ToCommandMetadata(source);
         }
 
-        internal static CommandMetadataTemplate ExtractCommandMetadataTemplate(this ICommand command)
+        internal static CommandMetadataTemplate ExtractCommandMetadataTemplate(this ICommand source)
         {
-            Guard.NotNull(command, nameof(command));
+            Guard.NotNull(source, nameof(source));
 
             lock (SimpleCommandMetadataCacheLockObject)
             {
-                if (!SimpleCommandMetadataCache.ContainsKey(command.GetType()))
+                if (!SimpleCommandMetadataCache.ContainsKey(source.GetType()))
                 {
                     var metadata = new CommandMetadataTemplate();
-                    Type commandType = command.GetType();
+                    Type commandType = source.GetType();
                     string fullCommandName = commandType.Name;
                     if (fullCommandName.EndsWith(COMMAND_SUFFIX, StringComparison.Ordinal))
                     {
@@ -75,9 +75,9 @@ namespace MGR.CommandLineParser.Command
                         metadata.Description = displayAttribute.GetLocalizedDescription();
                         metadata.Usage = displayAttribute.GetLocalizedUsage();
                     }
-                    SimpleCommandMetadataCache.Add(command.GetType(), metadata);
+                    SimpleCommandMetadataCache.Add(source.GetType(), metadata);
                 }
-                return SimpleCommandMetadataCache[command.GetType()];
+                return SimpleCommandMetadataCache[source.GetType()];
             }
         }
     }

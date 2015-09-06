@@ -124,7 +124,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 PropertyInfo propertyInfo = null;
                 var optionMetadata = new OptionMetadataTemplate(null, null);
-                string expectedExceptionMessage = @"propertySource";
+                string expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =
@@ -140,12 +140,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 PropertyInfo propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => OriginalProperty));
-                OptionMetadataTemplate optionMetadata = null;
-                string expectedExceptionMessage = @"metadata";
+                OptionMetadataTemplate optionMetadataTemplate = null;
+                string expectedExceptionMessage = nameof(optionMetadataTemplate);
 
                 // Act
                 var actualException =
-                    Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractDisplayMetadata(optionMetadata));
+                    Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractDisplayMetadata(optionMetadataTemplate));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);

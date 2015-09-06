@@ -49,7 +49,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 PropertyInfo testedProperty = null;
-                string expectedExceptionMessage = @"propertySource";
+                string expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException = Assert.Throws<ArgumentNullException>(() => testedProperty.ShouldBeIgnored());

@@ -96,7 +96,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 IConverter testedConverter = null;
                 Type expectedExceptionType = typeof (ArgumentNullException);
-                string expectedExceptionMessage = @"converter";
+                string expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =

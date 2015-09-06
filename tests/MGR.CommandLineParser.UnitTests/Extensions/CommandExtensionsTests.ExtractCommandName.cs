@@ -27,11 +27,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void NullCommandException()
             {
                 // Arrange
-                ICommand myCommand = null;
-                string expectedExceptionMessage = @"commandSource";
+                ICommand command = null;
+                string expectedExceptionMessage = SourceParameterName;
 
                 // Act
-                var actualException = Assert.Throws<ArgumentNullException>(() => myCommand.ExtractCommandName());
+                var actualException = Assert.Throws<ArgumentNullException>(() => command.ExtractCommandName());
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);
