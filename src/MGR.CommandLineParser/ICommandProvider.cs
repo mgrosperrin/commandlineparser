@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser
@@ -14,6 +13,7 @@ namespace MGR.CommandLineParser
         /// <summary>
         /// Returns all commands instances.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         IEnumerable<ICommand> GetAllCommands();
         /// <summary>
         /// Retrieve the instance of the <see cref="HelpCommand"/>.
@@ -21,7 +21,7 @@ namespace MGR.CommandLineParser
         /// <param name="parserOptions">The options of the parser.</param>
         /// <param name="console">The console to print message.</param>
         /// <returns>An <see cref="HelpCommand"/> instance.</returns>
-        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        //[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         HelpCommand GetHelpCommand(IParserOptions parserOptions, IConsole console);
         /// <summary>
         /// Retrive the <see cref="ICommand"/> with the specified <paramref name="commandName"/>.

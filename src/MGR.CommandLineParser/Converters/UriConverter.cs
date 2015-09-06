@@ -18,9 +18,6 @@ namespace MGR.CommandLineParser.Converters
         /// <param name="value">The original value provided by the user.</param>
         /// <param name="concreteTargetType">Not used.</param>
         /// <returns>The <see cref="Uri"/> converted from the value.</returns>
-        public object Convert(string value, Type concreteTargetType)
-        {
-            return new Uri(value, UriKind.RelativeOrAbsolute);
-        }
+        public object Convert(string value, Type concreteTargetType) => new Uri(value, UriKind.RelativeOrAbsolute);
     }
 }

@@ -18,14 +18,11 @@ namespace MGR.CommandLineParser.Tests.Commands
         public string ApiKey { get; set; }
 
         [IgnoreOptionProperty]
-        public object SourceProvider { get; private set; }
+        public object SourceProvider { get; }
 
         [IgnoreOptionProperty]
-        public object Settings { get; private set; }
+        public object Settings { get; }
 
-        protected override int ExecuteCommand()
-        {
-            return 0;
-        }
+        protected override int ExecuteCommand() => 0;
     }
 }

@@ -28,13 +28,13 @@ namespace MGR.CommandLineParser.Command
         {
             Guard.NotNull(source, nameof(source));
 
-            Type commandType = source.GetType();
+            var commandType = source.GetType();
             lock (CommandMetadataCacheLockObject)
             {
                 if (!CommandMetadataCache.ContainsKey(commandType))
                 {
                     var metadata = ExtractCommandMetadataTemplate(source);
-                    foreach (PropertyInfo propInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != nameof(ICommand.Arguments)))
+                    foreach (var propInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != nameof(ICommand.Arguments)))
                     {
                         var optionMetadata = propInfo.ExtractMetadata(metadata);
                         if (optionMetadata != null)
@@ -48,10 +48,7 @@ namespace MGR.CommandLineParser.Command
             }
         }
 
-        internal static CommandMetadata ExtractMetadata(this ICommand source)
-        {
-            return ExtractMetadataTemplate(source).ToCommandMetadata(source);
-        }
+        internal static CommandMetadata ExtractMetadata(this ICommand source) => ExtractMetadataTemplate(source).ToCommandMetadata(source);
 
         internal static CommandMetadataTemplate ExtractCommandMetadataTemplate(this ICommand source)
         {
@@ -62,8 +59,8 @@ namespace MGR.CommandLineParser.Command
                 if (!SimpleCommandMetadataCache.ContainsKey(source.GetType()))
                 {
                     var metadata = new CommandMetadataTemplate();
-                    Type commandType = source.GetType();
-                    string fullCommandName = commandType.Name;
+                    var commandType = source.GetType();
+                    var fullCommandName = commandType.Name;
                     if (fullCommandName.EndsWith(COMMAND_SUFFIX, StringComparison.Ordinal))
                     {
                         fullCommandName = fullCommandName.Substring(0, fullCommandName.Length - COMMAND_SUFFIX.Length);

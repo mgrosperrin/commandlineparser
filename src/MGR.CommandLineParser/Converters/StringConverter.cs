@@ -18,9 +18,6 @@ namespace MGR.CommandLineParser.Converters
         /// <param name="value">The original value provided by the user.</param>
         /// <param name="concreteTargetType">Not used.</param>
         /// <returns>The <see cref="string"/> converted from the value.</returns>
-        public object Convert(string value, Type concreteTargetType)
-        {
-            return value;
-        }
+        public object Convert(string value, Type concreteTargetType) => value;
     }
 }

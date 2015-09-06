@@ -21,9 +21,6 @@ namespace MGR.CommandLineParser.Tests.Commands
         [Display(Description = "SpecCommandForceDescription")]
         public bool Force { get; set; }
 
-        protected override int ExecuteCommand()
-        {
-            return 0;
-        }
+        protected override int ExecuteCommand() => 0;
     }
 }

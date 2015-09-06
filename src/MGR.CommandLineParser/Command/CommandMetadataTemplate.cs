@@ -18,9 +18,6 @@ namespace MGR.CommandLineParser.Command
 
         internal List<OptionMetadataTemplate> Options { get; } = new List<OptionMetadataTemplate>();
 
-        internal CommandMetadata ToCommandMetadata(ICommand command)
-        {
-            return new CommandMetadata(this, command);
-        }
+        internal CommandMetadata ToCommandMetadata(ICommand command) => new CommandMetadata(this, command);
     }
 }

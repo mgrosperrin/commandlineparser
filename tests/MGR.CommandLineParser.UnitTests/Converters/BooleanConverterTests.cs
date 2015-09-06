@@ -11,13 +11,13 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new BooleanConverter();
-            Type expectedType = typeof (Boolean);
+            var expectedType = typeof(bool);
 
             // Act
-            Type actualType = converter.TargetType;
+            var actual = converter.TargetType;
 
             // Assert
-            Assert.Equal(expectedType, actualType);
+            Assert.Equal(expectedType, actual);
         }
 
         [Fact]
@@ -25,84 +25,79 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new BooleanConverter();
-            string value = string.Empty;
-            bool expectedValue = true;
+            var value = string.Empty;
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actual = converter.Convert(value, converter.TargetType);
 
             // Assert
-            Assert.NotNull(actualValue);
-            Assert.IsType<bool>(actualValue);
-            Assert.Equal(expectedValue, (Boolean) actualValue);
+            Assert.NotNull(actual);
+            Assert.IsType<bool>(actual);
+            Assert.True((bool)actual);
         }
 
         [Fact]
-        public void trueConversion()
+        public void LowerTrueConversion()
         {
             // Arrange
             IConverter converter = new BooleanConverter();
-            string value = "true";
-            bool expectedValue = true;
+            var value = "true";
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actual = converter.Convert(value, converter.TargetType);
 
             // Assert
-            Assert.NotNull(actualValue);
-            Assert.IsType<bool>(actualValue);
-            Assert.Equal(expectedValue, (Boolean) actualValue);
+            Assert.NotNull(actual);
+            Assert.IsType<bool>(actual);
+            Assert.True((bool)actual);
         }
 
         [Fact]
-        public void TrueConversion()
+        public void UpperTrueConversion()
         {
             // Arrange
             IConverter converter = new BooleanConverter();
-            string value = "True";
-            bool expectedValue = true;
+            var value = "True";
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actual = converter.Convert(value, converter.TargetType);
 
             // Assert
-            Assert.NotNull(actualValue);
-            Assert.IsType<bool>(actualValue);
-            Assert.Equal(expectedValue, (Boolean) actualValue);
+            Assert.NotNull(actual);
+            Assert.IsType<bool>(actual);
+            Assert.True((bool)actual);
         }
 
         [Fact]
-        public void falseConversion()
+        public void LowerFalseConversion()
         {
             // Arrange
             IConverter converter = new BooleanConverter();
-            string value = "false";
-            bool expectedValue = false;
+            var value = "false";
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actual = converter.Convert(value, converter.TargetType);
 
             // Assert
-            Assert.NotNull(actualValue);
-            Assert.IsType<bool>(actualValue);
-            Assert.Equal(expectedValue, (Boolean) actualValue);
+            Assert.NotNull(actual);
+            Assert.IsType<bool>(actual);
+            Assert.False((bool)actual);
         }
 
         [Fact]
-        public void FalseConversion()
+        public void UpperFalseConversion()
         {
             // Arrange
             IConverter converter = new BooleanConverter();
-            string value = "False";
-            bool expectedValue = false;
+            var value = "False";
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actual = converter.Convert(value, converter.TargetType);
 
             // Assert
-            Assert.NotNull(actualValue);
-            Assert.IsType<bool>(actualValue);
-            Assert.Equal(expectedValue, (Boolean) actualValue);
+            Assert.NotNull(actual);
+            Assert.IsType<bool>(actual);
+            Assert.False((bool)actual);
         }
 
         [Fact]
@@ -110,16 +105,15 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new BooleanConverter();
-            string value = "-";
-            bool expectedValue = false;
+            var value = "-";
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actual = converter.Convert(value, converter.TargetType);
 
             // Assert
-            Assert.NotNull(actualValue);
-            Assert.IsType<bool>(actualValue);
-            Assert.Equal(expectedValue, (Boolean) actualValue);
+            Assert.NotNull(actual);
+            Assert.IsType<bool>(actual);
+            Assert.False((bool)actual);
         }
 
         [Fact]
@@ -127,27 +121,26 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new BooleanConverter();
-            string value = "+";
-            bool expectedValue = true;
+            var value = "+";
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actual = converter.Convert(value, converter.TargetType);
 
             // Assert
-            Assert.NotNull(actualValue);
-            Assert.IsType<bool>(actualValue);
-            Assert.Equal(expectedValue, (Boolean) actualValue);
+            Assert.NotNull(actual);
+            Assert.IsType<bool>(actual);
+            Assert.True((bool)actual);
         }
 
         [Fact]
-        [Trait("Exception", "CommandLineParserException")]
+        [Trait(nameof(Exception), nameof(CommandLineParserException))]
         public void BadValueConversion()
         {
             // Arrange
             IConverter converter = new BooleanConverter();
-            string value = "Hello";
-            string expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(bool));
-            string expectedInnerExceptionMessage = "String was not recognized as a valid Boolean.";
+            var value = "Hello";
+            var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(bool));
+            var expectedInnerExceptionMessage = "String was not recognized as a valid Boolean.";
 
             // Act
             using (new LangageSwitcher("en-us"))

@@ -14,10 +14,10 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 ICommand command = new HelloCommand();
-                string execpted = "Hello";
+                var execpted = "Hello";
 
                 // Act
-                string actual = command.ExtractCommandName();
+                var actual = command.ExtractCommandName();
 
                 // Assert
                 Assert.Equal(execpted, actual);
@@ -28,7 +28,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 ICommand command = null;
-                string expectedExceptionMessage = SourceParameterName;
+                var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException = Assert.Throws<ArgumentNullException>(() => command.ExtractCommandName());

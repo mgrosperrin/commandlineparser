@@ -17,13 +17,13 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
             IEnumerable<string> args = new[]
                 {"IntTest", "-Strvalue:custom value", "-i", "42", "Custom argument value", "-b"};
             var expectedReturnCode = CommandResultCode.Ok;
-            string expectedStrValue = "custom value";
-            int expectedNbOfArguments = 1;
-            string expectedArgumentsValue = "Custom argument value";
-            int expectedIntValue = 42;
+            var expectedStrValue = "custom value";
+            var expectedNbOfArguments = 1;
+            var expectedArgumentsValue = "Custom argument value";
+            var expectedIntValue = 42;
 
             // Act
-            CommandResult<ICommand> actual = parser.Parse(args);
+            var actual = parser.Parse(args);
 
             // Assert
             Assert.True(actual.IsValid);
@@ -46,13 +46,13 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
             IEnumerable<string> args = new[]
                 {"IntTest", "-Strvalue:custom value", "-i", "42", "-il", "42", "Custom argument value", "-b"};
             var expectedReturnCode = CommandResultCode.Ok;
-            string expectedStrValue = "custom value";
-            int expectedNbOfArguments = 1;
-            string expectedArgumentsValue = "Custom argument value";
-            int expectedIntValue = 42;
+            var expectedStrValue = "custom value";
+            var expectedNbOfArguments = 1;
+            var expectedArgumentsValue = "Custom argument value";
+            var expectedIntValue = 42;
 
             // Act
-            CommandResult<ICommand> actual = parser.Parse(args);
+            var actual = parser.Parse(args);
 
             // Assert
             Assert.True(actual.IsValid);
@@ -76,12 +76,12 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] {"IntTest", "-i", "42", "Custom argument value", "-b"};
             var expectedReturnCode = CommandResultCode.CommandParameterNotValid;
-            int expectedNbOfArguments = 1;
-            string expectedArgumentsValue = "Custom argument value";
-            int expectedIntValue = 42;
+            var expectedNbOfArguments = 1;
+            var expectedArgumentsValue = "Custom argument value";
+            var expectedIntValue = 42;
 
             // Act
-            CommandResult<ICommand> actual = parser.Parse(args);
+            var actual = parser.Parse(args);
 
             // Assert
             Assert.False(actual.IsValid);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using MGR.CommandLineParser.Converters;
 
 namespace MGR.CommandLineParser.Command
@@ -23,7 +22,7 @@ namespace MGR.CommandLineParser.Command
         /// </summary>
         /// <param name="valueConverterType">The type of the value converter.</param>
         /// <param name="keyConverterType">The type of the key converter.</param>
-        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "IConverter"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "CommandLineParser")]
+        //[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "IConverter"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "CommandLineParser")]
         public ConverterKeyValueAttribute(Type valueConverterType, Type keyConverterType)
         {
             Guard.NotNull(keyConverterType, nameof(keyConverterType));

@@ -15,14 +15,14 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] { "delete", "-Source:custom value", "-np", "-ApiKey", "MyApiKey", "Custom argument value", "b" };
-            CommandResultCode expectedReturnCode = CommandResultCode.Ok;
-            string expectedSource = "custom value";
-            string expectedApiKey = "MyApiKey";
-            int expectedNbOfArguments = 2;
+            var expectedReturnCode = CommandResultCode.Ok;
+            var expectedSource = "custom value";
+            var expectedApiKey = "MyApiKey";
+            var expectedNbOfArguments = 2;
             var expectedArgumentsValue = new List<string> { "Custom argument value", "b" };
 
             // Act
-            CommandResult<ICommand> actual = parser.Parse(args);
+            var actual = parser.Parse(args);
 
             // Assert
             Assert.True(actual.IsValid);
@@ -34,7 +34,7 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
             Assert.Null(((DeleteCommand)actual.Command).SourceProvider);
             Assert.Null(((DeleteCommand)actual.Command).Settings);
             Assert.Equal(expectedNbOfArguments, ((DeleteCommand)actual.Command).Arguments.Count);
-            for (int i = 0; i < expectedNbOfArguments; i++)
+            for (var i = 0; i < expectedNbOfArguments; i++)
             {
                 Assert.Equal(expectedArgumentsValue[i], actual.Command.Arguments[i]);
             }
@@ -46,7 +46,7 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] { "delete", "-Source:custom value", "-pn", "ApiKey", "MyApiKey", "Custom argument value", "b" };
-            string expectedMessageException = @"There is no option 'pn' for the command 'Delete'.";
+            var expectedMessageException = @"There is no option 'pn' for the command 'Delete'.";
 
             // Act
             Exception actual = null;

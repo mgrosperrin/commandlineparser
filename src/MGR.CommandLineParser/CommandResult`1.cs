@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using MGR.CommandLineParser.Command;
 
@@ -9,18 +8,18 @@ namespace MGR.CommandLineParser
     /// <summary>
     /// Represents the result of the parsing.
     /// </summary>
-    /// <typeparam name="T">The type of the command (defined to a specific type if you call the generic Parse method, <see cref="ICommand"/> otherwise).</typeparam>
-    [SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes")]
-    public struct CommandResult<T> where T : class, ICommand
+    /// <typeparam name="TCommand">The type of the command (defined to a specific type if you call the generic Parse method, <see cref="ICommand"/> otherwise).</typeparam>
+    //[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes")]
+    public struct CommandResult<TCommand> where TCommand : class, ICommand
     {
-        private readonly T _command;
+        private readonly TCommand _command;
         private readonly CommandResultCode _returnCode;
         private readonly List<ValidationResult> _validationResults;
 
-        internal CommandResult(T command, CommandResultCode returnCode)
+        internal CommandResult(TCommand command, CommandResultCode returnCode)
             : this(command, returnCode, new List<ValidationResult>())
         { }
-        internal CommandResult(T command, CommandResultCode returnCode, List<ValidationResult> validationResults)
+        internal CommandResult(TCommand command, CommandResultCode returnCode, List<ValidationResult> validationResults)
         {
             _command = command;
             _returnCode = returnCode;
@@ -29,7 +28,7 @@ namespace MGR.CommandLineParser
         /// <summary>
         /// The resulting command.
         /// </summary>
-        public T Command => _command;
+        public TCommand Command => _command;
 
         /// <summary>
         /// Defines if the command is in a valid state (parsing/validating the options).
@@ -59,5 +58,30 @@ namespace MGR.CommandLineParser
             }
             return Command.Execute();
         }
+
+        /// <inheritdoc />
+        public override bool Equals(object obj)
+        {
+            if (obj is CommandResult<TCommand>)
+            {
+                var commandResult = (CommandResult<TCommand>)obj;
+                return commandResult.Command == Command;
+            }
+            return false;
+        }
+        /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            if (_command == null)
+            {
+                return _returnCode.GetHashCode();
+            }
+            return _command.GetHashCode();
+        }
+
+        /// <inheritdoc />
+        public static bool operator ==(CommandResult<TCommand> first, CommandResult<TCommand> second) => first.Equals(second);
+        /// <inheritdoc />
+        public static bool operator !=(CommandResult<TCommand> first, CommandResult<TCommand> second) => !first.Equals(second);
     }
 }

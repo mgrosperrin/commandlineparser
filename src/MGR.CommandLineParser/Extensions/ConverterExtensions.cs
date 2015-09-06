@@ -25,7 +25,7 @@ namespace MGR.CommandLineParser.Converters
             Guard.NotNull(source, nameof(source));
             Guard.NotNull(targetType, nameof(targetType));
 
-            Type type = targetType.IsMultiValuedType() ? targetType.GetUnderlyingCollectionType() : targetType;
+            var type = targetType.IsMultiValuedType() ? targetType.GetUnderlyingCollectionType() : targetType;
             return type.IsAssignableFrom(source.TargetType);
         }
     }

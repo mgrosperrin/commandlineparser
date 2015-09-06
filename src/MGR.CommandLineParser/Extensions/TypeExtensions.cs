@@ -38,7 +38,7 @@ namespace System
         {
             Guard.NotNull(source, nameof(source));
 
-            Type collectionType = source.GetCollectionType();
+            var collectionType = source.GetCollectionType();
             if (collectionType == null)
             {
                 return null;

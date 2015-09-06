@@ -26,6 +26,7 @@ namespace MGR.CommandLineParser
         /// </summary>
         /// <param name="logo">The custom logo</param>
         /// <returns>This instance of <see cref="ParserBuilder" />.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1719:ParameterNamesShouldNotMatchMemberNames", MessageId = "0#")]
         public ParserBuilder Logo(string logo)
         {
             _parserBuilderOptions.Logo = logo;
@@ -37,6 +38,7 @@ namespace MGR.CommandLineParser
         /// </summary>
         /// <param name="commandLineName">The custom command line name</param>
         /// <returns>This instance of <see cref="ParserBuilder" />.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1719:ParameterNamesShouldNotMatchMemberNames", MessageId = "0#")]
         public ParserBuilder CommandLineName(string commandLineName)
         {
             _parserBuilderOptions.CommandLineName = commandLineName;

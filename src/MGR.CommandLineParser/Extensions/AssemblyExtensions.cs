@@ -8,6 +8,7 @@ namespace System.Reflection
 {
     internal static class AssemblyExtensions
     {
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public static IEnumerable<Type> GetTypes(this IEnumerable<Assembly> source, Func<Type, bool> predicate)
         {
             Guard.NotNull(predicate, nameof(predicate));

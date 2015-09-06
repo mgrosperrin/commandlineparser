@@ -40,10 +40,7 @@ namespace MGR.CommandLineParser.Tests.Commands
         public string Version { get; set; }
 
         [Display(Description = "PackageCommandExcludeDescription")]
-        public ICollection<string> Exclude
-        {
-            get { return _excludes; }
-        }
+        public ICollection<string> Exclude => _excludes;
 
         [Display(Description = "PackageCommandSymbolsDescription")]
         public bool Symbols { get; set; }
@@ -61,17 +58,11 @@ namespace MGR.CommandLineParser.Tests.Commands
         public bool NoPackageAnalysis { get; set; }
 
         [Display(Description = "PackageCommandPropertiesDescription")]
-        public Dictionary<string, string> Properties
-        {
-            get { return _properties; }
-        }
+        public Dictionary<string, string> Properties => _properties;
 
         [IgnoreOptionProperty]
         public IEnumerable<object> Rules { get; set; }
 
-        protected override int ExecuteCommand()
-        {
-            return 0;
-        }
+        protected override int ExecuteCommand() => 0;
     }
 }

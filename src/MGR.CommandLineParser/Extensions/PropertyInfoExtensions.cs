@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using MGR.CommandLineParser;
@@ -25,7 +24,7 @@ namespace System.Reflection
             return source.CanWrite || source.PropertyType.IsMultiValuedType();
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ICollection")]
+        //[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ICollection")]
         internal static OptionMetadataTemplate ExtractMetadata(this PropertyInfo source, CommandMetadataTemplate commandMetadataTemplate)
         {
             Guard.NotNull(source, nameof(source));
@@ -57,8 +56,7 @@ namespace System.Reflection
             return metadata;
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TValue"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TKey"),
-         SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "KeyValueConverter"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "IDictionary")]
+        //[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TValue"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TKey"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "KeyValueConverter"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "IDictionary")]
         internal static OptionMetadataTemplate ExtractConverterMetadata(this PropertyInfo source, OptionMetadataTemplate optionMetadataTemplate)
         {
             Guard.NotNull(source, nameof(source));

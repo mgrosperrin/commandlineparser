@@ -1,11 +1,12 @@
 ﻿using System;
+using JetBrains.Annotations;
 using MGR.CommandLineParser.Converters;
 
 namespace MGR.CommandLineParser
 {
     internal static class Guard
     {
-        public static void NotNull(object item, string name)
+        public static void NotNull(object item, [InvokerParameterName] string name)
         {
             if (item == null)
             {
@@ -13,9 +14,9 @@ namespace MGR.CommandLineParser
             }
         }
 
-        public static void IsIConverter(Type type, string message)
+        public static void IsIConverter([NotNull] Type type, string message)
         {
-            if (!typeof(IConverter).IsAssignableFrom(type))
+            if (!typeof (IConverter).IsAssignableFrom(type))
             {
                 throw new CommandLineParserException(message);
             }

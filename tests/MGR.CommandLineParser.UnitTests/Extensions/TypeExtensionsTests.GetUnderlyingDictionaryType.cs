@@ -12,11 +12,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void DictionaryStringIntKeyTest()
             {
                 // Arrange
-                Type testedType = typeof (Dictionary<string, int>);
-                Type expected = typeof (string);
+                var testedType = typeof (Dictionary<string, int>);
+                var expected = typeof (string);
 
                 // Act
-                Type actual = testedType.GetUnderlyingDictionaryType(true);
+                var actual = testedType.GetUnderlyingDictionaryType(true);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -26,11 +26,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void IDictionaryStringIntKeyTest()
             {
                 // Arrange
-                Type testedType = typeof (IDictionary<string, int>);
-                Type expected = typeof (string);
+                var testedType = typeof (IDictionary<string, int>);
+                var expected = typeof (string);
 
                 // Act
-                Type actual = testedType.GetUnderlyingDictionaryType(true);
+                var actual = testedType.GetUnderlyingDictionaryType(true);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -40,11 +40,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void DictionaryStringIntValueTest()
             {
                 // Arrange
-                Type testedType = typeof (Dictionary<string, int>);
-                Type expected = typeof (int);
+                var testedType = typeof (Dictionary<string, int>);
+                var expected = typeof (int);
 
                 // Act
-                Type actual = testedType.GetUnderlyingDictionaryType(false);
+                var actual = testedType.GetUnderlyingDictionaryType(false);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -54,11 +54,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void IDictionaryStringIntValueTest()
             {
                 // Arrange
-                Type testedType = typeof (IDictionary<string, int>);
-                Type expected = typeof (int);
+                var testedType = typeof (IDictionary<string, int>);
+                var expected = typeof (int);
 
                 // Act
-                Type actual = testedType.GetUnderlyingDictionaryType(false);
+                var actual = testedType.GetUnderlyingDictionaryType(false);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -68,11 +68,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void TupleIntKeyTest()
             {
                 // Arrange
-                Type testedType = typeof (Tuple<int>);
+                var testedType = typeof (Tuple<int>);
                 Type expected = null;
 
                 // Act
-                Type actual = testedType.GetUnderlyingDictionaryType(true);
+                var actual = testedType.GetUnderlyingDictionaryType(true);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -82,11 +82,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void TupleIntValueTest()
             {
                 // Arrange
-                Type testedType = typeof (Tuple<int>);
+                var testedType = typeof (Tuple<int>);
                 Type expected = null;
 
                 // Act
-                Type actual = testedType.GetUnderlyingDictionaryType(false);
+                var actual = testedType.GetUnderlyingDictionaryType(false);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -97,7 +97,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 Type testedType = null;
-                string expectedExceptionMessage = SourceParameterName;
+                var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =

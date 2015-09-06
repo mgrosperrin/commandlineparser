@@ -28,12 +28,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void OriginalTest()
             {
                 // Arrange
-                string expected = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expected);
+                var expected = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
+                var propertyInfo = GetType().GetProperty(expected);
                 var optionMetadata = new OptionMetadataTemplate(null, null);
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
 
                 // Assert
                 Assert.Equal(expected, actual.Name);
@@ -45,14 +45,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomNameTest()
             {
                 // Arrange
-                string expectedName = "CustomName";
-                string expectedShortName = expectedName;
-                PropertyInfo propertyInfo =
+                var expectedName = "CustomName";
+                var expectedShortName = expectedName;
+                var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameProperty));
                 var optionMetadata = new OptionMetadataTemplate(null, null);
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
 
                 // Assert
                 Assert.Equal(expectedName, actual.Name);
@@ -64,13 +64,13 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomShortNameTest()
             {
                 // Arrange
-                string expectedName = TypeHelpers.ExtractPropertyName(() => CustomShortNameProperty);
-                string expectedShortName = "csnp";
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var expectedName = TypeHelpers.ExtractPropertyName(() => CustomShortNameProperty);
+                var expectedShortName = "csnp";
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var optionMetadata = new OptionMetadataTemplate(null, null);
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
 
                 // Assert
                 Assert.Equal(expectedName, actual.Name);
@@ -82,14 +82,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomNameAndShortNameTest()
             {
                 // Arrange
-                string expectedName = "CustomName";
-                string expectedShortName = "csnp";
-                PropertyInfo propertyInfo =
+                var expectedName = "CustomName";
+                var expectedShortName = "csnp";
+                var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameAndShortNameProperty));
                 var optionMetadata = new OptionMetadataTemplate(null, null);
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
 
                 // Assert
                 Assert.Equal(expectedName, actual.Name);
@@ -101,16 +101,16 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomNameShortNameAndDescriptionTest()
             {
                 // Arrange
-                string expectedName = "CustomName";
-                string expectedShortName = "csnp";
-                string expectedDescription = "My custom description";
-                PropertyInfo propertyInfo =
+                var expectedName = "CustomName";
+                var expectedShortName = "csnp";
+                var expectedDescription = "My custom description";
+                var propertyInfo =
                     GetType()
                         .GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameAndShortNameDescriptionProperty));
                 var optionMetadata = new OptionMetadataTemplate(null, null);
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
 
                 // Assert
                 Assert.Equal(expectedName, actual.Name);
@@ -124,7 +124,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 PropertyInfo propertyInfo = null;
                 var optionMetadata = new OptionMetadataTemplate(null, null);
-                string expectedExceptionMessage = SourceParameterName;
+                var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =
@@ -138,10 +138,10 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void NullMetadataException()
             {
                 // Arrange
-                PropertyInfo propertyInfo =
+                var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => OriginalProperty));
                 OptionMetadataTemplate optionMetadataTemplate = null;
-                string expectedExceptionMessage = nameof(optionMetadataTemplate);
+                var expectedExceptionMessage = nameof(optionMetadataTemplate);
 
                 // Act
                 var actualException =

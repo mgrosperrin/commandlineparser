@@ -17,17 +17,17 @@ namespace MGR.CommandLineParser.UnitTests.Command
             public void TestSimpleProperty()
             {
                 // Arrange
-                PropertyInfo propertyInfo =
+                var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => SimpleIntProperty));
                 var commandMetadata = new CommandMetadataTemplate {Name = "MyCommand"};
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata)
                 {
                     Name = propertyInfo.Name
                 };
-                string expected = string.Empty;
+                var expected = string.Empty;
 
                 // Act
-                string actual = HelpCommand.GetMultiValueIndicator(optionMetadata);
+                var actual = HelpCommand.GetMultiValueIndicator(optionMetadata);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -37,17 +37,17 @@ namespace MGR.CommandLineParser.UnitTests.Command
             public void TestListProperty()
             {
                 // Arrange
-                PropertyInfo propertyInfo = GetType()
+                var propertyInfo = GetType()
                     .GetProperty(TypeHelpers.ExtractPropertyName(() => ListIntProperty));
                 var commandMetadata = new CommandMetadataTemplate {Name = "MyCommand"};
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata)
                 {
                     Name = propertyInfo.Name
                 };
-                string expected = "+";
+                var expected = "+";
 
                 // Act
-                string actual = HelpCommand.GetMultiValueIndicator(optionMetadata);
+                var actual = HelpCommand.GetMultiValueIndicator(optionMetadata);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -57,17 +57,17 @@ namespace MGR.CommandLineParser.UnitTests.Command
             public void TestDictionaryProperty()
             {
                 // Arrange
-                PropertyInfo propertyInfo =
+                var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => DictionaryProperty));
                 var commandMetadata = new CommandMetadataTemplate {Name = "MyCommand"};
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata)
                 {
                     Name = propertyInfo.Name
                 };
-                string expected = "#";
+                var expected = "#";
 
                 // Act
-                string actual = HelpCommand.GetMultiValueIndicator(optionMetadata);
+                var actual = HelpCommand.GetMultiValueIndicator(optionMetadata);
 
                 // Assert
                 Assert.Equal(expected, actual);

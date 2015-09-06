@@ -6,6 +6,10 @@ using MGR.CommandLineParser.Converters;
 
 namespace MGR.CommandLineParser
 {
+    /// <summary>
+    ///     Default implementation of the <see cref="IServiceResolver" />.
+    /// </summary>
+    /// <remarks>This implementation uses a simple map to find the service to resolve.</remarks>
     public class DefaultServiceResolver : IServiceResolver
     {
         private static readonly List<IConverter> Converters = new List<IConverter>
@@ -26,22 +30,26 @@ namespace MGR.CommandLineParser
             new TimeSpanConverter(),
             new UriConverter()
         };
-    private static readonly Dictionary<Type, Func<IEnumerable<object>>> MultiplyRegistredServices =
+
+        private static readonly Dictionary<Type, Func<IEnumerable<object>>> MultiplyRegistredServices =
             new Dictionary<Type, Func<IEnumerable<object>>>
             {
-                {typeof(IConverter),()=> Converters}
+                {typeof (IConverter), () => Converters}
             };
 
         private static readonly Dictionary<Type, Func<object>> SinglyRegistredServices = new Dictionary<Type, Func<object>>
         {
             {typeof (IConsole), () => new DefaultConsole()},
-            {typeof (ICommandProvider), () => new DirectotyBrowsingCommandProvider(
-                ServiceResolver.Current.ResolveService<IAssemblyFileProvider>(),
-                ServiceResolver.Current.ResolveService<ICommandActivator>())},
-            {typeof(ICommandActivator), () => new BasicCommandActivator() },
-            {typeof(IAssemblyFileProvider), () => new CurrentDirectoryAssemblyFileProvider() }
+            {
+                typeof (ICommandProvider), () => new DirectotyBrowsingCommandProvider(
+                    ServiceResolver.Current.ResolveService<IAssemblyFileProvider>(),
+                    ServiceResolver.Current.ResolveService<ICommandActivator>())
+            },
+            {typeof (ICommandActivator), () => new BasicCommandActivator()},
+            {typeof (IAssemblyFileProvider), () => new CurrentDirectoryAssemblyFileProvider()}
         };
 
+        /// <inheritdoc />
         public T ResolveService<T>() where T : class
         {
             if (!SinglyRegistredServices.ContainsKey(typeof (T)))
@@ -58,6 +66,7 @@ namespace MGR.CommandLineParser
             return service;
         }
 
+        /// <inheritdoc />
         public IEnumerable<T> ResolveServices<T>() where T : class
         {
             if (!MultiplyRegistredServices.ContainsKey(typeof (T)))
@@ -74,33 +83,65 @@ namespace MGR.CommandLineParser
             return services;
         }
 
-        public static void RegisterService<T>([NotNull]Func<T> serviceFactory)
+        /// <summary>
+        ///     Register a service.
+        /// </summary>
+        /// <typeparam name="T">The type of the contract of the service.</typeparam>
+        /// <param name="serviceFactory">A factory to get the implementation of the service.</param>
+        [PublicAPI]
+        public static void RegisterService<T>([NotNull] Func<T> serviceFactory) where T : class
         {
+            Guard.NotNull(serviceFactory, nameof(serviceFactory));
+
             var serviceType = typeof (T);
             if (SinglyRegistredServices.ContainsKey(serviceType))
             {
-                SinglyRegistredServices[serviceType] = () => serviceFactory();
+                SinglyRegistredServices[serviceType] = () => serviceFactory?.Invoke();
             }
             else
             {
-                SinglyRegistredServices.Add(serviceType, () => serviceFactory());
+                SinglyRegistredServices.Add(serviceType, () => serviceFactory?.Invoke());
             }
         }
 
-        public static void RegisterServices<T>(Func<IEnumerable<T>> servicesFactory)
+        /// <summary>
+        ///     Register a collection of services.
+        /// </summary>
+        /// <typeparam name="T">The type of the contract of the service.</typeparam>
+        /// <param name="servicesFactory">A factory to get the implementations of the service.</param>
+        public static void RegisterServices<T>([NotNull] Func<IEnumerable<T>> servicesFactory) where T : class
         {
             var serviceType = typeof (T);
             if (MultiplyRegistredServices.ContainsKey(serviceType))
             {
-                MultiplyRegistredServices[serviceType] = () => servicesFactory().OfType<object>();
+                MultiplyRegistredServices[serviceType] = () => servicesFactory?.Invoke();
             }
             else
             {
-                MultiplyRegistredServices.Add(serviceType, () => servicesFactory().OfType<object>());
+                MultiplyRegistredServices.Add(serviceType, () => servicesFactory?.Invoke());
             }
         }
 
-        public static void RegisterConverter(IConverter converter, bool overwriteExisting = false)
+        /// <summary>
+        ///     Register a <see cref="IConverter" />.
+        /// </summary>
+        /// <param name="converter">The <see cref="IConverter" /> to register.</param>
+        /// <remarks>Do not overwrite the converter.</remarks>
+        [PublicAPI]
+        public static void RegisterConverter([NotNull] IConverter converter)
+        {
+            RegisterConverter(converter, false);
+        }
+        /// <summary>
+        ///     Register a <see cref="IConverter" />.
+        /// </summary>
+        /// <param name="converter">The <see cref="IConverter" /> to register.</param>
+        /// <param name="overwriteExisting">
+        ///     <code>true</code> to overwrite an existing <see cref="IConverter" /> for the same
+        ///     target type. <code>false</code> otherwise.
+        /// </param>
+        [PublicAPI]
+        public static void RegisterConverter([NotNull] IConverter converter, bool overwriteExisting)
         {
             Guard.NotNull(converter, nameof(converter));
 
@@ -115,7 +156,13 @@ namespace MGR.CommandLineParser
                 Converters.Add(converter);
             }
         }
-        public static void RemoveConverter(IConverter converter)
+
+        /// <summary>
+        ///     Remove a <see cref="IConverter" />.
+        /// </summary>
+        /// <param name="converter">The <see cref="IConverter"/> to remove.</param>
+        [PublicAPI]
+        public static void RemoveConverter([NotNull] IConverter converter)
         {
             Guard.NotNull(converter, nameof(converter));
 

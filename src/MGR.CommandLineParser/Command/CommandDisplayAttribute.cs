@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime;
 
 namespace MGR.CommandLineParser.Command
@@ -11,14 +10,14 @@ namespace MGR.CommandLineParser.Command
     public sealed class CommandDisplayAttribute : Attribute
     {
         private readonly LocalizableString _description = new LocalizableString(nameof(Description));
-        private readonly LocalizableString _usage = new LocalizableString("Prompt");
+        private readonly LocalizableString _usage = new LocalizableString(nameof(Usage));
         private Type _resourceType;
 
 
-        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        //[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         internal string GetLocalizedDescription() => _description.GetLocalizableValue();
 
-        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        //[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         internal string GetLocalizedUsage() => _usage.GetLocalizableValue();
 
         /// <summary>

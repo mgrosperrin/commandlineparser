@@ -25,12 +25,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void WritableTest()
             {
                 // Arrange
-                PropertyInfo propertyToTest =
+                var propertyToTest =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => WritableProperty));
-                bool expected = true;
+                var expected = true;
 
                 // Act
-                bool actual = propertyToTest.IsValidOptionProperty();
+                var actual = propertyToTest.IsValidOptionProperty();
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -40,12 +40,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void NonWritableTest()
             {
                 // Arrange
-                PropertyInfo propertyToTest =
+                var propertyToTest =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => NonWritableProperty));
-                bool expected = false;
+                var expected = false;
 
                 // Act
-                bool actual = propertyToTest.IsValidOptionProperty();
+                var actual = propertyToTest.IsValidOptionProperty();
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -55,12 +55,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void NonWritableMultiValueTest()
             {
                 // Arrange
-                PropertyInfo propertyToTest =
+                var propertyToTest =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => NonWritableMultiValueProperty));
-                bool expected = true;
+                var expected = true;
 
                 // Act
-                bool actual = propertyToTest.IsValidOptionProperty();
+                var actual = propertyToTest.IsValidOptionProperty();
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -71,7 +71,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 PropertyInfo testedProperty = null;
-                string expectedExceptionMessage = SourceParameterName;
+                var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException = Assert.Throws<ArgumentNullException>(() => testedProperty.IsValidOptionProperty());

@@ -13,22 +13,16 @@ namespace MGR.CommandLineParser.Tests.Commands
         private readonly List<string> _ids = new List<string>();
 
         [IgnoreOptionProperty]
-        public object RepositoryFactory { get; private set; }
+        public object RepositoryFactory { get; }
 
         [IgnoreOptionProperty]
-        public object SourceProvider { get; private set; }
+        public object SourceProvider { get; }
 
         [Display(Description = "UpdateCommandSourceDescription")]
-        public ICollection<string> Source
-        {
-            get { return _sources; }
-        }
+        public ICollection<string> Source => _sources;
 
         [Display(Description = "UpdateCommandIdDescription")]
-        public ICollection<string> Id
-        {
-            get { return _ids; }
-        }
+        public ICollection<string> Id => _ids;
 
         [Display(Description = "UpdateCommandRepositoryPathDescription")]
         public string RepositoryPath { get; set; }
@@ -45,9 +39,6 @@ namespace MGR.CommandLineParser.Tests.Commands
         [Display(Description = "UpdateCommandPrerelease")]
         public bool Prerelease { get; set; }
 
-        protected override int ExecuteCommand()
-        {
-            return 0;
-        }
+        protected override int ExecuteCommand() => 0;
     }
 }

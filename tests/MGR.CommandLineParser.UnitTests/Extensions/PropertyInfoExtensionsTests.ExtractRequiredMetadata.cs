@@ -19,13 +19,13 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void WritableTest()
             {
                 // Arrange
-                PropertyInfo propertyInfo =
+                var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => WritableProperty));
                 var optionMetadata = new OptionMetadataTemplate(null, null);
-                bool expected = false;
+                var expected = false;
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractRequiredMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractRequiredMetadata(optionMetadata);
 
                 // Assert
                 Assert.Equal(expected, actual.IsRequired);
@@ -35,13 +35,13 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void NonWritableTest()
             {
                 // Arrange
-                PropertyInfo propertyInfo =
+                var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => WritableIgnoredProperty));
                 var optionMetadata = new OptionMetadataTemplate(null, null);
-                bool expected = true;
+                var expected = true;
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractRequiredMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractRequiredMetadata(optionMetadata);
 
                 // Assert
                 Assert.Equal(expected, actual.IsRequired);
@@ -53,7 +53,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 PropertyInfo propertyInfo = null;
                 var optionMetadata = new OptionMetadataTemplate(null, null);
-                string expectedExceptionMessage = SourceParameterName;
+                var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =
@@ -67,9 +67,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void NullMetadataException()
             {
                 // Arrange
-                PropertyInfo propertyInfo = GetType().GetProperty("WritableIgnoredProperty");
+                var propertyInfo = GetType().GetProperty(nameof(WritableIgnoredProperty));
                 OptionMetadataTemplate optionMetadataTemplate = null;
-                string expectedExceptionMessage = nameof(optionMetadataTemplate);
+                var expectedExceptionMessage = nameof(optionMetadataTemplate);
 
                 // Act
                 var actualException =

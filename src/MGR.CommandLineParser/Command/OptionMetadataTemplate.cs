@@ -37,9 +37,6 @@ namespace MGR.CommandLineParser.Command
         }
 
 
-        internal OptionMetadata ToOptionMetadata(CommandMetadata commandMetadata)
-        {
-            return new OptionMetadata(this, commandMetadata);
-        }
+        internal OptionMetadata ToOptionMetadata(CommandMetadata commandMetadata) => new OptionMetadata(this, commandMetadata);
     }
 }

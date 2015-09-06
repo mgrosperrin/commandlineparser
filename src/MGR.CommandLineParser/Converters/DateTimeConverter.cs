@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace MGR.CommandLineParser.Converters
@@ -23,7 +22,8 @@ namespace MGR.CommandLineParser.Converters
         /// <exception cref="CommandLineParserException">Thrown if the
         ///   <paramref name="value" />
         ///   is not valid.</exception>
-        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "DateTime")]
+        //[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "DateTime")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.DateTime.Parse(System.String,System.IFormatProvider)")]
         public object Convert(string value, Type concreteTargetType)
         {
             try

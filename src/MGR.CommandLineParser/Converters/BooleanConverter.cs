@@ -14,11 +14,11 @@ namespace MGR.CommandLineParser.Converters
 
 
         /// <summary>
-        ///     Convert the <paramref name="value" /> to an instance of <see cref="Boolean" /> .
+        ///     Convert the <paramref name="value" /> to an instance of <see cref="bool" /> .
         /// </summary>
         /// <param name="value"> The original value provided by the user. </param>
         /// <param name="concreteTargetType"> Not used. </param>
-        /// <returns> The <see cref="Boolean" /> converted from the value. </returns>
+        /// <returns> The <see cref="bool" /> converted from the value. </returns>
         /// <remarks>
         ///     The value can be '-', 'False' or 'false' to specify false, '+', 'True' or 'true' to specify true.
         /// </remarks>

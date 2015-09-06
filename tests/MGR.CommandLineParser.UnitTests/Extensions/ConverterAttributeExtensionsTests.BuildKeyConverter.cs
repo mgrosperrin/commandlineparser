@@ -13,12 +13,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void Int32ConverterActivation()
             {
                 // Arrange
-                Type expected = typeof (Int32Converter);
-                Type valueConverterType = typeof (GuidConverter);
+                var expected = typeof (Int32Converter);
+                var valueConverterType = typeof (GuidConverter);
                 var converterAttribute = new ConverterKeyValueAttribute(valueConverterType, expected);
 
                 // Act
-                IConverter actual = converterAttribute.BuildKeyConverter();
+                var actual = converterAttribute.BuildKeyConverter();
 
                 // Assert
                 Assert.NotNull(actual);
@@ -29,12 +29,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void DefaultStringConverterActivation()
             {
                 // Arrange
-                Type expected = typeof (StringConverter);
-                Type ValueConverterType = typeof (Int32Converter);
+                var expected = typeof (StringConverter);
+                var ValueConverterType = typeof (Int32Converter);
                 var converterAttribute = new ConverterKeyValueAttribute(ValueConverterType);
 
                 // Act
-                IConverter actual = converterAttribute.BuildKeyConverter();
+                var actual = converterAttribute.BuildKeyConverter();
 
                 // Assert
                 Assert.NotNull(actual);
@@ -46,7 +46,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 ConverterKeyValueAttribute converterAttribute = null;
-                string expectedExceptionMessage = SourceParameterName;
+                var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException = Assert.Throws<ArgumentNullException>(() => converterAttribute.BuildKeyConverter());

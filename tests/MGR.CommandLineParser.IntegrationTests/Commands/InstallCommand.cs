@@ -12,10 +12,7 @@ namespace MGR.CommandLineParser.Tests.Commands
         private ICollection<string> _sources = new List<string>();
 
         [Display(Description = "InstallCommandSourceDescription")]
-        public ICollection<string> Source
-        {
-            get { return _sources; }
-        }
+        public ICollection<string> Source => _sources;
 
         [Display(Description = "InstallCommandOutputDirDescription")]
         public string OutputDirectory { get; set; }
@@ -33,29 +30,20 @@ namespace MGR.CommandLineParser.Tests.Commands
         public bool NoCache { get; set; }
 
         [IgnoreOptionProperty]
-        public object RepositoryFactory { get; private set; }
+        public object RepositoryFactory { get; }
 
         [IgnoreOptionProperty]
-        public object SourceProvider { get; private set; }
+        public object SourceProvider { get; }
 
         /// <remarks>
         /// Meant for unit testing.
         /// </remarks>
         [IgnoreOptionProperty]
-        protected object CacheRepository
-        {
-            get { return null; }
-        }
+        protected object CacheRepository => null;
 
         [IgnoreOptionProperty]
-        private bool AllowMultipleVersions
-        {
-            get { return !ExcludeVersion; }
-        }
+        private bool AllowMultipleVersions => !ExcludeVersion;
 
-        protected override int ExecuteCommand()
-        {
-            return 0;
-        }
+        protected override int ExecuteCommand() => 0;
     }
 }

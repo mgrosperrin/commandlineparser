@@ -81,7 +81,7 @@ namespace JetBrains.Annotations
             FormatParameterName = formatParameterName;
         }
 
-        public string FormatParameterName { get; private set; }
+        public string FormatParameterName { get; }
     }
 
     /// <summary>
@@ -97,13 +97,13 @@ namespace JetBrains.Annotations
         }
 
         [NotNull]
-        public string Name { get; private set; }
+        public string Name { get; }
     }
 
     /// <summary>
     /// Indicates that the function argument should be string literal and match one
     /// of the parameters of the caller function. For example, ReSharper annotates
-    /// the parameter of <see cref="System.ArgumentNullException"/>.
+    /// the parameter of <see cref="ArgumentNullException"/>.
     /// </summary>
     /// <example><code>
     /// public void Foo(string param) {
@@ -159,7 +159,7 @@ namespace JetBrains.Annotations
             ParameterName = parameterName;
         }
 
-        public string ParameterName { get; private set; }
+        public string ParameterName { get; }
     }
 
     /// <summary>
@@ -218,8 +218,8 @@ namespace JetBrains.Annotations
             ForceFullStates = forceFullStates;
         }
 
-        public string Contract { get; private set; }
-        public bool ForceFullStates { get; private set; }
+        public string Contract { get; }
+        public bool ForceFullStates { get; }
     }
 
     /// <summary>
@@ -240,7 +240,7 @@ namespace JetBrains.Annotations
             Required = required;
         }
 
-        public bool Required { get; private set; }
+        public bool Required { get; }
     }
 
     /// <summary>
@@ -285,7 +285,7 @@ namespace JetBrains.Annotations
         }
 
         [NotNull]
-        public Type BaseType { get; private set; }
+        public Type BaseType { get; }
     }
 
     /// <summary>
@@ -313,8 +313,8 @@ namespace JetBrains.Annotations
             TargetFlags = targetFlags;
         }
 
-        public ImplicitUseKindFlags UseKindFlags { get; private set; }
-        public ImplicitUseTargetFlags TargetFlags { get; private set; }
+        public ImplicitUseKindFlags UseKindFlags { get; }
+        public ImplicitUseTargetFlags TargetFlags { get; }
     }
 
     /// <summary>
@@ -343,9 +343,9 @@ namespace JetBrains.Annotations
         }
 
         [UsedImplicitly]
-        public ImplicitUseKindFlags UseKindFlags { get; private set; }
+        public ImplicitUseKindFlags UseKindFlags { get; }
         [UsedImplicitly]
-        public ImplicitUseTargetFlags TargetFlags { get; private set; }
+        public ImplicitUseTargetFlags TargetFlags { get; }
     }
 
     [Flags]
@@ -393,7 +393,7 @@ namespace JetBrains.Annotations
             Comment = comment;
         }
 
-        public string Comment { get; private set; }
+        public string Comment { get; }
     }
 
     /// <summary>
@@ -431,7 +431,7 @@ namespace JetBrains.Annotations
             BasePath = basePath;
         }
 
-        public string BasePath { get; private set; }
+        public string BasePath { get; }
     }
 
     /// <summary>
@@ -465,9 +465,9 @@ namespace JetBrains.Annotations
     /// </summary>
     /// <remarks>
     /// You can apply the attribute on the whole method or on any of its additional parameters. The macro expression
-    /// is defined in the <see cref="MacroAttribute.Expression"/> property. When applied on a method, the target
-    /// template parameter is defined in the <see cref="MacroAttribute.Target"/> property. To apply the macro silently
-    /// for the parameter, set the <see cref="MacroAttribute.Editable"/> property value = -1.
+    /// is defined in the <see cref="Expression"/> property. When applied on a method, the target
+    /// template parameter is defined in the <see cref="Target"/> property. To apply the macro silently
+    /// for the parameter, set the <see cref="Editable"/> property value = -1.
     /// </remarks>
     /// <example>
     /// Applying the attribute on a source template method:
@@ -522,7 +522,7 @@ namespace JetBrains.Annotations
             Format = format;
         }
 
-        public string Format { get; private set; }
+        public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -533,7 +533,7 @@ namespace JetBrains.Annotations
             Format = format;
         }
 
-        public string Format { get; private set; }
+        public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -544,7 +544,7 @@ namespace JetBrains.Annotations
             Format = format;
         }
 
-        public string Format { get; private set; }
+        public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -555,7 +555,7 @@ namespace JetBrains.Annotations
             Format = format;
         }
 
-        public string Format { get; private set; }
+        public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -566,7 +566,7 @@ namespace JetBrains.Annotations
             Format = format;
         }
 
-        public string Format { get; private set; }
+        public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -577,7 +577,7 @@ namespace JetBrains.Annotations
             Format = format;
         }
 
-        public string Format { get; private set; }
+        public string Format { get; }
     }
 
     /// <summary>
@@ -595,7 +595,7 @@ namespace JetBrains.Annotations
             AnonymousProperty = anonymousProperty;
         }
 
-        public string AnonymousProperty { get; private set; }
+        public string AnonymousProperty { get; }
     }
 
     /// <summary>
@@ -612,7 +612,7 @@ namespace JetBrains.Annotations
             AnonymousProperty = anonymousProperty;
         }
 
-        public string AnonymousProperty { get; private set; }
+        public string AnonymousProperty { get; }
     }
 
     /// <summary>
@@ -630,7 +630,7 @@ namespace JetBrains.Annotations
             AnonymousProperty = anonymousProperty;
         }
 
-        public string AnonymousProperty { get; private set; }
+        public string AnonymousProperty { get; }
     }
 
     /// <summary>
@@ -718,7 +718,7 @@ namespace JetBrains.Annotations
             Name = name;
         }
 
-        public string Name { get; private set; }
+        public string Name { get; }
     }
 
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
@@ -730,7 +730,7 @@ namespace JetBrains.Annotations
         }
 
         [NotNull]
-        public string Name { get; private set; }
+        public string Name { get; }
     }
 
     /// <summary>
@@ -752,7 +752,7 @@ namespace JetBrains.Annotations
             CollectionAccessType = collectionAccessType;
         }
 
-        public CollectionAccessType CollectionAccessType { get; private set; }
+        public CollectionAccessType CollectionAccessType { get; }
     }
 
     [Flags]
@@ -789,7 +789,7 @@ namespace JetBrains.Annotations
             ConditionType = conditionType;
         }
 
-        public AssertionConditionType ConditionType { get; private set; }
+        public AssertionConditionType ConditionType { get; }
     }
 
     /// <summary>
@@ -864,8 +864,8 @@ namespace JetBrains.Annotations
             ControlType = controlType;
         }
 
-        public string TagName { get; private set; }
-        public Type ControlType { get; private set; }
+        public string TagName { get; }
+        public Type ControlType { get; }
     }
 
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
@@ -885,13 +885,13 @@ namespace JetBrains.Annotations
             Attribute = attribute;
         }
 
-        public string Attribute { get; private set; }
+        public string Attribute { get; }
     }
 
     [AttributeUsage(AttributeTargets.Property)]
     internal sealed class AspTypePropertyAttribute : Attribute
     {
-        public bool CreateConstructorReferences { get; private set; }
+        public bool CreateConstructorReferences { get; }
 
         public AspTypePropertyAttribute(bool createConstructorReferences)
         {
@@ -907,7 +907,7 @@ namespace JetBrains.Annotations
             Name = name;
         }
 
-        public string Name { get; private set; }
+        public string Name { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -919,8 +919,8 @@ namespace JetBrains.Annotations
             FieldName = fieldName;
         }
 
-        public string Type { get; private set; }
-        public string FieldName { get; private set; }
+        public string Type { get; }
+        public string FieldName { get; }
     }
 
     [AttributeUsage(AttributeTargets.Method)]

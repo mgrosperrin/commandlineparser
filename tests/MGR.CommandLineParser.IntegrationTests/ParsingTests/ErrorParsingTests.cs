@@ -13,10 +13,10 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = null;
-            CommandResultCode expectedReturnCode = CommandResultCode.NoArgs;
+            var expectedReturnCode = CommandResultCode.NoArgs;
 
             // Act
-            CommandResult<ICommand> actual = parser.Parse(args);
+            var actual = parser.Parse(args);
 
             // Assert
             Assert.False(actual.IsValid);
@@ -31,10 +31,10 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new List<string>();
-            CommandResultCode expectedReturnCode = CommandResultCode.NoCommandName;
+            var expectedReturnCode = CommandResultCode.NoCommandName;
 
             // Act
-            CommandResult<ICommand> actual = parser.Parse(args);
+            var actual = parser.Parse(args);
 
             // Assert
             Assert.False(actual.IsValid);
@@ -49,10 +49,10 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] { "NotValid", "-option:true" };
-            CommandResultCode expectedReturnCode = CommandResultCode.NoCommandFound;
+            var expectedReturnCode = CommandResultCode.NoCommandFound;
 
             // Act
-            CommandResult<ICommand> actual = parser.Parse(args);
+            var actual = parser.Parse(args);
 
             // Assert
             Assert.False(actual.IsValid);

@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Converters;
-using Moq;
 using Xunit;
 
 namespace MGR.CommandLineParser.UnitTests.Command
@@ -17,13 +16,15 @@ namespace MGR.CommandLineParser.UnitTests.Command
             public void PropertyListAddTest()
             {
                 // Arrange
-                var testCommand = new TestCommand();
-                testCommand.PropertyList = new List<int>();
+                var testCommand = new TestCommand
+                {
+                    PropertyList = new List<int>()
+                };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() });
-                CommandMetadata commandMetadata = testCommand.ExtractMetadata();
-                int expected = 42;
-                int expectedLength = 1;
-                string option = "42";
+                var commandMetadata = testCommand.ExtractMetadata();
+                var expected = 42;
+                var expectedLength = 1;
+                var option = "42";
 
                 // Act
                 commandMetadata.GetOption("PropertyList").AssignValue(option);
@@ -39,15 +40,17 @@ namespace MGR.CommandLineParser.UnitTests.Command
             public void PropertyDictionaryAddTest()
             {
                 // Arrange
-                var testCommand = new TestCommand();
-                testCommand.PropertyDictionary = new Dictionary<string, Guid>();
+                var testCommand = new TestCommand
+                {
+                    PropertyDictionary = new Dictionary<string, Guid>()
+                };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() });
-                CommandMetadata commandMetadata = testCommand.ExtractMetadata();
-                string expectedKey = "keyTest";
+                var commandMetadata = testCommand.ExtractMetadata();
+                var expectedKey = "keyTest";
                 var guid = "18591394-096C-476F-A8B7-71903E27DAB5";
-                Guid expectedValue = Guid.Parse(guid);
-                int expectedLength = 1;
-                string option = "keyTest=" + guid;
+                var expectedValue = Guid.Parse(guid);
+                var expectedLength = 1;
+                var option = "keyTest=" + guid;
 
                 // Act
                 commandMetadata.GetOption("PropertyDictionary").AssignValue(option);
@@ -56,7 +59,7 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 Assert.NotNull(testCommand.PropertyDictionary);
                 Assert.IsType<Dictionary<string, Guid>>(testCommand.PropertyDictionary);
                 Assert.Equal(expectedLength, testCommand.PropertyDictionary.Count);
-                KeyValuePair<string, Guid> first = testCommand.PropertyDictionary.First();
+                var first = testCommand.PropertyDictionary.First();
                 Assert.Equal(expectedKey, first.Key);
                 Assert.Equal(expectedValue, first.Value);
             }
@@ -65,12 +68,14 @@ namespace MGR.CommandLineParser.UnitTests.Command
             public void PropertySimpleTest()
             {
                 // Arrange
-                var testCommand = new TestCommand();
-                testCommand.PropertyList = new List<int>();
+                var testCommand = new TestCommand
+                {
+                    PropertyList = new List<int>()
+                };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() });
-                CommandMetadata commandMetadata = testCommand.ExtractMetadata();
-                int expected = 42;
-                string option = "42";
+                var commandMetadata = testCommand.ExtractMetadata();
+                var expected = 42;
+                var option = "42";
 
                 // Act
                 commandMetadata.GetOption("PropertySimple").AssignValue(option);
@@ -83,15 +88,17 @@ namespace MGR.CommandLineParser.UnitTests.Command
             public void PropertyWithNoConverterException()
             {
                 // Arrange
-                var testCommand = new TestCommand();
-                testCommand.PropertyList = new List<int>();
+                var testCommand = new TestCommand
+                {
+                    PropertyList = new List<int>()
+                };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() });
-                CommandMetadata commandMetadata = testCommand.ExtractMetadata();
-                OptionMetadata optionMetadata = commandMetadata.GetOption("PropertySimple");
+                var commandMetadata = testCommand.ExtractMetadata();
+                var optionMetadata = commandMetadata.GetOption("PropertySimple");
                 optionMetadata.Converter = new BooleanConverter();
-                string expectedMessageException = string.Format(CultureInfo.CurrentUICulture,
+                var expectedMessageException = string.Format(CultureInfo.CurrentUICulture,
                     "The specified converter is not valid : target type is '{1}' and option type is '{0}'.",
-                    typeof (int).FullName, typeof (bool).FullName);
+                    typeof(int).FullName, typeof(bool).FullName);
 
                 // Act
                 var actualException =

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Converters;
-using Moq;
 using Xunit;
 
 namespace MGR.CommandLineParser.UnitTests.Extensions
@@ -49,14 +48,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void OriginalTest()
             {
                 // Arrange
-                string expectedName = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var expectedName = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter() });
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
 
                 // Assert
                 Assert.NotNull(actual.Converter);
@@ -67,12 +66,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void OriginalNoConverterTest()
             {
                 // Arrange
-                string expectedName = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var expectedName = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter() });
-                string expectedExceptionMessage =
+                var expectedExceptionMessage =
                     string.Format("No converter found for the option '{0}' of the command '{1}' of type '{2}'.",
                         expectedName, commandMetadata.Name, typeof(int).FullName);
 
@@ -89,14 +88,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomConverterTest()
             {
                 // Arrange
-                string expectedName = TypeHelpers.ExtractPropertyName(() => CustomConverterProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var expectedName = TypeHelpers.ExtractPropertyName(() => CustomConverterProperty);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter() });
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
 
                 // Assert
                 Assert.NotNull(actual.Converter);
@@ -107,12 +106,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void WrongCustomConverterTest()
             {
                 // Arrange
-                string expectedName = TypeHelpers.ExtractPropertyName(() => WrongCustomConverterProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var expectedName = TypeHelpers.ExtractPropertyName(() => WrongCustomConverterProperty);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter() });
-                string expectedExceptionMessage =
+                var expectedExceptionMessage =
                     string.Format(
                         "The specified converter for the option '{0}' of the command '{1}' is not valid : property type : {2}, converter target type : {3}.",
                         expectedName, commandMetadata.Name, typeof(int).FullName, typeof(Guid).FullName);
@@ -130,14 +129,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void OriginalListTest()
             {
                 // Arrange
-                string expectedName = TypeHelpers.ExtractPropertyName(() => OriginalListProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var expectedName = TypeHelpers.ExtractPropertyName(() => OriginalListProperty);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter() });
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
 
                 // Assert
                 Assert.NotNull(actual.Converter);
@@ -148,14 +147,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomListConverterTest()
             {
                 // Arrange
-                string expectedName = TypeHelpers.ExtractPropertyName(() => CustomListConverterProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var expectedName = TypeHelpers.ExtractPropertyName(() => CustomListConverterProperty);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter() });
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
 
                 // Assert
                 Assert.NotNull(actual.Converter);
@@ -166,14 +165,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void OriginalDictionaryTest()
             {
                 // Arrange
-                string expectedName = TypeHelpers.ExtractPropertyName(() => OriginalDictionaryProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var expectedName = TypeHelpers.ExtractPropertyName(() => OriginalDictionaryProperty);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter(), new GuidConverter() });
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
 
                 // Assert
                 Assert.NotNull(actual.Converter);
@@ -184,14 +183,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomDictionaryConverterTest()
             {
                 // Arrange
-                string expectedName = TypeHelpers.ExtractPropertyName(() => CustomDictionaryConverterProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var expectedName = TypeHelpers.ExtractPropertyName(() => CustomDictionaryConverterProperty);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new GuidConverter() });
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
 
                 // Assert
                 Assert.NotNull(actual.Converter);
@@ -202,14 +201,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomValueOnlyDictionaryConverterTest()
             {
                 // Arrange
-                string expectedName = TypeHelpers.ExtractPropertyName(() => CustomValueOnlyDictionaryConverterProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var expectedName = TypeHelpers.ExtractPropertyName(() => CustomValueOnlyDictionaryConverterProperty);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new Int32Converter() });
 
                 // Act
-                OptionMetadataTemplate actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
 
                 // Assert
                 Assert.NotNull(actual.Converter);
@@ -220,12 +219,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomDictionaryConverterWithListException()
             {
                 // Arrange
-                string expectedName = TypeHelpers.ExtractPropertyName(() => CustomDictionaryConverterWithListProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var expectedName = TypeHelpers.ExtractPropertyName(() => CustomDictionaryConverterWithListProperty);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new GuidConverter() });
-                string expectedExceptionMessage =
+                var expectedExceptionMessage =
                     string.Format(
                         "The option '{0}' of the command 'MyCommand' defined a Key/Value converter but its type is not System.Generic.IDictionary<TKey, TValue>.",
                         expectedName);
@@ -243,13 +242,13 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomDictionaryWithWrongKeyConverterException()
             {
                 // Arrange
-                string expectedName =
+                var expectedName =
                     TypeHelpers.ExtractPropertyName(() => CustomDictionaryWithWrongKeyConverterProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter(), new GuidConverter() });
-                string expectedExceptionMessage =
+                var expectedExceptionMessage =
                     string.Format(
                         "The specified KeyValueConverter for the option '{0}' of the command '{1}' is not valid : key property type : {2}, key converter target type : {3}.",
                         expectedName, commandMetadata.Name, typeof(string).FullName, typeof(int).FullName);
@@ -267,13 +266,13 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomDictionaryWithWrongValueConverterException()
             {
                 // Arrange
-                string expectedName =
+                var expectedName =
                     TypeHelpers.ExtractPropertyName(() => CustomDictionaryWithWrongValueConverterProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter(), new GuidConverter() });
-                string expectedExceptionMessage =
+                var expectedExceptionMessage =
                     string.Format(
                         "The specified KeyValueConverter for the option '{0}' of the command '{1}' is not valid : value property type : {2}, value converter target type : {3}.",
                         expectedName, commandMetadata.Name, typeof(string).FullName, typeof(Guid).FullName);
@@ -291,13 +290,13 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void OriginalDictionaryWithoutKeyConverterException()
             {
                 // Arrange
-                string expectedName =
+                var expectedName =
                     TypeHelpers.ExtractPropertyName(() => OriginalDictionaryWithWrongKeyConverterProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter(), new GuidConverter() });
-                string expectedExceptionMessage =
+                var expectedExceptionMessage =
                     string.Format(
                         "No converter found for the key type ('{2}') of the option '{0}' of the command '{1}'.",
                         expectedName, commandMetadata.Name, typeof(string).FullName);
@@ -315,13 +314,13 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void OriginalDictionaryWithoutValueConverterException()
             {
                 // Arrange
-                string expectedName =
+                var expectedName =
                     TypeHelpers.ExtractPropertyName(() => OriginalDictionaryWithWrongValueConverterProperty);
-                PropertyInfo propertyInfo = GetType().GetProperty(expectedName);
+                var propertyInfo = GetType().GetProperty(expectedName);
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter(), new GuidConverter() });
-                string expectedExceptionMessage =
+                var expectedExceptionMessage =
                     string.Format(
                         "No converter found for the value type ('{2}') of the option '{0}' of the command '{1}'.",
                         expectedName, commandMetadata.Name, typeof(string).FullName);
@@ -341,7 +340,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 PropertyInfo propertyInfo = null;
                 var optionMetadata = new OptionMetadataTemplate(null, null);
-                string expectedExceptionMessage = SourceParameterName;
+                var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =
@@ -356,10 +355,10 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void NullMetadataException()
             {
                 // Arrange
-                PropertyInfo propertyInfo =
+                var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => OriginalProperty));
                 OptionMetadataTemplate optionMetadataTemplate = null;
-                string expectedExceptionMessage = nameof(optionMetadataTemplate);
+                var expectedExceptionMessage = nameof(optionMetadataTemplate);
 
                 // Act
                 var actualException =

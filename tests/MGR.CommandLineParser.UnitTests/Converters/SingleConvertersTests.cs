@@ -41,7 +41,7 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         }
 
         [Fact]
-        [Trait("Exception", "CommandLineParserException")]
+        [Trait(nameof(Exception), nameof(CommandLineParserException))]
         public void BadValueConversion()
         {
             // Arrange

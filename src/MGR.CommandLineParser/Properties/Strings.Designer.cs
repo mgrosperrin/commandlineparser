@@ -7,7 +7,9 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-
+#pragma warning disable IDE0001
+#pragma warning disable IDE0002
+#pragma warning disable CS8019
 namespace MGR.CommandLineParser.Properties {
     using System;
     
@@ -39,7 +41,7 @@ namespace MGR.CommandLineParser.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MGR.CommandLineParser.Properties.Strings", typeof(Strings).Assembly);
+                    var temp = new global::System.Resources.ResourceManager("MGR.CommandLineParser.Properties.Strings", typeof(Strings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -169,3 +171,6 @@ namespace MGR.CommandLineParser.Properties {
         }
     }
 }
+#pragma warning disable IDE0001
+#pragma warning restore IDE0002
+#pragma warning restore CS8019

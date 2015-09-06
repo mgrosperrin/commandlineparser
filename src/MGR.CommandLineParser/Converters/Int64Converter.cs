@@ -14,12 +14,13 @@ namespace MGR.CommandLineParser.Converters
         public Type TargetType => typeof (long);
 
         /// <summary>
-        /// Convert the <paramref name="value"/> to an instance of <see cref="Int64"/>.
+        /// Convert the <paramref name="value"/> to an instance of <see cref="long"/>.
         /// </summary>
         /// <param name="value">The original value provided by the user.</param>
         /// <param name="concreteTargetType">Not used.</param>
-        /// <returns>The <see cref="Int64"/> converted from the value.</returns>
+        /// <returns>The <see cref="long"/> converted from the value.</returns>
         /// <exception cref="CommandLineParserException">Thrown if the <paramref name="value"/> is not valid.</exception>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Int64.Parse(System.String,System.IFormatProvider)")]
         public object Convert(string value, Type concreteTargetType)
         {
             try

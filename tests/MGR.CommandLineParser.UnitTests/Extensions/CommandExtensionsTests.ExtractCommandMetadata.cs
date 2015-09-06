@@ -14,12 +14,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 ICommand myCommand = new TestCommand();
-                string expectedName = "Test";
-                string expectedDescription = "My great description";
-                string expectedUsage = "test arg [option]";
+                var expectedName = "Test";
+                var expectedDescription = "My great description";
+                var expectedUsage = "test arg [option]";
 
                 // Act
-                CommandMetadataTemplate metadata = myCommand.ExtractCommandMetadataTemplate();
+                var metadata = myCommand.ExtractCommandMetadataTemplate();
 
                 // Assert
                 Assert.Equal(expectedName, metadata.Name);
@@ -32,7 +32,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 ICommand myCommand = null;
-                string expectedExceptionMessage = SourceParameterName;
+                var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =

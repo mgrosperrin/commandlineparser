@@ -8,9 +8,6 @@ using MGR.CommandLineParser.Properties;
 
 namespace MGR.CommandLineParser
 {
-    /// <summary>
-    ///     Represents a parser.
-    /// </summary>
     internal sealed class Parser : IParser
     {
         private readonly IParserOptions _parserOptions;
