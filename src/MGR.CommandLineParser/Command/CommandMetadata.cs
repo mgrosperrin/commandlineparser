@@ -10,14 +10,9 @@ namespace MGR.CommandLineParser.Command
     {
         internal CommandMetadata(CommandMetadataTemplate commandMetadataTemplate, ICommand command)
         {
-            if (commandMetadataTemplate == null)
-            {
-                throw new ArgumentNullException(nameof(commandMetadataTemplate));
-            }
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
+            Guard.NotNull(commandMetadataTemplate, nameof(commandMetadataTemplate));
+            Guard.NotNull(command, nameof(command));
+
             Name = commandMetadataTemplate.Name;
             Description = commandMetadataTemplate.Description;
             Usage = commandMetadataTemplate.Usage;

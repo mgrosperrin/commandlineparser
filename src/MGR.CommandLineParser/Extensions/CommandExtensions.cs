@@ -19,19 +19,15 @@ namespace MGR.CommandLineParser.Command
 
         internal static string ExtractCommandName(this ICommand commandSource)
         {
-            if (commandSource == null)
-            {
-                throw new ArgumentNullException(nameof(commandSource));
-            }
+            Guard.NotNull(commandSource, nameof(commandSource));
+
             return commandSource.ExtractCommandMetadataTemplate().Name;
         }
 
         internal static CommandMetadataTemplate ExtractMetadataTemplate(this ICommand command)
         {
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
+            Guard.NotNull(command, nameof(command));
+
             Type commandType = command.GetType();
             lock (CommandMetadataCacheLockObject)
             {
@@ -59,10 +55,8 @@ namespace MGR.CommandLineParser.Command
 
         internal static CommandMetadataTemplate ExtractCommandMetadataTemplate(this ICommand command)
         {
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
+            Guard.NotNull(command, nameof(command));
+
             lock (SimpleCommandMetadataCacheLockObject)
             {
                 if (!SimpleCommandMetadataCache.ContainsKey(command.GetType()))

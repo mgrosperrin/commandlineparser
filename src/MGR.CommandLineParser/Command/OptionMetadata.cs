@@ -11,14 +11,9 @@ namespace MGR.CommandLineParser.Command
     {
         internal OptionMetadata(OptionMetadataTemplate optionMetadataTemplate, CommandMetadata commandMetadata)
         {
-            if (optionMetadataTemplate == null)
-            {
-                throw new ArgumentNullException(nameof(optionMetadataTemplate));
-            }
-            if (commandMetadata == null)
-            {
-                throw new ArgumentNullException(nameof(commandMetadata));
-            }
+            Guard.NotNull(optionMetadataTemplate, nameof(optionMetadataTemplate));
+            Guard.NotNull(commandMetadata, nameof(commandMetadata));
+
             Name = optionMetadataTemplate.Name;
             ShortName = optionMetadataTemplate.ShortName;
             Description = optionMetadataTemplate.Description;

@@ -17,10 +17,8 @@ namespace MGR.CommandLineParser.Command
         [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = nameof(IConverter)), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = nameof(CommandLineParser))]
         public ConverterAttribute(Type converterType)
         {
-            if (converterType == null)
-            {
-                throw new ArgumentNullException(nameof(converterType));
-            }
+            Guard.NotNull(converterType, nameof(converterType));
+
             if (!typeof (IConverter).IsAssignableFrom(converterType))
             {
                 throw new CommandLineParserException(Constants.ExceptionMessages.ConverterAttributeTypeMustBeIConverter);

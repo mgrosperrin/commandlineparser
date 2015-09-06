@@ -30,7 +30,7 @@ namespace MGR.CommandLineParser.Command
         {
             if (command == null)
             {
-            var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
+                var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
                 if (All)
                 {
                     WriteHelpForAllCommand(commandProvider);
@@ -71,10 +71,8 @@ namespace MGR.CommandLineParser.Command
 
         private void WriteHelpForCommand(ICommand command)
         {
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
+            Guard.NotNull(command, nameof(command));
+
             var metadata = command.ExtractMetadataTemplate();
             Console.WriteLine(ParserOptions.Logo);
             Console.WriteLine(Strings.HelpCommand_CommandUsageFormat, ParserOptions.CommandLineName, metadata.Name, metadata.Usage);

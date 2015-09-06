@@ -22,14 +22,9 @@ namespace MGR.CommandLineParser.Converters
         /// </returns>
         public static bool CanConvertTo(this IConverter converter, Type targetType)
         {
-            if (converter == null)
-            {
-                throw new ArgumentNullException("converter");
-            }
-            if (targetType == null)
-            {
-                throw new ArgumentNullException("targetType");
-            }
+            Guard.NotNull(converter, nameof(converter));
+            Guard.NotNull(targetType, nameof(targetType));
+
             Type type = targetType.IsMultiValuedType() ? targetType.GetUnderlyingCollectionType() : targetType;
             return type.IsAssignableFrom(converter.TargetType);
         }

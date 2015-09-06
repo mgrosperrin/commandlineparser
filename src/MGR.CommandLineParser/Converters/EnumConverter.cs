@@ -26,10 +26,8 @@ namespace MGR.CommandLineParser.Converters
         ///   is not an enum.</exception>
         public object Convert(string value, Type concreteTargetType)
         {
-            if (concreteTargetType == null)
-            {
-                throw new ArgumentNullException("concreteTargetType");
-            }
+            Guard.NotNull(concreteTargetType, nameof(concreteTargetType));
+
             if (!TargetType.IsAssignableFrom(concreteTargetType))
             {
                 throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, "The specified concrete target type ({0}) is not an enum type.",

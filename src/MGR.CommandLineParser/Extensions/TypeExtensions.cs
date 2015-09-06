@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MGR.CommandLineParser;
 
 // ReSharper disable CheckNamespace
 
@@ -10,28 +11,22 @@ namespace System
     {
         internal static bool IsCollectionType(this Type type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
+            Guard.NotNull(type, nameof(type));
+
             return type.GetCollectionType() != null && !type.IsDictionaryType();
         }
 
         internal static Type GetCollectionType(this Type type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
+            Guard.NotNull(type, nameof(type));
+
             return GetInterfaceType(type, typeof (ICollection<>));
         }
 
         public static Type GetUnderlyingGenericType(this Type type, int index = 0)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
+            Guard.NotNull(type, nameof(type));
+
             if (!type.IsGenericType)
             {
                 return null;
@@ -41,10 +36,8 @@ namespace System
 
         public static Type GetUnderlyingCollectionType(this Type type, int index = 0)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
+            Guard.NotNull(type, nameof(type));
+
             Type collectionType = type.GetCollectionType();
             if (collectionType == null)
             {
@@ -55,10 +48,8 @@ namespace System
 
         public static Type GetUnderlyingDictionaryType(this Type type, bool key)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
+            Guard.NotNull(type, nameof(type));
+
             Type collectionType = type.GetDictionaryType();
             if (collectionType == null)
             {
@@ -69,28 +60,22 @@ namespace System
 
         public static bool IsMultiValuedType(this Type type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
+            Guard.NotNull(type, nameof(type));
+
             return type.IsCollectionType() || type.IsDictionaryType();
         }
 
         public static bool IsDictionaryType(this Type type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
+            Guard.NotNull(type, nameof(type));
+
             return type.GetDictionaryType() != null;
         }
 
         public static Type GetDictionaryType(this Type type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
+            Guard.NotNull(type, nameof(type));
+
             return type.GetInterfaceType(typeof (IDictionary<,>));
         }
 

@@ -98,11 +98,9 @@ namespace MGR.CommandLineParser
 
         public static void RegisterConverter(IConverter converter, bool overwriteExisting = false)
         {
-            if (converter == null)
-            {
-                throw new ArgumentNullException(nameof(converter));
-            }
-            IConverter oldConverter = Converters.FirstOrDefault(conv => conv.CanConvertTo(converter.TargetType));
+            Guard.NotNull(converter, nameof(converter));
+
+            var oldConverter = Converters.FirstOrDefault(conv => conv.CanConvertTo(converter.TargetType));
             if (oldConverter == null)
             {
                 Converters.Add(converter);
@@ -115,10 +113,8 @@ namespace MGR.CommandLineParser
         }
         public static void RemoveConverter(IConverter converter)
         {
-            if (converter == null)
-            {
-                throw new ArgumentNullException(nameof(converter));
-            }
+            Guard.NotNull(converter, nameof(converter));
+
             Converters.Remove(converter);
         }
     }

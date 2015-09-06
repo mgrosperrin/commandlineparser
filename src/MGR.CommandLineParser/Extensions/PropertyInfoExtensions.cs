@@ -19,24 +19,17 @@ namespace System.Reflection
     {
         internal static bool IsValidOptionProperty(this PropertyInfo source)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+            Guard.NotNull(source, nameof(source));
+
             return source.CanWrite || source.PropertyType.IsMultiValuedType();
         }
 
         [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ICollection")]
         internal static OptionMetadataTemplate ExtractMetadata(this PropertyInfo propertySource, CommandMetadataTemplate commandMetadataTemplate)
         {
-            if (propertySource == null)
-            {
-                throw new ArgumentNullException(nameof(propertySource));
-            }
-            if (commandMetadataTemplate == null)
-            {
-                throw new ArgumentNullException(nameof(commandMetadataTemplate));
-            }
+            Guard.NotNull(propertySource, nameof(propertySource));
+            Guard.NotNull(commandMetadataTemplate, nameof(commandMetadataTemplate));
+
             if (propertySource.ShouldBeIgnored())
             {
                 return null;
@@ -63,14 +56,8 @@ namespace System.Reflection
          SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "KeyValueConverter"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "IDictionary")]
         internal static OptionMetadataTemplate ExtractConverterMetadata(this PropertyInfo propertySource, OptionMetadataTemplate metadata)
         {
-            if (propertySource == null)
-            {
-                throw new ArgumentNullException(nameof(propertySource));
-            }
-            if (metadata == null)
-            {
-                throw new ArgumentNullException(nameof(metadata));
-            }
+            Guard.NotNull(propertySource, nameof(propertySource));
+            Guard.NotNull(metadata, nameof(metadata));
 
             var converterAttribute = propertySource.GetCustomAttributes(typeof(ConverterAttribute), true).FirstOrDefault() as ConverterAttribute;
             if (converterAttribute != null)
@@ -120,8 +107,8 @@ namespace System.Reflection
                     {
                         var keyType = propertySource.PropertyType.GetUnderlyingDictionaryType(true);
                         var keyConverter = (from kvp in converters
-                                                   where kvp.CanConvertTo(keyType)
-                                                   select kvp).FirstOrDefault();
+                                            where kvp.CanConvertTo(keyType)
+                                            select kvp).FirstOrDefault();
                         if (keyConverter == null)
                         {
                             throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "No converter found for the key type ('{2}') of the option '{0}' of the command '{1}'.",
@@ -130,8 +117,8 @@ namespace System.Reflection
 
                         var valueType = propertySource.PropertyType.GetUnderlyingDictionaryType(false);
                         var valueConverter = (from kvp in converters
-                                                     where kvp.CanConvertTo(valueType)
-                                                     select kvp).FirstOrDefault();
+                                              where kvp.CanConvertTo(valueType)
+                                              select kvp).FirstOrDefault();
                         if (valueConverter == null)
                         {
                             throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "No converter found for the value type ('{2}') of the option '{0}' of the command '{1}'.",
@@ -142,8 +129,8 @@ namespace System.Reflection
                     else
                     {
                         var converter = (from kvp in converters
-                                                where kvp.CanConvertTo(propertySource.PropertyType)
-                                                select kvp).FirstOrDefault();
+                                         where kvp.CanConvertTo(propertySource.PropertyType)
+                                         select kvp).FirstOrDefault();
 
                         if (converter == null)
                         {
@@ -160,14 +147,9 @@ namespace System.Reflection
 
         internal static OptionMetadataTemplate ExtractRequiredMetadata(this PropertyInfo propertySource, OptionMetadataTemplate metadata)
         {
-            if (propertySource == null)
-            {
-                throw new ArgumentNullException(nameof(propertySource));
-            }
-            if (metadata == null)
-            {
-                throw new ArgumentNullException(nameof(metadata));
-            }
+            Guard.NotNull(propertySource, nameof(propertySource));
+            Guard.NotNull(metadata, nameof(metadata));
+
             var requiredAttribute = propertySource.GetCustomAttributes(typeof(RequiredAttribute), true).FirstOrDefault() as RequiredAttribute;
             if (requiredAttribute != null)
             {
@@ -178,14 +160,9 @@ namespace System.Reflection
 
         internal static OptionMetadataTemplate ExtractDisplayMetadata(this PropertyInfo propertySource, OptionMetadataTemplate metadata)
         {
-            if (propertySource == null)
-            {
-                throw new ArgumentNullException(nameof(propertySource));
-            }
-            if (metadata == null)
-            {
-                throw new ArgumentNullException(nameof(metadata));
-            }
+            Guard.NotNull(propertySource, nameof(propertySource));
+            Guard.NotNull(metadata, nameof(metadata));
+
             var displayAttribute = propertySource.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
             if (displayAttribute == null)
             {
@@ -207,14 +184,9 @@ namespace System.Reflection
 
         internal static OptionMetadataTemplate ExtractDefaultValue(this PropertyInfo propertySource, OptionMetadataTemplate metadata)
         {
-            if (propertySource == null)
-            {
-                throw new ArgumentNullException(nameof(propertySource));
-            }
-            if (metadata == null)
-            {
-                throw new ArgumentNullException(nameof(metadata));
-            }
+            Guard.NotNull(propertySource, nameof(propertySource));
+            Guard.NotNull(metadata, nameof(metadata));
+
             if (!propertySource.PropertyType.IsMultiValuedType())
             {
                 var defaultValueAttribute = propertySource.GetCustomAttributes(typeof(DefaultValueAttribute), true).OfType<DefaultValueAttribute>().FirstOrDefault();
@@ -245,10 +217,8 @@ namespace System.Reflection
         /// <returns>true if the <see cref="PropertyInfo"/> should be ignored, false otherwise.</returns>
         internal static bool ShouldBeIgnored(this PropertyInfo propertySource)
         {
-            if (propertySource == null)
-            {
-                throw new ArgumentNullException(nameof(propertySource));
-            }
+            Guard.NotNull(propertySource, nameof(propertySource));
+
             return propertySource.GetCustomAttributes(typeof(IgnoreOptionPropertyAttribute), true).Any();
         }
     }

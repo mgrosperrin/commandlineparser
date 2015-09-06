@@ -92,6 +92,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Guard.cs" />
     <Compile Include="ICommandProvider.cs" />
     <Compile Include="IConsole.cs" />
     <Compile Include="IParser.cs" />
