@@ -89,5 +89,14 @@ namespace System
                     where t.IsGenericType && t.GetGenericTypeDefinition() == interfaceType
                     select t).SingleOrDefault();
         }
+        public static bool IsType<T>(this Type source)
+        {
+            Guard.NotNull(source, nameof(source));
+
+            return source.IsClass &&
+                source.IsVisible &&
+                !source.IsAbstract &&
+                typeof(T).IsAssignableFrom(source);
+        }
     }
 }

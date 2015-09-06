@@ -35,7 +35,11 @@ namespace MGR.CommandLineParser
         private static readonly Dictionary<Type, Func<object>> SinglyRegistredServices = new Dictionary<Type, Func<object>>
         {
             {typeof (IConsole), () => new DefaultConsole()},
-            {typeof (ICommandProvider), () => new DefaultCommandProvider()}
+            {typeof (ICommandProvider), () => new DirectotyBrowsingCommandProvider(
+                ServiceResolver.Current.ResolveService<IAssemblyFileProvider>(),
+                ServiceResolver.Current.ResolveService<ICommandActivator>())},
+            {typeof(ICommandActivator), () => new BasicCommandActivator() },
+            {typeof(IAssemblyFileProvider), () => new CurrentDirectoryAssemblyFileProvider() }
         };
 
         public T ResolveService<T>() where T : class

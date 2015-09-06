@@ -59,7 +59,7 @@ namespace MGR.CommandLineParser
 
         public void WriteError(string value)
         {
-            WriteError(value, null);
+            WriteError(value, new object[0]);
         }
 
         public void WriteError(string format, params object[] args)

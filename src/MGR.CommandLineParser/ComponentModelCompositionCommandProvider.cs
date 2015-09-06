@@ -8,11 +8,11 @@ using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser
 {
-    internal sealed class DefaultCommandProvider : ICommandProvider
+    public sealed class ComponentModelCompositionCommandProvider : ICommandProvider
     {
         private readonly Lazy<List<ICommand>> _commands;
 
-        public DefaultCommandProvider()
+        public ComponentModelCompositionCommandProvider()
         {
             _commands = new Lazy<List<ICommand>>(BuildCommands);
         }
@@ -22,14 +22,14 @@ namespace MGR.CommandLineParser
             var commands = new List<ICommand>();
             using (var catalog = new AggregateCatalog())
             {
-                var directory = Path.GetDirectoryName(typeof (DefaultCommandProvider).Assembly.CodeBase);
+                var directory = Path.GetDirectoryName(typeof (ComponentModelCompositionCommandProvider).Assembly.CodeBase);
                 if (!string.IsNullOrEmpty(directory))
                 {
-                    string thisDirectory = new Uri(directory).AbsolutePath;
-                    Assembly entryAssembly = Assembly.GetEntryAssembly();
+                    var thisDirectory = new Uri(directory).AbsolutePath;
+                    var entryAssembly = Assembly.GetEntryAssembly();
                     if (entryAssembly != null) // could be null in test context or if the main executable is not .Net
                     {
-                        string entryDirectory = Path.GetDirectoryName(entryAssembly.CodeBase);
+                        var entryDirectory = Path.GetDirectoryName(entryAssembly.CodeBase);
                         if (thisDirectory.Equals(entryDirectory, StringComparison.OrdinalIgnoreCase))
                         {
                             catalog.Catalogs.Add(new AssemblyCatalog(entryAssembly));

@@ -48,7 +48,10 @@
     <Compile Include="..\CommonFiles\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AssemblyFileProviderBase.cs" />
+    <Compile Include="BasicCommandActivator.cs" />
     <Compile Include="CommandLineParserException.cs" />
+    <Compile Include="CommandProviderBase.cs" />
     <Compile Include="CommandResultCode.cs" />
     <Compile Include="CommandResult`1.cs" />
     <Compile Include="Command\CommandBase.cs" />
@@ -82,9 +85,12 @@
     <Compile Include="Converters\StringConverter.cs" />
     <Compile Include="Converters\TimeSpanConverter.cs" />
     <Compile Include="Converters\UriConverter.cs" />
-    <Compile Include="DefaultCommandProvider.cs" />
+    <Compile Include="ComponentModelCompositionCommandProvider.cs" />
+    <Compile Include="CurrentDirectoryAssemblyFileProvider.cs" />
     <Compile Include="DefaultConsole.cs" />
     <Compile Include="DefaultServiceResolver.cs" />
+    <Compile Include="DirectotyBrowsingCommandProvider.cs" />
+    <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\CommandExtensions.cs" />
     <Compile Include="Extensions\ConverterAttributeExtensions.cs" />
     <Compile Include="Extensions\ConverterExtensions.cs" />
@@ -93,6 +99,8 @@
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Guard.cs" />
+    <Compile Include="IAssemblyFileProvider.cs" />
+    <Compile Include="ICommandActivator.cs" />
     <Compile Include="ICommandProvider.cs" />
     <Compile Include="IConsole.cs" />
     <Compile Include="IParser.cs" />
@@ -109,7 +117,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="RecursiveAssemblyFileProvider.cs" />
     <Compile Include="ServiceResolver.cs" />
+    <Compile Include="ServiceResolverCommandActivator.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Strings.fr-fr.resx" />
