@@ -50,7 +50,7 @@ namespace System
         {
             Guard.NotNull(source, nameof(source));
 
-            Type collectionType = source.GetDictionaryType();
+            var collectionType = source.GetDictionaryType();
             if (collectionType == null)
             {
                 return null;

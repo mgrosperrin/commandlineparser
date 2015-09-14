@@ -36,7 +36,7 @@ namespace System.Reflection
                 catch
 #pragma warning restore CC0003 // Your catch maybe include some Exception
                 {
-                    // We deliberately ignore all other exceptions. 
+                    // We deliberately ignore all other exceptions.
                     continue;
                 }
 

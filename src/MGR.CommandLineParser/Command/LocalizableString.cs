@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Runtime;
 
 namespace MGR.CommandLineParser.Command
@@ -48,8 +47,7 @@ namespace MGR.CommandLineParser.Command
                     }
                     if (flag)
                     {
-                        var exceptionMessage = string.Format(CultureInfo.CurrentCulture,
-                                                                "Cannot retrieve property '{0}' because localization failed.  Type '{1}' is not public or does not contain a public static string property with the name '{2}'", _propertyName, _resourceType.FullName, _propertyValue);
+                        var exceptionMessage = Constants.ExceptionMessages.LocalizableNoPropertyFound(_propertyName, _resourceType, _propertyValue);
                         _cachedResult = delegate { throw new InvalidOperationException(exceptionMessage); };
                     }
                     else

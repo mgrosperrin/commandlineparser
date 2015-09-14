@@ -12,10 +12,12 @@ namespace MGR.CommandLineParser.Command
     [PublicAPI]
     public sealed class HelpCommand : CommandBase
     {
+        internal const string CollectionIndicator = "+";
+        internal const string DictionaryIndicator = "#";
         /// <summary>
         ///     Name of the help command.
         /// </summary>
-        public const string Name = "Help";
+        public const string Name = nameof(Help);
 
         /// <summary>
         ///     Show detailled help for all commands.
@@ -108,11 +110,11 @@ namespace MGR.CommandLineParser.Command
         {
             if (optionMetadata.PropertyOption.PropertyType.IsCollectionType())
             {
-                return "+";
+                return CollectionIndicator;
             }
             if (optionMetadata.PropertyOption.PropertyType.IsDictionaryType())
             {
-                return "#";
+                return DictionaryIndicator;
             }
             return string.Empty;
         }

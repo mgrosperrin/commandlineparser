@@ -53,6 +53,28 @@ namespace MGR.CommandLineParser
 
             internal static readonly Func<string, string, Type, string> ParserNoConverterFound = (propertyName, commandName, propertyType) =>
                 string.Format(CultureInfo.CurrentUICulture, "No converter found for the option '{0}' of the command '{1}' of type '{2}'.", propertyName, commandName, propertyType.FullName);
+
+            internal static readonly Func<Type, Type, string> ParserSpecifiedConverterNotValidToAssignValue =
+                (optionType, targetType) => string.Format(CultureInfo.CurrentUICulture, "The specified converter is not valid : target type is '{1}' and option type is '{0}'.", optionType, targetType);
+
+            internal static readonly Func<string, string, Type, Type, string> ParserSpecifiedConverterNotValid =
+                (optionName, commandName, optionType, targetType) =>
+                    string.Format(CultureInfo.CurrentUICulture, "The specified converter for the option '{0}' of the command '{1}' is not valid : property type : {2}, converter target type : {3}.",
+                        optionName, commandName, optionType.FullName, targetType.FullName);
+
+            internal static readonly Func<string, Type, string, string> LocalizableNoPropertyFound =
+                (propertyName, resourceType, propertyValue) =>
+                    string.Format(CultureInfo.CurrentCulture,
+                        "Cannot retrieve property '{0}' because localization failed.  Type '{1}' is not public or does not contain a public static string property with the name '{2}'", propertyName,
+                        resourceType.FullName, propertyValue);
+
+            internal static readonly Func<string, string, string> ParserMultiValueOptionIsNullAndHasNoSetter = (optionName, commandName) => string.Format(CultureInfo.CurrentUICulture, "The multi-valued option '{0}' of the command '{1}' returns null and have no setter.", optionName, commandName);
+
+            internal static readonly Func<Type, string> EnumConverterConcreteTargetTypeIsNotAnEnum =
+                concreteTargetType => string.Format(CultureInfo.CurrentCulture, "The specified concrete target type ({0}) is not an enum type.", concreteTargetType.FullName);
+
+            internal static readonly Func<string, Type, string> EnumConverterParsedValueIsNotOfConcreteType =
+                (value, concreteTargetType) => string.Format(CultureInfo.CurrentCulture, "The specified value '{0}' is not correct the type '{1}'.", value, concreteTargetType);
         }
     }
 }

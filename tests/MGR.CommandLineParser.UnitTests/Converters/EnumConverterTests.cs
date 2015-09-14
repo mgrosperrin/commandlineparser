@@ -77,7 +77,7 @@ namespace MGR.CommandLineParser.UnitTests.Converters
             // Arrange
             IConverter converter = new EnumConverter();
             var value = "10";
-            var expectedExceptionMessage = "The specified value '10' is not correct the type 'ConsoleModifiers'.";
+            var expectedExceptionMessage = "The specified value '10' is not correct the type 'System.ConsoleModifiers'.";
 
             // Act
             var actualException = Assert.Throws<CommandLineParserException>(() => converter.Convert(value, typeof (ConsoleModifiers)));
@@ -126,7 +126,7 @@ namespace MGR.CommandLineParser.UnitTests.Converters
             // Arrange
             IConverter converter = new EnumConverter();
             var value = "Hello";
-            var expectedExceptionMessage = "The specified concrete target type (Exception) is not an enum type.";
+            var expectedExceptionMessage = "The specified concrete target type (System.Exception) is not an enum type.";
 
             // Act
             var actualException = Assert.Throws<CommandLineParserException>(() => converter.Convert(value, typeof (Exception)));

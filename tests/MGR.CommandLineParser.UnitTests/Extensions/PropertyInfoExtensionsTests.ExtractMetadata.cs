@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using MGR.CommandLineParser.Command;
@@ -11,13 +12,15 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
     {
         public class ExtractMetadata
         {
+            private const string CustomPropertyName = "MyCustomName";
+            private const string CustomPropertyShortName = "mcn";
             public int OriginalProperty { get; set; }
 
             [IgnoreOptionProperty]
             public string IgnoredProperty { get; set; }
 
             [Required]
-            [Display(Name = "MyCustomName", ShortName = "mcn")]
+            [Display(Name = CustomPropertyName, ShortName = CustomPropertyShortName)]
             [Converter(typeof (StringConverter))]
             public string CustomProperty { get; set; }
 
@@ -42,8 +45,8 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomPropertyTests()
             {
                 // Arrange
-                var expectedName = "MyCustomName";
-                var expectedShortName = "mcn";
+                var expectedName = CustomPropertyName;
+                var expectedShortName = CustomPropertyShortName;
                 var propertyInfo = GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomProperty));
                 var commandMetadata = new CommandMetadataTemplate {Name = "MyCommand"};
 
@@ -82,12 +85,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => OriginalProperty));
-                CommandMetadataTemplate commandMetadata = null;
-                var expectedExceptionMessage = @"commandMetadataTemplate";
+                CommandMetadataTemplate commandMetadataTemplate = null;
+                var expectedExceptionMessage = nameof(commandMetadataTemplate);
 
                 // Act
                 // ReSharper disable once ExpressionIsAlwaysNull
-                var actualException = Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractMetadata(commandMetadata));
+                var actualException = Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractMetadata(commandMetadataTemplate));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);
@@ -100,8 +103,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => NonWritableProperty));
                 var commandMetadata = new CommandMetadataTemplate {Name = "MyCommand"};
-                var expectedExceptionMessage =
-                    "The option 'NonWritableProperty' of the command 'MyCommand' must be writable or implements ICollection<T>.";
+                var expectedExceptionMessage = Constants.ExceptionMessages.ParserExtractMetadataPropertyShouldBeWritableOrICollection(nameof(NonWritableProperty), "MyCommand");
 
                 // Act
                 var actualException = Assert.Throws<CommandLineParserException>(() => propertyInfo.ExtractMetadata(commandMetadata));

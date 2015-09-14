@@ -15,7 +15,7 @@ namespace MGR.CommandLineParser.Command
         private static readonly object CommandMetadataCacheLockObject = new object();
         private static readonly object SimpleCommandMetadataCacheLockObject = new object();
 
-        private const string COMMAND_SUFFIX = "Command";
+        private const string COMMAND_SUFFIX = nameof(Command);
 
         internal static string ExtractCommandName(this ICommand source)
         {

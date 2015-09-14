@@ -11,15 +11,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
         {
             public int WritableProperty { get; set; }
 
-            public int NonWritableProperty
-            {
-                get { return 0; }
-            }
+            public int NonWritableProperty => 0;
 
-            public List<int> NonWritableMultiValueProperty
-            {
-                get { return new List<int>(); }
-            }
+            public List<int> NonWritableMultiValueProperty => new List<int>();
 
             [Fact]
             public void WritableTest()

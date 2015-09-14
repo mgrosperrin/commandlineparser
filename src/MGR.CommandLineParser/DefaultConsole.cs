@@ -74,7 +74,7 @@ namespace MGR.CommandLineParser
 
         public void WriteWarning(string value, params object[] args)
         {
-            var message = string.Format(CultureInfo.CurrentCulture, Strings.Console_WarningFormat, value);
+            var message = string.Format(CultureInfo.CurrentUICulture, Strings.Console_WarningFormat, value);
             WriteColor(Console.Out, ConsoleColor.Yellow, message, args);
         }
 

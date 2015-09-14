@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.Reflection;
 using MGR.CommandLineParser.Converters;
 
@@ -53,8 +52,7 @@ namespace MGR.CommandLineParser.Command
         {
             if (!OptionType.IsAssignableFrom(Converter.TargetType))
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "The specified converter is not valid : target type is '{1}' and option type is '{0}'.", OptionType,
-                                                                   Converter.TargetType));
+                throw new CommandLineParserException(Constants.ExceptionMessages.ParserSpecifiedConverterNotValidToAssignValue(OptionType, Converter.TargetType));
             }
             var convertedValue = Converter.Convert(option, OptionType);
             AssignValueInternal(convertedValue);
@@ -83,9 +81,7 @@ namespace MGR.CommandLineParser.Command
                     }
                     else
                     {
-                        throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture,
-                                                                           "The multi-valued option '{0}' of the command '{1}' returns null and have no setter.", Name,
-                                                                           CommandMetadata.Name));
+                        throw new CommandLineParserException(Constants.ExceptionMessages.ParserMultiValueOptionIsNullAndHasNoSetter(Name, CommandMetadata.Name));
                     }
                 }
                 if (PropertyOption.PropertyType.IsCollectionType())

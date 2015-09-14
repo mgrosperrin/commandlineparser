@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Linq;
 using MGR.CommandLineParser;
 using MGR.CommandLineParser.Command;
@@ -124,8 +123,7 @@ namespace System.Reflection
 
                 if (!converter.CanConvertTo(propertyInfo.PropertyType))
                 {
-                    throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "The specified converter for the option '{0}' of the command '{1}' is not valid : property type : {2}, converter target type : {3}.",
-                                                                       optionMetadataTemplate.Name, optionMetadataTemplate.CommandMetadata.Name, propertyInfo.PropertyType.FullName, converter.TargetType.FullName));
+                    throw new CommandLineParserException(Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(optionMetadataTemplate.Name, optionMetadataTemplate.CommandMetadata.Name, propertyInfo.PropertyType, converter.TargetType));
                 }
                 return converter;
             }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 
 namespace MGR.CommandLineParser.Converters
 {
@@ -30,16 +29,14 @@ namespace MGR.CommandLineParser.Converters
 
             if (!TargetType.IsAssignableFrom(concreteTargetType))
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, "The specified concrete target type ({0}) is not an enum type.",
-                                                                   concreteTargetType.Name));
+                throw new CommandLineParserException(Constants.ExceptionMessages.EnumConverterConcreteTargetTypeIsNotAnEnum(concreteTargetType));
             }
             try
             {
                 var enumValue = Enum.Parse(concreteTargetType, value, true);
-                if (!(Enum.IsDefined(concreteTargetType, enumValue) | enumValue.ToString().Contains(",")))
+                if (!(Enum.IsDefined(concreteTargetType, enumValue) || enumValue.ToString().Contains(",")))
                 {
-                    throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, "The specified value '{0}' is not correct the type '{1}'.",
-                                                                       value, concreteTargetType.Name));
+                    throw new CommandLineParserException(Constants.ExceptionMessages.EnumConverterParsedValueIsNotOfConcreteType(value, concreteTargetType));
                 }
                 return enumValue;
             }

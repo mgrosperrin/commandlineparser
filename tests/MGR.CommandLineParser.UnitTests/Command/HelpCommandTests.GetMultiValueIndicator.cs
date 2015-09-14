@@ -64,7 +64,7 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 {
                     Name = propertyInfo.Name
                 };
-                var expected = "#";
+                var expected = HelpCommand.DictionaryIndicator;
 
                 // Act
                 var actual = HelpCommand.GetMultiValueIndicator(optionMetadata);

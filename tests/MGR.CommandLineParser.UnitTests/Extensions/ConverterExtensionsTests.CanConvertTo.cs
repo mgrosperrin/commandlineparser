@@ -112,12 +112,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var converterMoq = new Mock<IConverter>();
                 converterMoq.SetupGet(converter => converter.TargetType).Returns(typeof (int));
-                Type testedType = null;
-                var expectedExceptionMessage = @"targetType";
+                Type targetType = null;
+                var expectedExceptionMessage = nameof(targetType);
 
                 // Act
                 var actualException =
-                    Assert.Throws<ArgumentNullException>(() => converterMoq.Object.CanConvertTo(testedType));
+                    Assert.Throws<ArgumentNullException>(() => converterMoq.Object.CanConvertTo(targetType));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);

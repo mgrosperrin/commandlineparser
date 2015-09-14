@@ -71,9 +71,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter() });
-                var expectedExceptionMessage =
-                    string.Format("No converter found for the option '{0}' of the command '{1}' of type '{2}'.",
-                        expectedName, commandMetadata.Name, typeof(int).FullName);
+                var expectedExceptionMessage = Constants.ExceptionMessages.ParserNoConverterFound(expectedName, commandMetadata.Name, typeof(int));
 
                 // Act
                 var actualException =
@@ -111,10 +109,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter() });
-                var expectedExceptionMessage =
-                    string.Format(
-                        "The specified converter for the option '{0}' of the command '{1}' is not valid : property type : {2}, converter target type : {3}.",
-                        expectedName, commandMetadata.Name, typeof(int).FullName, typeof(Guid).FullName);
+                var expectedExceptionMessage = Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(expectedName, commandMetadata.Name, typeof(int), typeof(Guid));
 
                 // Act
                 var actualException =
@@ -224,10 +219,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new GuidConverter() });
-                var expectedExceptionMessage =
-                    string.Format(
-                        "The option '{0}' of the command 'MyCommand' defined a Key/Value converter but its type is not System.Generic.IDictionary<TKey, TValue>.",
-                        expectedName);
+                var expectedExceptionMessage = Constants.ExceptionMessages.ParserExtractConverterKeyValueConverterIsForIDictionaryProperty(expectedName, "MyCommand");
 
                 // Act
                 var actualException =
@@ -248,10 +240,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter(), new GuidConverter() });
-                var expectedExceptionMessage =
-                    string.Format(
-                        "The specified KeyValueConverter for the option '{0}' of the command '{1}' is not valid : key property type : {2}, key converter target type : {3}.",
-                        expectedName, commandMetadata.Name, typeof(string).FullName, typeof(int).FullName);
+                var expectedExceptionMessage =Constants.ExceptionMessages.ParserExtractKeyConverterIsNotValid(expectedName, commandMetadata.Name, typeof(string), typeof(int));
 
                 // Act
                 var actualException =
@@ -272,10 +261,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter(), new GuidConverter() });
-                var expectedExceptionMessage =
-                    string.Format(
-                        "The specified KeyValueConverter for the option '{0}' of the command '{1}' is not valid : value property type : {2}, value converter target type : {3}.",
-                        expectedName, commandMetadata.Name, typeof(string).FullName, typeof(Guid).FullName);
+                var expectedExceptionMessage = Constants.ExceptionMessages.ParserExtractValueConverterIsNotValid(expectedName, commandMetadata.Name, typeof(string), typeof(Guid));
 
                 // Act
                 var actualException =
@@ -296,10 +282,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter(), new GuidConverter() });
-                var expectedExceptionMessage =
-                    string.Format(
-                        "No converter found for the key type ('{2}') of the option '{0}' of the command '{1}'.",
-                        expectedName, commandMetadata.Name, typeof(string).FullName);
+                var expectedExceptionMessage = Constants.ExceptionMessages.ParserNoKeyConverterFound(expectedName, commandMetadata.Name, typeof(string));
 
                 // Act
                 var actualException =
@@ -320,10 +303,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
                 var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
                 DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter(), new GuidConverter() });
-                var expectedExceptionMessage =
-                    string.Format(
-                        "No converter found for the value type ('{2}') of the option '{0}' of the command '{1}'.",
-                        expectedName, commandMetadata.Name, typeof(string).FullName);
+                var expectedExceptionMessage = Constants.ExceptionMessages.ParserNoValueConverterFound(expectedName, commandMetadata.Name, typeof(string));
 
                 // Act
                 var actualException =

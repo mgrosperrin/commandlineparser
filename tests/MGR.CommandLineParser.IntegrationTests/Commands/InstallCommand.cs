@@ -9,7 +9,7 @@ namespace MGR.CommandLineParser.Tests.Commands
     [CommandDisplay(Description = "InstallCommandDescription", Usage = "InstallCommandUsageSummary")]
     public class InstallCommand : CommandBase
     {
-        private ICollection<string> _sources = new List<string>();
+        private readonly ICollection<string> _sources = new List<string>();
 
         [Display(Description = "InstallCommandSourceDescription")]
         public ICollection<string> Source => _sources;

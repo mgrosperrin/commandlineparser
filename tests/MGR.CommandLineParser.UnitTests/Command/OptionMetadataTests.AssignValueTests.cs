@@ -96,9 +96,7 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 var commandMetadata = testCommand.ExtractMetadata();
                 var optionMetadata = commandMetadata.GetOption("PropertySimple");
                 optionMetadata.Converter = new BooleanConverter();
-                var expectedMessageException = string.Format(CultureInfo.CurrentUICulture,
-                    "The specified converter is not valid : target type is '{1}' and option type is '{0}'.",
-                    typeof(int).FullName, typeof(bool).FullName);
+                var expectedMessageException = Constants.ExceptionMessages.ParserSpecifiedConverterNotValidToAssignValue(typeof(int), typeof(bool));
 
                 // Act
                 var actualException =
