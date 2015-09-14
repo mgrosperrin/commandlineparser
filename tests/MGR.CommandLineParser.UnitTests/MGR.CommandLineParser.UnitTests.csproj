@@ -124,7 +124,7 @@
     <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractDisplayMetadata.cs">
       <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractMetadata.cs">
+    <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractOptionMetadataTemplate.cs">
       <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractRequiredMetadata.cs">

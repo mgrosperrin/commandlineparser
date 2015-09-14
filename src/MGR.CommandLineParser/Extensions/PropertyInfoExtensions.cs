@@ -24,7 +24,7 @@ namespace System.Reflection
         }
 
         //[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ICollection")]
-        internal static OptionMetadataTemplate ExtractMetadata(this PropertyInfo source, CommandMetadataTemplate commandMetadataTemplate)
+        internal static OptionMetadataTemplate ExtractOptionMetadataTemplate(this PropertyInfo source, CommandMetadataTemplate commandMetadataTemplate)
         {
             Guard.NotNull(source, nameof(source));
             Guard.NotNull(commandMetadataTemplate, nameof(commandMetadataTemplate));

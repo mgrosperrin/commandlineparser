@@ -34,17 +34,22 @@ namespace MGR.CommandLineParser.Command
                 if (!CommandMetadataCache.ContainsKey(commandType))
                 {
                     var metadata = ExtractCommandMetadataTemplate(source);
-                    foreach (var propInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != nameof(ICommand.Arguments)))
-                    {
-                        var optionMetadata = propInfo.ExtractMetadata(metadata);
-                        if (optionMetadata != null)
-                        {
-                            metadata.Options.Add(optionMetadata);
-                        }
-                    }
+                    ExtractOptionMetadataTemplates(commandType, metadata);
                     CommandMetadataCache.Add(commandType, metadata);
                 }
                 return CommandMetadataCache[commandType];
+            }
+        }
+
+        private static void ExtractOptionMetadataTemplates(Type commandType, CommandMetadataTemplate metadata)
+        {
+            foreach (var propInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != nameof(ICommand.Arguments)))
+            {
+                var optionMetadataTemplate = propInfo.ExtractOptionMetadataTemplate(metadata);
+                if (optionMetadataTemplate != null)
+                {
+                    metadata.Options.Add(optionMetadataTemplate);
+                }
             }
         }
 
@@ -56,26 +61,37 @@ namespace MGR.CommandLineParser.Command
 
             lock (SimpleCommandMetadataCacheLockObject)
             {
-                if (!SimpleCommandMetadataCache.ContainsKey(source.GetType()))
+                var commandType = source.GetType();
+                if (!SimpleCommandMetadataCache.ContainsKey(commandType))
                 {
                     var metadata = new CommandMetadataTemplate();
-                    var commandType = source.GetType();
-                    var fullCommandName = commandType.Name;
-                    if (fullCommandName.EndsWith(COMMAND_SUFFIX, StringComparison.Ordinal))
-                    {
-                        fullCommandName = fullCommandName.Substring(0, fullCommandName.Length - COMMAND_SUFFIX.Length);
-                    }
+                    var fullCommandName = GetFullCommandName(commandType);
                     metadata.Name = fullCommandName;
-                    var displayAttribute = commandType.GetCustomAttributes(typeof(CommandDisplayAttribute), true).FirstOrDefault() as CommandDisplayAttribute;
-                    if (displayAttribute != null)
-                    {
-                        metadata.Description = displayAttribute.GetLocalizedDescription();
-                        metadata.Usage = displayAttribute.GetLocalizedUsage();
-                    }
-                    SimpleCommandMetadataCache.Add(source.GetType(), metadata);
+                    ExtractCommandDisplayInformation(commandType, metadata);
+                    SimpleCommandMetadataCache.Add(commandType, metadata);
                 }
-                return SimpleCommandMetadataCache[source.GetType()];
+                return SimpleCommandMetadataCache[commandType];
             }
+        }
+
+        private static void ExtractCommandDisplayInformation(Type commandType, CommandMetadataTemplate metadata)
+        {
+            var displayAttribute = commandType.GetCustomAttributes(typeof (CommandDisplayAttribute), true).FirstOrDefault() as CommandDisplayAttribute;
+            if (displayAttribute != null)
+            {
+                metadata.Description = displayAttribute.GetLocalizedDescription();
+                metadata.Usage = displayAttribute.GetLocalizedUsage();
+            }
+        }
+
+        private static string GetFullCommandName(Type commandType)
+        {
+            var fullCommandName = commandType.Name;
+            if (fullCommandName.EndsWith(COMMAND_SUFFIX, StringComparison.Ordinal))
+            {
+                fullCommandName = fullCommandName.Substring(0, fullCommandName.Length - COMMAND_SUFFIX.Length);
+            }
+            return fullCommandName;
         }
     }
 }

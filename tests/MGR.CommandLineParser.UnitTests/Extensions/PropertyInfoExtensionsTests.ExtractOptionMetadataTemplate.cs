@@ -10,7 +10,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
 {
     public partial class PropertyInfoExtensionsTests
     {
-        public class ExtractMetadata
+        public class ExtractOptionMetadataTemplate
         {
             private const string CustomPropertyName = "MyCustomName";
             private const string CustomPropertyShortName = "mcn";
@@ -35,7 +35,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var commandMetadata = new CommandMetadataTemplate {Name = "MyCommand"};
 
                 // Act
-                var actual = propertyInfo.ExtractMetadata(commandMetadata);
+                var actual = propertyInfo.ExtractOptionMetadataTemplate(commandMetadata);
 
                 // Assert
                 Assert.Null(actual);
@@ -51,7 +51,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var commandMetadata = new CommandMetadataTemplate {Name = "MyCommand"};
 
                 // Act
-                var actual = propertyInfo.ExtractMetadata(commandMetadata);
+                var actual = propertyInfo.ExtractOptionMetadataTemplate(commandMetadata);
 
                 // Assert
                 Assert.NotNull(actual);
@@ -73,7 +73,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var actualException =
                     Assert.Throws<ArgumentNullException>(
                         // ReSharper disable once ExpressionIsAlwaysNull
-                        () => propertyInfo.ExtractMetadata(commandMetadata));
+                        () => propertyInfo.ExtractOptionMetadataTemplate(commandMetadata));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);
@@ -90,7 +90,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
 
                 // Act
                 // ReSharper disable once ExpressionIsAlwaysNull
-                var actualException = Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractMetadata(commandMetadataTemplate));
+                var actualException = Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractOptionMetadataTemplate(commandMetadataTemplate));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);
@@ -106,7 +106,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var expectedExceptionMessage = Constants.ExceptionMessages.ParserExtractMetadataPropertyShouldBeWritableOrICollection(nameof(NonWritableProperty), "MyCommand");
 
                 // Act
-                var actualException = Assert.Throws<CommandLineParserException>(() => propertyInfo.ExtractMetadata(commandMetadata));
+                var actualException = Assert.Throws<CommandLineParserException>(() => propertyInfo.ExtractOptionMetadataTemplate(commandMetadata));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.Message);
