@@ -21,5 +21,15 @@ namespace MGR.CommandLineParser
                 throw new CommandLineParserException(message);
             }
         }
+
+        public static void OfType<T>(Type type, [InvokerParameterName]  string name)
+        {
+            NotNull(type, name);
+
+            if (!typeof (T).IsAssignableFrom(type))
+            {
+                throw new ArgumentOutOfRangeException(name);
+            }
+        }
     }
 }

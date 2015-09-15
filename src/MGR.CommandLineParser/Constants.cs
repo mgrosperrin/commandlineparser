@@ -8,6 +8,7 @@ namespace MGR.CommandLineParser
     {
         internal static readonly string[] ArgumentStarter = {"/", "-"};
         internal static readonly char ArgumentSplitter = ':';
+        internal const string CommandSuffix = nameof(Command);
 
         internal static class ExceptionMessages
         {

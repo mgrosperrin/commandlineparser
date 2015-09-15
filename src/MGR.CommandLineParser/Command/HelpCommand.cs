@@ -75,7 +75,7 @@ namespace MGR.CommandLineParser.Command
         {
             Guard.NotNull(command, nameof(command));
 
-            var metadata = command.ExtractMetadataTemplate();
+            var metadata = command.GetType().ExtractMetadataTemplate();
             Console.WriteLine(ParserOptions.Logo);
             Console.WriteLine(Strings.HelpCommand_CommandUsageFormat, ParserOptions.CommandLineName, metadata.Name, metadata.Usage);
             Console.WriteLine(metadata.Description);
@@ -123,7 +123,7 @@ namespace MGR.CommandLineParser.Command
         {
             WriteGeneralInformation();
 
-            var metadatas = commandProvider.GetAllCommands().Select(command => command.ExtractCommandMetadataTemplate()).ToList();
+            var metadatas = commandProvider.GetAllCommands().Select(command => command.GetType().ExtractCommandMetadataTemplate()).ToList();
             var maxNameLength = metadatas.Max(m => m.Name.Length);
             foreach (var metadata in metadatas)
             {

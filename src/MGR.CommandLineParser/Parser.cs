@@ -18,11 +18,6 @@ namespace MGR.CommandLineParser
         }
 
         /// <summary>
-        ///     Gets the command used by the parser if called via <seealso cref="Parse{T}" /> method.
-        /// </summary>
-        public ICommand UniqueCommand { get; private set; }
-
-        /// <summary>
         ///     Gets the logo used by the parser.
         /// </summary>
         public string Logo => _parserOptions.Logo;
@@ -44,25 +39,14 @@ namespace MGR.CommandLineParser
             {
                 return new CommandResult<TCommand>(default(TCommand), CommandResultCode.NoArgs);
             }
-            SetUniqueCommand<TCommand>();
-            var parsingResult = ParseImpl(args);
+            //SetUniqueCommand<TCommand>();
+            var commandName = typeof (TCommand).ExtractCommandMetadataTemplate().Name;
+            var parsingResult = ParseImpl(args, commandName);
             if (parsingResult.Command == null)
             {
                 return new CommandResult<TCommand>(default(TCommand), parsingResult.ReturnCode);
             }
             return new CommandResult<TCommand>((TCommand) parsingResult.Command, parsingResult.ReturnCode, parsingResult.ValidationResults.ToList());
-        }
-        private void SetUniqueCommand<T>() where T : class, ICommand
-        {
-            var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
-            foreach (var command in commandProvider.GetAllCommands())
-            {
-                if (command.GetType() == typeof(T))
-                {
-                    UniqueCommand = command;
-                    break;
-                }
-            }
         }
 
         /// <summary>
@@ -76,7 +60,7 @@ namespace MGR.CommandLineParser
             {
                 return new CommandResult<ICommand>(null, CommandResultCode.NoArgs);
             }
-            return ParseImpl(args);
+            return ParseImpl(args, string.Empty);
         }
 
         private static string GetNextCommandLineItem(IEnumerator<string> argsEnumerator)
@@ -88,12 +72,15 @@ namespace MGR.CommandLineParser
             return argsEnumerator.Current;
         }
 
-        private CommandResult<ICommand> ParseImpl(IEnumerable<string> args)
+        private CommandResult<ICommand> ParseImpl(IEnumerable<string> args, string commandName)
         {
             var argsEnumerator = args.GetEnumerator();
             var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
             var console = ServiceResolver.Current.ResolveService<IConsole>();
-            var commandName = GetCommandName(argsEnumerator);
+            if (string.IsNullOrEmpty(commandName))
+            {
+                commandName = GetCommandName(argsEnumerator);
+            }
             if (commandName == null)
             {
                 WriteHelp(commandProvider, console);
@@ -192,13 +179,6 @@ namespace MGR.CommandLineParser
             commandProvider.GetHelpCommand(_parserOptions, console).Execute();
         }
 
-        private string GetCommandName(IEnumerator<string> argsEnumerator)
-        {
-            if (UniqueCommand == null)
-            {
-                return GetNextCommandLineItem(argsEnumerator);
-            }
-            return UniqueCommand.ExtractCommandName();
-        }
+        private static string GetCommandName(IEnumerator<string> argsEnumerator) => GetNextCommandLineItem(argsEnumerator);
     }
 }
