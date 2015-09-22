@@ -10,6 +10,6 @@ namespace MGR.CommandLineParser.Command
         /// <summary>
         /// Gets the usage samples.
         /// </summary>
-        IEnumerable<string> Samples { get; }
+        IEnumerable<string> GetSamples();
     }
 }

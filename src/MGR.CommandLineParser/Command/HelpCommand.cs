@@ -99,7 +99,7 @@ namespace MGR.CommandLineParser.Command
             var usageCommand = command as ISampleCommand;
             if (usageCommand != null)
             {
-                foreach (var usage in usageCommand.Samples)
+                foreach (var usage in usageCommand.GetSamples())
                 {
                     Console.WriteLine(usage);
                 }
