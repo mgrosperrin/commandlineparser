@@ -13,7 +13,7 @@ namespace MGR.CommandLineParser
     public sealed class ComponentModelCompositionCommandProvider : CommandProviderBase
     {
         /// <inheritdoc />
-        protected override List<ICommand> BuildCommands()
+        protected override IEnumerable<ICommand> BuildCommands()
         {
             var commands = new List<ICommand>();
             using (var catalog = new AggregateCatalog())

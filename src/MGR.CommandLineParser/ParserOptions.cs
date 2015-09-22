@@ -3,7 +3,7 @@
     /// <summary>
     ///     Default implementation of <see cref="IParserOptions" />.
     /// </summary>
-    public sealed class ParserOptions : IParserOptions
+    internal sealed class ParserOptions : IParserOptions
     {
         /// <summary>
         ///     The logo used in the help by the parser.

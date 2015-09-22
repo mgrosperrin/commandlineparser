@@ -54,8 +54,8 @@ namespace MGR.CommandLineParser.Command
         /// <returns>Return 0 is everything was right, an negative error code otherwise.</returns>
         protected override int ExecuteCommand()
         {
-            var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
-            var command = commandProvider.GetCommand(Arguments.FirstOrDefault(), ParserOptions, Console);
+            var commandResolver = ServiceResolver.Current.ResolveService<CommandResolver>();
+            var command = commandResolver.GetCommand(Arguments.FirstOrDefault() ?? string.Empty, ParserOptions, Console);
             WriteHelp(command);
             return 0;
         }

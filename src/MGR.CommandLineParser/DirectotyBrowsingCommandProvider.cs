@@ -20,7 +20,7 @@ namespace MGR.CommandLineParser
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods", MessageId = "System.Reflection.Assembly.LoadFrom")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        protected override List<ICommand> BuildCommands()
+        protected override IEnumerable<ICommand> BuildCommands()
         {
             foreach (var assemblyFile in _assemblyProvider.GetFilesToLoad())
             {

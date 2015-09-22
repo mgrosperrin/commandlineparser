@@ -52,8 +52,8 @@ namespace MGR.CommandLineParser.Command
         {
             if (Help)
             {
-                var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
-                commandProvider.GetHelpCommand(ParserOptions, Console).WriteHelp(this);
+                var commandResolver = ServiceResolver.Current.ResolveService<CommandResolver>();
+                commandResolver.GetHelpCommand(ParserOptions, Console).WriteHelp(this);
                 return 0;
             }
             return ExecuteCommand();

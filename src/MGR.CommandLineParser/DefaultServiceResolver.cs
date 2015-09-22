@@ -46,7 +46,8 @@ namespace MGR.CommandLineParser
                     ServiceResolver.Current.ResolveService<ICommandActivator>())
             },
             {typeof (ICommandActivator), () => new BasicCommandActivator()},
-            {typeof (IAssemblyFileProvider), () => new CurrentDirectoryAssemblyFileProvider()}
+            {typeof (IAssemblyFileProvider), () => new CurrentDirectoryAssemblyFileProvider()},
+            { typeof(CommandResolver), () => new CommandResolver(ServiceResolver.Current.ResolveService<ICommandProvider>())}
         };
 
         /// <inheritdoc />

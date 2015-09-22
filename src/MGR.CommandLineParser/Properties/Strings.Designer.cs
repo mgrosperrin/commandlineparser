@@ -7,13 +7,11 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-#pragma warning disable IDE0001
-#pragma warning disable IDE0002
-#pragma warning disable CS8019
-namespace MGR.CommandLineParser.Properties {
-    using System;
-    
-    
+
+namespace MGR.CommandLineParser.Properties
+{
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -25,15 +23,15 @@ namespace MGR.CommandLineParser.Properties {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
-        
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Strings() {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -41,13 +39,13 @@ namespace MGR.CommandLineParser.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    var temp = new global::System.Resources.ResourceManager("MGR.CommandLineParser.Properties.Strings", typeof(Strings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MGR.CommandLineParser.Properties.Strings", typeof(Strings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -61,7 +59,7 @@ namespace MGR.CommandLineParser.Properties {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
@@ -70,7 +68,7 @@ namespace MGR.CommandLineParser.Properties {
                 return ResourceManager.GetString("Command_HelpOption_DescriptionMessage", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ?.
         /// </summary>
@@ -79,7 +77,7 @@ namespace MGR.CommandLineParser.Properties {
                 return ResourceManager.GetString("Command_HelpOption_ShortNameMessage", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to WARNING: {0}.
         /// </summary>
@@ -88,7 +86,7 @@ namespace MGR.CommandLineParser.Properties {
                 return ResourceManager.GetString("Console_WarningFormat", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to {0} Command help :.
         /// </summary>
@@ -97,7 +95,7 @@ namespace MGR.CommandLineParser.Properties {
                 return ResourceManager.GetString("HelpCommand_CommandTitleFormat", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Usage: {0} {1} {2}.
         /// </summary>
@@ -106,7 +104,7 @@ namespace MGR.CommandLineParser.Properties {
                 return ResourceManager.GetString("HelpCommand_CommandUsageFormat", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to {0} &lt;command&gt;.
         /// </summary>
@@ -115,7 +113,7 @@ namespace MGR.CommandLineParser.Properties {
                 return ResourceManager.GetString("HelpCommand_GlobalCommandLineCommandFormat", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Available commands:.
         /// </summary>
@@ -124,7 +122,7 @@ namespace MGR.CommandLineParser.Properties {
                 return ResourceManager.GetString("HelpCommand_GlobalHelp_AvailableCommands", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Type &apos;{0} &lt;command&gt;&apos; for help on a specific command..
         /// </summary>
@@ -133,16 +131,16 @@ namespace MGR.CommandLineParser.Properties {
                 return ResourceManager.GetString("HelpCommand_GlobalHelpCommandUsageFormat", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Looks up a localized string similar to Usage: {0} [args] [options].
+        ///   Looks up a localized string similar to Usage: {0} [args] [parserOptions].
         /// </summary>
         public static string HelpCommand_GlobalUsageFormat {
             get {
                 return ResourceManager.GetString("HelpCommand_GlobalUsageFormat", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Options:.
         /// </summary>
@@ -151,7 +149,7 @@ namespace MGR.CommandLineParser.Properties {
                 return ResourceManager.GetString("HelpCommand_OptionsListTitle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Command {0} : invalid arguments :.
         /// </summary>
@@ -160,7 +158,7 @@ namespace MGR.CommandLineParser.Properties {
                 return ResourceManager.GetString("Parser_CommandInvalidArgumentsFormat", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to {0} Version: {1}.
         /// </summary>
@@ -171,6 +169,3 @@ namespace MGR.CommandLineParser.Properties {
         }
     }
 }
-#pragma warning disable IDE0001
-#pragma warning restore IDE0002
-#pragma warning restore CS8019

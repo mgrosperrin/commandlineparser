@@ -75,7 +75,7 @@ namespace MGR.CommandLineParser
         private CommandResult<ICommand> ParseImpl(IEnumerable<string> args, string commandName)
         {
             var argsEnumerator = args.GetEnumerator();
-            var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
+            var commandResolver = ServiceResolver.Current.ResolveService<CommandResolver>();
             var console = ServiceResolver.Current.ResolveService<IConsole>();
             if (string.IsNullOrEmpty(commandName))
             {
@@ -83,13 +83,13 @@ namespace MGR.CommandLineParser
             }
             if (commandName == null)
             {
-                WriteHelp(commandProvider, console);
+                WriteHelp(commandResolver, console);
                 return new CommandResult<ICommand>(null, CommandResultCode.NoCommandName);
             }
-            var command = commandProvider.GetCommand(commandName, _parserOptions, console);
+            var command = commandResolver.GetCommand(commandName, _parserOptions, console);
             if (command == null)
             {
-                WriteHelp(commandProvider, console);
+                WriteHelp(commandResolver, console);
                 return new CommandResult<ICommand>(null, CommandResultCode.NoCommandFound);
             }
             var commandMetadata = command.ExtractMetadata();
@@ -97,7 +97,7 @@ namespace MGR.CommandLineParser
             var validation = Validate(command);
             if (!validation.Item1)
             {
-                commandProvider.GetHelpCommand(_parserOptions, console).WriteHelp(commandMetadata.Command);
+                commandResolver.GetHelpCommand(_parserOptions, console).WriteHelp(commandMetadata.Command);
                 return new CommandResult<ICommand>(command, CommandResultCode.CommandParameterNotValid, validation.Item2);
             }
             return new CommandResult<ICommand>(command, CommandResultCode.Ok);
@@ -174,9 +174,9 @@ namespace MGR.CommandLineParser
             }
         }
 
-        private void WriteHelp(ICommandProvider commandProvider, IConsole console)
+        private void WriteHelp(CommandResolver commandResolver, IConsole console)
         {
-            commandProvider.GetHelpCommand(_parserOptions, console).Execute();
+            commandResolver.GetHelpCommand(_parserOptions, console).Execute();
         }
 
         private static string GetCommandName(IEnumerator<string> argsEnumerator) => GetNextCommandLineItem(argsEnumerator);

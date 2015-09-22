@@ -53,6 +53,7 @@
     <Compile Include="BasicCommandActivator.cs" />
     <Compile Include="CommandLineParserException.cs" />
     <Compile Include="CommandProviderBase.cs" />
+    <Compile Include="CommandResolver.cs" />
     <Compile Include="CommandResultCode.cs" />
     <Compile Include="CommandResult`1.cs" />
     <Compile Include="Command\CommandBase.cs" />
