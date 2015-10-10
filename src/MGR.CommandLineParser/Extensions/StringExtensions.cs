@@ -13,5 +13,13 @@ namespace System
 
             return values.Any(value => source.StartsWith(value, comparisonType));
         }
+        public static int IndexOf(this string source, params char[] values)
+        {
+            Guard.NotNull(source, nameof(source));
+
+            var firstIndex = values.Select(c => source.IndexOf(c))
+                .FirstOrDefault(index => index >= 0);
+            return firstIndex;
+        }
     }
 }

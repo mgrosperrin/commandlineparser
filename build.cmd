@@ -5,24 +5,19 @@ if("%1"=="") goto noVersion
 set version=%1
 
 SETLOCAL
-SET GLOBAL_NUGET=%LocalAppData%\NuGet\NuGet.exe
+SET LOCAL_NUGET=build\NuGet.exe
 
-IF EXIST %GLOBAL_NUGET% goto copyNuget
+IF EXIST %LOCAL_NUGET% goto runBuild
 echo Downloading latest version of NuGet.exe...
-IF NOT EXIST %LocalAppData%\NuGet md %LocalAppData%\NuGet
-@powershell -NoProfile -ExecutionPolicy unrestricted -Command "$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest 'https://www.nuget.org/nuget.exe' -OutFile '%GLOBAL_NUGET%'"
-
-:copyNuget
-IF EXIST build\nuget.exe goto runBuild
-md build
-copy %GLOBAL_NUGET% build\nuget.exe > nul
+@powershell -NoProfile -ExecutionPolicy unrestricted -Command "$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest 'https://dist.nuget.org/win-x86-commandline/latest/nuget.exe' -OutFile '%LOCAL_NUGET%'"
 
 :runBuild
 build\nuget restore
 
-"%ProgramFiles(x86)%\MSBuild\14.0\bin\msbuild.exe" src\MGR.CommandLineParser\MGR.CommandLineParser.csproj /p:Configuration=Release /t:Rebuild
-build\nuget pack build\MGR.CommandLineParser.nuspec -symbols -Version %version%
+build\nuget pack src\MGR.CommandLineParser\MGR.CommandLineParser.csproj -Properties Configuration=Release -Build -Symbols -MSBuildVersion 14
+rem build\nuget pack build\MGR.CommandLineParser.nuspec -symbols -Version %version%
 
+pause
 goto:eof
 
 :noVersion

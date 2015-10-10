@@ -1,14 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using MGR.CommandLineParser.Command;
 using Xunit;
 
 namespace MGR.CommandLineParser.UnitTests.Extensions
 {
     public partial class PropertyInfoExtensionsTests
     {
-        public class ExtractDisplayMetadata
+        public class ExtractOptionDisplayInfoMetadata
         {
             public int OriginalProperty { get; set; }
 
@@ -30,10 +29,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var expected = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
                 var propertyInfo = GetType().GetProperty(expected);
-                var optionMetadata = new OptionMetadataTemplate(null, null);
 
                 // Act
-                var actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata();
 
                 // Assert
                 Assert.Equal(expected, actual.Name);
@@ -49,10 +47,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var expectedShortName = expectedName;
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameProperty));
-                var optionMetadata = new OptionMetadataTemplate(null, null);
 
                 // Act
-                var actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata();
 
                 // Assert
                 Assert.Equal(expectedName, actual.Name);
@@ -67,10 +64,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var expectedName = TypeHelpers.ExtractPropertyName(() => CustomShortNameProperty);
                 var expectedShortName = "csnp";
                 var propertyInfo = GetType().GetProperty(expectedName);
-                var optionMetadata = new OptionMetadataTemplate(null, null);
 
                 // Act
-                var actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata();
 
                 // Assert
                 Assert.Equal(expectedName, actual.Name);
@@ -86,10 +82,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var expectedShortName = "csnp";
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameAndShortNameProperty));
-                var optionMetadata = new OptionMetadataTemplate(null, null);
 
                 // Act
-                var actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata();
 
                 // Assert
                 Assert.Equal(expectedName, actual.Name);
@@ -107,10 +102,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var propertyInfo =
                     GetType()
                         .GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameAndShortNameDescriptionProperty));
-                var optionMetadata = new OptionMetadataTemplate(null, null);
 
                 // Act
-                var actual = propertyInfo.ExtractDisplayMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata();
 
                 // Assert
                 Assert.Equal(expectedName, actual.Name);
@@ -123,29 +117,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 PropertyInfo propertyInfo = null;
-                var optionMetadata = new OptionMetadataTemplate(null, null);
                 var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =
-                    Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractDisplayMetadata(optionMetadata));
-
-                // Assert
-                Assert.Equal(expectedExceptionMessage, actualException.ParamName);
-            }
-
-            [Fact]
-            public void NullMetadataException()
-            {
-                // Arrange
-                var propertyInfo =
-                    GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => OriginalProperty));
-                OptionMetadataTemplate optionMetadataTemplate = null;
-                var expectedExceptionMessage = nameof(optionMetadataTemplate);
-
-                // Act
-                var actualException =
-                    Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractDisplayMetadata(optionMetadataTemplate));
+                    Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractOptionDisplayInfoMetadata());
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);

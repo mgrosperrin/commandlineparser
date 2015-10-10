@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using JetBrains.Annotations;
 using MGR.CommandLineParser;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Converters;
@@ -23,86 +24,107 @@ namespace System.Reflection
             return source.CanWrite || source.PropertyType.IsMultiValuedType();
         }
 
-        //[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ICollection")]
-        internal static OptionMetadataTemplate ExtractOptionMetadataTemplate(this PropertyInfo source, CommandMetadataTemplate commandMetadataTemplate)
+        internal static IConverter ExtractConverter(this PropertyInfo source, IEnumerable<IConverter> converters, string optionName, string commandName)
         {
             Guard.NotNull(source, nameof(source));
-            Guard.NotNull(commandMetadataTemplate, nameof(commandMetadataTemplate));
+            Guard.NotNullOrEmpty(optionName, nameof(optionName));
+            Guard.NotNullOrEmpty(commandName, nameof(commandName));
 
-            if (source.ShouldBeIgnored())
-            {
-                return null;
-            }
-            if (!source.IsValidOptionProperty())
-            {
-                throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractMetadataPropertyShouldBeWritableOrICollection(source.Name, commandMetadataTemplate.Name));
-            }
-            var metadata = CreateOptionMetadataTemplate(source, commandMetadataTemplate);
-            return metadata;
-        }
-        private static OptionMetadataTemplate CreateOptionMetadataTemplate(PropertyInfo source, CommandMetadataTemplate commandMetadataTemplate)
-        {
-            var metadata = new OptionMetadataTemplate(source, commandMetadataTemplate);
-
-            metadata = source.ExtractDisplayMetadata(metadata);
-
-            metadata = source.ExtractRequiredMetadata(metadata);
-
-            metadata = source.ExtractConverterMetadata(metadata);
-
-            metadata = source.ExtractDefaultValue(metadata);
-
-            return metadata;
-        }
-
-        //[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TValue"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TKey"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "KeyValueConverter"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "IDictionary")]
-        internal static OptionMetadataTemplate ExtractConverterMetadata(this PropertyInfo source, OptionMetadataTemplate optionMetadataTemplate)
-        {
-            Guard.NotNull(source, nameof(source));
-            Guard.NotNull(optionMetadataTemplate, nameof(optionMetadataTemplate));
-
-            var converter = GetConverterFromAttribute(source, optionMetadataTemplate)
-    ?? GetKeyValueConverterFromAttribute(source, optionMetadataTemplate)
-    ?? FindConverter(source, optionMetadataTemplate);
+            var converter = GetConverterFromAttribute(source, optionName, commandName)
+                                ?? GetKeyValueConverterFromAttribute(source, optionName, commandName)
+                                ?? FindConverter(source, converters, optionName, commandName);
             if (converter == null)
             {
-                throw new CommandLineParserException(Constants.ExceptionMessages.ParserNoConverterFound(optionMetadataTemplate.Name, optionMetadataTemplate.CommandMetadata.Name, source.PropertyType));
+                throw new CommandLineParserException(Constants.ExceptionMessages.ParserNoConverterFound(optionName, commandName, source.PropertyType));
             }
-            optionMetadataTemplate.Converter = converter;
-
-            return optionMetadataTemplate;
+            return converter;
         }
-        private static IConverter FindConverter(PropertyInfo propertyInfo, OptionMetadataTemplate optionMetadataTemplate)
+        private static IConverter FindConverter(PropertyInfo propertyInfo, IEnumerable<IConverter> converters, string optionName, string commandName)
         {
-            var converters = ServiceResolver.Current.ResolveServices<IConverter>().ToList();
             if (propertyInfo.PropertyType.IsDictionaryType())
             {
-                var keyConverter = FindKeyConverter(propertyInfo, converters, optionMetadataTemplate);
-                var valueConverter = FindValueConverter(propertyInfo, converters, optionMetadataTemplate);
+                var keyConverter = FindKeyConverter(propertyInfo, converters, optionName, commandName);
+                var valueConverter = FindValueConverter(propertyInfo, converters, optionName, commandName);
 
                 return new KeyValueConverter(keyConverter, valueConverter);
             }
             var converter = GetConverterFromType(propertyInfo.PropertyType, converters);
             return converter;
         }
-        private static IConverter FindValueConverter(PropertyInfo propertyInfo, IEnumerable<IConverter> converters, OptionMetadataTemplate optionMetadataTemplate)
+        private static IConverter FindValueConverter(PropertyInfo propertyInfo, IEnumerable<IConverter> converters, string optionName, string commandName)
         {
             var valueType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(false);
             var valueConverter = GetConverterFromType(valueType, converters);
             if (valueConverter == null)
             {
-                throw new CommandLineParserException(Constants.ExceptionMessages.ParserNoValueConverterFound(optionMetadataTemplate.Name, optionMetadataTemplate.CommandMetadata.Name, valueType));
+                throw new CommandLineParserException(Constants.ExceptionMessages.ParserNoValueConverterFound(optionName, commandName, valueType));
             }
             return valueConverter;
         }
-        private static IConverter FindKeyConverter(PropertyInfo propertyInfo, IEnumerable<IConverter> converters, OptionMetadataTemplate optionMetadataTemplate)
+        private static IConverter FindKeyConverter(PropertyInfo propertyInfo, IEnumerable<IConverter> converters, string optionName, string commandName)
         {
             var keyType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(true);
             var keyConverter = GetConverterFromType(keyType, converters);
             if (keyConverter == null)
             {
-                throw new CommandLineParserException(Constants.ExceptionMessages.ParserNoKeyConverterFound(optionMetadataTemplate.Name, optionMetadataTemplate.CommandMetadata.Name, keyType));
+                throw new CommandLineParserException(Constants.ExceptionMessages.ParserNoKeyConverterFound(optionName, commandName, keyType));
             }
+            return keyConverter;
+        }
+
+        private static IConverter GetConverterFromAttribute(PropertyInfo propertyInfo, string optionName, string commandName)
+        {
+            var converterAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterAttribute), true).FirstOrDefault() as ConverterAttribute;
+            if (converterAttribute != null)
+            {
+                var converter = converterAttribute.BuildConverter();
+
+                if (!converter.CanConvertTo(propertyInfo.PropertyType))
+                {
+                    throw new CommandLineParserException(Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(optionName, commandName, propertyInfo.PropertyType, converter.TargetType));
+                }
+                return converter;
+            }
+            return null;
+        }
+
+        private static IConverter GetKeyValueConverterFromAttribute(PropertyInfo propertyInfo, string optionName, string commandName)
+        {
+            var converterKeyValuePairAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterKeyValueAttribute), true).FirstOrDefault() as ConverterKeyValueAttribute;
+            if (converterKeyValuePairAttribute != null)
+            {
+                if (!propertyInfo.PropertyType.IsDictionaryType())
+                {
+                    throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractConverterKeyValueConverterIsForIDictionaryProperty(optionName, commandName));
+                }
+                var keyConverter = GetKeyConverter(propertyInfo, optionName, commandName, converterKeyValuePairAttribute);
+                var valueConverter = GetValueConverter(propertyInfo, optionName, commandName, converterKeyValuePairAttribute);
+
+                return new KeyValueConverter(keyConverter, valueConverter);
+            }
+            return null;
+        }
+
+        private static IConverter GetValueConverter(PropertyInfo propertyInfo, string optionName, string commandName, ConverterKeyValueAttribute converterKeyValuePairAttribute)
+        {
+            var valueType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(false);
+            var valueConverter = converterKeyValuePairAttribute.BuildValueConverter();
+            if (!valueType.IsAssignableFrom(valueConverter.TargetType))
+            {
+                throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractValueConverterIsNotValid(optionName, commandName, valueType, valueConverter.TargetType));
+            }
+            return valueConverter;
+        }
+
+        private static IConverter GetKeyConverter(PropertyInfo propertyInfo, string optionName, string commandName, ConverterKeyValueAttribute converterKeyValuePairAttribute)
+        {
+            var keyType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(true);
+            var keyConverter = converterKeyValuePairAttribute.BuildKeyConverter();
+            if (!keyType.IsAssignableFrom(keyConverter.TargetType))
+            {
+                throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractKeyConverterIsNotValid(optionName, commandName, keyType, keyConverter.TargetType));
+            }
+
             return keyConverter;
         }
 
@@ -114,124 +136,46 @@ namespace System.Reflection
             return converter;
         }
 
-        private static IConverter GetConverterFromAttribute(PropertyInfo propertyInfo, OptionMetadataTemplate optionMetadataTemplate)
-        {
-            var converterAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterAttribute), true).FirstOrDefault() as ConverterAttribute;
-            if (converterAttribute != null)
-            {
-                var converter = converterAttribute.BuildConverter();
-
-                if (!converter.CanConvertTo(propertyInfo.PropertyType))
-                {
-                    throw new CommandLineParserException(Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(optionMetadataTemplate.Name, optionMetadataTemplate.CommandMetadata.Name, propertyInfo.PropertyType, converter.TargetType));
-                }
-                return converter;
-            }
-            return null;
-        }
-
-        private static IConverter GetKeyValueConverterFromAttribute(PropertyInfo propertyInfo, OptionMetadataTemplate optionMetadataTemplate)
-        {
-            var converterKeyValuePairAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterKeyValueAttribute), true).FirstOrDefault() as ConverterKeyValueAttribute;
-            if (converterKeyValuePairAttribute != null)
-            {
-                if (!propertyInfo.PropertyType.IsDictionaryType())
-                {
-                    throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractConverterKeyValueConverterIsForIDictionaryProperty(optionMetadataTemplate.Name, optionMetadataTemplate.CommandMetadata.Name));
-                }
-                var keyConverter = GetKeyConverter(propertyInfo, optionMetadataTemplate, converterKeyValuePairAttribute);
-                var valueConverter = GetValueConverter(propertyInfo, optionMetadataTemplate, converterKeyValuePairAttribute);
-
-                return new KeyValueConverter(keyConverter, valueConverter);
-            }
-            return null;
-        }
-
-        private static IConverter GetValueConverter(PropertyInfo propertyInfo, OptionMetadataTemplate optionMetadataTemplate, ConverterKeyValueAttribute converterKeyValuePairAttribute)
-        {
-            var valueType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(false);
-            var valueConverter = converterKeyValuePairAttribute.BuildValueConverter();
-            if (!valueType.IsAssignableFrom(valueConverter.TargetType))
-            {
-                throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractValueConverterIsNotValid(optionMetadataTemplate.Name, optionMetadataTemplate.CommandMetadata.Name, valueType, valueConverter.TargetType));
-            }
-            return valueConverter;
-        }
-
-        private static IConverter GetKeyConverter(PropertyInfo propertyInfo, OptionMetadataTemplate optionMetadataTemplate, ConverterKeyValueAttribute converterKeyValuePairAttribute)
-        {
-            var keyType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(true);
-            var keyConverter = converterKeyValuePairAttribute.BuildKeyConverter();
-            if (!keyType.IsAssignableFrom(keyConverter.TargetType))
-            {
-                throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractKeyConverterIsNotValid(optionMetadataTemplate.Name, optionMetadataTemplate.CommandMetadata.Name, keyType, keyConverter.TargetType));
-            }
-
-            return keyConverter;
-        }
-
-        internal static OptionMetadataTemplate ExtractRequiredMetadata(this PropertyInfo source, OptionMetadataTemplate optionMetadataTemplate)
+        internal static bool ExtractIsRequiredMetadata(this PropertyInfo source)
         {
             Guard.NotNull(source, nameof(source));
-            Guard.NotNull(optionMetadataTemplate, nameof(optionMetadataTemplate));
 
             var requiredAttribute = source.GetCustomAttributes(typeof(RequiredAttribute), true).FirstOrDefault() as RequiredAttribute;
-            if (requiredAttribute != null)
-            {
-                optionMetadataTemplate.IsRequired = true;
-            }
-            return optionMetadataTemplate;
+            return requiredAttribute != null;
         }
 
-        internal static OptionMetadataTemplate ExtractDisplayMetadata(this PropertyInfo source, OptionMetadataTemplate optionMetadataTemplate)
+        [NotNull]
+        internal static OptionDisplayInfo ExtractOptionDisplayInfoMetadata(this PropertyInfo source)
         {
             Guard.NotNull(source, nameof(source));
-            Guard.NotNull(optionMetadataTemplate, nameof(optionMetadataTemplate));
-
+            var optionDisplyInfo = new OptionDisplayInfo
+            {
+                Name = source.Name,
+                ShortName = source.Name
+            };
             var displayAttribute = source.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
-            if (displayAttribute == null)
+            if (displayAttribute != null)
             {
-                optionMetadataTemplate.Name = source.Name;
-                optionMetadataTemplate.ShortName = source.Name;
+                optionDisplyInfo.Name = displayAttribute.GetName() ?? source.Name;
+                optionDisplyInfo.ShortName = displayAttribute.GetShortName();
+                optionDisplyInfo.Description = displayAttribute.GetDescription();
             }
-            else
-            {
-                optionMetadataTemplate.Name = displayAttribute.GetName() ?? source.Name;
-                var shortName = displayAttribute.GetShortName();
-                if (!string.IsNullOrEmpty(shortName))
-                {
-                    optionMetadataTemplate.ShortName = shortName;
-                }
-                optionMetadataTemplate.Description = displayAttribute.GetDescription();
-            }
-            return optionMetadataTemplate;
+            return optionDisplyInfo;
         }
 
-        internal static OptionMetadataTemplate ExtractDefaultValue(this PropertyInfo source, OptionMetadataTemplate optionMetadataTemplate)
+        internal static object ExtractDefaultValue([NotNull] this PropertyInfo source, [NotNull] Func<object, object> valueConverter)
         {
             Guard.NotNull(source, nameof(source));
-            Guard.NotNull(optionMetadataTemplate, nameof(optionMetadataTemplate));
+            Guard.NotNull(valueConverter, nameof(valueConverter));
 
             if (!source.PropertyType.IsMultiValuedType())
             {
                 var defaultValueAttribute = source.GetCustomAttributes(typeof(DefaultValueAttribute), true).OfType<DefaultValueAttribute>().FirstOrDefault();
-                var defaultValue = defaultValueAttribute?.Value;
-                optionMetadataTemplate.DefaultValue = ConvertDefaultValue(optionMetadataTemplate, defaultValue);
+                var originalDefaultValue = defaultValueAttribute?.Value;
+                var defaultValue = valueConverter(originalDefaultValue);
+                return defaultValue;
             }
-            return optionMetadataTemplate;
-        }
-
-        private static object ConvertDefaultValue(OptionMetadataTemplate optionMetadataTemplate, object defaultValue)
-        {
-            if (defaultValue != null)
-            {
-                if (optionMetadataTemplate.OptionType != defaultValue.GetType())
-                {
-                    var conververtedDefaultValue = optionMetadataTemplate.Converter.Convert(defaultValue.ToString(), optionMetadataTemplate.OptionType);
-                    return conververtedDefaultValue;
-                }
-            }
-            return defaultValue;
+            return null;
         }
 
         /// <summary>

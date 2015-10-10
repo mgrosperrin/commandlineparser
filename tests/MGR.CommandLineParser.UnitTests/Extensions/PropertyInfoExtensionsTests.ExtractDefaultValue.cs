@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using MGR.CommandLineParser.Command;
 using Xunit;
-using GuidConverter = MGR.CommandLineParser.Converters.GuidConverter;
-using Int32Converter = MGR.CommandLineParser.Converters.Int32Converter;
 
 namespace MGR.CommandLineParser.UnitTests.Extensions
 {
@@ -36,13 +33,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => OriginalProperty));
-                var optionMetadata = new OptionMetadataTemplate(null, null);
 
                 // Act
-                var actual = propertyInfo.ExtractDefaultValue(optionMetadata);
+                var actual = propertyInfo.ExtractDefaultValue(_ => _);
 
                 // Assert
-                Assert.Null(actual.DefaultValue);
+                Assert.Null(actual);
             }
 
             [Fact]
@@ -51,17 +47,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomIntProperty));
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, null)
-                {
-                    Converter = new Int32Converter()
-                };
                 var expected = 42;
 
                 // Act
-                var actual = propertyInfo.ExtractDefaultValue(optionMetadata);
+                var actual = propertyInfo.ExtractDefaultValue(_ => _);
 
                 // Assert
-                Assert.Equal(expected, actual.DefaultValue);
+                Assert.IsType<int>(actual);
+                Assert.Equal(expected, actual);
             }
 
             [Fact]
@@ -70,14 +63,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomStringProperty));
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, null);
                 var expected = "Test";
 
                 // Act
-                var actual = propertyInfo.ExtractDefaultValue(optionMetadata);
+                var actual = propertyInfo.ExtractDefaultValue(_ => _);
 
                 // Assert
-                Assert.Equal(expected, actual.DefaultValue);
+                Assert.IsType<string>(actual);
+                Assert.Equal(expected, actual);
             }
 
             [Fact]
@@ -86,17 +79,14 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomGuidProperty));
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, null)
-                {
-                    Converter = new GuidConverter()
-                };
                 var expected = new Guid(GuidValue);
 
                 // Act
-                var actual = propertyInfo.ExtractDefaultValue(optionMetadata);
+                var actual = propertyInfo.ExtractDefaultValue(value => Guid.Parse(value.ToString()));
 
                 // Assert
-                Assert.Equal(expected, actual.DefaultValue);
+                Assert.IsType<Guid>(actual);
+                Assert.Equal(expected, actual);
             }
 
             [Fact]
@@ -105,46 +95,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var expectedName = TypeHelpers.ExtractPropertyName(() => CustomStringListProperty);
                 var propertyInfo = GetType().GetProperty(expectedName);
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, null);
 
                 // Act
-                var actual = propertyInfo.ExtractDefaultValue(optionMetadata);
+                var actual = propertyInfo.ExtractDefaultValue(_ => _);
 
                 // Assert
-                Assert.Null(actual.DefaultValue);
-            }
-
-            [Fact]
-            public void NullPropertyInfoException()
-            {
-                // Arrange
-                PropertyInfo propertyInfo = null;
-                var optionMetadata = new OptionMetadataTemplate(null, null);
-                var expectedExceptionMessage = SourceParameterName;
-
-                // Act
-                var actualException =
-                    Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractDefaultValue(optionMetadata));
-
-                // Assert
-                Assert.Equal(expectedExceptionMessage, actualException.ParamName);
-            }
-
-            [Fact]
-            public void NullMetadataException()
-            {
-                // Arrange
-                var propertyInfo =
-                    GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => OriginalProperty));
-                OptionMetadataTemplate optionMetadataTemplate = null;
-                var expectedExceptionMessage = nameof(optionMetadataTemplate);
-
-                // Act
-                var actualException =
-                    Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractDefaultValue(optionMetadataTemplate));
-
-                // Assert
-                Assert.Equal(expectedExceptionMessage, actualException.ParamName);
+                Assert.Null(actual);
             }
         }
     }

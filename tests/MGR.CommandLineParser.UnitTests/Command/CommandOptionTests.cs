@@ -1,6 +1,6 @@
 ﻿namespace MGR.CommandLineParser.UnitTests.Command
 {
-    public partial class OptionMetadataTests
+    public partial class CommandOptionTests
     {
     }
 }

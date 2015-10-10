@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
 using MGR.CommandLineParser.Command;
+using MGR.CommandLineParser.Converters;
 using Xunit;
 
 namespace MGR.CommandLineParser.UnitTests.Command
@@ -19,15 +19,12 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Arrange
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => SimpleIntProperty));
-                var commandMetadata = new CommandMetadataTemplate {Name = "MyCommand"};
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata)
-                {
-                    Name = propertyInfo.Name
-                };
+                var commandMetadata = new CommandMetadata(typeof (GetMultiValueIndicator));
+                var commandOption = CommandOption.Create(propertyInfo, commandMetadata, new[] {new Int32Converter()});
                 var expected = string.Empty;
 
                 // Act
-                var actual = HelpCommand.GetMultiValueIndicator(optionMetadata);
+                var actual = HelpCommand.GetMultiValueIndicator(commandOption);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -39,15 +36,12 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Arrange
                 var propertyInfo = GetType()
                     .GetProperty(TypeHelpers.ExtractPropertyName(() => ListIntProperty));
-                var commandMetadata = new CommandMetadataTemplate {Name = "MyCommand"};
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata)
-                {
-                    Name = propertyInfo.Name
-                };
-                var expected = "+";
+                var commandMetadata = new CommandMetadata(typeof (GetMultiValueIndicator));
+                var commandOption = CommandOption.Create(propertyInfo, commandMetadata, new[] {new Int32Converter()});
+                var expected = HelpCommand.CollectionIndicator;
 
                 // Act
-                var actual = HelpCommand.GetMultiValueIndicator(optionMetadata);
+                var actual = HelpCommand.GetMultiValueIndicator(commandOption);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -59,15 +53,13 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Arrange
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => DictionaryProperty));
-                var commandMetadata = new CommandMetadataTemplate {Name = "MyCommand"};
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata)
-                {
-                    Name = propertyInfo.Name
-                };
+                var commandMetadata = new CommandMetadata(typeof (GetMultiValueIndicator));
+                var commandOption = CommandOption.Create(propertyInfo, commandMetadata,
+                    new List<IConverter> {new StringConverter(), new Int32Converter()});
                 var expected = HelpCommand.DictionaryIndicator;
 
                 // Act
-                var actual = HelpCommand.GetMultiValueIndicator(optionMetadata);
+                var actual = HelpCommand.GetMultiValueIndicator(commandOption);
 
                 // Assert
                 Assert.Equal(expected, actual);

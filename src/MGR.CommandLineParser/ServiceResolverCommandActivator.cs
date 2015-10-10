@@ -10,15 +10,15 @@ namespace MGR.CommandLineParser
 
         public ServiceResolverCommandActivator()
         {
-            var serviceResolverType = typeof (IServiceResolver);
-            _genericResolveServiceMethodInfo = serviceResolverType.GetMethod(nameof(IServiceResolver.ResolveService));
+            var serviceResolverType = typeof (IDependencyResolverScope);
+            _genericResolveServiceMethodInfo = serviceResolverType.GetMethod(nameof(IDependencyResolverScope.ResolveDependency));
         }
 
 
         public ICommand ActivateCommand(Type commandType)
         {
             var resolveServiceMethod = _genericResolveServiceMethodInfo.MakeGenericMethod(commandType);
-            var command = resolveServiceMethod.Invoke(ServiceResolver.Current, null);
+            var command = resolveServiceMethod.Invoke(DependencyResolver.Current, null);
             return command as ICommand;
         }
     }

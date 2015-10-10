@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+ <metadata>
+   <version>$version$</version>
+   <authors>Matthias GROSPERRIN</authors>
+   <owners>Matthias GROSPERRIN</owners>
+   <licenseUrl>https://github.com/mgrosperrin/commandlineparser/blob/master/LICENSE</licenseUrl>
+   <projectUrl>https://github.com/mgrosperrin/commandlineparser</projectUrl>
+   <frameworkAssemblies>
+     <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework=".NETFramework4.0" />
+   </frameworkAssemblies>
+   <id>MGR.CommandLineParser</id>
+   <title>MGR.CommandLineParser</title>
+   <requireLicenseAcceptance>false</requireLicenseAcceptance>
+   <description>MGR.CommandLineParser is a multi-command line parser. It uses System.ComponentModel.DataAnnotations to declare the commands.</description>
+   <releaseNotes>0.5.0 : Rewrite of the API. See
+   </releaseNotes>
+   <copyright>Copyright © Matthias GROSPERRIN 2014</copyright>
+   <tags>command parser command-line</tags>
+ </metadata>
+ <files>
+   <!--  <file src="..\src\MGR.CommandLineParser\bin\Release\MGR.CommandLineParser.dll" target="lib\net40\MGR.CommandLineParser.dll" />-->
+   <file src="\bin\Release\fr-fr\MGR.CommandLineParser.resources.dll" target="lib\net40\fr-fr\MGR.CommandLineParser.resources.dll" />
+ </files>
+</package>

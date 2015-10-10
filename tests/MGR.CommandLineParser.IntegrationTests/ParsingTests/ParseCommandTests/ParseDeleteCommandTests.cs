@@ -49,19 +49,9 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
             var expectedMessageException = @"There is no option 'pn' for the command 'Delete'.";
 
             // Act
-            Exception actual = null;
-            try
-            {
-                parser.Parse(args);
-            }
-            catch (Exception exception)
-            {
-                actual = exception;
-            }
+            var actual = Assert.Throws<CommandLineParserException>(() => parser.Parse(args));
 
             // Assert
-            Assert.NotNull(actual);
-            Assert.IsType<CommandLineParserException>(actual);
             Assert.Equal(expectedMessageException, actual.Message);
         }
     }

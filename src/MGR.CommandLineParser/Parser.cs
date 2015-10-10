@@ -39,14 +39,16 @@ namespace MGR.CommandLineParser
             {
                 return new CommandResult<TCommand>(default(TCommand), CommandResultCode.NoArgs);
             }
-            //SetUniqueCommand<TCommand>();
-            var commandName = typeof (TCommand).ExtractCommandMetadataTemplate().Name;
-            var parsingResult = ParseImpl(args, commandName);
+            var currentDependencyResolver = DependencyResolver.Current.CreateScope();
+            var commandTypeProvider = currentDependencyResolver.ResolveDependency<ICommandTypeProvider>();
+            var commandType = commandTypeProvider.GetCommandType<TCommand>();
+            var argsEnumerator = args.GetEnumerator();
+            var parsingResult = ParseImpl(argsEnumerator, currentDependencyResolver, commandType);
             if (parsingResult.Command == null)
             {
                 return new CommandResult<TCommand>(default(TCommand), parsingResult.ReturnCode);
             }
-            return new CommandResult<TCommand>((TCommand) parsingResult.Command, parsingResult.ReturnCode, parsingResult.ValidationResults.ToList());
+            return new CommandResult<TCommand>((TCommand)parsingResult.Command, parsingResult.ReturnCode, parsingResult.ValidationResults.ToList());
         }
 
         /// <summary>
@@ -60,7 +62,22 @@ namespace MGR.CommandLineParser
             {
                 return new CommandResult<ICommand>(null, CommandResultCode.NoArgs);
             }
-            return ParseImpl(args, string.Empty);
+            var currentDependencyResolver = DependencyResolver.Current.CreateScope();
+            var argsEnumerator = args.GetEnumerator();
+            var commandName = GetNextCommandLineItem(argsEnumerator);
+            if (commandName == null)
+            {
+                WriteGlobalHelp(currentDependencyResolver, _parserOptions);
+                return new CommandResult<ICommand>(null, CommandResultCode.NoCommandName);
+            }
+            var commandTypeProvider = currentDependencyResolver.ResolveDependency<ICommandTypeProvider>();
+            var commandType = commandTypeProvider.GetCommandType(commandName);
+            if (commandType == null)
+            {
+                WriteGlobalHelp(currentDependencyResolver, _parserOptions);
+                return new CommandResult<ICommand>(null, CommandResultCode.NoCommandFound);
+            }
+            return ParseImpl(argsEnumerator, currentDependencyResolver, commandType);
         }
 
         private static string GetNextCommandLineItem(IEnumerator<string> argsEnumerator)
@@ -72,38 +89,20 @@ namespace MGR.CommandLineParser
             return argsEnumerator.Current;
         }
 
-        private CommandResult<ICommand> ParseImpl(IEnumerable<string> args, string commandName)
+        private CommandResult<ICommand> ParseImpl(IEnumerator<string> argsEnumerator, IDependencyResolverScope dependencyResolver, CommandType commandType)
         {
-            var argsEnumerator = args.GetEnumerator();
-            var commandResolver = ServiceResolver.Current.ResolveService<CommandResolver>();
-            var console = ServiceResolver.Current.ResolveService<IConsole>();
-            if (string.IsNullOrEmpty(commandName))
-            {
-                commandName = GetCommandName(argsEnumerator);
-            }
-            if (commandName == null)
-            {
-                WriteHelp(commandResolver, console);
-                return new CommandResult<ICommand>(null, CommandResultCode.NoCommandName);
-            }
-            var command = commandResolver.GetCommand(commandName, _parserOptions, console);
-            if (command == null)
-            {
-                WriteHelp(commandResolver, console);
-                return new CommandResult<ICommand>(null, CommandResultCode.NoCommandFound);
-            }
-            var commandMetadata = command.ExtractMetadata();
-            ExtractCommandLineOptions(commandMetadata, argsEnumerator);
-            var validation = Validate(command);
+            var command = ExtractCommandLineOptions(commandType, dependencyResolver, argsEnumerator);
+            var validation = Validate(command, dependencyResolver, commandType.Metadata.Name);
             if (!validation.Item1)
             {
-                commandResolver.GetHelpCommand(_parserOptions, console).WriteHelp(commandMetadata.Command);
+                var helpCommand = GetHelpCommand(dependencyResolver, _parserOptions);
+                helpCommand.WriteHelp(commandType);
                 return new CommandResult<ICommand>(command, CommandResultCode.CommandParameterNotValid, validation.Item2);
             }
             return new CommandResult<ICommand>(command, CommandResultCode.Ok);
         }
 
-        private static Tuple<bool, List<ValidationResult>> Validate(ICommand command)
+        private static Tuple<bool, List<ValidationResult>> Validate(ICommand command, IDependencyResolverScope dependencyResolver, string commandName)
         {
             var validationContext = new ValidationContext(command, null, null);
             var results = new List<ValidationResult>();
@@ -111,8 +110,8 @@ namespace MGR.CommandLineParser
             var isValid = Validator.TryValidateObject(command, validationContext, results, true);
             if (!isValid)
             {
-                var console = ServiceResolver.Current.ResolveService<IConsole>();
-                console.WriteError(Strings.Parser_CommandInvalidArgumentsFormat, command.ExtractCommandName());
+                var console = dependencyResolver.ResolveDependency<IConsole>();
+                console.WriteError(Strings.Parser_CommandInvalidArgumentsFormat, commandName);
                 foreach (var validation in results)
                 {
                     console.WriteError(string.Format(CultureInfo.CurrentUICulture, "-{0} :", validation.ErrorMessage));
@@ -125,8 +124,9 @@ namespace MGR.CommandLineParser
             return Tuple.Create(isValid, results);
         }
 
-        private static void ExtractCommandLineOptions(CommandMetadata commandMetadata, IEnumerator<string> argsEnumerator)
+        private ICommand ExtractCommandLineOptions(CommandType commandType, IDependencyResolverScope dependencyResolver, IEnumerator<string> argsEnumerator)
         {
+            var command = commandType.CreateCommand(dependencyResolver, _parserOptions);
             while (true)
             {
                 var argument = GetNextCommandLineItem(argsEnumerator);
@@ -135,28 +135,28 @@ namespace MGR.CommandLineParser
                     break;
                 }
 
-                if (!(argument.StartsWith(StringComparison.OrdinalIgnoreCase, Constants.ArgumentStarter)))
+                if (!(argument.StartsWith(StringComparison.OrdinalIgnoreCase, Constants.OptionStarter)))
                 {
-                    commandMetadata.Command.Arguments.Add(argument);
+                    command.Arguments.Add(argument);
                     continue;
                 }
 
                 var optionText = argument.Substring(1);
                 string value = null;
-                var splitIndex = optionText.IndexOf(Constants.ArgumentSplitter);
+                var splitIndex = optionText.IndexOf(Constants.OptionSplitter);
                 if (splitIndex > 0)
                 {
                     value = optionText.Substring(splitIndex + 1);
                     optionText = optionText.Substring(0, splitIndex);
                 }
 
-                var option = commandMetadata.GetOption(optionText);
+                var option = commandType.FindOption(optionText);
                 if (option == null)
                 {
-                    throw new CommandLineParserException(Constants.ExceptionMessages.FormatParserOptionNotFoundForCommand(commandMetadata.Name, optionText));
+                    throw new CommandLineParserException(Constants.ExceptionMessages.FormatParserOptionNotFoundForCommand(commandType.Metadata.Name, optionText));
                 }
 
-                if (option.OptionType == typeof (bool))
+                if (option.OptionType == typeof(bool))
                 {
                     value = value ?? bool.TrueString;
                 }
@@ -167,18 +167,27 @@ namespace MGR.CommandLineParser
 
                 if (value == null)
                 {
-                    throw new CommandLineParserException(Constants.ExceptionMessages.FormatParserOptionValueRequired(commandMetadata.Name, optionText));
+                    throw new CommandLineParserException(Constants.ExceptionMessages.FormatParserOptionValueRequired(commandType.Metadata.Name, optionText));
                 }
 
-                option.AssignValue(value);
+                option.AssignValue(value, command);
             }
+            return command;
         }
 
-        private void WriteHelp(CommandResolver commandResolver, IConsole console)
+        private static void WriteGlobalHelp(IDependencyResolverScope dependencyResolver, IParserOptions parserOptions)
         {
-            commandResolver.GetHelpCommand(_parserOptions, console).Execute();
+            var helpCommand = GetHelpCommand(dependencyResolver, parserOptions);
+            helpCommand.Execute();
         }
 
-        private static string GetCommandName(IEnumerator<string> argsEnumerator) => GetNextCommandLineItem(argsEnumerator);
+        private static HelpCommand GetHelpCommand(IDependencyResolverScope dependencyResolver, IParserOptions parserOptions)
+        {
+
+            var commandTypeProvider = dependencyResolver.ResolveDependency<ICommandTypeProvider>();
+            var helpCommandType = commandTypeProvider.GetCommandType(HelpCommand.Name);
+            var helpCommand = helpCommandType.CreateCommand(dependencyResolver, parserOptions) as HelpCommand;
+            return helpCommand;
+        }
     }
 }

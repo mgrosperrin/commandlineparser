@@ -66,14 +66,18 @@
     <Compile Include="..\..\src\CommonFiles\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Command\OptionMetadataTests.AssignValueTests.cs">
-      <DependentUpon>OptionMetadataTests.cs</DependentUpon>
+    <Compile Include="Command\CommandTypeTests.cs" />
+    <Compile Include="Command\CommandTypeTests.Metadata.cs">
+      <DependentUpon>CommandTypeTests.cs</DependentUpon>
     </Compile>
     <Compile Include="Command\HelpCommandTests.cs" />
     <Compile Include="Command\HelpCommandTests.GetMultiValueIndicator.cs">
       <DependentUpon>HelpCommandTests.cs</DependentUpon>
     </Compile>
-    <Compile Include="Command\OptionMetadataTests.cs" />
+    <Compile Include="Command\CommandOptionTests.AssignValueTests.cs">
+      <DependentUpon>CommandOptionTests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Command\CommandOptionTests.cs" />
     <Compile Include="Converters\BooleanConverterTests.cs" />
     <Compile Include="Converters\ByteConverterTests.cs" />
     <Compile Include="Converters\CharConverterTests.cs" />
@@ -90,16 +94,6 @@
     <Compile Include="Converters\StringConverterTests.cs" />
     <Compile Include="Converters\TimeSpanConverterTests.cs" />
     <Compile Include="Converters\UriConverterTests.cs" />
-    <Compile Include="Extensions\CommandExtensionsTests.cs" />
-    <Compile Include="Extensions\CommandExtensionsTests.ExtractCommandMetadata.cs">
-      <DependentUpon>CommandExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\CommandExtensionsTests.ExtractCommandName.cs">
-      <DependentUpon>CommandExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\CommandExtensionsTests.ExtractMetadata.cs">
-      <DependentUpon>CommandExtensionsTests.cs</DependentUpon>
-    </Compile>
     <Compile Include="Extensions\ConverterAttributeExtensionsTests.cs" />
     <Compile Include="Extensions\ConverterAttributeExtensionsTests.BuildConverter.cs">
       <DependentUpon>ConverterAttributeExtensionsTests.cs</DependentUpon>
@@ -121,13 +115,10 @@
     <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractDefaultValue.cs">
       <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractDisplayMetadata.cs">
+    <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractOptionDisplayInfoMetadata.cs">
       <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractOptionMetadataTemplate.cs">
-      <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractRequiredMetadata.cs">
+    <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractIsRequiredMetadata.cs">
       <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\PropertyInfoExtensionsTests.IsValidOptionProperty.cs">

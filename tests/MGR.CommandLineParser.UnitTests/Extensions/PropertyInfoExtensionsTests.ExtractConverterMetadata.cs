@@ -48,35 +48,33 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void OriginalTest()
             {
                 // Arrange
-                var expectedName = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
-                var propertyInfo = GetType().GetProperty(expectedName);
-                var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
-                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter() });
+                var propertyName = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new Int32Converter() };
 
                 // Act
-                var actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractConverter(converters, propertyName, commandName);
 
                 // Assert
-                Assert.NotNull(actual.Converter);
-                Assert.IsType<Int32Converter>(actual.Converter);
+                Assert.NotNull(actual);
+                Assert.IsType<Int32Converter>(actual);
             }
 
             [Fact]
             public void OriginalNoConverterTest()
             {
                 // Arrange
-                var expectedName = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
-                var propertyInfo = GetType().GetProperty(expectedName);
-                var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
-                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter() });
-                var expectedExceptionMessage = Constants.ExceptionMessages.ParserNoConverterFound(expectedName, commandMetadata.Name, typeof(int));
+                var propertyName = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new StringConverter()};
+                var expectedExceptionMessage = Constants.ExceptionMessages.ParserNoConverterFound(propertyName, commandName, typeof(int));
 
                 // Act
                 var actualException =
                     Assert.Throws<CommandLineParserException>(
-                        () => propertyInfo.ExtractConverterMetadata(optionMetadata));
+                        () => propertyInfo.ExtractConverter(converters, propertyName, commandName));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.Message);
@@ -86,35 +84,33 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomConverterTest()
             {
                 // Arrange
-                var expectedName = TypeHelpers.ExtractPropertyName(() => CustomConverterProperty);
-                var propertyInfo = GetType().GetProperty(expectedName);
-                var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
-                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter() });
+                var propertyName = TypeHelpers.ExtractPropertyName(() => CustomConverterProperty);
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new StringConverter() };
 
                 // Act
-                var actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractConverter(converters, propertyName, commandName);
 
                 // Assert
-                Assert.NotNull(actual.Converter);
-                Assert.IsType<Int32Converter>(actual.Converter);
+                Assert.NotNull(actual);
+                Assert.IsType<Int32Converter>(actual);
             }
 
             [Fact]
             public void WrongCustomConverterTest()
             {
                 // Arrange
-                var expectedName = TypeHelpers.ExtractPropertyName(() => WrongCustomConverterProperty);
-                var propertyInfo = GetType().GetProperty(expectedName);
-                var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
-                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter() });
-                var expectedExceptionMessage = Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(expectedName, commandMetadata.Name, typeof(int), typeof(Guid));
+                var propertyName = TypeHelpers.ExtractPropertyName(() => WrongCustomConverterProperty);
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new StringConverter() };
+                var expectedExceptionMessage = Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(propertyName, commandName, typeof(int), typeof(Guid));
 
                 // Act
                 var actualException =
                     Assert.Throws<CommandLineParserException>(
-                        () => propertyInfo.ExtractConverterMetadata(optionMetadata));
+                        () => propertyInfo.ExtractConverter(converters, propertyName, commandName));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.Message);
@@ -124,107 +120,101 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void OriginalListTest()
             {
                 // Arrange
-                var expectedName = TypeHelpers.ExtractPropertyName(() => OriginalListProperty);
-                var propertyInfo = GetType().GetProperty(expectedName);
-                var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
-                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter() });
+                var propertyName = TypeHelpers.ExtractPropertyName(() => OriginalListProperty);
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new Int32Converter() };
 
                 // Act
-                var actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractConverter(converters, propertyName, commandName);
 
                 // Assert
-                Assert.NotNull(actual.Converter);
-                Assert.IsType<Int32Converter>(actual.Converter);
+                Assert.NotNull(actual);
+                Assert.IsType<Int32Converter>(actual);
             }
 
             [Fact]
             public void CustomListConverterTest()
             {
                 // Arrange
-                var expectedName = TypeHelpers.ExtractPropertyName(() => CustomListConverterProperty);
-                var propertyInfo = GetType().GetProperty(expectedName);
-                var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
-                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter() });
+                var propertyName = TypeHelpers.ExtractPropertyName(() => CustomListConverterProperty);
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new StringConverter() };
 
                 // Act
-                var actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractConverter(converters, propertyName, commandName);
 
                 // Assert
-                Assert.NotNull(actual.Converter);
-                Assert.IsType<Int32Converter>(actual.Converter);
+                Assert.NotNull(actual);
+                Assert.IsType<Int32Converter>(actual);
             }
 
             [Fact]
             public void OriginalDictionaryTest()
             {
                 // Arrange
-                var expectedName = TypeHelpers.ExtractPropertyName(() => OriginalDictionaryProperty);
-                var propertyInfo = GetType().GetProperty(expectedName);
-                var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
-                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter(), new GuidConverter() });
+                var propertyName = TypeHelpers.ExtractPropertyName(() => OriginalDictionaryProperty);
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new Int32Converter(), new GuidConverter() };
 
                 // Act
-                var actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractConverter(converters, propertyName, commandName);
 
                 // Assert
-                Assert.NotNull(actual.Converter);
-                Assert.IsType<KeyValueConverter>(actual.Converter);
+                Assert.NotNull(actual);
+                Assert.IsType<KeyValueConverter>(actual);
             }
 
             [Fact]
             public void CustomDictionaryConverterTest()
             {
                 // Arrange
-                var expectedName = TypeHelpers.ExtractPropertyName(() => CustomDictionaryConverterProperty);
-                var propertyInfo = GetType().GetProperty(expectedName);
-                var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
-                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new GuidConverter() });
+                var propertyName = TypeHelpers.ExtractPropertyName(() => CustomDictionaryConverterProperty);
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new StringConverter(), new GuidConverter() };
 
                 // Act
-                var actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractConverter(converters, propertyName, commandName);
 
                 // Assert
-                Assert.NotNull(actual.Converter);
-                Assert.IsType<KeyValueConverter>(actual.Converter);
+                Assert.NotNull(actual);
+                Assert.IsType<KeyValueConverter>(actual);
             }
 
             [Fact]
             public void CustomValueOnlyDictionaryConverterTest()
             {
                 // Arrange
-                var expectedName = TypeHelpers.ExtractPropertyName(() => CustomValueOnlyDictionaryConverterProperty);
-                var propertyInfo = GetType().GetProperty(expectedName);
-                var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
-                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new Int32Converter() });
+                var propertyName = TypeHelpers.ExtractPropertyName(() => CustomValueOnlyDictionaryConverterProperty);
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new StringConverter(), new Int32Converter() };
 
                 // Act
-                var actual = propertyInfo.ExtractConverterMetadata(optionMetadata);
+                var actual = propertyInfo.ExtractConverter(converters, propertyName, commandName);
 
                 // Assert
-                Assert.NotNull(actual.Converter);
-                Assert.IsType<KeyValueConverter>(actual.Converter);
+                Assert.NotNull(actual);
+                Assert.IsType<KeyValueConverter>(actual);
             }
 
             [Fact]
             public void CustomDictionaryConverterWithListException()
             {
                 // Arrange
-                var expectedName = TypeHelpers.ExtractPropertyName(() => CustomDictionaryConverterWithListProperty);
-                var propertyInfo = GetType().GetProperty(expectedName);
-                var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
-                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new StringConverter(), new GuidConverter() });
-                var expectedExceptionMessage = Constants.ExceptionMessages.ParserExtractConverterKeyValueConverterIsForIDictionaryProperty(expectedName, "MyCommand");
+                var propertyName = TypeHelpers.ExtractPropertyName(() => CustomDictionaryConverterWithListProperty);
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new StringConverter(), new GuidConverter() };
+                var expectedExceptionMessage = Constants.ExceptionMessages.ParserExtractConverterKeyValueConverterIsForIDictionaryProperty(propertyName, "MyCommand");
 
                 // Act
                 var actualException =
                     Assert.Throws<CommandLineParserException>(
-                        () => propertyInfo.ExtractConverterMetadata(optionMetadata));
+                        () => propertyInfo.ExtractConverter(converters, propertyName, commandName));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.Message);
@@ -234,18 +224,17 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomDictionaryWithWrongKeyConverterException()
             {
                 // Arrange
-                var expectedName =
+                var propertyName =
                     TypeHelpers.ExtractPropertyName(() => CustomDictionaryWithWrongKeyConverterProperty);
-                var propertyInfo = GetType().GetProperty(expectedName);
-                var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
-                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter(), new GuidConverter() });
-                var expectedExceptionMessage =Constants.ExceptionMessages.ParserExtractKeyConverterIsNotValid(expectedName, commandMetadata.Name, typeof(string), typeof(int));
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new Int32Converter(), new GuidConverter() };
+                var expectedExceptionMessage = Constants.ExceptionMessages.ParserExtractKeyConverterIsNotValid(propertyName, commandName, typeof(string), typeof(int));
 
                 // Act
                 var actualException =
                     Assert.Throws<CommandLineParserException>(
-                        () => propertyInfo.ExtractConverterMetadata(optionMetadata));
+                        () => propertyInfo.ExtractConverter(converters, propertyName, commandName));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.Message);
@@ -255,18 +244,17 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomDictionaryWithWrongValueConverterException()
             {
                 // Arrange
-                var expectedName =
+                var propertyName =
                     TypeHelpers.ExtractPropertyName(() => CustomDictionaryWithWrongValueConverterProperty);
-                var propertyInfo = GetType().GetProperty(expectedName);
-                var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
-                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter(), new GuidConverter() });
-                var expectedExceptionMessage = Constants.ExceptionMessages.ParserExtractValueConverterIsNotValid(expectedName, commandMetadata.Name, typeof(string), typeof(Guid));
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new Int32Converter(), new GuidConverter() };
+                var expectedExceptionMessage = Constants.ExceptionMessages.ParserExtractValueConverterIsNotValid(propertyName, commandName, typeof(string), typeof(Guid));
 
                 // Act
                 var actualException =
                     Assert.Throws<CommandLineParserException>(
-                        () => propertyInfo.ExtractConverterMetadata(optionMetadata));
+                        () => propertyInfo.ExtractConverter(converters, propertyName, commandName));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.Message);
@@ -276,18 +264,17 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void OriginalDictionaryWithoutKeyConverterException()
             {
                 // Arrange
-                var expectedName =
+                var propertyName =
                     TypeHelpers.ExtractPropertyName(() => OriginalDictionaryWithWrongKeyConverterProperty);
-                var propertyInfo = GetType().GetProperty(expectedName);
-                var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
-                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter(), new GuidConverter() });
-                var expectedExceptionMessage = Constants.ExceptionMessages.ParserNoKeyConverterFound(expectedName, commandMetadata.Name, typeof(string));
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new Int32Converter(), new GuidConverter() };
+                var expectedExceptionMessage = Constants.ExceptionMessages.ParserNoKeyConverterFound(propertyName, commandName, typeof(string));
 
                 // Act
                 var actualException =
                     Assert.Throws<CommandLineParserException>(
-                        () => propertyInfo.ExtractConverterMetadata(optionMetadata));
+                        () => propertyInfo.ExtractConverter(converters, propertyName, commandName));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.Message);
@@ -297,18 +284,17 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void OriginalDictionaryWithoutValueConverterException()
             {
                 // Arrange
-                var expectedName =
+                var propertyName =
                     TypeHelpers.ExtractPropertyName(() => OriginalDictionaryWithWrongValueConverterProperty);
-                var propertyInfo = GetType().GetProperty(expectedName);
-                var commandMetadata = new CommandMetadataTemplate { Name = "MyCommand" };
-                var optionMetadata = new OptionMetadataTemplate(propertyInfo, commandMetadata) { Name = expectedName };
-                DefaultServiceResolver.RegisterServices(() => new List<IConverter> { new Int32Converter(), new GuidConverter() });
-                var expectedExceptionMessage = Constants.ExceptionMessages.ParserNoValueConverterFound(expectedName, commandMetadata.Name, typeof(string));
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new Int32Converter(), new GuidConverter() };
+                var expectedExceptionMessage = Constants.ExceptionMessages.ParserNoValueConverterFound(propertyName, commandName, typeof(string));
 
                 // Act
                 var actualException =
                     Assert.Throws<CommandLineParserException>(
-                        () => propertyInfo.ExtractConverterMetadata(optionMetadata));
+                        () => propertyInfo.ExtractConverter(converters, propertyName, commandName));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.Message);
@@ -319,13 +305,32 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 PropertyInfo propertyInfo = null;
-                var optionMetadata = new OptionMetadataTemplate(null, null);
+                var converters = new List<IConverter> { new Int32Converter(), new GuidConverter() };
                 var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =
                     Assert.Throws<ArgumentNullException>(
-                        () => propertyInfo.ExtractConverterMetadata(optionMetadata));
+                        () => propertyInfo.ExtractConverter(converters, null, null));
+
+                // Assert
+                Assert.Equal(expectedExceptionMessage, actualException.ParamName);
+            }
+
+            [Fact]
+            public void NullOptionNameException()
+            {
+                // Arrange
+                var propertyInfo = GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => OriginalProperty));
+                var converters = new List<IConverter> { new Int32Converter(), new GuidConverter() };
+                string optionName = null;
+                string commandName = null;
+                var expectedExceptionMessage = nameof(optionName);
+
+                // Act
+                var actualException =
+                    Assert.Throws<ArgumentNullException>(
+                        () => propertyInfo.ExtractConverter(converters, optionName, commandName));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);
@@ -335,15 +340,16 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void NullMetadataException()
             {
                 // Arrange
-                var propertyInfo =
-                    GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => OriginalProperty));
-                OptionMetadataTemplate optionMetadataTemplate = null;
-                var expectedExceptionMessage = nameof(optionMetadataTemplate);
+                var propertyName = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
+                var propertyInfo = GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => OriginalProperty));
+                var converters = new List<IConverter> { new Int32Converter(), new GuidConverter() };
+                string commandName = null;
+                var expectedExceptionMessage = nameof(commandName);
 
                 // Act
                 var actualException =
                     Assert.Throws<ArgumentNullException>(
-                        () => propertyInfo.ExtractConverterMetadata(optionMetadataTemplate));
+                        () => propertyInfo.ExtractConverter(converters, propertyName, commandName));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);

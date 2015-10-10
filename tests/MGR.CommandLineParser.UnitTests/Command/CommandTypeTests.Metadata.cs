@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using MGR.CommandLineParser.Command;
+using MGR.CommandLineParser.Converters;
+using MGR.CommandLineParser.UnitTests.Extensions;
 using Xunit;
 
-namespace MGR.CommandLineParser.UnitTests.Extensions
+namespace MGR.CommandLineParser.UnitTests.Command
 {
-    public partial class CommandExtensionsTests
+    public partial class CommandTypeTests
     {
-        public class ExtractCommandMetadataTemplate
+        public class Metadata
         {
             [Fact]
             public void TestCommandMetadataExtraction()
             {
                 // Arrange
-                ICommand myCommand = new TestCommand();
+                var testCommandType =
+                    new CommandType(typeof (TestCommand),
+                        new List<IConverter>());
                 var expectedName = "Test";
                 var expectedDescription = "My great description";
                 var expectedUsage = "test arg [option]";
 
                 // Act
-                var metadata = myCommand.GetType().ExtractCommandMetadataTemplate();
+                var metadata = testCommandType.Metadata;
 
                 // Assert
                 Assert.Equal(expectedName, metadata.Name);

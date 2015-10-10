@@ -6,8 +6,8 @@ namespace MGR.CommandLineParser
 {
     internal static class Constants
     {
-        internal static readonly string[] ArgumentStarter = {"/", "-"};
-        internal static readonly char ArgumentSplitter = ':';
+        internal static readonly string[] OptionStarter = {"/", "-"};
+        internal static readonly char[] OptionSplitter = {':'};
         internal const string CommandSuffix = nameof(Command);
 
         internal static class ExceptionMessages
@@ -76,6 +76,8 @@ namespace MGR.CommandLineParser
 
             internal static readonly Func<string, Type, string> EnumConverterParsedValueIsNotOfConcreteType =
                 (value, concreteTargetType) => string.Format(CultureInfo.CurrentCulture, "The specified value '{0}' is not correct the type '{1}'.", value, concreteTargetType);
+
+            internal static readonly string CommandBaseUnableToFindHelpCommand = "Unable to locate HelpCommand";
         }
     }
 }

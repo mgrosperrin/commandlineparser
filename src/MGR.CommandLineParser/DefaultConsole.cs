@@ -7,6 +7,10 @@ namespace MGR.CommandLineParser
 {
     internal sealed class DefaultConsole : IConsole
     {
+        internal static readonly IConsole Instance = new DefaultConsole();
+
+        private DefaultConsole() { }
+
         private static int CursorLeft
         {
             get

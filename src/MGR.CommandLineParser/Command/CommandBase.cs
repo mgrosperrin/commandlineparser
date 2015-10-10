@@ -25,7 +25,12 @@ namespace MGR.CommandLineParser.Command
         /// <summary>
         ///     Gets the console used by the parser (if the command needs to writes something).
         /// </summary>
-        protected IConsole Console { get; private set; }
+        protected IConsole Console => CurrentDependencyResolverScope.ResolveDependency<IConsole>();
+
+        /// <summary>
+        ///     Gets the <see cref="IDependencyResolverScope" /> of the parsing operation.
+        /// </summary>
+        protected IDependencyResolverScope CurrentDependencyResolverScope { get; private set; }
 
         /// <summary>
         ///     Gets the <see cref="IParserOptions" /> of the parser.
@@ -33,9 +38,15 @@ namespace MGR.CommandLineParser.Command
         protected IParserOptions ParserOptions { get; private set; }
 
         /// <summary>
+        ///     Gets the <see cref="CommandType" /> of the command.
+        /// </summary>
+        protected CommandType CommandType { get; private set; }
+
+        /// <summary>
         ///     Gets or sets the indicator for showing the help of the command.
         /// </summary>
-        [Display(ShortName = "Command_HelpOption_ShortNameMessage", Description = "Command_HelpOption_DescriptionMessage", ResourceType = typeof (Strings))]
+        [Display(ShortName = "Command_HelpOption_ShortNameMessage",
+            Description = "Command_HelpOption_DescriptionMessage", ResourceType = typeof (Strings))]
         [PublicAPI]
         public bool Help { get; set; }
 
@@ -52,8 +63,14 @@ namespace MGR.CommandLineParser.Command
         {
             if (Help)
             {
-                var commandResolver = ServiceResolver.Current.ResolveService<CommandResolver>();
-                commandResolver.GetHelpCommand(ParserOptions, Console).WriteHelp(this);
+                var commandTypeProvider = CurrentDependencyResolverScope.ResolveDependency<ICommandTypeProvider>();
+                var helpCommand = commandTypeProvider.GetCommandType(HelpCommand.Name)
+                    .CreateCommand(CurrentDependencyResolverScope, ParserOptions) as HelpCommand;
+                if (helpCommand == null)
+                {
+                    throw new CommandLineParserException(Constants.ExceptionMessages.CommandBaseUnableToFindHelpCommand);
+                }
+                helpCommand.WriteHelp(CommandType);
                 return 0;
             }
             return ExecuteCommand();
@@ -63,11 +80,14 @@ namespace MGR.CommandLineParser.Command
         ///     Configure the command with the <see cref="IParserOptions" /> and the <see cref="IConsole" /> of the parser.
         /// </summary>
         /// <param name="parserOptions">The <see cref="IParserOptions" />.</param>
-        /// <param name="console">The <see cref="IConsole" />.</param>
-        public virtual void Configure(IParserOptions parserOptions, IConsole console)
+        /// <param name="dependencyResolverScope">The <see cref="IDependencyResolverScope" />.</param>
+        /// <param name="commandType">The <see cref="CommandType" /> of the command.</param>
+        public virtual void Configure(IParserOptions parserOptions, IDependencyResolverScope dependencyResolverScope,
+            CommandType commandType)
         {
             ParserOptions = parserOptions;
-            Console = console;
+            CurrentDependencyResolverScope = dependencyResolverScope;
+            CommandType = commandType;
         }
 
         /// <summary>

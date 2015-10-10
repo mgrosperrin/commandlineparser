@@ -1,44 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace MGR.CommandLineParser.Command
 {
-    [DebuggerDisplay("{CommandMetadata:{Name}, Nb options : {Options.Count()}")]
-    internal sealed class CommandMetadata
+    /// <summary>
+    ///     Represents the metadata of a command.
+    /// </summary>
+    public sealed class CommandMetadata
     {
-        internal CommandMetadata(CommandMetadataTemplate commandMetadataTemplate, ICommand command)
+        internal CommandMetadata(Type commandType)
         {
-            Guard.NotNull(commandMetadataTemplate, nameof(commandMetadataTemplate));
-            Guard.NotNull(command, nameof(command));
-
-            Name = commandMetadataTemplate.Name;
-            Description = commandMetadataTemplate.Description;
-            Usage = commandMetadataTemplate.Usage;
-            Command = command;
-            _options = new List<OptionMetadata>(commandMetadataTemplate.Options.Select(option => option.ToOptionMetadata(this)));
-        }
-
-        private readonly List<OptionMetadata> _options;
-
-        internal string Name { get; }
-        internal string Description { get; set; }
-        internal string Usage { get; set; }
-
-        internal IEnumerable<OptionMetadata> Options => _options.AsEnumerable();
-
-        internal ICommand Command { get; }
-
-        internal OptionMetadata GetOption(string optionName)
-        {
-            var om = Options.FirstOrDefault(option => option.Name.Equals(optionName, StringComparison.OrdinalIgnoreCase));
-            if (om != null)
+            Name = commandType.GetFullCommandName();
+            var displayAttribute = commandType.GetCustomAttributes(typeof (CommandDisplayAttribute), true).FirstOrDefault() as
+                    CommandDisplayAttribute;
+            if (displayAttribute != null)
             {
-                return om;
+                Description = displayAttribute.GetLocalizedDescription();
+                Usage = displayAttribute.GetLocalizedUsage();
             }
-            return Options.FirstOrDefault(option => (option.ShortName ?? string.Empty).Equals(optionName, StringComparison.OrdinalIgnoreCase));
         }
 
+        /// <summary>
+        ///     Gets the name of the command.
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        ///     Gets the description of the command (if defined).
+        /// </summary>
+        public string Description { get; } = string.Empty;
+
+        /// <summary>
+        ///     Gets the usage of the command (if defined).
+        /// </summary>
+        public string Usage { get; } = string.Empty;
     }
 }

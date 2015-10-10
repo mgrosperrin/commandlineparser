@@ -6,15 +6,22 @@ namespace MGR.CommandLineParser
 {
     internal static class Guard
     {
-        public static void NotNull(object item, [InvokerParameterName] string name)
+        internal static void NotNull(object item, [InvokerParameterName] string name)
         {
             if (item == null)
             {
                 throw new ArgumentNullException(name);
             }
         }
+        internal static void NotNullOrEmpty(string item, [InvokerParameterName] string name)
+        {
+            if (string.IsNullOrEmpty(item))
+            {
+                throw new ArgumentNullException(name);
+            }
+        }
 
-        public static void IsIConverter([NotNull] Type type, string message)
+        internal static void IsIConverter([NotNull] Type type, string message)
         {
             if (!typeof (IConverter).IsAssignableFrom(type))
             {
@@ -22,7 +29,7 @@ namespace MGR.CommandLineParser
             }
         }
 
-        public static void OfType<T>(Type type, [InvokerParameterName]  string name)
+        internal static void OfType<T>(Type type, [InvokerParameterName]  string name)
         {
             NotNull(type, name);
 

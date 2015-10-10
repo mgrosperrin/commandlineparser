@@ -49,17 +49,16 @@
     <Compile Include="..\CommonFiles\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AssemblyFileProviderBase.cs" />
+    <Compile Include="AssemblyProviderBase.cs" />
     <Compile Include="BasicCommandActivator.cs" />
     <Compile Include="CommandLineParserException.cs" />
-    <Compile Include="CommandProviderBase.cs" />
-    <Compile Include="CommandResolver.cs" />
+    <Compile Include="CommandType.cs" />
     <Compile Include="CommandResultCode.cs" />
     <Compile Include="CommandResult`1.cs" />
     <Compile Include="Command\CommandBase.cs" />
     <Compile Include="Command\CommandDisplayAttribute.cs" />
     <Compile Include="Command\CommandMetadata.cs" />
-    <Compile Include="Command\CommandMetadataTemplate.cs" />
+    <Compile Include="Command\CommandOption.cs" />
     <Compile Include="Command\ConverterAttribute.cs" />
     <Compile Include="Command\ConverterKeyValueAttribute.cs" />
     <Compile Include="Command\HelpCommand.cs" />
@@ -67,12 +66,11 @@
     <Compile Include="Command\IgnoreOptionPropertyAttribute.cs" />
     <Compile Include="Command\ISampleCommand.cs" />
     <Compile Include="Command\LocalizableString.cs" />
-    <Compile Include="Command\OptionMetadata.cs" />
-    <Compile Include="Command\OptionMetadataTemplate.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\ByteConverter.cs" />
     <Compile Include="Converters\CharConverter.cs" />
+    <Compile Include="Converters\Converters.cs" />
     <Compile Include="Converters\DateTimeConverter.cs" />
     <Compile Include="Converters\DecimalConverter.cs" />
     <Compile Include="Converters\DoubleConverter.cs" />
@@ -87,13 +85,11 @@
     <Compile Include="Converters\StringConverter.cs" />
     <Compile Include="Converters\TimeSpanConverter.cs" />
     <Compile Include="Converters\UriConverter.cs" />
-    <Compile Include="ComponentModelCompositionCommandProvider.cs" />
-    <Compile Include="CurrentDirectoryAssemblyFileProvider.cs" />
+    <Compile Include="CurrentDirectoryAssemblyProvider.cs" />
     <Compile Include="DefaultConsole.cs" />
-    <Compile Include="DefaultServiceResolver.cs" />
-    <Compile Include="DirectotyBrowsingCommandProvider.cs" />
+    <Compile Include="DefaultDependencyResolver.cs" />
+    <Compile Include="AssemblyBrowsingCommandTypeProvider.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
-    <Compile Include="Extensions\CommandExtensions.cs" />
     <Compile Include="Extensions\ConverterAttributeExtensions.cs" />
     <Compile Include="Extensions\ConverterExtensions.cs" />
     <Compile Include="Extensions\PropertyInfoExtensions.cs" />
@@ -101,13 +97,15 @@
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Guard.cs" />
-    <Compile Include="IAssemblyFileProvider.cs" />
+    <Compile Include="IAssemblyProvider.cs" />
     <Compile Include="ICommandActivator.cs" />
-    <Compile Include="ICommandProvider.cs" />
+    <Compile Include="ICommandTypeProvider.cs" />
     <Compile Include="IConsole.cs" />
+    <Compile Include="IDependencyResolver.cs" />
+    <Compile Include="Command\OptionDisplayInfo.cs" />
     <Compile Include="IParser.cs" />
     <Compile Include="IParserOptions.cs" />
-    <Compile Include="IServiceResolver.cs" />
+    <Compile Include="IDependencyResolverScope.cs" />
     <Compile Include="ParserBuilder.cs" />
     <Compile Include="ParserBuilderOptions.cs" />
     <Compile Include="Properties\JetBrains.Annotations.cs" />
@@ -119,8 +117,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="RecursiveAssemblyFileProvider.cs" />
-    <Compile Include="ServiceResolver.cs" />
+    <Compile Include="RecursiveAssemblyProvider.cs" />
+    <Compile Include="DependencyResolver.cs" />
     <Compile Include="ServiceResolverCommandActivator.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -134,6 +132,9 @@
     <CodeAnalysisDictionary Include="..\..\CustomDictionary.xml">
       <Link>Properties\CustomDictionary.xml</Link>
     </CodeAnalysisDictionary>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MGR.CommandLineParser.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

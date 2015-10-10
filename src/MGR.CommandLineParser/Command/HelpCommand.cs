@@ -27,12 +27,12 @@ namespace MGR.CommandLineParser.Command
         /// <summary>
         ///     Writes help for the specified command. If the command is null, lists all available commands.
         /// </summary>
-        /// <param name="command">The <see cref="ICommand" />.</param>
-        public void WriteHelp(ICommand command)
+        /// <param name="commandType">The <see cref="ICommand" />.</param>
+        public void WriteHelp(CommandType commandType)
         {
-            if (command == null)
+            if (commandType == null)
             {
-                var commandProvider = ServiceResolver.Current.ResolveService<ICommandProvider>();
+                var commandProvider = CurrentDependencyResolverScope.ResolveDependency<ICommandTypeProvider>();
                 if (All)
                 {
                     WriteHelpForAllCommand(commandProvider);
@@ -44,7 +44,7 @@ namespace MGR.CommandLineParser.Command
             }
             else
             {
-                WriteHelpForCommand(command);
+                WriteHelpForCommand(commandType);
             }
         }
 
@@ -54,83 +54,87 @@ namespace MGR.CommandLineParser.Command
         /// <returns>Return 0 is everything was right, an negative error code otherwise.</returns>
         protected override int ExecuteCommand()
         {
-            var commandResolver = ServiceResolver.Current.ResolveService<CommandResolver>();
-            var command = commandResolver.GetCommand(Arguments.FirstOrDefault() ?? string.Empty, ParserOptions, Console);
-            WriteHelp(command);
+            var commandTypeProvider = CurrentDependencyResolverScope.ResolveDependency<ICommandTypeProvider>();
+            var commandType = commandTypeProvider.GetCommandType(Arguments.FirstOrDefault() ?? string.Empty);
+            WriteHelp(commandType);
             return 0;
         }
 
-        private void WriteHelpForAllCommand(ICommandProvider commandProvider)
+        private void WriteHelpForAllCommand(ICommandTypeProvider commandProvider)
         {
             WriteGeneralInformation();
-            var commands = commandProvider.GetAllCommands();
+            var commands = commandProvider.GetAllCommandTypes();
             foreach (var command in commands)
             {
-                Console.WriteLine(string.Format(CultureInfo.CurrentUICulture, Strings.HelpCommand_CommandTitleFormat, command.ExtractCommandName()));
+                Console.WriteLine(string.Format(CultureInfo.CurrentUICulture, Strings.HelpCommand_CommandTitleFormat, command.Metadata.Name));
                 WriteHelpForCommand(command);
             }
         }
 
-        private void WriteHelpForCommand(ICommand command)
+        private void WriteHelpForCommand(CommandType commandType)
         {
-            Guard.NotNull(command, nameof(command));
+            Guard.NotNull(commandType, nameof(commandType));
 
-            var metadata = command.GetType().ExtractMetadataTemplate();
+            var metadata = commandType.Metadata;
             Console.WriteLine(ParserOptions.Logo);
             Console.WriteLine(Strings.HelpCommand_CommandUsageFormat, ParserOptions.CommandLineName, metadata.Name, metadata.Usage);
             Console.WriteLine(metadata.Description);
             Console.WriteLine();
 
-            if (metadata.Options.Any())
+            if (commandType.Options.Any())
             {
                 Console.WriteLine(Strings.HelpCommand_OptionsListTitle);
-                var maxOptionWidth = metadata.Options.Max(o => o.Name.Length) + 2;
-                var maxAltOptionWidth = metadata.Options.Max(o => (o.ShortName ?? string.Empty).Length);
-                foreach (var optionMetadata in metadata.Options)
+                var maxOptionWidth = commandType.Options.Max(o => o.DisplayInfo.Name.Length) + 2;
+                var maxAltOptionWidth = commandType.Options.Max(o => (o.DisplayInfo.ShortName ?? string.Empty).Length);
+                foreach (var commandOption in commandType.Options)
                 {
-                    Console.Write(" -{0, -" + (maxOptionWidth + 2) + "}", optionMetadata.Name + GetMultiValueIndicator(optionMetadata));
-                    Console.Write(" {0, -" + (maxAltOptionWidth + 4) + "}", FormatShortName(optionMetadata.ShortName));
+                    Console.Write(" -{0, -" + (maxOptionWidth + 2) + "}", commandOption.DisplayInfo.Name + GetMultiValueIndicator(commandOption));
+                    Console.Write(" {0, -" + (maxAltOptionWidth + 4) + "}", FormatShortName(commandOption.DisplayInfo.ShortName));
 
-                    Console.PrintJustified((10 + maxAltOptionWidth + maxOptionWidth), optionMetadata.Description);
+                    Console.PrintJustified((10 + maxAltOptionWidth + maxOptionWidth), commandOption.DisplayInfo.Description);
                     Console.WriteLine();
                 }
             }
 
-            var usageCommand = command as ISampleCommand;
-            if (usageCommand != null)
+            if (commandType.Type.IsType<ISampleCommand>())
             {
-                foreach (var usage in usageCommand.GetSamples())
+                var sampleCommand =
+                    commandType.CreateCommand(CurrentDependencyResolverScope, ParserOptions) as ISampleCommand;
+                if (sampleCommand != null)
                 {
-                    Console.WriteLine(usage);
+                    foreach (var usage in sampleCommand.GetSamples())
+                    {
+                        Console.WriteLine(usage);
+                    }
                 }
             }
         }
 
-        internal static string GetMultiValueIndicator(OptionMetadataTemplate optionMetadata)
+        internal static string GetMultiValueIndicator(CommandOption commandOption)
         {
-            if (optionMetadata.PropertyOption.PropertyType.IsCollectionType())
+            if (commandOption.PropertyOption.PropertyType.IsCollectionType())
             {
                 return CollectionIndicator;
             }
-            if (optionMetadata.PropertyOption.PropertyType.IsDictionaryType())
+            if (commandOption.PropertyOption.PropertyType.IsDictionaryType())
             {
                 return DictionaryIndicator;
             }
             return string.Empty;
         }
 
-        private void WriteGeneralHelp(ICommandProvider commandProvider)
+        private void WriteGeneralHelp(ICommandTypeProvider commandProvider)
         {
             WriteGeneralInformation();
 
-            var metadatas = commandProvider.GetAllCommands().Select(command => command.GetType().ExtractCommandMetadataTemplate()).ToList();
-            var maxNameLength = metadatas.Max(m => m.Name.Length);
-            foreach (var metadata in metadatas)
+            var commandTypes = commandProvider.GetAllCommandTypes().ToList();
+            var maxNameLength = commandTypes.Max(m => m.Metadata.Name.Length);
+            foreach (var commandType in commandTypes)
             {
-                Console.Write(" {0, -" + maxNameLength + "}   ", metadata.Name);
+                Console.Write(" {0, -" + maxNameLength + "}   ", commandType.Metadata.Name);
                 // Starting index of the description
                 var descriptionPadding = maxNameLength + 4;
-                Console.PrintJustified(descriptionPadding, metadata.Description);
+                Console.PrintJustified(descriptionPadding, commandType.Metadata.Description);
                 Console.WriteLine();
             }
         }
