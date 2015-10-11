@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Matthias Grosperrin")]
 [assembly: AssemblyProduct("MGR.CommandLineParser")]
-[assembly: AssemblyCopyright("Copyright © Matthias Grosperrin 2014")]
+[assembly: AssemblyCopyright("Copyright © Matthias Grosperrin 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
