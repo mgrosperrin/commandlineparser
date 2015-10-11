@@ -50,7 +50,8 @@ namespace MGR.CommandLineParser.Tests.Commands
 
         [Display(Description = "PackageCommandBuildDescription")]
         public bool Build { get; set; }
-
+        [Display(Description = "CommandMSBuildVersion")]
+        public string MSBuildVersion { get; set; }
         [Display(Description = "PackageCommandNoDefaultExcludes")]
         public bool NoDefaultExcludes { get; set; }
 

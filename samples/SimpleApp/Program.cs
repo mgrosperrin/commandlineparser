@@ -7,42 +7,10 @@ namespace SimpleApp
     {
         private static int Main()
         {
-            var arguments = new[] { "pack", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "-Build", "-Properties", "Configuration=Release", "-Exclude", "Test", "-Symbols" };
-            Console.WriteLine("Press enter");
-            Console.ReadLine();
+            var arguments = new[] { "pack", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "-Properties", "Configuration=Release", "-Build", "-Symbols", "-MSBuildVersion", "14" };
             var parserBuild = new ParserBuilder();
-            parserBuild = new ParserBuilder();
-            parserBuild = new ParserBuilder();
-            parserBuild = new ParserBuilder();
-            parserBuild = new ParserBuilder();
-            parserBuild = new ParserBuilder();
-            parserBuild = new ParserBuilder();
-            parserBuild = new ParserBuilder();
-            parserBuild = new ParserBuilder();
-            parserBuild = new ParserBuilder();
-            parserBuild = new ParserBuilder();
-            parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
-            Console.WriteLine("Press enter");
-            Console.ReadLine();
             var commandResult = parser.Parse(arguments);
-            Console.WriteLine("Press enter");
-            Console.ReadLine();
-            commandResult = parser.Parse(arguments);
-            commandResult = parser.Parse(arguments);
-            commandResult = parser.Parse(arguments);
-            commandResult = parser.Parse(arguments);
-            commandResult = parser.Parse(arguments);
-            commandResult = parser.Parse(arguments);
-            commandResult = parser.Parse(arguments);
-            commandResult = parser.Parse(arguments);
-            commandResult = parser.Parse(arguments);
-            commandResult = parser.Parse(arguments);
-            commandResult = parser.Parse(arguments);
-            commandResult = parser.Parse(arguments);
-            commandResult = parser.Parse(arguments);
-            Console.WriteLine("Press enter");
-            Console.ReadLine();
             if (commandResult.IsValid)
             {
                 return commandResult.Execute();
