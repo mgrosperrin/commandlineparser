@@ -102,8 +102,8 @@ Depending on the value of `args`, the result will be (when not providing the typ
 * `args` is `HelloWorld -n Matthias` : return code is `CommandResultCode.Ok` (0) and `Hello world Matthias !` is printed to the console.
 
 
-   [appveyor]: https://ci.appveyor.com/project/mgrosperrin/commandlineparser
-   [appveyor-svg]: http://img.shields.io/appveyor/ci/mgrosperrin/commandlineparser.svg
+   [appveyor]: https://ci.appveyor.com/project/mgrosperrin/commandlineparser-gydv9
+   [appveyor-svg]: https://ci.appveyor.com/api/projects/status/ybws3e4dtqmd7qfv?svg=true
    [nuget]: http://www.nuget.org/packages/MGR.CommandLineParser/
    [nuget-svg]: http://img.shields.io/nuget/v/MGR.CommandLineParser.svg
    [nugetDownload]: http://www.nuget.org/stats/packages/MGR.CommandLineParser?groupby=Version

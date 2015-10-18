@@ -14,7 +14,7 @@
 x64/
 x86/
 build/*
-!build/nuget.*
+!build/*.cs
 bld/
 [Bb]in/
 [Oo]bj/
