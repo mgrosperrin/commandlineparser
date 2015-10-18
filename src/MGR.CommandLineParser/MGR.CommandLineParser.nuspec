@@ -16,7 +16,7 @@
    <releaseNotes>
      0.5.0 : Rewrite of the API. See https://github.com/mgrosperrin/commandlineparser/wiki for more info on the API.
    </releaseNotes>
-   <copyright>Copyright © Matthias GROSPERRIN 2014</copyright>
+   <copyright>Copyright © Matthias GROSPERRIN 2015</copyright>
    <tags>command parser command-line</tags>
  </metadata>
  <files>
