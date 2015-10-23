@@ -18,10 +18,8 @@ namespace MGR.CommandLineParser.Command
         /// <returns>A new instance of the <see cref="IConverter"/>.</returns>
         internal static IConverter BuildConverter(this ConverterAttribute source)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException("source");
-            }
+            Guard.NotNull(source, nameof(source));
+
             return Activator.CreateInstance(source.ConverterType) as IConverter;
         }
         /// <summary>
@@ -31,10 +29,8 @@ namespace MGR.CommandLineParser.Command
         /// <returns>A new instance of the <see cref="IConverter"/>.</returns>
         internal static IConverter BuildKeyConverter(this ConverterKeyValueAttribute source)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException("source");
-            }
+            Guard.NotNull(source, nameof(source));
+
             return Activator.CreateInstance(source.KeyConverterType) as IConverter;
         }
         /// <summary>
@@ -44,10 +40,8 @@ namespace MGR.CommandLineParser.Command
         /// <returns>A new instance of the <see cref="IConverter"/>.</returns>
         internal static IConverter BuildValueConverter(this ConverterKeyValueAttribute source)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException("source");
-            }
+            Guard.NotNull(source, nameof(source));
+
             return Activator.CreateInstance(source.ValueConverterType) as IConverter;
         }
     }

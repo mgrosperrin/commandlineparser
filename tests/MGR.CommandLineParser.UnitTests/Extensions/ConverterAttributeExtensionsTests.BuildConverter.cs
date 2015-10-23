@@ -13,11 +13,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void Int32ConverterActivation()
             {
                 // Arrange
-                Type expected = typeof (Int32Converter);
+                var expected = typeof (Int32Converter);
                 var converterAttribute = new ConverterAttribute(expected);
 
                 // Act
-                IConverter actual = converterAttribute.BuildConverter();
+                var actual = converterAttribute.BuildConverter();
 
                 // Assert
                 Assert.NotNull(actual);
@@ -29,7 +29,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 ConverterAttribute converterAttribute = null;
-                string expectedExceptionMessage = @"source";
+                var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException = Assert.Throws<ArgumentNullException>(() => converterAttribute.BuildConverter());

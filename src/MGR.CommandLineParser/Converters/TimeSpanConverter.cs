@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace MGR.CommandLineParser.Converters
@@ -12,10 +11,7 @@ namespace MGR.CommandLineParser.Converters
         /// <summary>
         /// The target type of the converter (<see cref="TimeSpan"/>).
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (TimeSpan); }
-        }
+        public Type TargetType => typeof (TimeSpan);
 
         /// <summary>
         /// Convert the <paramref name="value"/> to an instance of <see cref="TimeSpan"/>.
@@ -24,7 +20,8 @@ namespace MGR.CommandLineParser.Converters
         /// <param name="concreteTargetType">Not used.</param>
         /// <returns>The <see cref="TimeSpan"/> converted from the value.</returns>
         /// <exception cref="CommandLineParserException">Thrown if the <paramref name="value"/> is not valid.</exception>
-        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TimeSpan")]
+        //[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TimeSpan")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.TimeSpan.Parse(System.String,System.IFormatProvider)")]
         public object Convert(string value, Type concreteTargetType)
         {
             try
@@ -33,8 +30,7 @@ namespace MGR.CommandLineParser.Converters
             }
             catch (FormatException exception)
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, CommonStrings.ExcConverterUnableConvertFormat, value, "TimeSpan"),
-                                                     exception);
+                throw new CommandLineParserException(Constants.ExceptionMessages.FormatConverterUnableConvert(value, TargetType), exception);
             }
         }
     }

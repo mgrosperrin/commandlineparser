@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace MGR.CommandLineParser.Converters
@@ -12,10 +11,7 @@ namespace MGR.CommandLineParser.Converters
         /// <summary>
         ///   The target type of the converter ( <see cref="DateTime" /> )..
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (DateTime); }
-        }
+        public Type TargetType => typeof (DateTime);
 
         /// <summary>
         ///   Convert the <paramref name="value" /> to an instance of <see cref="DateTime" /> .
@@ -26,7 +22,8 @@ namespace MGR.CommandLineParser.Converters
         /// <exception cref="CommandLineParserException">Thrown if the
         ///   <paramref name="value" />
         ///   is not valid.</exception>
-        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "DateTime")]
+        //[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "DateTime")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.DateTime.Parse(System.String,System.IFormatProvider)")]
         public object Convert(string value, Type concreteTargetType)
         {
             try
@@ -35,7 +32,7 @@ namespace MGR.CommandLineParser.Converters
             }
             catch (FormatException exception)
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, CommonStrings.ExcConverterUnableConvertFormat, value, "DateTime"),
+                throw new CommandLineParserException(Constants.ExceptionMessages.FormatConverterUnableConvert(value, TargetType),
                                                      exception);
             }
         }

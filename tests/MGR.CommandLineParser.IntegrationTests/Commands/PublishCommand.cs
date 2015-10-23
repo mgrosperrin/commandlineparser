@@ -11,9 +11,6 @@ namespace MGR.CommandLineParser.Tests.Commands
         [Display(Description = "PublishCommandSourceDescription", ShortName = "src")]
         public string Source { get; set; }
 
-        protected override int ExecuteCommand()
-        {
-            return 0;
-        }
+        protected override int ExecuteCommand() => 0;
     }
 }

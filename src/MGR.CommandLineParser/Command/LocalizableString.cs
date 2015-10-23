@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.Reflection;
 using System.Runtime;
 
 namespace MGR.CommandLineParser.Command
@@ -33,15 +31,15 @@ namespace MGR.CommandLineParser.Command
                 }
                 else
                 {
-                    PropertyInfo property = _resourceType.GetProperty(_propertyValue);
-                    bool flag = false;
+                    var property = _resourceType.GetProperty(_propertyValue);
+                    var flag = false;
                     if ((!_resourceType.IsVisible || (property == null)) || (property.PropertyType != typeof (string)))
                     {
                         flag = true;
                     }
                     else
                     {
-                        MethodInfo getMethod = property.GetGetMethod();
+                        var getMethod = property.GetGetMethod();
                         if (((getMethod == null) || !getMethod.IsPublic) || !getMethod.IsStatic)
                         {
                             flag = true;
@@ -49,9 +47,7 @@ namespace MGR.CommandLineParser.Command
                     }
                     if (flag)
                     {
-                        string exceptionMessage = string.Format(CultureInfo.CurrentCulture,
-                                                                "Cannot retrieve property '{0}' because localization failed.  Type '{1}' is not public or does not contain a public static string property with the name '{2}'",
-                                                                new object[] {_propertyName, _resourceType.FullName, _propertyValue});
+                        var exceptionMessage = Constants.ExceptionMessages.LocalizableNoPropertyFound(_propertyName, _resourceType, _propertyValue);
                         _cachedResult = delegate { throw new InvalidOperationException(exceptionMessage); };
                     }
                     else
@@ -60,7 +56,7 @@ namespace MGR.CommandLineParser.Command
                     }
                 }
             }
-            return _cachedResult();
+            return _cachedResult?.Invoke();
         }
 
         internal Type ResourceType

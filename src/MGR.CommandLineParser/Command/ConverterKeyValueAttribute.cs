@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using MGR.CommandLineParser.Converters;
 
 namespace MGR.CommandLineParser.Command
@@ -7,7 +6,7 @@ namespace MGR.CommandLineParser.Command
     /// <summary>
     /// Defines the key and the value converter types for a dictionary property.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property)]
     public sealed class ConverterKeyValueAttribute : Attribute
     {
         /// <summary>
@@ -15,7 +14,7 @@ namespace MGR.CommandLineParser.Command
         /// </summary>
         /// <param name="valueConverterType">The type of the value converter.</param>
         /// <remarks>The key's converter is supposed to be the <see cref="StringConverter"/>.</remarks>
-        public ConverterKeyValueAttribute(Type valueConverterType) : this(valueConverterType, typeof (StringConverter))
+        public ConverterKeyValueAttribute(Type valueConverterType) : this(valueConverterType, typeof(StringConverter))
         {
         }
         /// <summary>
@@ -23,35 +22,24 @@ namespace MGR.CommandLineParser.Command
         /// </summary>
         /// <param name="valueConverterType">The type of the value converter.</param>
         /// <param name="keyConverterType">The type of the key converter.</param>
-        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "IConverter"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "CommandLineParser")]
+        //[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "IConverter"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "CommandLineParser")]
         public ConverterKeyValueAttribute(Type valueConverterType, Type keyConverterType)
         {
-            if (keyConverterType == null)
-            {
-                throw new ArgumentNullException("keyConverterType");
-            }
-            if (!typeof (IConverter).IsAssignableFrom(keyConverterType))
-            {
-                throw new CommandLineParserException("The key converter type must implement MGR.CommandLineParser.Command.IConverter");
-            }
+            Guard.NotNull(keyConverterType, nameof(keyConverterType));
+            Guard.NotNull(valueConverterType, nameof(valueConverterType));
+            Guard.IsIConverter(keyConverterType, Constants.ExceptionMessages.ConverterKeyConverterTypeMustBeIConverter);
+            Guard.IsIConverter(valueConverterType, Constants.ExceptionMessages.ConverterValueConverterTypeMustBeIConverter);
+
             KeyConverterType = keyConverterType;
-            if (valueConverterType == null)
-            {
-                throw new ArgumentNullException("valueConverterType");
-            }
-            if (!typeof (IConverter).IsAssignableFrom(valueConverterType))
-            {
-                throw new CommandLineParserException("The value converter type must implement MGR.CommandLineParser.Command.IConverter");
-            }
             ValueConverterType = valueConverterType;
         }
         /// <summary>
         /// Gets the type of the key converter.
         /// </summary>
-        public Type KeyConverterType { get; private set; }
+        public Type KeyConverterType { get; }
         /// <summary>
         /// Gets the type of the value converter.
         /// </summary>
-        public Type ValueConverterType { get; private set; }
+        public Type ValueConverterType { get; }
     }
 }

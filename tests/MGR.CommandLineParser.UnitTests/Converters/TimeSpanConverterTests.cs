@@ -11,10 +11,10 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new TimeSpanConverter();
-            Type expectedType = typeof (TimeSpan);
+            var expectedType = typeof (TimeSpan);
 
             // Act
-            Type actualType = converter.TargetType;
+            var actualType = converter.TargetType;
 
             // Assert
             Assert.Equal(expectedType, actualType);
@@ -25,11 +25,11 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new TimeSpanConverter();
-            string value = "3:15:14";
+            var value = "3:15:14";
             var expectedValue = new TimeSpan(3, 15, 14);
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actualValue = converter.Convert(value, converter.TargetType);
 
             // Assert
             Assert.NotNull(actualValue);
@@ -38,14 +38,14 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         }
 
         [Fact]
-        [Trait("Exception", "CommandLineParserException")]
+        [Trait(nameof(Exception), nameof(CommandLineParserException))]
         public void BadValueConversion()
         {
             // Arrange
             IConverter converter = new TimeSpanConverter();
-            string value = "Hello";
-            string expectedExceptionMessage = "Unable to parse 'Hello' to TimeSpan.";
-            string expectedInnerExceptionMessage = "String was not recognized as a valid TimeSpan.";
+            var value = "Hello";
+            var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(TimeSpan));
+            var expectedInnerExceptionMessage = "String was not recognized as a valid TimeSpan.";
 
             // Act
             using (new LangageSwitcher("en-us"))

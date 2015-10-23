@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 
 namespace MGR.CommandLineParser.Converters
 {
@@ -11,10 +10,7 @@ namespace MGR.CommandLineParser.Converters
         /// <summary>
         ///   The target type of the converter ( <see cref="Enum" /> )..
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (Enum); }
-        }
+        public Type TargetType => typeof(Enum);
 
         /// <summary>
         ///   Convert the <paramref name="value" /> to an instance of <see cref="Enum" /> .
@@ -29,29 +25,24 @@ namespace MGR.CommandLineParser.Converters
         ///   is not an enum.</exception>
         public object Convert(string value, Type concreteTargetType)
         {
-            if (concreteTargetType == null)
-            {
-                throw new ArgumentNullException("concreteTargetType");
-            }
+            Guard.NotNull(concreteTargetType, nameof(concreteTargetType));
+
             if (!TargetType.IsAssignableFrom(concreteTargetType))
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, "The specified concrete target type ({0}) is not an enum type.",
-                                                                   concreteTargetType.Name));
+                throw new CommandLineParserException(Constants.ExceptionMessages.EnumConverterConcreteTargetTypeIsNotAnEnum(concreteTargetType));
             }
             try
             {
                 var enumValue = Enum.Parse(concreteTargetType, value, true);
-                if (!(Enum.IsDefined(concreteTargetType, enumValue) | enumValue.ToString().Contains(",")))
+                if (!(Enum.IsDefined(concreteTargetType, enumValue) || enumValue.ToString().Contains(",")))
                 {
-                    throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, "The specified value '{0}' is not correct the type '{1}'.",
-                                                                       value, concreteTargetType.Name));
+                    throw new CommandLineParserException(Constants.ExceptionMessages.EnumConverterParsedValueIsNotOfConcreteType(value, concreteTargetType));
                 }
                 return enumValue;
             }
             catch (ArgumentException exception)
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, CommonStrings.ExcConverterUnableConvertFormat, value, concreteTargetType.Name),
-                                                     exception);
+                throw new CommandLineParserException(Constants.ExceptionMessages.FormatConverterUnableConvert(value, concreteTargetType), exception);
             }
         }
     }

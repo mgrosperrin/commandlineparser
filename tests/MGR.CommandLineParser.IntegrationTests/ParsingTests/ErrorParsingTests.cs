@@ -10,12 +10,13 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests
         public void ParseWithoutParameter()
         {
             // Arrange
-            Parser parser = Parser.Create();
+            var parserBuild = new ParserBuilder();
+            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = null;
-            CommandResultCode expectedReturnCode = CommandResultCode.NoArgs;
+            var expectedReturnCode = CommandResultCode.NoArgs;
 
             // Act
-            CommandResult<ICommand> actual = parser.Parse(args);
+            var actual = parser.Parse(args);
 
             // Assert
             Assert.False(actual.IsValid);
@@ -27,12 +28,13 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests
         public void ParseWithEmptyParameter()
         {
             // Arrange
-            Parser parser = Parser.Create();
+            var parserBuild = new ParserBuilder();
+            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new List<string>();
-            CommandResultCode expectedReturnCode = CommandResultCode.NoCommandName;
+            var expectedReturnCode = CommandResultCode.NoCommandName;
 
             // Act
-            CommandResult<ICommand> actual = parser.Parse(args);
+            var actual = parser.Parse(args);
 
             // Assert
             Assert.False(actual.IsValid);
@@ -44,12 +46,13 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests
         public void ParseWithBadCommandName()
         {
             // Arrange
-            Parser parser = Parser.Create();
-            IEnumerable<string> args = new[] {"NotValid", "-option:true"};
-            CommandResultCode expectedReturnCode = CommandResultCode.NoCommandFound;
+            var parserBuild = new ParserBuilder();
+            var parser = parserBuild.BuildParser();
+            IEnumerable<string> args = new[] { "NotValid", "-option:true" };
+            var expectedReturnCode = CommandResultCode.NoCommandFound;
 
             // Act
-            CommandResult<ICommand> actual = parser.Parse(args);
+            var actual = parser.Parse(args);
 
             // Assert
             Assert.False(actual.IsValid);

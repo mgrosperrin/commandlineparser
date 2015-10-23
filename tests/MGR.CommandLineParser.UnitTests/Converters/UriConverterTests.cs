@@ -11,10 +11,10 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new UriConverter();
-            Type expectedType = typeof (Uri);
+            var expectedType = typeof (Uri);
 
             // Act
-            Type actualType = converter.TargetType;
+            var actualType = converter.TargetType;
 
             // Assert
             Assert.Equal(expectedType, actualType);
@@ -25,11 +25,11 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new UriConverter();
-            string value = "http://mgrcommandlineparser.codeplex.com";
+            var value = "http://mgrcommandlineparser.codeplex.com";
             var expectedValue = new Uri("http://mgrcommandlineparser.codeplex.com");
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actualValue = converter.Convert(value, converter.TargetType);
 
             // Assert
             Assert.NotNull(actualValue);
@@ -42,11 +42,11 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new UriConverter();
-            string value = "hello";
+            var value = "hello";
             var expectedValue = new Uri("hello", UriKind.Relative);
 
             // Act
-            object actualValue = converter.Convert(value, converter.TargetType);
+            var actualValue = converter.Convert(value, converter.TargetType);
 
             // Assert
             Assert.NotNull(actualValue);

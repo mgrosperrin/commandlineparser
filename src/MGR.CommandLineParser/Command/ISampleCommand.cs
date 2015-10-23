@@ -10,6 +10,7 @@ namespace MGR.CommandLineParser.Command
         /// <summary>
         /// Gets the usage samples.
         /// </summary>
-        IEnumerable<string> Samples { get; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        IEnumerable<string> GetSamples();
     }
 }

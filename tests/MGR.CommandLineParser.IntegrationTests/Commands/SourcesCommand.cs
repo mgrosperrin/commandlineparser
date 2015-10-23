@@ -6,7 +6,6 @@ namespace MGR.CommandLineParser.Tests.Commands
 // ReSharper restore CheckNamespace
 {
     [CommandDisplay(Description = "SourcesCommandDescription", Usage = "SourcesCommandUsageSummary")]
-    
     public class SourcesCommand : CommandBase
     {
         [Display(Description = "SourcesCommandNameDescription")]
@@ -21,9 +20,6 @@ namespace MGR.CommandLineParser.Tests.Commands
         [Display(Description = "SourcesCommandPasswordDescription")]
         public string Password { get; set; }
 
-        protected override int ExecuteCommand()
-        {
-            return 0;
-        }
+        protected override int ExecuteCommand() => 0;
     }
 }

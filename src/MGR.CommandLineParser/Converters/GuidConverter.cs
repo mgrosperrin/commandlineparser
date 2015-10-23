@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 
 namespace MGR.CommandLineParser.Converters
 {
@@ -11,10 +10,7 @@ namespace MGR.CommandLineParser.Converters
         /// <summary>
         ///   The target type of the converter ( <see cref="Guid" /> )..
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (Guid); }
-        }
+        public Type TargetType => typeof (Guid);
 
         /// <summary>
         ///   Convert the <paramref name="value" /> to an instance of <see cref="Guid" /> .
@@ -33,8 +29,7 @@ namespace MGR.CommandLineParser.Converters
             }
             catch (FormatException exception)
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, CommonStrings.ExcConverterUnableConvertFormat, value, "Guid"),
-                                                     exception);
+                throw new CommandLineParserException(Constants.ExceptionMessages.FormatConverterUnableConvert(value, TargetType), exception);
             }
         }
     }

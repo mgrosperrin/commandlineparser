@@ -16,11 +16,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var converterMoq = new Mock<IConverter>();
                 converterMoq.SetupGet(converter => converter.TargetType).Returns(typeof (int));
-                bool expected = true;
-                Type assignableType = typeof (int);
+                var expected = true;
+                var assignableType = typeof (int);
 
                 // Act
-                bool actual = converterMoq.Object.CanConvertTo(assignableType);
+                var actual = converterMoq.Object.CanConvertTo(assignableType);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -32,11 +32,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var converterMoq = new Mock<IConverter>();
                 converterMoq.SetupGet(converter => converter.TargetType).Returns(typeof (int));
-                bool expected = true;
-                Type assignableType = typeof (List<int>);
+                var expected = true;
+                var assignableType = typeof (List<int>);
 
                 // Act
-                bool actual = converterMoq.Object.CanConvertTo(assignableType);
+                var actual = converterMoq.Object.CanConvertTo(assignableType);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -48,11 +48,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var converterMoq = new Mock<IConverter>();
                 converterMoq.SetupGet(converter => converter.TargetType).Returns(typeof (string));
-                bool expected = false;
-                Type assignableType = typeof (List<int>);
+                var expected = false;
+                var assignableType = typeof (List<int>);
 
                 // Act
-                bool actual = converterMoq.Object.CanConvertTo(assignableType);
+                var actual = converterMoq.Object.CanConvertTo(assignableType);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -64,11 +64,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var converterMoq = new Mock<IConverter>();
                 converterMoq.SetupGet(converter => converter.TargetType).Returns(typeof (int));
-                bool expected = false;
-                Type assignableType = typeof (Dictionary<int, string>);
+                var expected = false;
+                var assignableType = typeof (Dictionary<int, string>);
 
                 // Act
-                bool actual = converterMoq.Object.CanConvertTo(assignableType);
+                var actual = converterMoq.Object.CanConvertTo(assignableType);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -80,11 +80,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var converterMoq = new Mock<IConverter>();
                 converterMoq.SetupGet(converter => converter.TargetType).Returns(typeof (KeyValuePair<int, int>));
-                bool expected = true;
-                Type assignableType = typeof (KeyValuePair<int, int>);
+                var expected = true;
+                var assignableType = typeof (KeyValuePair<int, int>);
 
                 // Act
-                bool actual = converterMoq.Object.CanConvertTo(assignableType);
+                var actual = converterMoq.Object.CanConvertTo(assignableType);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -95,8 +95,8 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 IConverter testedConverter = null;
-                Type expectedExceptionType = typeof (ArgumentNullException);
-                string expectedExceptionMessage = @"converter";
+                var expectedExceptionType = typeof (ArgumentNullException);
+                var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =
@@ -112,12 +112,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var converterMoq = new Mock<IConverter>();
                 converterMoq.SetupGet(converter => converter.TargetType).Returns(typeof (int));
-                Type testedType = null;
-                string expectedExceptionMessage = @"targetType";
+                Type targetType = null;
+                var expectedExceptionMessage = nameof(targetType);
 
                 // Act
                 var actualException =
-                    Assert.Throws<ArgumentNullException>(() => converterMoq.Object.CanConvertTo(testedType));
+                    Assert.Throws<ArgumentNullException>(() => converterMoq.Object.CanConvertTo(targetType));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);

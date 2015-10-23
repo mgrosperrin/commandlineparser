@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MGR.CommandLineParser;
 
 // ReSharper disable CheckNamespace
 
@@ -8,44 +9,36 @@ namespace System
 {
     internal static class TypeExtensions
     {
-        internal static bool IsCollectionType(this Type type)
+        internal static bool IsCollectionType(this Type source)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
-            return type.GetCollectionType() != null && !type.IsDictionaryType();
+            Guard.NotNull(source, nameof(source));
+
+            return source.GetCollectionType() != null && !source.IsDictionaryType();
         }
 
-        internal static Type GetCollectionType(this Type type)
+        internal static Type GetCollectionType(this Type source)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
-            return GetInterfaceType(type, typeof (ICollection<>));
+            Guard.NotNull(source, nameof(source));
+
+            return GetInterfaceType(source, typeof (ICollection<>));
         }
 
-        public static Type GetUnderlyingGenericType(this Type type, int index = 0)
+        internal static Type GetUnderlyingGenericType(this Type source, int index = 0)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
-            if (!type.IsGenericType)
+            Guard.NotNull(source, nameof(source));
+
+            if (!source.IsGenericType)
             {
                 return null;
             }
-            return type.GetGenericArguments()[index];
+            return source.GetGenericArguments()[index];
         }
 
-        public static Type GetUnderlyingCollectionType(this Type type, int index = 0)
+        internal static Type GetUnderlyingCollectionType(this Type source, int index = 0)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
-            Type collectionType = type.GetCollectionType();
+            Guard.NotNull(source, nameof(source));
+
+            var collectionType = source.GetCollectionType();
             if (collectionType == null)
             {
                 return null;
@@ -53,13 +46,11 @@ namespace System
             return collectionType.GetUnderlyingGenericType(index);
         }
 
-        public static Type GetUnderlyingDictionaryType(this Type type, bool key)
+        internal static Type GetUnderlyingDictionaryType(this Type source, bool key)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
-            Type collectionType = type.GetDictionaryType();
+            Guard.NotNull(source, nameof(source));
+
+            var collectionType = source.GetDictionaryType();
             if (collectionType == null)
             {
                 return null;
@@ -67,42 +58,55 @@ namespace System
             return collectionType.GetUnderlyingGenericType(key ? 0 : 1);
         }
 
-        public static bool IsMultiValuedType(this Type type)
+        internal static bool IsMultiValuedType(this Type source)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
-            return type.IsCollectionType() || type.IsDictionaryType();
+            Guard.NotNull(source, nameof(source));
+
+            return source.IsCollectionType() || source.IsDictionaryType();
         }
 
-        public static bool IsDictionaryType(this Type type)
+        internal static bool IsDictionaryType(this Type source)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
-            return type.GetDictionaryType() != null;
+            Guard.NotNull(source, nameof(source));
+
+            return source.GetDictionaryType() != null;
         }
 
-        public static Type GetDictionaryType(this Type type)
+        internal static Type GetDictionaryType(this Type source)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
-            return type.GetInterfaceType(typeof (IDictionary<,>));
+            Guard.NotNull(source, nameof(source));
+
+            return source.GetInterfaceType(typeof (IDictionary<,>));
         }
 
-        private static Type GetInterfaceType(this Type type, Type interfaceType)
+        private static Type GetInterfaceType(this Type source, Type interfaceType)
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == interfaceType)
+            if (source.IsGenericType && source.GetGenericTypeDefinition() == interfaceType)
             {
-                return type;
+                return source;
             }
-            return (from t in type.GetInterfaces()
-                    where t.IsGenericType && t.GetGenericTypeDefinition() == interfaceType
-                    select t).SingleOrDefault();
+            return (from t in source.GetInterfaces()
+                where t.IsGenericType && t.GetGenericTypeDefinition() == interfaceType
+                select t).SingleOrDefault();
+        }
+
+        internal static bool IsType<T>(this Type source)
+        {
+            Guard.NotNull(source, nameof(source));
+
+            return source.IsClass && source.IsVisible && !source.IsAbstract && typeof (T).IsAssignableFrom(source);
+        }
+
+        internal static string GetFullCommandName(this Type commandType)
+        {
+            Guard.NotNull(commandType, nameof(commandType));
+
+            var fullCommandName = commandType.Name;
+            if (fullCommandName.EndsWith(Constants.CommandSuffix, StringComparison.Ordinal))
+            {
+                fullCommandName = fullCommandName.Substring(0, fullCommandName.Length - Constants.CommandSuffix.Length);
+            }
+            return fullCommandName;
         }
     }
 }

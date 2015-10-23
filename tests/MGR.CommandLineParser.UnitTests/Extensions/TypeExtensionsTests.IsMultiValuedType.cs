@@ -12,11 +12,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void ListIntTest()
             {
                 // Arrange
-                Type testedType = typeof (List<int>);
-                bool expected = true;
+                var testedType = typeof (List<int>);
+                var expected = true;
 
                 // Act
-                bool actual = testedType.IsMultiValuedType();
+                var actual = testedType.IsMultiValuedType();
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -26,11 +26,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void TupleInt()
             {
                 // Arrange
-                Type testedType = typeof (Tuple<int>);
-                bool expected = false;
+                var testedType = typeof (Tuple<int>);
+                var expected = false;
 
                 // Act
-                bool actual = testedType.IsMultiValuedType();
+                var actual = testedType.IsMultiValuedType();
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -40,11 +40,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void DictionaryStringInt()
             {
                 // Arrange
-                Type testedType = typeof (Dictionary<string, int>);
-                bool expected = true;
+                var testedType = typeof (Dictionary<string, int>);
+                var expected = true;
 
                 // Act
-                bool actual = testedType.IsMultiValuedType();
+                var actual = testedType.IsMultiValuedType();
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -54,11 +54,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void IDictionaryStringInt()
             {
                 // Arrange
-                Type testedType = typeof (IDictionary<string, int>);
-                bool expected = true;
+                var testedType = typeof (IDictionary<string, int>);
+                var expected = true;
 
                 // Act
-                bool actual = testedType.IsMultiValuedType();
+                var actual = testedType.IsMultiValuedType();
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -69,7 +69,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 Type testedType = null;
-                string expectedExceptionMessage = @"type";
+                var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException = Assert.Throws<ArgumentNullException>(() => testedType.IsMultiValuedType());

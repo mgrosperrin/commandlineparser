@@ -10,10 +10,7 @@ namespace MGR.CommandLineParser.Converters
         /// <summary>
         /// The target type of the converter (<see cref="Uri"/>)..
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (Uri); }
-        }
+        public Type TargetType => typeof (Uri);
 
         /// <summary>
         /// Convert the <paramref name="value"/> to an instance of <see cref="Uri"/>.
@@ -21,9 +18,6 @@ namespace MGR.CommandLineParser.Converters
         /// <param name="value">The original value provided by the user.</param>
         /// <param name="concreteTargetType">Not used.</param>
         /// <returns>The <see cref="Uri"/> converted from the value.</returns>
-        public object Convert(string value, Type concreteTargetType)
-        {
-            return new Uri(value, UriKind.RelativeOrAbsolute);
-        }
+        public object Convert(string value, Type concreteTargetType) => new Uri(value, UriKind.RelativeOrAbsolute);
     }
 }

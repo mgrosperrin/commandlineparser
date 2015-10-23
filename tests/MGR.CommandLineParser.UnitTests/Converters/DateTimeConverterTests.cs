@@ -11,10 +11,10 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new DateTimeConverter();
-            Type expectedType = typeof (DateTime);
+            var expectedType = typeof (DateTime);
 
             // Act
-            Type actualType = converter.TargetType;
+            var actualType = converter.TargetType;
 
             // Assert
             Assert.Equal(expectedType, actualType);
@@ -25,13 +25,13 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new DateTimeConverter();
-            string value = "01/10/2012";
+            var value = "01/10/2012";
             var expectedValue = new DateTime(2012, 10, 01);
 
             // Act
             using (new LangageSwitcher("fr-fr"))
             {
-                object actualValue = converter.Convert(value, converter.TargetType);
+                var actualValue = converter.Convert(value, converter.TargetType);
 
                 // Assert
                 Assert.NotNull(actualValue);
@@ -45,13 +45,13 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new DateTimeConverter();
-            string value = "2012/10/01";
+            var value = "2012/10/01";
             var expectedValue = new DateTime(2012, 10, 01);
 
             // Act
             using (new LangageSwitcher("en-us"))
             {
-                object actualValue = converter.Convert(value, converter.TargetType);
+                var actualValue = converter.Convert(value, converter.TargetType);
 
                 // Assert
                 Assert.NotNull(actualValue);
@@ -65,9 +65,9 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new DateTimeConverter();
-            string value = "Hello";
-            string expectedExceptionMessage = "Unable to parse 'Hello' to DateTime.";
-            string expectedInnerExceptionMessage =
+            var value = "Hello";
+            var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(DateTime));
+            var expectedInnerExceptionMessage =
                 "The string was not recognized as a valid DateTime. There is an unknown word starting at index 0.";
 
             // Act

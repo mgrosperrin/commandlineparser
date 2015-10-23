@@ -12,11 +12,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void ListIntTest()
             {
                 // Arrange
-                Type testedType = typeof (List<int>);
-                Type expected = typeof (int);
+                var testedType = typeof (List<int>);
+                var expected = typeof (int);
 
                 // Act
-                Type actual = testedType.GetUnderlyingCollectionType();
+                var actual = testedType.GetUnderlyingCollectionType();
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -26,11 +26,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void ICollectionIntTest()
             {
                 // Arrange
-                Type testedType = typeof (ICollection<int>);
-                Type expected = typeof (int);
+                var testedType = typeof (ICollection<int>);
+                var expected = typeof (int);
 
                 // Act
-                Type actual = testedType.GetUnderlyingCollectionType();
+                var actual = testedType.GetUnderlyingCollectionType();
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -40,11 +40,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void TupleInt()
             {
                 // Arrange
-                Type testedType = typeof (Tuple<int>);
+                var testedType = typeof (Tuple<int>);
                 Type expected = null;
 
                 // Act
-                Type actual = testedType.GetUnderlyingCollectionType();
+                var actual = testedType.GetUnderlyingCollectionType();
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -54,11 +54,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void DictionaryStringInt()
             {
                 // Arrange
-                Type testedType = typeof (Dictionary<string, int>);
-                Type expected = typeof (KeyValuePair<string, int>);
+                var testedType = typeof (Dictionary<string, int>);
+                var expected = typeof (KeyValuePair<string, int>);
 
                 // Act
-                Type actual = testedType.GetUnderlyingCollectionType();
+                var actual = testedType.GetUnderlyingCollectionType();
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -69,7 +69,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 Type testedType = null;
-                string expectedExceptionMessage = @"type";
+                var expectedExceptionMessage = SourceParameterName;
 
                 // Act
                 var actualException =

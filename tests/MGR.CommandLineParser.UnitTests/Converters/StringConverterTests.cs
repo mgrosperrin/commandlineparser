@@ -11,10 +11,10 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new StringConverter();
-            Type expectedType = typeof (string);
+            var expectedType = typeof (string);
 
             // Act
-            Type actualType = converter.TargetType;
+            var actualType = converter.TargetType;
 
             // Assert
             Assert.Equal(expectedType, actualType);
@@ -25,10 +25,10 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new StringConverter();
-            string expectedValue = "value";
+            var expectedValue = "value";
 
             // Act
-            object actualValue = converter.Convert(expectedValue, converter.TargetType);
+            var actualValue = converter.Convert(expectedValue, converter.TargetType);
 
             // Assert
             Assert.NotNull(actualValue);

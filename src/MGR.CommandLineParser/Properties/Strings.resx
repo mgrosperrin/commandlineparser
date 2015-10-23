@@ -145,9 +145,12 @@
     <value>Available commands:</value>
   </data>
   <data name="HelpCommand_GlobalUsageFormat" xml:space="preserve">
-    <value>Usage: {0} [args] [options]</value>
+    <value>Usage: {0} [args] [parserOptions]</value>
   </data>
   <data name="HelpCommand_OptionsListTitle" xml:space="preserve">
     <value>Options:</value>
+  </data>
+  <data name="Parser_CommandInvalidArgumentsFormat" xml:space="preserve">
+    <value>Command {0} : invalid arguments :</value>
   </data>
 </root>

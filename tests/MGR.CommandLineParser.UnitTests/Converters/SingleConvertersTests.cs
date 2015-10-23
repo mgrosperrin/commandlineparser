@@ -11,10 +11,10 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new SingleConverter();
-            Type expectedType = typeof (Single);
+            var expectedType = typeof (Single);
 
             // Act
-            Type actualType = converter.TargetType;
+            var actualType = converter.TargetType;
 
             // Assert
             Assert.Equal(expectedType, actualType);
@@ -25,13 +25,13 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         {
             // Arrange
             IConverter converter = new SingleConverter();
-            string value = "42,1";
+            var value = "42,1";
             var expectedValue = (Single) 42.1;
 
             // Act
             using (new LangageSwitcher("fr-fr"))
             {
-                object actualValue = converter.Convert(value, converter.TargetType);
+                var actualValue = converter.Convert(value, converter.TargetType);
 
                 // Assert
                 Assert.NotNull(actualValue);
@@ -41,14 +41,14 @@ namespace MGR.CommandLineParser.UnitTests.Converters
         }
 
         [Fact]
-        [Trait("Exception", "CommandLineParserException")]
+        [Trait(nameof(Exception), nameof(CommandLineParserException))]
         public void BadValueConversion()
         {
             // Arrange
             IConverter converter = new SingleConverter();
-            string value = "Hello";
-            string expectedExceptionMessage = "Unable to parse 'Hello' to Single.";
-            string expectedInnerExceptionMessage = "Input string was not in a correct format.";
+            var value = "Hello";
+            var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(float));
+            var expectedInnerExceptionMessage = "Input string was not in a correct format.";
 
             // Act
             using (new LangageSwitcher("en-us"))

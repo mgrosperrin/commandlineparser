@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime;
 
 namespace MGR.CommandLineParser.Command
@@ -10,22 +9,16 @@ namespace MGR.CommandLineParser.Command
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class CommandDisplayAttribute : Attribute
     {
-        private readonly LocalizableString _description = new LocalizableString("Description");
-        private readonly LocalizableString _usage = new LocalizableString("Prompt");
+        private readonly LocalizableString _description = new LocalizableString(nameof(Description));
+        private readonly LocalizableString _usage = new LocalizableString(nameof(Usage));
         private Type _resourceType;
 
 
-        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        internal string GetLocalizedDescription()
-        {
-            return _description.GetLocalizableValue();
-        }
+        //[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        internal string GetLocalizedDescription() => _description.GetLocalizableValue();
 
-        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        internal string GetLocalizedUsage()
-        {
-            return _usage.GetLocalizableValue();
-        }
+        //[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        internal string GetLocalizedUsage() => _usage.GetLocalizableValue();
 
         /// <summary>
         /// Gets or sets the description of the command.

@@ -7,6 +7,10 @@ namespace MGR.CommandLineParser
 {
     internal sealed class DefaultConsole : IConsole
     {
+        internal static readonly IConsole Instance = new DefaultConsole();
+
+        private DefaultConsole() { }
+
         private static int CursorLeft
         {
             get
@@ -74,7 +78,7 @@ namespace MGR.CommandLineParser
 
         public void WriteWarning(string value, params object[] args)
         {
-            string message = String.Format(CultureInfo.CurrentCulture, Strings.Console_WarningFormat, value);
+            var message = string.Format(CultureInfo.CurrentUICulture, Strings.Console_WarningFormat, value);
             WriteColor(Console.Out, ConsoleColor.Yellow, message, args);
         }
 
@@ -98,7 +102,7 @@ namespace MGR.CommandLineParser
             PrintJustified(startIndex, value, WindowWidth);
         }
 
-        public static void PrintJustified(int startIndex, string value, int maxWidth)
+        internal static void PrintJustified(int startIndex, string value, int maxWidth)
         {
             if (maxWidth > startIndex)
             {
@@ -110,10 +114,10 @@ namespace MGR.CommandLineParser
                 // Trim whitespace at the beginning
                 value = value.TrimStart();
                 // Calculate the number of chars to print based on the width of the System.Console
-                int length = Math.Min(value.Length, maxWidth);
+                var length = Math.Min(value.Length, maxWidth);
                 // Text we can print without overflowing the System.Console.
-                string content = value.Substring(0, length);
-                int leftPadding = startIndex + length - CursorLeft;
+                var content = value.Substring(0, length);
+                var leftPadding = startIndex + length - CursorLeft;
                 // Print it with the correct padding
                 Console.WriteLine(content.PadLeft(leftPadding));
                 // Get the next substring to be printed

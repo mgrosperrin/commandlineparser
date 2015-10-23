@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
+using JetBrains.Annotations;
 using MGR.CommandLineParser;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Converters;
@@ -19,244 +19,175 @@ namespace System.Reflection
     {
         internal static bool IsValidOptionProperty(this PropertyInfo source)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException("source");
-            }
+            Guard.NotNull(source, nameof(source));
+
             return source.CanWrite || source.PropertyType.IsMultiValuedType();
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ICollection")]
-        internal static OptionMetadataTemplate ExtractMetadata(this PropertyInfo propertySource, CommandMetadataTemplate commandMetadataTemplate, IParserOptions options)
+        internal static IConverter ExtractConverter(this PropertyInfo source, IEnumerable<IConverter> converters, string optionName, string commandName)
         {
-            if (propertySource == null)
-            {
-                throw new ArgumentNullException("propertySource");
-            }
-            if (commandMetadataTemplate == null)
-            {
-                throw new ArgumentNullException("commandMetadataTemplate");
-            }
-            if (options == null)
-            {
-                throw new ArgumentNullException("options");
-            }
-            if (propertySource.ShouldBeIgnored())
-            {
-                return null;
-            }
-            if (!propertySource.IsValidOptionProperty())
-            {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "The option '{0}' of the command '{1}' must be writable or implements ICollection<T>.",
-                                                                   propertySource.Name, commandMetadataTemplate.Name));
-            }
-            var metadata = new OptionMetadataTemplate(propertySource, commandMetadataTemplate);
+            Guard.NotNull(source, nameof(source));
+            Guard.NotNullOrEmpty(optionName, nameof(optionName));
+            Guard.NotNullOrEmpty(commandName, nameof(commandName));
 
-            metadata = propertySource.ExtractDisplayMetadata(metadata);
+            var converter = GetConverterFromAttribute(source, optionName, commandName)
+                                ?? GetKeyValueConverterFromAttribute(source, optionName, commandName)
+                                ?? FindConverter(source, converters, optionName, commandName);
+            if (converter == null)
+            {
+                throw new CommandLineParserException(Constants.ExceptionMessages.ParserNoConverterFound(optionName, commandName, source.PropertyType));
+            }
+            return converter;
+        }
+        private static IConverter FindConverter(PropertyInfo propertyInfo, IEnumerable<IConverter> converters, string optionName, string commandName)
+        {
+            if (propertyInfo.PropertyType.IsDictionaryType())
+            {
+                var keyConverter = FindKeyConverter(propertyInfo, converters, optionName, commandName);
+                var valueConverter = FindValueConverter(propertyInfo, converters, optionName, commandName);
 
-            metadata = propertySource.ExtractRequiredMetadata(metadata);
-
-            metadata = propertySource.ExtractConverterMetadata(options, metadata);
-
-            metadata = propertySource.ExtractDefaultValue(metadata);
-
-            return metadata;
+                return new KeyValueConverter(keyConverter, valueConverter);
+            }
+            var converter = GetConverterFromType(propertyInfo.PropertyType, converters);
+            return converter;
+        }
+        private static IConverter FindValueConverter(PropertyInfo propertyInfo, IEnumerable<IConverter> converters, string optionName, string commandName)
+        {
+            var valueType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(false);
+            var valueConverter = GetConverterFromType(valueType, converters);
+            if (valueConverter == null)
+            {
+                throw new CommandLineParserException(Constants.ExceptionMessages.ParserNoValueConverterFound(optionName, commandName, valueType));
+            }
+            return valueConverter;
+        }
+        private static IConverter FindKeyConverter(PropertyInfo propertyInfo, IEnumerable<IConverter> converters, string optionName, string commandName)
+        {
+            var keyType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(true);
+            var keyConverter = GetConverterFromType(keyType, converters);
+            if (keyConverter == null)
+            {
+                throw new CommandLineParserException(Constants.ExceptionMessages.ParserNoKeyConverterFound(optionName, commandName, keyType));
+            }
+            return keyConverter;
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TValue"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TKey"),
-         SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "KeyValueConverter"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "IDictionary")]
-        internal static OptionMetadataTemplate ExtractConverterMetadata(this PropertyInfo propertySource, IParserOptions options, OptionMetadataTemplate metadata)
+        private static IConverter GetConverterFromAttribute(PropertyInfo propertyInfo, string optionName, string commandName)
         {
-            if (propertySource == null)
-            {
-                throw new ArgumentNullException("propertySource");
-            }
-            if (options == null)
-            {
-                throw new ArgumentNullException("options");
-            }
-            if (metadata == null)
-            {
-                throw new ArgumentNullException("metadata");
-            }
-
-            var converterAttribute = propertySource.GetCustomAttributes(typeof(ConverterAttribute), true).FirstOrDefault() as ConverterAttribute;
+            var converterAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterAttribute), true).FirstOrDefault() as ConverterAttribute;
             if (converterAttribute != null)
             {
-                IConverter converter = converterAttribute.BuildConverter();
+                var converter = converterAttribute.BuildConverter();
 
-                if (!converter.CanConvertTo(propertySource.PropertyType))
+                if (!converter.CanConvertTo(propertyInfo.PropertyType))
                 {
-                    throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "The specified converter for the option '{0}' of the command '{1}' is not valid : property type : {2}, converter target type : {3}.",
-                                                                       metadata.Name, metadata.CommandMetadata.Name, propertySource.PropertyType.FullName, converter.TargetType.FullName));
+                    throw new CommandLineParserException(Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(optionName, commandName, propertyInfo.PropertyType, converter.TargetType));
                 }
-                metadata.Converter = converter;
+                return converter;
             }
-            else
-            {
-                var converterKeyValuePairAttribute = propertySource.GetCustomAttributes(typeof(ConverterKeyValueAttribute), true).FirstOrDefault() as ConverterKeyValueAttribute;
-                if (converterKeyValuePairAttribute != null)
-                {
-                    if (!propertySource.PropertyType.IsDictionaryType())
-                    {
-                        throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "The option '{0}' of the command '{1}' defined a Key/Value converter but its type is not System.Generic.IDictionary<TKey, TValue>.",
-                                                                           metadata.Name, metadata.CommandMetadata.Name));
-                    }
-                    Type keyType = propertySource.PropertyType.GetUnderlyingDictionaryType(true);
-                    IConverter keyConverter = converterKeyValuePairAttribute.BuildKeyConverter();
-                    if (!keyType.IsAssignableFrom(keyConverter.TargetType))
-                    {
-                        throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture,
-                                                                           "The specified KeyValueConverter for the option '{0}' of the command '{1}' is not valid : key property type : {2}, key converter target type : {3}.",
-                                                                           metadata.Name, metadata.CommandMetadata.Name, keyType.FullName, keyConverter.TargetType.FullName));
-                    }
-
-                    Type valueType = propertySource.PropertyType.GetUnderlyingDictionaryType(false);
-                    IConverter valueConverter = converterKeyValuePairAttribute.BuildValueConverter();
-                    if (!valueType.IsAssignableFrom(valueConverter.TargetType))
-                    {
-                        throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture,
-                                                                           "The specified KeyValueConverter for the option '{0}' of the command '{1}' is not valid : value property type : {2}, value converter target type : {3}.",
-                                                                           metadata.Name, metadata.CommandMetadata.Name, valueType.FullName, valueConverter.TargetType.FullName));
-                    }
-                    metadata.Converter = new KeyValueConverter(keyConverter, valueConverter);
-                }
-                else
-                {
-                    if (propertySource.PropertyType.IsDictionaryType())
-                    {
-                        Type keyType = propertySource.PropertyType.GetUnderlyingDictionaryType(true);
-                        IConverter keyConverter = (from kvp in options.Converters
-                                                   where kvp.CanConvertTo(keyType)
-                                                   select kvp).FirstOrDefault();
-                        if (keyConverter == null)
-                        {
-                            throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "No converter found for the key type ('{2}') of the option '{0}' of the command '{1}'.",
-                                                                               metadata.Name, metadata.CommandMetadata.Name, keyType.FullName));
-                        }
-
-                        Type valueType = propertySource.PropertyType.GetUnderlyingDictionaryType(false);
-                        IConverter valueConverter = (from kvp in options.Converters
-                                                     where kvp.CanConvertTo(valueType)
-                                                     select kvp).FirstOrDefault();
-                        if (valueConverter == null)
-                        {
-                            throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "No converter found for the value type ('{2}') of the option '{0}' of the command '{1}'.",
-                                                                               metadata.Name, metadata.CommandMetadata.Name, valueType.FullName));
-                        }
-                        metadata.Converter = new KeyValueConverter(keyConverter, valueConverter);
-                    }
-                    else
-                    {
-                        IConverter converter = (from kvp in options.Converters
-                                                where kvp.CanConvertTo(propertySource.PropertyType)
-                                                select kvp).FirstOrDefault();
-
-                        if (converter == null)
-                        {
-                            throw new CommandLineParserException(string.Format(CultureInfo.CurrentUICulture, "No converter found for the option '{0}' of the command '{1}' of type '{2}'.", metadata.Name, metadata.CommandMetadata.Name,
-                                                                               propertySource.PropertyType.FullName));
-                        }
-                        metadata.Converter = converter;
-                    }
-                }
-            }
-
-            return metadata;
+            return null;
         }
 
-        internal static OptionMetadataTemplate ExtractRequiredMetadata(this PropertyInfo propertySource, OptionMetadataTemplate metadata)
+        private static IConverter GetKeyValueConverterFromAttribute(PropertyInfo propertyInfo, string optionName, string commandName)
         {
-            if (propertySource == null)
+            var converterKeyValuePairAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterKeyValueAttribute), true).FirstOrDefault() as ConverterKeyValueAttribute;
+            if (converterKeyValuePairAttribute != null)
             {
-                throw new ArgumentNullException("propertySource");
+                if (!propertyInfo.PropertyType.IsDictionaryType())
+                {
+                    throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractConverterKeyValueConverterIsForIDictionaryProperty(optionName, commandName));
+                }
+                var keyConverter = GetKeyConverter(propertyInfo, optionName, commandName, converterKeyValuePairAttribute);
+                var valueConverter = GetValueConverter(propertyInfo, optionName, commandName, converterKeyValuePairAttribute);
+
+                return new KeyValueConverter(keyConverter, valueConverter);
             }
-            if (metadata == null)
-            {
-                throw new ArgumentNullException("metadata");
-            }
-            var requiredAttribute = propertySource.GetCustomAttributes(typeof(RequiredAttribute), true).FirstOrDefault() as RequiredAttribute;
-            if (requiredAttribute != null)
-            {
-                metadata.IsRequired = true;
-            }
-            return metadata;
+            return null;
         }
 
-        internal static OptionMetadataTemplate ExtractDisplayMetadata(this PropertyInfo propertySource, OptionMetadataTemplate metadata)
+        private static IConverter GetValueConverter(PropertyInfo propertyInfo, string optionName, string commandName, ConverterKeyValueAttribute converterKeyValuePairAttribute)
         {
-            if (propertySource == null)
+            var valueType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(false);
+            var valueConverter = converterKeyValuePairAttribute.BuildValueConverter();
+            if (!valueType.IsAssignableFrom(valueConverter.TargetType))
             {
-                throw new ArgumentNullException("propertySource");
+                throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractValueConverterIsNotValid(optionName, commandName, valueType, valueConverter.TargetType));
             }
-            if (metadata == null)
-            {
-                throw new ArgumentNullException("metadata");
-            }
-            var displayAttribute = propertySource.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
-            if (displayAttribute == null)
-            {
-                metadata.Name = propertySource.Name;
-                metadata.ShortName = propertySource.Name;
-            }
-            else
-            {
-                metadata.Name = displayAttribute.GetName() ?? propertySource.Name;
-                string shortName = displayAttribute.GetShortName();
-                if (!string.IsNullOrEmpty(shortName))
-                {
-                    metadata.ShortName = shortName;
-                }
-                metadata.Description = displayAttribute.GetDescription();
-            }
-            return metadata;
+            return valueConverter;
         }
 
-        internal static OptionMetadataTemplate ExtractDefaultValue(this PropertyInfo propertySource, OptionMetadataTemplate metadata)
+        private static IConverter GetKeyConverter(PropertyInfo propertyInfo, string optionName, string commandName, ConverterKeyValueAttribute converterKeyValuePairAttribute)
         {
-            if (propertySource == null)
+            var keyType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(true);
+            var keyConverter = converterKeyValuePairAttribute.BuildKeyConverter();
+            if (!keyType.IsAssignableFrom(keyConverter.TargetType))
             {
-                throw new ArgumentNullException("propertySource");
+                throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractKeyConverterIsNotValid(optionName, commandName, keyType, keyConverter.TargetType));
             }
-            if (metadata == null)
+
+            return keyConverter;
+        }
+
+        private static IConverter GetConverterFromType(Type type, IEnumerable<IConverter> converters)
+        {
+            var converter = (from kvp in converters
+                             where kvp.CanConvertTo(type)
+                             select kvp).FirstOrDefault();
+            return converter;
+        }
+
+        internal static bool ExtractIsRequiredMetadata(this PropertyInfo source)
+        {
+            Guard.NotNull(source, nameof(source));
+
+            var requiredAttribute = source.GetCustomAttributes(typeof(RequiredAttribute), true).FirstOrDefault() as RequiredAttribute;
+            return requiredAttribute != null;
+        }
+
+        [NotNull]
+        internal static OptionDisplayInfo ExtractOptionDisplayInfoMetadata(this PropertyInfo source)
+        {
+            Guard.NotNull(source, nameof(source));
+            var optionDisplyInfo = new OptionDisplayInfo
             {
-                throw new ArgumentNullException("metadata");
-            }
-            if (!propertySource.PropertyType.IsMultiValuedType())
+                Name = source.Name,
+                ShortName = source.Name
+            };
+            var displayAttribute = source.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
+            if (displayAttribute != null)
             {
-                var defaultValueAttribute = propertySource.GetCustomAttributes(typeof(DefaultValueAttribute), true).OfType<DefaultValueAttribute>().FirstOrDefault();
-                if (defaultValueAttribute != null)
-                {
-                    object defaultValue = defaultValueAttribute.Value;
-                    if (defaultValue != null)
-                    {
-                        if (metadata.OptionType == defaultValue.GetType())
-                        {
-                            metadata.DefaultValue = defaultValue;
-                        }
-                        else
-                        {
-                            object conververtedDefaultValue = metadata.Converter.Convert(defaultValue.ToString(), metadata.OptionType);
-                            metadata.DefaultValue = conververtedDefaultValue;
-                        }
-                    }
-                }
+                optionDisplyInfo.Name = displayAttribute.GetName() ?? source.Name;
+                optionDisplyInfo.ShortName = displayAttribute.GetShortName();
+                optionDisplyInfo.Description = displayAttribute.GetDescription();
             }
-            return metadata;
+            return optionDisplyInfo;
+        }
+
+        internal static object ExtractDefaultValue([NotNull] this PropertyInfo source, [NotNull] Func<object, object> valueConverter)
+        {
+            Guard.NotNull(source, nameof(source));
+            Guard.NotNull(valueConverter, nameof(valueConverter));
+
+            if (!source.PropertyType.IsMultiValuedType())
+            {
+                var defaultValueAttribute = source.GetCustomAttributes(typeof(DefaultValueAttribute), true).OfType<DefaultValueAttribute>().FirstOrDefault();
+                var originalDefaultValue = defaultValueAttribute?.Value;
+                var defaultValue = valueConverter(originalDefaultValue);
+                return defaultValue;
+            }
+            return null;
         }
 
         /// <summary>
         /// Indicates if the given <see cref="PropertyInfo"/> should be ignored as option by the parse.
         /// </summary>
-        /// <param name="propertySource">The <see cref="PropertyInfo"/>.</param>
+        /// <param name="source">The <see cref="PropertyInfo"/>.</param>
         /// <returns>true if the <see cref="PropertyInfo"/> should be ignored, false otherwise.</returns>
-        internal static bool ShouldBeIgnored(this PropertyInfo propertySource)
+        internal static bool ShouldBeIgnored(this PropertyInfo source)
         {
-            if (propertySource == null)
-            {
-                throw new ArgumentNullException("propertySource");
-            }
-            return propertySource.GetCustomAttributes(typeof(IgnoreOptionPropertyAttribute), true).Any();
+            Guard.NotNull(source, nameof(source));
+
+            return source.GetCustomAttributes(typeof(IgnoreOptionPropertyAttribute), true).Any();
         }
     }
 }

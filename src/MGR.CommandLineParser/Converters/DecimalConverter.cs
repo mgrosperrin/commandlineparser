@@ -11,29 +11,27 @@ namespace MGR.CommandLineParser.Converters
         /// <summary>
         ///   The target type of the converter ( <see cref="decimal" /> )..
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof (Decimal); }
-        }
+        public Type TargetType => typeof (decimal);
 
         /// <summary>
-        ///   Convert the <paramref name="value" /> to an instance of <see cref="Decimal" /> .
+        ///   Convert the <paramref name="value" /> to an instance of <see cref="decimal" /> .
         /// </summary>
         /// <param name="value"> The original value provided by the user. </param>
         /// <param name="concreteTargetType"> Not used. </param>
-        /// <returns> The <see cref="Decimal" /> converted from the value. </returns>
+        /// <returns> The <see cref="decimal" /> converted from the value. </returns>
         /// <exception cref="CommandLineParserException">Thrown if the
         ///   <paramref name="value" />
         ///   is not valid.</exception>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Decimal.Parse(System.String,System.IFormatProvider)")]
         public object Convert(string value, Type concreteTargetType)
         {
             try
             {
-                return Decimal.Parse(value, CultureInfo.CurrentUICulture);
+                return decimal.Parse(value, CultureInfo.CurrentUICulture);
             }
             catch (FormatException exception)
             {
-                throw new CommandLineParserException(string.Format(CultureInfo.CurrentCulture, CommonStrings.ExcConverterUnableConvertFormat, value, "Decimal"),
+                throw new CommandLineParserException(Constants.ExceptionMessages.FormatConverterUnableConvert(value, TargetType),
                                                      exception);
             }
         }
