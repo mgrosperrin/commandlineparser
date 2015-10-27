@@ -20,7 +20,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\..\MGR.CommandLineParser.ruleset</CodeAnalysisRuleSet>
-	<TargetFrameworkMonikerAssemblyAttributesPath>..\..\build\.NETFramework,Version=v4.0.AssemblyAttributes.cs</TargetFrameworkMonikerAssemblyAttributesPath>
+    <TargetFrameworkMonikerAssemblyAttributesPath>..\..\build\.NETFramework,Version=v4.0.AssemblyAttributes.cs</TargetFrameworkMonikerAssemblyAttributesPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <Optimize>false</Optimize>
@@ -120,7 +120,7 @@
     </Compile>
     <Compile Include="RecursiveAssemblyProvider.cs" />
     <Compile Include="DependencyResolver.cs" />
-    <Compile Include="ServiceResolverCommandActivator.cs" />
+    <Compile Include="DependencyResolverCommandActivator.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Strings.fr-fr.resx" />

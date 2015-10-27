@@ -4,17 +4,23 @@ using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser
 {
-    internal class ServiceResolverCommandActivator : ICommandActivator
+    /// <summary>
+    /// Implementation of <see cref="ICommandActivator"/> based on <see cref="DependencyResolver"/>.
+    /// </summary>
+    public class DependencyResolverCommandActivator : ICommandActivator
     {
         private readonly MethodInfo _genericResolveServiceMethodInfo;
 
-        public ServiceResolverCommandActivator()
+        /// <summary>
+        /// Creates a new instance of <see cref="DependencyResolverCommandActivator"/>.
+        /// </summary>
+        public DependencyResolverCommandActivator()
         {
             var serviceResolverType = typeof (IDependencyResolverScope);
             _genericResolveServiceMethodInfo = serviceResolverType.GetMethod(nameof(IDependencyResolverScope.ResolveDependency));
         }
 
-
+        /// <inheritdoc />
         public ICommand ActivateCommand(Type commandType)
         {
             var resolveServiceMethod = _genericResolveServiceMethodInfo.MakeGenericMethod(commandType);
