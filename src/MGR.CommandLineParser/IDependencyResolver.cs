@@ -3,7 +3,7 @@
     /// <summary>
     ///     Represents a dependency injection container.
     /// </summary>
-    public interface IDependencyResolver : IDependencyResolverScope
+    public interface IDependencyResolver
     {
         /// <summary>
         ///     Creates a new resolution scope.

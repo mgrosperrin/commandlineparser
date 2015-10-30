@@ -90,6 +90,7 @@
     <Compile Include="DefaultConsole.cs" />
     <Compile Include="DefaultDependencyResolver.cs" />
     <Compile Include="AssemblyBrowsingCommandTypeProvider.cs" />
+    <Compile Include="DefaultDependencyResolverScope.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\ConverterAttributeExtensions.cs" />
     <Compile Include="Extensions\ConverterExtensions.cs" />
