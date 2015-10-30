@@ -10,7 +10,7 @@ namespace MGR.CommandLineParser
     ///     Default implementation of the <see cref="IDependencyResolver" />.
     /// </summary>
     /// <remarks>This implementation uses a simple map to find the service to resolve.</remarks>
-    public class DefaultDependencyResolver : /*DefaultDependencyResolverScope,*/ IDependencyResolver
+    public class DefaultDependencyResolver : IDependencyResolver
     {
         internal static readonly DefaultDependencyResolver Current = new DefaultDependencyResolver();
 
