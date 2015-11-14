@@ -33,7 +33,7 @@ namespace MGR.CommandLineParser
 
             internal static readonly Func<string, string, string> ParserExtractConverterKeyValueConverterIsForIDictionaryProperty =
                 (propertyName, commandName) =>
-                    string.Format(CultureInfo.CurrentUICulture, "The option '{0}' of the command '{1}' defined a Key/Value converter but its type is not System.Generic.IDictionary<TKey, TValue>.",
+                    string.Format(CultureInfo.CurrentUICulture, "The option '{0}' of the command '{1}' defines a Key/Value converter but its type is not System.Generic.IDictionary<TKey, TValue>.",
                         propertyName, commandName);
 
             internal static readonly Func<string, string, Type, Type, string> ParserExtractKeyConverterIsNotValid =
