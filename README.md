@@ -11,7 +11,7 @@ _**Build status**_
 [![Number of NuGet downloads][nugetDownload-svg]][nugetDownload]
 [![Number of open issues][githubIssues-svg]][githubIssues]
 
-MGR.CommandLineParser is a multi-command line parser. It uses [System.ComponentModel.DataAnnotations](http://msdn.microsoft.com/fr-fr/library/system.componentmodel.dataannotations.aspx) to declare and validate the commands.
+MGR.CommandLineParser is a multi-command line parser. It uses [System.ComponentModel.DataAnnotations](http://msdn.microsoft.com/fr-fr/library/system.componentmodel.dataannotations.aspx) to declare and validate the commands. 
 
 #How to use it ?
 I. **Install MGR.CommandLineParser**
