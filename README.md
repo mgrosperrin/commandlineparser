@@ -1,11 +1,14 @@
 MGR.Commandlineparser
 =================
 
+[![Join the chat at https://gitter.im/mgrosperrin/commandlineparser](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mgrosperrin/commandlineparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 _**Build status**_
 
 | dev | [![Build status][appveyor-dev-svg]][appveyor-dev] |
 |-----|--------|
 | **master** | [![Build status][appveyor-master-svg]][appveyor-master] |
+
 
 [![NuGet package version][nuget-svg]][nuget]
 [![Number of NuGet downloads][nugetDownload-svg]][nugetDownload]
