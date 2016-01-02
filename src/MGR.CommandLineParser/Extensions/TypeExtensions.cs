@@ -108,5 +108,12 @@ namespace System
             }
             return fullCommandName;
         }
+
+        internal static TAttribute GetAttribute<TAttribute>(this Type source)
+            where TAttribute : Attribute
+        {
+            var attribute = source.GetCustomAttributes(typeof(TAttribute), true).FirstOrDefault() as TAttribute;
+            return attribute;
+        }
     }
 }

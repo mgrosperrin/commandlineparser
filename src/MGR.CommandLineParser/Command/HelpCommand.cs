@@ -96,16 +96,12 @@ namespace MGR.CommandLineParser.Command
                 }
             }
 
-            if (commandType.Type.IsType<ISampleCommand>())
+            var sampleCommandAttribute = commandType.Type.GetAttribute<SampleCommandAttribute>();
+            if (sampleCommandAttribute != null)
             {
-                var sampleCommand =
-                    commandType.CreateCommand(CurrentDependencyResolverScope, ParserOptions) as ISampleCommand;
-                if (sampleCommand != null)
+                foreach (var usage in sampleCommandAttribute.Samples)
                 {
-                    foreach (var usage in sampleCommand.GetSamples())
-                    {
-                        Console.WriteLine(usage);
-                    }
+                    Console.WriteLine(usage);
                 }
             }
         }

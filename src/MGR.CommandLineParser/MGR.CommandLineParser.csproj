@@ -20,6 +20,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\..\MGR.CommandLineParser.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
     <TargetFrameworkMonikerAssemblyAttributesPath>..\..\build\.NETFramework,Version=v4.0.AssemblyAttributes.cs</TargetFrameworkMonikerAssemblyAttributesPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -65,8 +66,8 @@
     <Compile Include="Command\HelpCommand.cs" />
     <Compile Include="Command\ICommand.cs" />
     <Compile Include="Command\IgnoreOptionPropertyAttribute.cs" />
-    <Compile Include="Command\ISampleCommand.cs" />
     <Compile Include="Command\LocalizableString.cs" />
+    <Compile Include="Command\SampleCommandAttribute.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\ByteConverter.cs" />
