@@ -13,6 +13,7 @@ namespace MGR.CommandLineParser.Converters
             new DecimalConverter(),
             new DoubleConverter(),
             new EnumConverter(),
+            new FileSystemInfoConverter(),
             new GuidConverter(),
             new Int16Converter(),
             new Int32Converter(),
