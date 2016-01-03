@@ -7,7 +7,7 @@ using MGR.CommandLineParser.Converters;
 namespace MGR.CommandLineParser
 {
     /// <summary>
-    ///     Default implementation of the <see cref="IDependencyResolverScope" />.
+    ///     Default implementation of the <see cref="IDependencyResolver" />.
     /// </summary>
     /// <remarks>This implementation uses a simple map to find the service to resolve.</remarks>
     public class DefaultDependencyResolver : IDependencyResolver
@@ -15,72 +15,27 @@ namespace MGR.CommandLineParser
         internal static readonly DefaultDependencyResolver Current = new DefaultDependencyResolver();
 
         private readonly List<IConverter> _converters = Converters.Converters.GetAll();
-
         private ICommandTypeProvider _commandTypeProvider;
 
-        private readonly Dictionary<Type, Func<IDependencyResolverScope, IEnumerable<object>>> _multiplyRegistredDependencies =
-            new Dictionary<Type, Func<IDependencyResolverScope, IEnumerable<object>>>();
+        private readonly Dictionary<Type, Func<Func<IDependencyResolverScope, IEnumerable<object>>>> _multiplyRegistredDependencies =
+            new Dictionary<Type, Func<Func<IDependencyResolverScope, IEnumerable<object>>>>();
 
-        private readonly Dictionary<Type, Func<IDependencyResolverScope, object>> _singlyRegistredDependencies = new Dictionary<Type, Func<IDependencyResolverScope, object>>();
+        private readonly Dictionary<Type, Func<Func<IDependencyResolverScope, object>>> _singlyRegistredDependencies = new Dictionary<Type, Func<Func<IDependencyResolverScope, object>>>();
 
         private DefaultDependencyResolver()
         {
-            SaveDependencies(_ => _converters);
-            SaveDependency(_ => DefaultConsole.Instance);
-            SaveDependency(_ => BasicCommandActivator.Instance);
-            SaveDependency(_ => CurrentDirectoryAssemblyProvider.Instance);
-            SaveDependency(_ => _commandTypeProvider ?? (_commandTypeProvider = new AssemblyBrowsingCommandTypeProvider(_.ResolveDependency<IAssemblyProvider>(), _.ResolveDependencies<IConverter>())));
+            SaveDependencies<IConverter>(() => _ => _converters);
+            SaveDependency<IConsole>(() => _ => DefaultConsole.Instance);
+            SaveDependency<ICommandActivator>(() => _ => BasicCommandActivator.Instance);
+            SaveDependency<IAssemblyProvider>(() => _ => CurrentDirectoryAssemblyProvider.Instance);
+            SaveDependency<ICommandTypeProvider>(() => _ => _commandTypeProvider ?? (_commandTypeProvider = new AssemblyBrowsingCommandTypeProvider(_.ResolveDependency<IAssemblyProvider>(), _.ResolveDependencies<IConverter>())));
         }
 
         /// <inheritdoc />
-        public T ResolveDependency<T>() where T : class
-        {
-            if (!_singlyRegistredDependencies.ContainsKey(typeof(T)))
-            {
-                return null;
-            }
-            var serviceFactory = _singlyRegistredDependencies[typeof(T)];
-            if (serviceFactory == null)
-            {
-                return null;
-            }
-            var serviceObject = serviceFactory(this);
-            var service = serviceObject as T;
-            return service;
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<T> ResolveDependencies<T>() where T : class
-        {
-            if (!_multiplyRegistredDependencies.ContainsKey(typeof(T)))
-            {
-                return Enumerable.Empty<T>();
-            }
-            var servicesFactory = _multiplyRegistredDependencies[typeof(T)];
-            if (servicesFactory == null)
-            {
-                return Enumerable.Empty<T>();
-            }
-            var servicesObject = servicesFactory(this);
-            var services = servicesObject.OfType<T>();
-            return services;
-        }
-
-        /// <inheritdoc />
-        public IDependencyResolverScope CreateScope() => this;
-
-        private void SaveDependency<T>([NotNull] Func<IDependencyResolverScope, T> serviceFactory) where T : class
-        {
-            var serviceType = typeof(T);
-            if (_singlyRegistredDependencies.ContainsKey(serviceType))
-            {
-                _singlyRegistredDependencies[serviceType] = serviceFactory;
-            }
-            else
-            {
-                _singlyRegistredDependencies.Add(serviceType, serviceFactory);
-            }
-        }
+        public IDependencyResolverScope CreateScope() => new DefaultDependencyResolverScope(
+                _multiplyRegistredDependencies.ToDictionary(kvp => kvp.Key, kvp => kvp.Value()),
+                _singlyRegistredDependencies.ToDictionary(kvp => kvp.Key, kvp => kvp.Value())
+                );
 
         /// <summary>
         ///     Register a service.
@@ -88,29 +43,11 @@ namespace MGR.CommandLineParser
         /// <typeparam name="T">The type of the contract of the service.</typeparam>
         /// <param name="serviceFactory">A factory to get the implementation of the service.</param>
         [PublicAPI]
-        public static void RegisterDependency<T>([NotNull] Func<IDependencyResolverScope, T> serviceFactory) where T : class
+        public static void RegisterDependency<T>([NotNull] Func<Func<IDependencyResolverScope, T>> serviceFactory) where T : class
         {
             Guard.NotNull(serviceFactory, nameof(serviceFactory));
 
             Current.SaveDependency(serviceFactory);
-        }
-
-        private void SaveDependencies<T>([NotNull] Func<IDependencyResolverScope, IEnumerable<T>> servicesFactory) where T : class
-        {
-            var serviceType = typeof(T);
-            if (_multiplyRegistredDependencies.ContainsKey(serviceType))
-            {
-                _multiplyRegistredDependencies[serviceType] = servicesFactory;
-            }
-            else
-            {
-                _multiplyRegistredDependencies.Add(serviceType, servicesFactory);
-            }
-            // This code is here to avoid the CC0052 issue with _commandTypeProvider (https://github.com/code-cracker/code-cracker/issues/544)
-            if (_commandTypeProvider == null)
-            {
-                _commandTypeProvider = null;
-            }
         }
 
         /// <summary>
@@ -119,7 +56,7 @@ namespace MGR.CommandLineParser
         /// <typeparam name="T">The type of the contract of the service.</typeparam>
         /// <param name="servicesFactory">A factory to get the implementations of the service.</param>
         [PublicAPI]
-        public static void RegisterDependencies<T>([NotNull] Func<IDependencyResolverScope, IEnumerable<T>> servicesFactory) where T : class
+        public static void RegisterDependencies<T>([NotNull] Func<Func<IDependencyResolverScope, IEnumerable<T>>> servicesFactory) where T : class
         {
             Current.SaveDependencies(servicesFactory);
         }
@@ -180,6 +117,36 @@ namespace MGR.CommandLineParser
             Guard.NotNull(converter, nameof(converter));
 
             Current.DeleteConverter(converter);
+        }
+
+        private void SaveDependency<T>([NotNull] Func<Func<IDependencyResolverScope, T>> serviceFactory) where T : class
+        {
+            var serviceType = typeof(T);
+            if (_singlyRegistredDependencies.ContainsKey(serviceType))
+            {
+                _singlyRegistredDependencies[serviceType] = serviceFactory;
+            }
+            else
+            {
+                _singlyRegistredDependencies.Add(serviceType, serviceFactory);
+            }
+        }
+        private void SaveDependencies<T>([NotNull] Func<Func<IDependencyResolverScope, IEnumerable<T>>> servicesFactory) where T : class
+        {
+            var serviceType = typeof(T);
+            if (_multiplyRegistredDependencies.ContainsKey(serviceType))
+            {
+                _multiplyRegistredDependencies[serviceType] = servicesFactory;
+            }
+            else
+            {
+                _multiplyRegistredDependencies.Add(serviceType, servicesFactory);
+            }
+            // This code is here to avoid the CC0052 issue with _commandTypeProvider (https://github.com/code-cracker/code-cracker/issues/544)
+            if (_commandTypeProvider == null)
+            {
+                _commandTypeProvider = null;
+            }
         }
     }
 }

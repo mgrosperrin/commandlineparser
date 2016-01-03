@@ -20,7 +20,8 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\..\MGR.CommandLineParser.ruleset</CodeAnalysisRuleSet>
-	<TargetFrameworkMonikerAssemblyAttributesPath>..\..\build\.NETFramework,Version=v4.0.AssemblyAttributes.cs</TargetFrameworkMonikerAssemblyAttributesPath>
+    <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
+    <TargetFrameworkMonikerAssemblyAttributesPath>..\..\build\.NETFramework,Version=v4.0.AssemblyAttributes.cs</TargetFrameworkMonikerAssemblyAttributesPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <Optimize>false</Optimize>
@@ -65,8 +66,8 @@
     <Compile Include="Command\HelpCommand.cs" />
     <Compile Include="Command\ICommand.cs" />
     <Compile Include="Command\IgnoreOptionPropertyAttribute.cs" />
-    <Compile Include="Command\ISampleCommand.cs" />
     <Compile Include="Command\LocalizableString.cs" />
+    <Compile Include="Command\SampleCommandAttribute.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\ByteConverter.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Converters\DecimalConverter.cs" />
     <Compile Include="Converters\DoubleConverter.cs" />
     <Compile Include="Converters\EnumConverter.cs" />
+    <Compile Include="Converters\FileSystemInfoConverter.cs" />
     <Compile Include="Converters\GuidConverter.cs" />
     <Compile Include="Converters\IConverter.cs" />
     <Compile Include="Converters\Int16Converter.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="DefaultConsole.cs" />
     <Compile Include="DefaultDependencyResolver.cs" />
     <Compile Include="AssemblyBrowsingCommandTypeProvider.cs" />
+    <Compile Include="DefaultDependencyResolverScope.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\ConverterAttributeExtensions.cs" />
     <Compile Include="Extensions\ConverterExtensions.cs" />
@@ -120,7 +123,7 @@
     </Compile>
     <Compile Include="RecursiveAssemblyProvider.cs" />
     <Compile Include="DependencyResolver.cs" />
-    <Compile Include="ServiceResolverCommandActivator.cs" />
+    <Compile Include="DependencyResolverCommandActivator.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Strings.fr-fr.resx" />

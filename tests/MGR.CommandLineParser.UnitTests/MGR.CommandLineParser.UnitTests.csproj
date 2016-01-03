@@ -85,6 +85,7 @@
     <Compile Include="Converters\DecimalConverterTests.cs" />
     <Compile Include="Converters\DoubleConverterTests.cs" />
     <Compile Include="Converters\EnumConverterTests.cs" />
+    <Compile Include="Converters\FileSystemInfoConverterTests.cs" />
     <Compile Include="Converters\GuidConverterTests.cs" />
     <Compile Include="Converters\Int16ConverterTests.cs" />
     <Compile Include="Converters\Int32ConverterTests.cs" />

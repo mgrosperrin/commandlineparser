@@ -14,6 +14,7 @@
    <requireLicenseAcceptance>false</requireLicenseAcceptance>
    <description>MGR.CommandLineParser is a multi-command line parser. It uses System.ComponentModel.DataAnnotations to declare the commands.</description>
    <releaseNotes>
+     0.6.0 : Rename ServiceResolverCommandActivator to DependencyResolverCommandActivator. Change registration mechanism.
      0.5.0 : Rewrite of the API. See https://github.com/mgrosperrin/commandlineparser/wiki for more info on the API.
    </releaseNotes>
    <copyright>Copyright © Matthias GROSPERRIN 2015</copyright>

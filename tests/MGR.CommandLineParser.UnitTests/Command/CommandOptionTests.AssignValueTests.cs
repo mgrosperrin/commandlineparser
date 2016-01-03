@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Converters;
+using Moq;
 using Xunit;
 
 namespace MGR.CommandLineParser.UnitTests.Command
@@ -17,8 +18,12 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Arrange
                 var testCommandType = new CommandType(typeof (TestCommand),
                     new List<IConverter> {new StringConverter(), new GuidConverter(), new Int32Converter()});
+                var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
+                dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
+                    .Returns(BasicCommandActivator.Instance);
                 var testCommand =
-                    testCommandType.CreateCommand(DependencyResolver.Current, new ParserOptions()) as TestCommand;
+                    testCommandType.CreateCommand(dependencyResolverScopeMock.Object, new ParserOptions()) as
+                        TestCommand;
                 var optionName = nameof(TestCommand.PropertyList);
                 var expected = 42;
                 var expectedLength = 1;
@@ -40,8 +45,12 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Arrange
                 var testCommandType = new CommandType(typeof (TestCommand),
                     new List<IConverter> {new StringConverter(), new GuidConverter(), new Int32Converter()});
+                var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
+                dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
+                    .Returns(BasicCommandActivator.Instance);
                 var testCommand =
-                    testCommandType.CreateCommand(DependencyResolver.Current, new ParserOptions()) as TestCommand;
+                    testCommandType.CreateCommand(dependencyResolverScopeMock.Object, new ParserOptions()) as
+                        TestCommand;
                 var optionName = nameof(TestCommand.PropertyDictionary);
                 var expectedKey = "keyTest";
                 var guid = "18591394-096C-476F-A8B7-71903E27DAB5";
@@ -67,8 +76,12 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 // Arrange
                 var testCommandType = new CommandType(typeof (TestCommand),
                     new List<IConverter> {new StringConverter(), new GuidConverter(), new Int32Converter()});
+                var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
+                dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
+                    .Returns(BasicCommandActivator.Instance);
                 var testCommand =
-                    testCommandType.CreateCommand(DependencyResolver.Current, new ParserOptions()) as TestCommand;
+                    testCommandType.CreateCommand(dependencyResolverScopeMock.Object, new ParserOptions()) as
+                        TestCommand;
                 var optionName = nameof(TestCommand.PropertySimple);
                 var expected = 42;
                 var option = "42";
@@ -92,11 +105,16 @@ namespace MGR.CommandLineParser.UnitTests.Command
                         new Int32Converter(),
                         new BooleanConverter()
                     });
+                var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
+                dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
+                    .Returns(BasicCommandActivator.Instance);
                 var testCommand =
-                    testCommandType.CreateCommand(DependencyResolver.Current, new ParserOptions()) as TestBadConverterCommand;
+                    testCommandType.CreateCommand(dependencyResolverScopeMock.Object, new ParserOptions()) as
+                        TestBadConverterCommand;
                 var optionName = nameof(TestBadConverterCommand.PropertySimpleWithBadConverter);
                 var expectedMessageException =
-                    Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(optionName,testCommandType.Metadata.Name, typeof (int), typeof (bool));
+                    Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(optionName,
+                        testCommandType.Metadata.Name, typeof (int), typeof (bool));
 
                 // Act
                 var actualException =
@@ -127,9 +145,9 @@ namespace MGR.CommandLineParser.UnitTests.Command
 
                 #endregion
             }
+
             private class TestBadConverterCommand : ICommand
             {
-
                 [Converter(typeof (BooleanConverter))]
                 public int PropertySimpleWithBadConverter { get; set; }
 

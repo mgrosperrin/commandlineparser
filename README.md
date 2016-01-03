@@ -3,7 +3,13 @@ MGR.Commandlineparser
 
 [![Join the chat at https://gitter.im/mgrosperrin/commandlineparser](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mgrosperrin/commandlineparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build status][appveyor-svg]][appveyor]
+_**Build status**_
+
+| dev | [![Build status][appveyor-dev-svg]][appveyor-dev] |
+|-----|--------|
+| **master** | [![Build status][appveyor-master-svg]][appveyor-master] |
+
+
 [![NuGet package version][nuget-svg]][nuget]
 [![Number of NuGet downloads][nugetDownload-svg]][nugetDownload]
 [![Number of open issues][githubIssues-svg]][githubIssues]
@@ -19,7 +25,7 @@ MGR.CommandLineParser is available through [NuGet][nuget]:
 
 II. **Declare your own commands**
 
-After adding MGR.CommandLineParser to your project, you have to define your own commands :
+After adding MGR.CommandLineParser to your project, you have to define your own commands:
 
 * by implementing the interface `MGR.CommandLineParser.Command.ICommand`;
 * by extending the abstract class `MGR.CommandLineParser.Command.CommandBase`.
@@ -105,8 +111,10 @@ Depending on the value of `args`, the result will be (when not providing the typ
 * `args` is `HelloWorld -n Matthias` : return code is `CommandResultCode.Ok` (0) and `Hello world Matthias !` is printed to the console.
 
 
-   [appveyor]: https://ci.appveyor.com/project/mgrosperrin/commandlineparser
-   [appveyor-svg]: https://ci.appveyor.com/api/projects/status/lfp2jw7xle8vmpo3?svg=true
+   [appveyor-dev]: https://ci.appveyor.com/project/mgrosperrin/commandlineparser
+   [appveyor-dev-svg]: https://ci.appveyor.com/api/projects/status/lfp2jw7xle8vmpo3/branch/dev?svg=true
+   [appveyor-master]: https://ci.appveyor.com/project/mgrosperrin/commandlineparser
+   [appveyor-master-svg]: https://ci.appveyor.com/api/projects/status/lfp2jw7xle8vmpo3/branch/master?svg=true
    [nuget]: http://www.nuget.org/packages/MGR.CommandLineParser/
    [nuget-svg]: http://img.shields.io/nuget/v/MGR.CommandLineParser.svg
    [nugetDownload]: http://www.nuget.org/stats/packages/MGR.CommandLineParser?groupby=Version

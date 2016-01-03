@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace MGR.CommandLineParser.Command
 {
@@ -11,8 +10,7 @@ namespace MGR.CommandLineParser.Command
         internal CommandMetadata(Type commandType)
         {
             Name = commandType.GetFullCommandName();
-            var displayAttribute = commandType.GetCustomAttributes(typeof (CommandDisplayAttribute), true).FirstOrDefault() as
-                    CommandDisplayAttribute;
+            var displayAttribute = commandType.GetAttribute<CommandDisplayAttribute>();
             if (displayAttribute != null)
             {
                 Description = displayAttribute.GetLocalizedDescription();
