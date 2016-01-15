@@ -13,8 +13,8 @@ namespace MGR.CommandLineParser.Command
             var displayAttribute = commandType.GetAttribute<CommandDisplayAttribute>();
             if (displayAttribute != null)
             {
-                Description = displayAttribute.GetLocalizedDescription();
-                Usage = displayAttribute.GetLocalizedUsage();
+                _description = displayAttribute.GetLocalizedDescription();
+				_usage = displayAttribute.GetLocalizedUsage();
             }
         }
 
@@ -26,11 +26,13 @@ namespace MGR.CommandLineParser.Command
         /// <summary>
         ///     Gets the description of the command (if defined).
         /// </summary>
-        public string Description { get; } = string.Empty;
+		public string Description { get { return _description; } } 
+		string _description = string.Empty;
 
         /// <summary>
         ///     Gets the usage of the command (if defined).
         /// </summary>
-        public string Usage { get; } = string.Empty;
+		public string Usage { get { return _usage; } }
+		string _usage = string.Empty;
     }
 }
