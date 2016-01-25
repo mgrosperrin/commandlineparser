@@ -63,6 +63,10 @@ namespace MGR.CommandLineParser
             var commandActivator = dependencyResolver.ResolveDependency<ICommandActivator>();
             var command = commandActivator.ActivateCommand(Type);
             var commandBase = command as CommandBase;
+            foreach (var commandOption in Options)
+            {
+                commandOption.AssignDefaultValue(command);
+            }
             commandBase?.Configure(parserOptions, dependencyResolver, this);
             return command;
         }
