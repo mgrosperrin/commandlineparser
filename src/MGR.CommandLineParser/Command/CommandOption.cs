@@ -86,6 +86,13 @@ namespace MGR.CommandLineParser.Command
             }
             return value;
         }
+        internal void AssignDefaultValue(ICommand command)
+        {
+            if (DefaultValue != null)
+            {
+                AssignValueInternal(DefaultValue, command);
+            }
+        }
         internal void AssignValue(string optionValue, ICommand command)
         {
             if (!OptionType.IsAssignableFrom(Converter.TargetType))

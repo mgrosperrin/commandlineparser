@@ -66,6 +66,7 @@
     <Compile Include="..\..\src\CommonFiles\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Command\CommandTypeTests.CreateCommand.cs" />
     <Compile Include="Command\CommandTypeTests.cs" />
     <Compile Include="Command\CommandTypeTests.Metadata.cs">
       <DependentUpon>CommandTypeTests.cs</DependentUpon>
