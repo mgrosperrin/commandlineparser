@@ -63,6 +63,7 @@
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Commands\DeleteCommand.cs" />
+    <Compile Include="Commands\ImportCommand.cs" />
     <Compile Include="Commands\InstallCommand.cs" />
     <Compile Include="Commands\IntTestCommand.cs" />
     <Compile Include="Commands\ListCommand.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Commands\UpdateCommand.cs" />
     <Compile Include="ParsingTests\ErrorParsingTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseDeleteCommandTests.cs" />
+    <Compile Include="ParsingTests\ParseCommandTests\ParseImportCommandTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseInstallCommandTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseIntTestCommandTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseListCommandTests.cs" />

@@ -18,7 +18,7 @@ namespace MGR.CommandLineParser.Command
         {
             Guard.NotNull(converterType, nameof(converterType));
 
-            if (!typeof (IConverter).IsAssignableFrom(converterType))
+            if (!converterType.IsType<IConverter>())
             {
                 throw new CommandLineParserException(Constants.ExceptionMessages.ConverterAttributeTypeMustBeIConverter);
             }

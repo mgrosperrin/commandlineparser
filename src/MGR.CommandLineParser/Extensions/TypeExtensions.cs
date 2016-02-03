@@ -93,8 +93,18 @@ namespace System
         internal static bool IsType<T>(this Type source)
         {
             Guard.NotNull(source, nameof(source));
+            return source.IsType(typeof (T));
+        }
+        internal static bool IsType(this Type source, Type baseType)
+        {
+            Guard.NotNull(source, nameof(source));
 
-            return source.IsClass && source.IsVisible && !source.IsAbstract && typeof (T).IsAssignableFrom(source);
+            if (source == baseType)
+            {
+                return true;
+            }
+
+            return source.IsClass && source.IsVisible && !source.IsAbstract && baseType.IsAssignableFrom(source);
         }
 
         internal static string GetFullCommandName(this Type commandType)
