@@ -1,21 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F192F36D-7EDD-4E1E-82A4-95CA11665D2B}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleApp</RootNamespace>
-    <AssemblyName>SimpleApp</AssemblyName>
+    <RootNamespace>MGR.CommandLineParser.Tests.Commands</RootNamespace>
+    <AssemblyName>MGR.CommandLineParser.Tests.Commands</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -44,23 +40,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\src\CommonFiles\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="DeleteCommand.cs" />
+    <Compile Include="InstallCommand.cs" />
+    <Compile Include="IntTestCommand.cs" />
+    <Compile Include="ListCommand.cs" />
+    <Compile Include="PackCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
+    <Compile Include="PublishCommand.cs" />
+    <Compile Include="PushCommand.cs" />
+    <Compile Include="SetApiKeyCommand.cs" />
+    <Compile Include="SourcesCommand.cs" />
+    <Compile Include="SpecCommand.cs" />
+    <Compile Include="UpdateCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\MGR.CommandLineParser\MGR.CommandLineParser.csproj">
-      <Project>{ef6019c2-2c4d-4874-bbbf-d76ca30f7e8d}</Project>
+      <Project>{EF6019C2-2C4D-4874-BBBF-D76CA30F7E8D}</Project>
       <Name>MGR.CommandLineParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\tests\MGR.CommandLineParser.Tests.Commands\MGR.CommandLineParser.Tests.Commands.csproj">
-      <Project>{a422bace-2758-4abd-9daa-adf289fcce65}</Project>
-      <Name>MGR.CommandLineParser.Tests.Commands</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
