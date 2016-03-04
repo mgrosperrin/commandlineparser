@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MGR.CommandLineParser.Command;
 
-// ReSharper disable CheckNamespace
 namespace MGR.CommandLineParser.Tests.Commands
-// ReSharper restore CheckNamespace
 {
     [CommandDisplay(Description = "SourcesCommandDescription", Usage = "SourcesCommandUsageSummary")]
     public class SourcesCommand : CommandBase
