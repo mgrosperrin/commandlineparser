@@ -28,11 +28,12 @@ var commandLineParserNuspecFile = rootDir + Directory("src") + Directory("MGR.Co
 var commandLineParserDllFile = outputBinariesDir + File("MGR.CommandLineParser.dll");
 var commandLineParserPdbFile = outputBinariesDir + File("MGR.CommandLineParser.pdb");
 var commandLineParserXmlFile = outputBinariesDir + File("MGR.CommandLineParser.xml");
-var commandLineParserNuGetFile = artifactsDir + File("MGR.CommandLineParser.nupkg");
+
 var branchName = "";
 var nugetFeed = "";
 var version = "0.0.0";
 var subVersion = "";
+var shaHash = "";
 var publishPackage = false;
 var isApiKeyDefined = HasEnvironmentVariable("NUGET_API_KEY");
 var mygetFeedDefined = !string.IsNullOrEmpty(mygetFeed);
@@ -80,6 +81,7 @@ Task("Prepare-Build")
 	});
 	version = gitVersion.MajorMinorPatch;
 	branchName = gitVersion.BranchName;
+	shaHash = gitVersion.Sha;
 	if (branchName == "dev")
 	{
 		nugetFeed = mygetFeed;
@@ -89,12 +91,12 @@ Task("Prepare-Build")
 	else if (branchName.StartsWith("release-"))
 	{
 		publishPackage = isApiKeyDefined;
+		subVersion = "-beta" + buildNumber;
 	}
 	else if (branchName == "master")
 	{
 		publishPackage = isApiKeyDefined;
 	}
-
 	CreateAssemblyInfo(versionAssemblyFile, new AssemblyInfoSettings {
 		Version = version,
 		FileVersion = version,
@@ -131,7 +133,8 @@ Task("Create-Package")
 	{
 		GitLink(rootDir, new GitLinkSettings {
 			PdbDirectoryPath = outputBinariesDir,
-			ToolPath = gitLinkFile
+			ToolPath = gitLinkFile,
+			ShaHash = shaHash
 		});
 		var nuGetPackSettings = new NuGetPackSettings{
 			ToolPath = nugetFile,
@@ -143,12 +146,12 @@ Task("Create-Package")
 			},
 			OutputDirectory = artifactsDir
 		};
-		var commandLineParserRessourceFiles = GetFiles(MakeAbsolute(outputBinariesDir).FullPath + "\\*\\MGR.CommandLineParser.resources.dll");
-		foreach(var ressourceFile in commandLineParserRessourceFiles)
+		var commandLineParserResourceFiles = GetFiles(MakeAbsolute(outputBinariesDir).FullPath + "\\*\\MGR.CommandLineParser.resources.dll");
+		foreach(var resourceFile in commandLineParserResourceFiles)
 		{
-			var ressourceFileFullPath = ressourceFile.FullPath;
-			var ressourceName = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(ressourceFileFullPath));
-			nuGetPackSettings.Files.Add(new NuSpecContent{ Source = ressourceFile.FullPath, Target = "lib/net40/" + ressourceName });
+			var resourceFileFullPath = resourceFile.FullPath;
+			var resourceName = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(resourceFileFullPath));
+			nuGetPackSettings.Files.Add(new NuSpecContent{ Source = resourceFile.FullPath, Target = "lib/net40/" + resourceName });
 		}
 		NuGetPack(commandLineParserNuspecFile, nuGetPackSettings);
 	}
@@ -160,11 +163,16 @@ Task("Publish-Package")
 {
 	if (publishPackage)
 	{
-		NuGetPush(commandLineParserNuGetFile, new NuGetPushSettings {
-			Source = nugetFeed,
-			ApiKey = EnvironmentVariable("NUGET_API_KEY"),
-			ToolPath = nugetFile
-		});
+		var nugetPackageFiles = GetFiles(artifactsDir.Path + "\\MGR.CommandLineParser.*.nupkg");
+		var commandLineParserNuGetFile = nugetPackageFiles.FirstOrDefault();
+		if(commandLineParserNuGetFile != null)
+		{
+			NuGetPush(commandLineParserNuGetFile, new NuGetPushSettings {
+				Source = nugetFeed,
+				ApiKey = EnvironmentVariable("NUGET_API_KEY"),
+				ToolPath = nugetFile
+			});
+		}
 	}
 });
 
