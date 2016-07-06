@@ -127,52 +127,48 @@ Task("Run-Unit-Tests")
 
 Task("Create-Package")
 	.IsDependentOn("Run-Unit-Tests")
+	//.WithCriteria(() => publishPackage)
 	.Does(() =>
 {
-	if (publishPackage)
+	GitLink(rootDir, new GitLinkSettings {
+		PdbDirectoryPath = outputBinariesDir,
+		ToolPath = gitLinkFile,
+		ShaHash = shaHash
+	});
+	var nuGetPackSettings = new NuGetPackSettings{
+		ToolPath = nugetFile,
+		Version = version + subVersion,
+		Files = new List<NuSpecContent> {
+			new NuSpecContent{ Source = commandLineParserDllFile, Target = "lib/net40" },
+			new NuSpecContent{ Source = commandLineParserPdbFile, Target = "lib/net40" },
+			new NuSpecContent{ Source = commandLineParserXmlFile, Target = "lib/net40" }
+		},
+		OutputDirectory = artifactsDir
+	};
+	var commandLineParserResourceFiles = GetFiles(MakeAbsolute(outputBinariesDir).FullPath + "\\*\\MGR.CommandLineParser.resources.dll");
+	foreach(var resourceFile in commandLineParserResourceFiles)
 	{
-		GitLink(rootDir, new GitLinkSettings {
-			PdbDirectoryPath = outputBinariesDir,
-			ToolPath = gitLinkFile,
-			ShaHash = shaHash
-		});
-		var nuGetPackSettings = new NuGetPackSettings{
-			ToolPath = nugetFile,
-			Version = version + subVersion,
-			Files = new List<NuSpecContent> {
-				new NuSpecContent{ Source = commandLineParserDllFile, Target = "lib/net40" },
-				new NuSpecContent{ Source = commandLineParserPdbFile, Target = "lib/net40" },
-				new NuSpecContent{ Source = commandLineParserXmlFile, Target = "lib/net40" }
-			},
-			OutputDirectory = artifactsDir
-		};
-		var commandLineParserResourceFiles = GetFiles(MakeAbsolute(outputBinariesDir).FullPath + "\\*\\MGR.CommandLineParser.resources.dll");
-		foreach(var resourceFile in commandLineParserResourceFiles)
-		{
-			var resourceFileFullPath = resourceFile.FullPath;
-			var resourceName = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(resourceFileFullPath));
-			nuGetPackSettings.Files.Add(new NuSpecContent{ Source = resourceFile.FullPath, Target = "lib/net40/" + resourceName });
-		}
-		NuGetPack(commandLineParserNuspecFile, nuGetPackSettings);
+		var resourceFileFullPath = resourceFile.FullPath;
+		var resourceName = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(resourceFileFullPath));
+		nuGetPackSettings.Files.Add(new NuSpecContent{ Source = resourceFile.FullPath, Target = "lib/net40/" + resourceName });
 	}
+	NuGetPack(commandLineParserNuspecFile, nuGetPackSettings);
 });
 
 Task("Publish-Package")
 	.IsDependentOn("Create-Package")
+	.WithCriteria(() => publishPackage)
 	.Does(() =>
 {
-	if (publishPackage)
+	var nugetPackageFiles = GetFiles(artifactsDir.Path + "\\MGR.CommandLineParser.*.nupkg");
+	var commandLineParserNuGetFile = nugetPackageFiles.FirstOrDefault();
+	if(commandLineParserNuGetFile != null)
 	{
-		var nugetPackageFiles = GetFiles(artifactsDir.Path + "\\MGR.CommandLineParser.*.nupkg");
-		var commandLineParserNuGetFile = nugetPackageFiles.FirstOrDefault();
-		if(commandLineParserNuGetFile != null)
-		{
-			NuGetPush(commandLineParserNuGetFile, new NuGetPushSettings {
-				Source = nugetFeed,
-				ApiKey = EnvironmentVariable("NUGET_API_KEY"),
-				ToolPath = nugetFile
-			});
-		}
+		NuGetPush(commandLineParserNuGetFile, new NuGetPushSettings {
+			Source = nugetFeed,
+			ApiKey = EnvironmentVariable("NUGET_API_KEY"),
+			ToolPath = nugetFile
+		});
 	}
 });
 
