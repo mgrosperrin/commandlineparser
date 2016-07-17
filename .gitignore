@@ -15,6 +15,7 @@ x64/
 x86/
 build/*
 !build/*.cs
+!build/*.cake
 bld/
 [Bb]in/
 [Oo]bj/
@@ -184,3 +185,4 @@ UpgradeLog*.htm
 FakesAssemblies/
 
 .vs/
+artifacts/
