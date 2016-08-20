@@ -67,14 +67,14 @@ namespace MGR.CommandLineParser
             var commandName = GetNextCommandLineItem(argsEnumerator);
             if (commandName == null)
             {
-                WriteGlobalHelp(currentDependencyResolver, _parserOptions);
+                currentDependencyResolver.WriteGlobalHelp(_parserOptions);
                 return new CommandResult<ICommand>(null, CommandResultCode.NoCommandName);
             }
             var commandTypeProvider = currentDependencyResolver.ResolveDependency<ICommandTypeProvider>();
             var commandType = commandTypeProvider.GetCommandType(commandName);
             if (commandType == null)
             {
-                WriteGlobalHelp(currentDependencyResolver, _parserOptions);
+                currentDependencyResolver.WriteGlobalHelp(_parserOptions);
                 return new CommandResult<ICommand>(null, CommandResultCode.NoCommandFound);
             }
             return ParseImpl(argsEnumerator, currentDependencyResolver, commandType);
@@ -95,7 +95,7 @@ namespace MGR.CommandLineParser
             var validation = Validate(command, dependencyResolver, commandType.Metadata.Name);
             if (!validation.Item1)
             {
-                var helpCommand = GetHelpCommand(dependencyResolver, _parserOptions);
+                var helpCommand = dependencyResolver.GetHelpCommand(_parserOptions);
                 helpCommand.WriteHelp(commandType);
                 return new CommandResult<ICommand>(command, CommandResultCode.CommandParameterNotValid, validation.Item2);
             }
@@ -127,6 +127,7 @@ namespace MGR.CommandLineParser
         private ICommand ExtractCommandLineOptions(CommandType commandType, IDependencyResolverScope dependencyResolver, IEnumerator<string> argsEnumerator)
         {
             var command = commandType.CreateCommand(dependencyResolver, _parserOptions);
+            var alwaysPutInArgumentList = false;
             while (true)
             {
                 var argument = GetNextCommandLineItem(argsEnumerator);
@@ -134,8 +135,13 @@ namespace MGR.CommandLineParser
                 {
                     break;
                 }
+                if (argument.Equals(Constants.DoubleDash))
+                {
+                    alwaysPutInArgumentList = true;
+                    continue;
+                }
 
-                if (!(argument.StartsWith(StringComparison.OrdinalIgnoreCase, Constants.OptionStarter)))
+                if (alwaysPutInArgumentList || !argument.StartsWith(StringComparison.OrdinalIgnoreCase, Constants.OptionStarter))
                 {
                     command.Arguments.Add(argument);
                     continue;
@@ -173,21 +179,6 @@ namespace MGR.CommandLineParser
                 option.AssignValue(value, command);
             }
             return command;
-        }
-
-        private static void WriteGlobalHelp(IDependencyResolverScope dependencyResolver, IParserOptions parserOptions)
-        {
-            var helpCommand = GetHelpCommand(dependencyResolver, parserOptions);
-            helpCommand.Execute();
-        }
-
-        private static HelpCommand GetHelpCommand(IDependencyResolverScope dependencyResolver, IParserOptions parserOptions)
-        {
-
-            var commandTypeProvider = dependencyResolver.ResolveDependency<ICommandTypeProvider>();
-            var helpCommandType = commandTypeProvider.GetCommandType(HelpCommand.Name);
-            var helpCommand = helpCommandType.CreateCommand(dependencyResolver, parserOptions) as HelpCommand;
-            return helpCommand;
         }
     }
 }
