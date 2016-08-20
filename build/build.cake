@@ -36,6 +36,7 @@ var subVersion = "";
 var shaHash = "";
 var publishPackage = false;
 var isApiKeyDefined = HasEnvironmentVariable("NUGET_API_KEY");
+var isBuildingPR = !HasEnvironmentVariable("APPVEYOR_PULL_REQUEST_NUMBER");
 var mygetFeedDefined = !string.IsNullOrEmpty(mygetFeed);
 
 //////////////////////////////////////////////////////////////////////
@@ -97,6 +98,7 @@ Task("Prepare-Build")
 	{
 		publishPackage = isApiKeyDefined;
 	}
+	publishPackage = publishPackage && !isBuildingPR;
 	CreateAssemblyInfo(versionAssemblyFile, new AssemblyInfoSettings {
 		Version = version,
 		FileVersion = version,
@@ -127,7 +129,7 @@ Task("Run-Unit-Tests")
 
 Task("Create-Package")
 	.IsDependentOn("Run-Unit-Tests")
-	//.WithCriteria(() => publishPackage)
+	.WithCriteria(() => publishPackage)
 	.Does(() =>
 {
 	GitLink(rootDir, new GitLinkSettings {
