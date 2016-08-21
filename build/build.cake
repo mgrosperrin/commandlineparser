@@ -30,14 +30,13 @@ var commandLineParserPdbFile = outputBinariesDir + File("MGR.CommandLineParser.p
 var commandLineParserXmlFile = outputBinariesDir + File("MGR.CommandLineParser.xml");
 
 var branchName = "";
-var nugetFeed = "";
+var nugetPackagePublicationFeed = "";
 var version = "0.0.0";
 var subVersion = "";
 var shaHash = "";
-var publishPackage = false;
-var isApiKeyDefined = HasEnvironmentVariable("NUGET_API_KEY");
-var isBuildingPR = !HasEnvironmentVariable("APPVEYOR_PULL_REQUEST_NUMBER");
-var mygetFeedDefined = !string.IsNullOrEmpty(mygetFeed);
+var publishPackage = true;
+var packagePublishingApiKeyName = "NUGET_API_KEY";
+var isBuildingPR = HasEnvironmentVariable("APPVEYOR_PULL_REQUEST_NUMBER");
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -49,65 +48,76 @@ Task("Clean")
     CleanDirectory(outputBinariesDir);
 });
 
-Task("Restore-NuGet-Packages")
+Task("Install-Tools-Packages")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    NuGetRestore(solutionFile, new NuGetRestoreSettings { PackagesDirectory = packagesDir, ToolPath = nugetFile });
-    NuGetInstall("GitVersion.CommandLine", new NuGetInstallSettings {
+	var defaultInstallSettings = new NuGetInstallSettings {
         OutputDirectory = toolsDir,
         ExcludeVersion = true,
         ToolPath = nugetFile
-    });
-    NuGetInstall("xunit.runner.console", new NuGetInstallSettings {
-        OutputDirectory = toolsDir,
-        ExcludeVersion = true,
-        ToolPath = nugetFile
-    });
-    NuGetInstall("gitlink", new NuGetInstallSettings {
+    };
+    NuGetInstall("GitVersion.CommandLine", defaultInstallSettings);
+    NuGetInstall("xunit.runner.console", defaultInstallSettings);
+	var gitLinkInstallSettings =  new NuGetInstallSettings {
         OutputDirectory = toolsDir,
         ExcludeVersion = true,
 		Prerelease = true,
         ToolPath = nugetFile
-    });
+    };
+    NuGetInstall("gitlink", gitLinkInstallSettings);
 });
 
 Task("Prepare-Build")
-	.IsDependentOn("Restore-NuGet-Packages")
+	.IsDependentOn("Install-Tools-Packages")
 	.Does(() =>
 {
-	var gitVersion = GitVersion(new GitVersionSettings
+	var gitVersionSettings = new GitVersionSettings
 	{
 		ToolPath = gitVersionFile
-	});
+	};
+	var gitVersion = GitVersion(gitVersionSettings);
 	version = gitVersion.MajorMinorPatch;
 	branchName = gitVersion.BranchName;
 	shaHash = gitVersion.Sha;
 	if (branchName == "dev")
 	{
-		nugetFeed = mygetFeed;
 		subVersion = "-alpha" + buildNumber;
-		publishPackage = isApiKeyDefined && mygetFeedDefined;
+		nugetPackagePublicationFeed = mygetFeed;
+		packagePublishingApiKeyName = "MYGET_API_KEY";
+		publishPackage = !string.IsNullOrEmpty(nugetPackagePublicationFeed);
 	}
 	else if (branchName.StartsWith("release-"))
 	{
-		publishPackage = isApiKeyDefined;
 		subVersion = "-beta" + buildNumber;
 	}
-	else if (branchName == "master")
+	else if (branchName != "master")
 	{
-		publishPackage = isApiKeyDefined;
+		publishPackage = false;
 	}
-	publishPackage = publishPackage && !isBuildingPR;
-	CreateAssemblyInfo(versionAssemblyFile, new AssemblyInfoSettings {
+	publishPackage = publishPackage && HasEnvironmentVariable(packagePublishingApiKeyName) && !isBuildingPR;
+	
+	var assemblyInfoSettings = new AssemblyInfoSettings {
 		Version = version,
 		FileVersion = version,
 		InformationalVersion = version + subVersion
-	});
+	};
+	CreateAssemblyInfo(versionAssemblyFile, assemblyInfoSettings);
+});
+
+Task("Restore-NuGet-Packages")
+    .IsDependentOn("Prepare-Build")
+    .Does(() =>
+{
+	var nugetRestoreSettings = new NuGetRestoreSettings {
+		PackagesDirectory = packagesDir,
+		ToolPath = nugetFile
+	};
+    NuGetRestore(solutionFile, nugetRestoreSettings);
 });
 
 Task("Build")
-    .IsDependentOn("Prepare-Build")
+    .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
 {
     DotNetBuild(solutionFile, settings =>
@@ -120,11 +130,12 @@ Task("Run-Unit-Tests")
     .Does(() =>
 {
 	var testsDlls = GetFiles(outputBinariesDir.Path + "/*Tests.dll");
-    XUnit2(testsDlls, new XUnit2Settings {
+	var xunit2Settings = new XUnit2Settings {
         MaxThreads = 1,
         ToolPath = xunitRunnerFile,
         OutputDirectory = outputBinariesDir
-        });
+	};
+    XUnit2(testsDlls, xunit2Settings);
 });
 
 Task("Create-Package")
@@ -132,18 +143,28 @@ Task("Create-Package")
 	.WithCriteria(() => publishPackage)
 	.Does(() =>
 {
-	GitLink(rootDir, new GitLinkSettings {
+	var gitLinkSettings = new GitLinkSettings {
 		PdbDirectoryPath = outputBinariesDir,
 		ToolPath = gitLinkFile,
 		ShaHash = shaHash
-	});
+	};
+	GitLink(rootDir, gitLinkSettings);
 	var nuGetPackSettings = new NuGetPackSettings{
 		ToolPath = nugetFile,
 		Version = version + subVersion,
 		Files = new List<NuSpecContent> {
-			new NuSpecContent{ Source = commandLineParserDllFile, Target = "lib/net40" },
-			new NuSpecContent{ Source = commandLineParserPdbFile, Target = "lib/net40" },
-			new NuSpecContent{ Source = commandLineParserXmlFile, Target = "lib/net40" }
+			new NuSpecContent{
+				Source = commandLineParserDllFile,
+				Target = "lib/net40"
+			},
+			new NuSpecContent{
+				Source = commandLineParserPdbFile,
+				Target = "lib/net40"
+			},
+			new NuSpecContent{
+				Source = commandLineParserXmlFile,
+				Target = "lib/net40"
+			}
 		},
 		OutputDirectory = artifactsDir
 	};
@@ -152,7 +173,10 @@ Task("Create-Package")
 	{
 		var resourceFileFullPath = resourceFile.FullPath;
 		var resourceName = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(resourceFileFullPath));
-		nuGetPackSettings.Files.Add(new NuSpecContent{ Source = resourceFile.FullPath, Target = "lib/net40/" + resourceName });
+		nuGetPackSettings.Files.Add(new NuSpecContent{
+			Source = resourceFile.FullPath,
+			Target = "lib/net40/" + resourceName
+		});
 	}
 	NuGetPack(commandLineParserNuspecFile, nuGetPackSettings);
 });
@@ -166,18 +190,18 @@ Task("Publish-Package")
 	var commandLineParserNuGetFile = nugetPackageFiles.FirstOrDefault();
 	if(commandLineParserNuGetFile != null)
 	{
-		NuGetPush(commandLineParserNuGetFile, new NuGetPushSettings {
-			Source = nugetFeed,
-			ApiKey = EnvironmentVariable("NUGET_API_KEY"),
+		var nugetPushSettings = new NuGetPushSettings {
+			Source = nugetPackagePublicationFeed,
+			ApiKey = EnvironmentVariable(packagePublishingApiKeyName),
 			ToolPath = nugetFile
-		});
+		};
+		NuGetPush(commandLineParserNuGetFile, nugetPushSettings);
 	}
 });
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
-
 Task("Default")
     .IsDependentOn("Publish-Package")
 	;
@@ -185,5 +209,4 @@ Task("Default")
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
-
 RunTarget(target);

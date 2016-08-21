@@ -10,6 +10,7 @@ Param(
     [switch]$Experimental,
     [switch]$WhatIf
 )
+
 $BUILD_DIR = Join-Path $PSScriptRoot "build"
 $ARTIFACTS_DIR = Join-Path $PSScriptRoot "artifacts"
 $TOOLS_DIR = Join-Path $ARTIFACTS_DIR "tools"
@@ -59,6 +60,7 @@ if (!(Test-Path $CAKE_EXE)) {
 }
 
 # Start Cake
-Invoke-Expression "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseDryRun $UseExperimental -mygetFeed=`"$MyGetFeed`" -buildNumber=`"$BuildNumber`""
+$CakeInvokeExpression = "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseDryRun $UseExperimental -mygetFeed=`"$MyGetFeed`" -buildNumber=`"$BuildNumber`""
+Invoke-Expression $CakeInvokeExpression 
 Write-Host
 exit $LASTEXITCODE
