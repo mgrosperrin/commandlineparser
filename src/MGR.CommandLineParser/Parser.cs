@@ -42,7 +42,7 @@ namespace MGR.CommandLineParser
             var currentDependencyResolver = DependencyResolver.Current.CreateScope();
             var commandTypeProvider = currentDependencyResolver.ResolveDependency<ICommandTypeProvider>();
             var commandType = commandTypeProvider.GetCommandType<TCommand>();
-            var argsEnumerator = args.GetEnumerator();
+            var argsEnumerator = args.GetArgumentEnumerator();
             var parsingResult = ParseImpl(argsEnumerator, currentDependencyResolver, commandType);
             if (parsingResult.Command == null)
             {
@@ -63,7 +63,7 @@ namespace MGR.CommandLineParser
                 return new CommandResult<ICommand>(null, CommandResultCode.NoArgs);
             }
             var currentDependencyResolver = DependencyResolver.Current.CreateScope();
-            var argsEnumerator = args.GetEnumerator();
+            var argsEnumerator = args.GetArgumentEnumerator();
             var commandName = GetNextCommandLineItem(argsEnumerator);
             if (commandName == null)
             {
