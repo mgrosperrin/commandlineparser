@@ -5,7 +5,10 @@ using MGR.CommandLineParser.Properties;
 
 namespace MGR.CommandLineParser
 {
-    internal sealed class DefaultConsole : IConsole
+    /// <summary>
+    /// Forward to <see cref="Console"/>.
+    /// </summary>
+    public sealed class DefaultConsole : IConsole
     {
         internal static readonly IConsole Instance = new DefaultConsole();
 
@@ -41,44 +44,52 @@ namespace MGR.CommandLineParser
             }
         }
 
+        /// <inheritdoc />
         public void Write(string format, params object[] args)
         {
             Console.Write(format, args);
         }
 
+        /// <inheritdoc />
         public void WriteLine()
         {
             Console.WriteLine();
         }
 
+        /// <inheritdoc />
         public void WriteLine(string value)
         {
             Console.WriteLine(value);
         }
 
+        /// <inheritdoc />
         public void WriteLine(string format, params object[] args)
         {
             Console.WriteLine(format, args);
         }
 
+        /// <inheritdoc />
         public void WriteError(string value)
         {
             WriteError(value, new object[0]);
         }
 
+        /// <inheritdoc />
         public void WriteError(string format, params object[] args)
         {
             WriteColor(Console.Error, ConsoleColor.Red, format, args);
         }
 
+        /// <inheritdoc />
         public void WriteWarning(string value)
         {
             WriteWarning(value, new object[0]);
         }
 
-        public void WriteWarning(string value, params object[] args)
+        /// <inheritdoc />
+        public void WriteWarning(string format, params object[] args)
         {
-            var message = string.Format(CultureInfo.CurrentUICulture, Strings.Console_WarningFormat, value);
+            var message = string.Format(CultureInfo.CurrentUICulture, Strings.Console_WarningFormat, format);
             WriteColor(Console.Out, ConsoleColor.Yellow, message, args);
         }
 
@@ -97,6 +108,7 @@ namespace MGR.CommandLineParser
             }
         }
 
+        /// <inheritdoc />
         public void PrintJustified(int startIndex, string value)
         {
             PrintJustified(startIndex, value, WindowWidth);

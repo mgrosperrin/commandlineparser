@@ -7,26 +7,31 @@ using MGR.CommandLineParser.Converters;
 
 namespace MGR.CommandLineParser
 {
-    internal sealed class AssemblyBrowsingCommandTypeProvider : ICommandTypeProvider
+    /// <summary>
+    /// Browse types in assemblies to get all commands.
+    /// </summary>
+    public sealed class AssemblyBrowsingCommandTypeProvider : ICommandTypeProvider
     {
         private readonly IAssemblyProvider _assemblyProvider;
         private readonly Lazy<Dictionary<string, CommandType>> _commands;
 
         private readonly IEnumerable<IConverter> _converters;
 
-        public AssemblyBrowsingCommandTypeProvider(IAssemblyProvider assemblyProvider, IEnumerable<IConverter> converters)
+        internal AssemblyBrowsingCommandTypeProvider(IAssemblyProvider assemblyProvider, IEnumerable<IConverter> converters)
         {
             _assemblyProvider = assemblyProvider;
             _converters = converters;
             _commands = new Lazy<Dictionary<string, CommandType>>(SearchAllCommandTypes);
         }
 
+        /// <inheritdoc />
         public IEnumerable<CommandType> GetAllCommandTypes()
         {
             var commandTypes = _commands.Value;
             return commandTypes.Values;
         }
 
+        /// <inheritdoc />
         public CommandType GetCommandType(string commandName)
         {
             var commandTypes = _commands.Value;
@@ -37,6 +42,7 @@ namespace MGR.CommandLineParser
             return null;
         }
 
+        /// <inheritdoc />
         public CommandType GetCommandType<TCommand>() where TCommand : ICommand
         {
             var commandTypes = _commands.Value;
