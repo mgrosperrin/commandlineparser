@@ -7,7 +7,7 @@ namespace MGR.CommandLineParser
     /// <summary>
     /// Implementation of <see cref="ICommandActivator"/> based on <see cref="DependencyResolver"/>.
     /// </summary>
-    public class DependencyResolverCommandActivator : ICommandActivator
+    public sealed class DependencyResolverCommandActivator : ICommandActivator
     {
         private readonly MethodInfo _genericResolveServiceMethodInfo;
 
