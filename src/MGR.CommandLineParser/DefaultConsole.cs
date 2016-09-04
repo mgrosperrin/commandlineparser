@@ -129,7 +129,7 @@ namespace MGR.CommandLineParser
                 var length = Math.Min(value.Length, maxWidth);
                 // Text we can print without overflowing the System.Console.
                 var content = value.Substring(0, length);
-                var leftPadding = startIndex + length - CursorLeft;
+                var leftPadding = Math.Max(startIndex + length - CursorLeft, 0);
                 // Print it with the correct padding
                 Console.WriteLine(content.PadLeft(leftPadding));
                 // Get the next substring to be printed
