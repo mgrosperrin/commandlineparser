@@ -1,6 +1,6 @@
 ﻿namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
 {
-    public class ParsePushCommandTests
+    public class ParsePushCommandTests : ConsoleLoggingTestsBase
     {
     }
 }
