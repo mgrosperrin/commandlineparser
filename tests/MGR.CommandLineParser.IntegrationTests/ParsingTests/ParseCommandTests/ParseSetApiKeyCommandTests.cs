@@ -5,7 +5,7 @@ using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
 {
-    public class ParseSetApiKeyCommandTests
+    public class ParseSetApiKeyCommandTests : ConsoleLoggingTestsBase
     {
         [Fact]
         public void ParseWithValidArgsAndDefaultValue()

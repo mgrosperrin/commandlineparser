@@ -62,6 +62,8 @@
     <Compile Include="..\..\src\CommonFiles\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ConsoleLoggingTestsBase.cs" />
+    <Compile Include="MockedConsole.cs" />
     <Compile Include="ParsingTests\ErrorParsingTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseDeleteCommandTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseInstallCommandTests.cs" />

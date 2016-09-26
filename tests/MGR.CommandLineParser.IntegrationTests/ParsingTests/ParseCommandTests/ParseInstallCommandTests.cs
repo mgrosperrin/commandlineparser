@@ -1,10 +1,10 @@
-﻿using System.IO;
+using System.IO;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
 {
-    public class ParseInstallCommandTests
+    public class ParseInstallCommandTests : ConsoleLoggingTestsBase
     {
         [Fact]
         public void ParseWithAResponseFile()

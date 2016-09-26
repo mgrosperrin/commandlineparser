@@ -6,7 +6,7 @@ using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
 {
-    public class ParseIntTestCommandTests
+    public class ParseIntTestCommandTests : ConsoleLoggingTestsBase
     {
         [Fact]
         public void ParseWithValidArgs()
