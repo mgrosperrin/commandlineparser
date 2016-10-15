@@ -6,8 +6,8 @@ namespace MGR.CommandLineParser.IntegrationTests
     internal class MockedConsole : IConsole
     {
         [ThreadStatic]
-        private static readonly MockedConsole _currentConsole = new MockedConsole();
-        public static MockedConsole CurrentConsole => _currentConsole;
+        private static MockedConsole _currentConsole = new MockedConsole();
+        public static MockedConsole CurrentConsole => _currentConsole = _currentConsole ?? new MockedConsole();
 
         private readonly StringBuilder _console = new StringBuilder();
 
