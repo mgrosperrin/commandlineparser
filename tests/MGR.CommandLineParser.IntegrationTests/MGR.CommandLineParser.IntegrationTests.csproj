@@ -66,6 +66,7 @@
     <Compile Include="MockedConsole.cs" />
     <Compile Include="ParsingTests\ErrorParsingTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseDeleteCommandTests.cs" />
+    <Compile Include="ParsingTests\ParseCommandTests\ParseImportCommandTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseInstallCommandTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseIntTestCommandTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseListCommandTests.cs" />

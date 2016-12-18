@@ -109,7 +109,7 @@ namespace System.Reflection
         {
             var valueType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(false);
             var valueConverter = converterKeyValuePairAttribute.BuildValueConverter();
-            if (!valueType.IsAssignableFrom(valueConverter.TargetType))
+            if (!valueType.IsType(valueConverter.TargetType))
             {
                 throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractValueConverterIsNotValid(optionName, commandName, valueType, valueConverter.TargetType));
             }
@@ -120,7 +120,7 @@ namespace System.Reflection
         {
             var keyType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(true);
             var keyConverter = converterKeyValuePairAttribute.BuildKeyConverter();
-            if (!keyType.IsAssignableFrom(keyConverter.TargetType))
+            if (!keyType.IsType(keyConverter.TargetType))
             {
                 throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractKeyConverterIsNotValid(optionName, commandName, keyType, keyConverter.TargetType));
             }
