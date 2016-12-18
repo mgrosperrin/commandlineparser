@@ -62,18 +62,8 @@
     <Compile Include="..\..\src\CommonFiles\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Commands\DeleteCommand.cs" />
-    <Compile Include="Commands\ImportCommand.cs" />
-    <Compile Include="Commands\InstallCommand.cs" />
-    <Compile Include="Commands\IntTestCommand.cs" />
-    <Compile Include="Commands\ListCommand.cs" />
-    <Compile Include="Commands\PackCommand.cs" />
-    <Compile Include="Commands\PublishCommand.cs" />
-    <Compile Include="Commands\PushCommand.cs" />
-    <Compile Include="Commands\SetApiKeyCommand.cs" />
-    <Compile Include="Commands\SourcesCommand.cs" />
-    <Compile Include="Commands\SpecCommand.cs" />
-    <Compile Include="Commands\UpdateCommand.cs" />
+    <Compile Include="ConsoleLoggingTestsBase.cs" />
+    <Compile Include="MockedConsole.cs" />
     <Compile Include="ParsingTests\ErrorParsingTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseDeleteCommandTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseImportCommandTests.cs" />
@@ -94,6 +84,10 @@
     <ProjectReference Include="..\..\src\MGR.CommandLineParser\MGR.CommandLineParser.csproj">
       <Project>{ef6019c2-2c4d-4874-bbbf-d76ca30f7e8d}</Project>
       <Name>MGR.CommandLineParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MGR.CommandLineParser.Tests.Commands\MGR.CommandLineParser.Tests.Commands.csproj">
+      <Project>{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}</Project>
+      <Name>MGR.CommandLineParser.Tests.Commands</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

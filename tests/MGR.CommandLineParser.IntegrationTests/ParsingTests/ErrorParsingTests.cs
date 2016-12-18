@@ -4,7 +4,7 @@ using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.ParsingTests
 {
-    public class ErrorParsingTests
+    public class ErrorParsingTests : ConsoleLoggingTestsBase
     {
         [Fact]
         public void ParseWithoutParameter()

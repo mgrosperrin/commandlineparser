@@ -96,6 +96,8 @@
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\ConverterAttributeExtensions.cs" />
     <Compile Include="Extensions\ConverterExtensions.cs" />
+    <Compile Include="Extensions\DependencyResolverScopeExtensions.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\PropertyInfoExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
