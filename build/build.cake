@@ -140,7 +140,7 @@ Task("Run-Unit-Tests")
 
 Task("Create-Package")
 	.IsDependentOn("Run-Unit-Tests")
-	.WithCriteria(() => publishPackage)
+	.WithCriteria(() => !isBuildingPR)
 	.Does(() =>
 {
 	var gitLinkSettings = new GitLinkSettings {

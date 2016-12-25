@@ -78,7 +78,7 @@ namespace MGR.CommandLineParser.Command
         {
             if (value != null)
             {
-                if (!value.GetType().IsAssignableFrom(OptionType))
+                if (!value.GetType().IsType(OptionType))
                 {
                     var conververtedDefaultValue = Converter.Convert(value.ToString(), OptionType);
                     return conververtedDefaultValue;
@@ -95,7 +95,7 @@ namespace MGR.CommandLineParser.Command
         }
         internal void AssignValue(string optionValue, ICommand command)
         {
-            if (!OptionType.IsAssignableFrom(Converter.TargetType))
+            if (!OptionType.IsType(Converter.TargetType))
             {
                 throw new CommandLineParserException(Constants.ExceptionMessages.ParserSpecifiedConverterNotValidToAssignValue(OptionType, Converter.TargetType));
             }
