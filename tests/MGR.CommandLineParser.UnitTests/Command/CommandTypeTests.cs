@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MGR.CommandLineParser.UnitTests.Command
+﻿namespace MGR.CommandLineParser.UnitTests.Command
 {
 public partial    class CommandTypeTests
     {

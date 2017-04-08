@@ -23,7 +23,7 @@ namespace MGR.CommandLineParser
         {
             Type = commandType;
             _commandMetadata = new Lazy<CommandMetadata>(() => new CommandMetadata(Type));
-            _commandOptions = new Lazy<List<CommandOption>>(() => new List<CommandOption>(ExtractCommandOptions(Type, Metadata, converters)));
+            _commandOptions = new Lazy<List<CommandOption>>(() => new List<CommandOption>(ExtractCommandOptions(Type, Metadata, converters.ToList())));
 
         }
         /// <summary>
@@ -71,7 +71,7 @@ namespace MGR.CommandLineParser
             return command;
         }
 
-        private static IEnumerable<CommandOption> ExtractCommandOptions(Type commandType, CommandMetadata commandMetadata, IEnumerable<IConverter> converters)
+        private static IEnumerable<CommandOption> ExtractCommandOptions(Type commandType, CommandMetadata commandMetadata, List<IConverter> converters)
         {
             foreach (var propertyInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != nameof(ICommand.Arguments)))
             {

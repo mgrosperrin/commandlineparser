@@ -20,7 +20,7 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => SimpleIntProperty));
                 var commandMetadata = new CommandMetadata(typeof (GetMultiValueIndicator));
-                var commandOption = CommandOption.Create(propertyInfo, commandMetadata, new[] {new Int32Converter()});
+                var commandOption = CommandOption.Create(propertyInfo, commandMetadata, new List<IConverter> {new Int32Converter()});
                 var expected = string.Empty;
 
                 // Act
@@ -37,7 +37,7 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 var propertyInfo = GetType()
                     .GetProperty(TypeHelpers.ExtractPropertyName(() => ListIntProperty));
                 var commandMetadata = new CommandMetadata(typeof (GetMultiValueIndicator));
-                var commandOption = CommandOption.Create(propertyInfo, commandMetadata, new[] {new Int32Converter()});
+                var commandOption = CommandOption.Create(propertyInfo, commandMetadata, new List<IConverter> { new Int32Converter()});
                 var expected = HelpCommand.CollectionIndicator;
 
                 // Act

@@ -21,7 +21,7 @@ namespace System.Reflection
 
             foreach (var assembly in source.Where(assembly => assembly != null && !assembly.IsDynamic))
             {
-                Type[] exportedTypes = null;
+                Type[] exportedTypes;
 
                 try
                 {
