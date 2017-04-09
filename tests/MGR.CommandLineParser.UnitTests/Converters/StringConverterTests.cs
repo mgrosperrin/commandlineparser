@@ -1,5 +1,4 @@
-﻿using System;
-using MGR.CommandLineParser.Converters;
+﻿using MGR.CommandLineParser.Converters;
 using Xunit;
 
 namespace MGR.CommandLineParser.UnitTests.Converters

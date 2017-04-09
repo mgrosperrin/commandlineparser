@@ -62,7 +62,7 @@ Task("Install-Tools-Packages")
 	var gitLinkInstallSettings =  new NuGetInstallSettings {
         OutputDirectory = toolsDir,
         ExcludeVersion = true,
-		Prerelease = true,
+		Version = "2.4.1",
         ToolPath = nugetFile
     };
     NuGetInstall("gitlink", gitLinkInstallSettings);

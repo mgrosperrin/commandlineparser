@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 

@@ -24,7 +24,7 @@ namespace System.Reflection
             return source.CanWrite || source.PropertyType.IsMultiValuedType();
         }
 
-        internal static IConverter ExtractConverter(this PropertyInfo source, IEnumerable<IConverter> converters, string optionName, string commandName)
+        internal static IConverter ExtractConverter(this PropertyInfo source, List<IConverter> converters, string optionName, string commandName)
         {
             Guard.NotNull(source, nameof(source));
             Guard.NotNullOrEmpty(optionName, nameof(optionName));
@@ -39,7 +39,7 @@ namespace System.Reflection
             }
             return converter;
         }
-        private static IConverter FindConverter(PropertyInfo propertyInfo, IEnumerable<IConverter> converters, string optionName, string commandName)
+        private static IConverter FindConverter(PropertyInfo propertyInfo, List<IConverter> converters, string optionName, string commandName)
         {
             if (propertyInfo.PropertyType.IsDictionaryType())
             {
