@@ -4,7 +4,7 @@ using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands
 {
-    [CommandDisplay(Description = "UpdateCommandDescription", Usage = "<packages.config|solution>")]
+    [Command(Description = "UpdateCommandDescription", Usage = "<packages.config|solution>")]
     public class UpdateCommand : CommandBase
     {
         private readonly List<string> _sources = new List<string>();

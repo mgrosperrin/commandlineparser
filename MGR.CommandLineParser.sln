@@ -40,6 +40,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{07E4D8F7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGR.CommandLineParser.Tests.Commands", "tests\MGR.CommandLineParser.Tests.Commands\MGR.CommandLineParser.Tests.Commands.csproj", "{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{172E24C2-BF99-4DA9-A7DF-8C0BB44C138D}"
+	ProjectSection(SolutionItems) = preProject
+		docs\customize-command-display.md = docs\customize-command-display.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

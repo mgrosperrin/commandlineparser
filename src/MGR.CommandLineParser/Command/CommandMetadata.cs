@@ -10,7 +10,7 @@ namespace MGR.CommandLineParser.Command
         internal CommandMetadata(Type commandType)
         {
             Name = commandType.GetFullCommandName();
-            var displayAttribute = commandType.GetAttribute<CommandDisplayAttribute>();
+            var displayAttribute = commandType.GetAttribute<CommandAttribute>();
             if (displayAttribute != null)
             {
                 Description = displayAttribute.GetLocalizedDescription();

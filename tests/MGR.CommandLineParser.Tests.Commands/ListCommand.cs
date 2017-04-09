@@ -4,7 +4,7 @@ using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands
 {
-    [CommandDisplay(Description = "ListCommandDescription", Usage = "ListCommandUsageDescription")]
+    [Command(Description = "ListCommandDescription", Usage = "ListCommandUsageDescription")]
     public class ListCommand : CommandBase
     {
         private readonly List<string> _sources = new List<string>();

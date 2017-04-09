@@ -57,8 +57,8 @@
     <Compile Include="CommandType.cs" />
     <Compile Include="CommandResultCode.cs" />
     <Compile Include="CommandResult`1.cs" />
+    <Compile Include="Command\CommandAttribute.cs" />
     <Compile Include="Command\CommandBase.cs" />
-    <Compile Include="Command\CommandDisplayAttribute.cs" />
     <Compile Include="Command\CommandMetadata.cs" />
     <Compile Include="Command\CommandOption.cs" />
     <Compile Include="Command\ConverterAttribute.cs" />
@@ -67,7 +67,6 @@
     <Compile Include="Command\ICommand.cs" />
     <Compile Include="Command\IgnoreOptionPropertyAttribute.cs" />
     <Compile Include="Command\LocalizableString.cs" />
-    <Compile Include="Command\SampleCommandAttribute.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\ByteConverter.cs" />

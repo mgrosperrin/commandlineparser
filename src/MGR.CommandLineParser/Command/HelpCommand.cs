@@ -96,7 +96,7 @@ namespace MGR.CommandLineParser.Command
                 }
             }
 
-            var sampleCommandAttribute = commandType.Type.GetAttribute<SampleCommandAttribute>();
+            var sampleCommandAttribute = commandType.Type.GetAttribute<CommandAttribute>();
             if (sampleCommandAttribute != null)
             {
                 foreach (var usage in sampleCommandAttribute.Samples)
