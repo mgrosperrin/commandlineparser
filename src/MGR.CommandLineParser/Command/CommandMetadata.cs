@@ -10,11 +10,13 @@ namespace MGR.CommandLineParser.Command
         internal CommandMetadata(Type commandType)
         {
             Name = commandType.GetFullCommandName();
-            var displayAttribute = commandType.GetAttribute<CommandAttribute>();
-            if (displayAttribute != null)
+            var commandAttribute = commandType.GetAttribute<CommandAttribute>();
+            if (commandAttribute != null)
             {
-                Description = displayAttribute.GetLocalizedDescription();
-                Usage = displayAttribute.GetLocalizedUsage();
+                Description = commandAttribute.GetLocalizedDescription();
+                Usage = commandAttribute.GetLocalizedUsage();
+                Samples = commandAttribute.Samples ?? new string[0];
+                HideFromHelpListing = commandAttribute.HideFromHelpListing;
             }
         }
 
@@ -32,5 +34,15 @@ namespace MGR.CommandLineParser.Command
         ///     Gets the usage of the command (if defined).
         /// </summary>
         public string Usage { get; } = string.Empty;
+
+        /// <summary>
+        ///     Gets the samples for the command.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
+        public string[] Samples { get; } = new string[0];
+        /// <summary>
+        /// Determine if the command should be hidden from the help listing.
+        /// </summary>
+        public bool HideFromHelpListing { get; }
     }
 }
