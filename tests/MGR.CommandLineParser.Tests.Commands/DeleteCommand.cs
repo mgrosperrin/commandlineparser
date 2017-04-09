@@ -3,7 +3,7 @@ using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands
 {
-    [CommandDisplay(Description = "DeleteCommandDescription", Usage = "DeleteCommandUsageDescription")]
+    [Command(Description = "DeleteCommandDescription", Usage = "DeleteCommandUsageDescription")]
     public class DeleteCommand : CommandBase
     {
         [Display(Description = "DeleteCommandSourceDescription", ShortName = "src")]

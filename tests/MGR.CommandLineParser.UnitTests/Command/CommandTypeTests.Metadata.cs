@@ -30,7 +30,7 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 Assert.Equal(expectedUsage, metadata.Usage);
             }
 
-            [CommandDisplay(Description = "My great description", Usage = "test arg [option]")]
+            [Command(Description = "My great description", Usage = "test arg [option]")]
             private class TestCommand : ICommand
             {
                 public int Execute()

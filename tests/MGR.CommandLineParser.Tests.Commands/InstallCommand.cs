@@ -4,7 +4,7 @@ using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands
 {
-    [CommandDisplay(Description = "InstallCommandDescription", Usage = "InstallCommandUsageSummary")]
+    [Command(Description = "InstallCommandDescription", Usage = "InstallCommandUsageSummary")]
     public class InstallCommand : CommandBase
     {
         private readonly ICollection<string> _sources = new List<string>();
