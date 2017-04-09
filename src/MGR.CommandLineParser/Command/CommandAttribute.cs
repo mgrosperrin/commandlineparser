@@ -5,7 +5,7 @@ using System.Runtime;
 namespace MGR.CommandLineParser.Command
 {
     /// <summary>
-    ///     Defines samples for the command.
+    ///     Defines attributes for the command.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class CommandAttribute : Attribute
