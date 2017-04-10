@@ -59,7 +59,8 @@ namespace MGR.CommandLineParser.Command
         /// </summary>
         public Type ResourceType
         {
-            [TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")] get { return _resourceType; }
+            [TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")]
+            get { return _resourceType; }
             set
             {
                 if (_resourceType != value)
@@ -70,6 +71,11 @@ namespace MGR.CommandLineParser.Command
                 }
             }
         }
+
+        /// <summary>
+        /// Determine if the command should be hidden from the help listing.
+        /// </summary>
+        public bool HideFromHelpListing { get; set; }
 
         internal string GetLocalizedDescription() => _description.GetLocalizableValue();
 

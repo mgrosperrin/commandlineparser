@@ -63,7 +63,7 @@ namespace MGR.CommandLineParser.Command
         private void WriteHelpForAllCommand(ICommandTypeProvider commandProvider)
         {
             WriteGeneralInformation();
-            var commands = commandProvider.GetAllCommandTypes();
+            var commands = commandProvider.GetAllVisibleCommandsTypes();
             foreach (var command in commands)
             {
                 Console.WriteLine(string.Format(CultureInfo.CurrentUICulture, Strings.HelpCommand_CommandTitleFormat, command.Metadata.Name));
@@ -96,13 +96,10 @@ namespace MGR.CommandLineParser.Command
                 }
             }
 
-            var sampleCommandAttribute = commandType.Type.GetAttribute<CommandAttribute>();
-            if (sampleCommandAttribute != null)
+            var samples = commandType.Metadata.Samples;
+            foreach (var usage in samples)
             {
-                foreach (var usage in sampleCommandAttribute.Samples)
-                {
-                    Console.WriteLine(usage);
-                }
+                Console.WriteLine(usage);
             }
         }
 
@@ -123,7 +120,7 @@ namespace MGR.CommandLineParser.Command
         {
             WriteGeneralInformation();
 
-            var commandTypes = commandProvider.GetAllCommandTypes().ToList();
+            var commandTypes = commandProvider.GetAllVisibleCommandsTypes().ToList();
             var maxNameLength = commandTypes.Max(m => m.Metadata.Name.Length);
             foreach (var commandType in commandTypes)
             {
