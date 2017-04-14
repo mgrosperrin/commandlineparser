@@ -16,6 +16,7 @@ namespace MGR.CommandLineParser
 
         private readonly List<IConverter> _converters = Converters.Converters.GetAll();
         private ICommandTypeProvider _commandTypeProvider;
+        private IHelpWriter _helpWriter;
 
         private readonly Dictionary<Type, Func<Func<IDependencyResolverScope, IEnumerable<object>>>> _multiplyRegistredDependencies =
             new Dictionary<Type, Func<Func<IDependencyResolverScope, IEnumerable<object>>>>();
@@ -29,6 +30,7 @@ namespace MGR.CommandLineParser
             SaveDependency<ICommandActivator>(() => _ => BasicCommandActivator.Instance);
             SaveDependency<IAssemblyProvider>(() => _ => CurrentDirectoryAssemblyProvider.Instance);
             SaveDependency<ICommandTypeProvider>(() => _ => _commandTypeProvider ?? (_commandTypeProvider = new AssemblyBrowsingCommandTypeProvider(_.ResolveDependency<IAssemblyProvider>(), _.ResolveDependencies<IConverter>())));
+            SaveDependency<IHelpWriter>(() => _ => _helpWriter ?? (_helpWriter = new DefaultHelpWriter(_.ResolveDependency<IConsole>(), _.ResolveDependency<ICommandTypeProvider>())));
         }
 
         /// <inheritdoc />

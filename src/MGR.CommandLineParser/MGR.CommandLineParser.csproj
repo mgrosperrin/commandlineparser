@@ -92,6 +92,7 @@
     <Compile Include="DefaultDependencyResolver.cs" />
     <Compile Include="AssemblyBrowsingCommandTypeProvider.cs" />
     <Compile Include="DefaultDependencyResolverScope.cs" />
+    <Compile Include="DefaultHelpWriter.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\CommandTypeProviderExtensions.cs" />
     <Compile Include="Extensions\ConverterAttributeExtensions.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="IConsole.cs" />
     <Compile Include="IDependencyResolver.cs" />
     <Compile Include="Command\OptionDisplayInfo.cs" />
+    <Compile Include="IHelpWriter.cs" />
     <Compile Include="IParser.cs" />
     <Compile Include="IParserOptions.cs" />
     <Compile Include="IDependencyResolverScope.cs" />
@@ -132,6 +134,7 @@
     <EmbeddedResource Include="Properties\Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

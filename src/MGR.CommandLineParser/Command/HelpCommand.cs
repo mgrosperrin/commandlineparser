@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using JetBrains.Annotations;
 using MGR.CommandLineParser.Properties;
@@ -12,8 +11,6 @@ namespace MGR.CommandLineParser.Command
     [PublicAPI]
     public sealed class HelpCommand : CommandBase
     {
-        internal const string CollectionIndicator = "+";
-        internal const string DictionaryIndicator = "#";
         /// <summary>
         ///     Name of the help command.
         /// </summary>
@@ -32,14 +29,14 @@ namespace MGR.CommandLineParser.Command
         {
             if (commandType == null)
             {
-                var commandProvider = CurrentDependencyResolverScope.ResolveDependency<ICommandTypeProvider>();
                 if (All)
                 {
+                    var commandProvider = CurrentDependencyResolverScope.ResolveDependency<ICommandTypeProvider>();
                     WriteHelpForAllCommand(commandProvider);
                 }
                 else
                 {
-                    WriteGeneralHelp(commandProvider);
+                    WriteGeneralHelp();
                 }
             }
             else
@@ -75,61 +72,14 @@ namespace MGR.CommandLineParser.Command
         {
             Guard.NotNull(commandType, nameof(commandType));
 
-            var metadata = commandType.Metadata;
-            Console.WriteLine(ParserOptions.Logo);
-            Console.WriteLine(Strings.HelpCommand_CommandUsageFormat, ParserOptions.CommandLineName, metadata.Name, metadata.Usage);
-            Console.WriteLine(metadata.Description);
-            Console.WriteLine();
-
-            if (commandType.Options.Any())
-            {
-                Console.WriteLine(Strings.HelpCommand_OptionsListTitle);
-                var maxOptionWidth = commandType.Options.Max(o => o.DisplayInfo.Name.Length) + 2;
-                var maxAltOptionWidth = commandType.Options.Max(o => (o.DisplayInfo.ShortName ?? string.Empty).Length);
-                foreach (var commandOption in commandType.Options)
-                {
-                    Console.Write(" -{0, -" + (maxOptionWidth + 2) + "}", commandOption.DisplayInfo.Name + GetMultiValueIndicator(commandOption));
-                    Console.Write(" {0, -" + (maxAltOptionWidth + 4) + "}", FormatShortName(commandOption.DisplayInfo.ShortName));
-
-                    Console.PrintJustified((10 + maxAltOptionWidth + maxOptionWidth), commandOption.DisplayInfo.Description);
-                    Console.WriteLine();
-                }
-            }
-
-            var samples = commandType.Metadata.Samples;
-            foreach (var usage in samples)
-            {
-                Console.WriteLine(usage);
-            }
+            var helpWriter = CurrentDependencyResolverScope.ResolveDependency<IHelpWriter>();
+            helpWriter.WriteHelpForCommand(ParserOptions, commandType);
         }
 
-        internal static string GetMultiValueIndicator(CommandOption commandOption)
+        private void WriteGeneralHelp()
         {
-            if (commandOption.PropertyOption.PropertyType.IsCollectionType())
-            {
-                return CollectionIndicator;
-            }
-            if (commandOption.PropertyOption.PropertyType.IsDictionaryType())
-            {
-                return DictionaryIndicator;
-            }
-            return string.Empty;
-        }
-
-        private void WriteGeneralHelp(ICommandTypeProvider commandProvider)
-        {
-            WriteGeneralInformation();
-
-            var commandTypes = commandProvider.GetAllVisibleCommandsTypes().ToList();
-            var maxNameLength = commandTypes.Max(m => m.Metadata.Name.Length);
-            foreach (var commandType in commandTypes)
-            {
-                Console.Write(" {0, -" + maxNameLength + "}   ", commandType.Metadata.Name);
-                // Starting index of the description
-                var descriptionPadding = maxNameLength + 4;
-                Console.PrintJustified(descriptionPadding, commandType.Metadata.Description);
-                Console.WriteLine();
-            }
+            var helpWriter = CurrentDependencyResolverScope.ResolveDependency<IHelpWriter>();
+            helpWriter.WriteCommandListing(ParserOptions);
         }
 
         private void WriteGeneralInformation()
@@ -140,15 +90,6 @@ namespace MGR.CommandLineParser.Command
             Console.WriteLine();
             Console.WriteLine(Strings.HelpCommand_GlobalHelp_AvailableCommands);
             Console.WriteLine();
-        }
-
-        private static string FormatShortName(string shortName)
-        {
-            if (string.IsNullOrEmpty(shortName))
-            {
-                return string.Empty;
-            }
-            return string.Format(CultureInfo.CurrentUICulture, "({0})", shortName);
         }
     }
 }

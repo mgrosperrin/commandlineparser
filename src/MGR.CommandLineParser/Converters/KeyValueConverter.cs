@@ -10,14 +10,9 @@ namespace MGR.CommandLineParser.Converters
 
         internal KeyValueConverter(IConverter keyConverter, IConverter valueConverter)
         {
-            if (keyConverter == null)
-            {
-                throw new ArgumentNullException(nameof(keyConverter));
-            }
-            if (valueConverter == null)
-            {
-                throw new ArgumentNullException(nameof(valueConverter));
-            }
+            Guard.NotNull(keyConverter, nameof(keyConverter));
+            Guard.NotNull(valueConverter, nameof(valueConverter));
+
             _keyConverter = keyConverter;
             _valueConverter = valueConverter;
         }
@@ -26,10 +21,7 @@ namespace MGR.CommandLineParser.Converters
 
         public object Convert(string value, Type concreteTargetType)
         {
-            if (string.IsNullOrEmpty(value))
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            Guard.NotNullOrEmpty(value, nameof(value));
             var eqIndex = value.IndexOf("=", StringComparison.OrdinalIgnoreCase);
             if (eqIndex > -1)
             {

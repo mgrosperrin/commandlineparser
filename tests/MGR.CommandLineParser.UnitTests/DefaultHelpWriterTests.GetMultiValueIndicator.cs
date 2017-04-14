@@ -3,9 +3,9 @@ using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Converters;
 using Xunit;
 
-namespace MGR.CommandLineParser.UnitTests.Command
+namespace MGR.CommandLineParser.UnitTests
 {
-    public partial class HelpCommandTests
+    public partial class DefaultHelpWriterTests
     {
         public class GetMultiValueIndicator
         {
@@ -24,7 +24,7 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 var expected = string.Empty;
 
                 // Act
-                var actual = HelpCommand.GetMultiValueIndicator(commandOption);
+                var actual = DefaultHelpWriter.GetMultiValueIndicator(commandOption);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -38,10 +38,10 @@ namespace MGR.CommandLineParser.UnitTests.Command
                     .GetProperty(TypeHelpers.ExtractPropertyName(() => ListIntProperty));
                 var commandMetadata = new CommandMetadata(typeof (GetMultiValueIndicator));
                 var commandOption = CommandOption.Create(propertyInfo, commandMetadata, new List<IConverter> { new Int32Converter()});
-                var expected = HelpCommand.CollectionIndicator;
+                var expected = DefaultHelpWriter.CollectionIndicator;
 
                 // Act
-                var actual = HelpCommand.GetMultiValueIndicator(commandOption);
+                var actual = DefaultHelpWriter.GetMultiValueIndicator(commandOption);
 
                 // Assert
                 Assert.Equal(expected, actual);
@@ -56,10 +56,10 @@ namespace MGR.CommandLineParser.UnitTests.Command
                 var commandMetadata = new CommandMetadata(typeof (GetMultiValueIndicator));
                 var commandOption = CommandOption.Create(propertyInfo, commandMetadata,
                     new List<IConverter> {new StringConverter(), new Int32Converter()});
-                var expected = HelpCommand.DictionaryIndicator;
+                var expected = DefaultHelpWriter.DictionaryIndicator;
 
                 // Act
-                var actual = HelpCommand.GetMultiValueIndicator(commandOption);
+                var actual = DefaultHelpWriter.GetMultiValueIndicator(commandOption);
 
                 // Assert
                 Assert.Equal(expected, actual);

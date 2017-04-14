@@ -66,15 +66,14 @@
     <Compile Include="..\..\src\CommonFiles\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Command\CommandTypeTests.CreateCommand.cs" />
+    <Compile Include="Command\CommandTypeTests.CreateCommand.cs">
+      <DependentUpon>CommandTypeTests.cs</DependentUpon>
+    </Compile>
     <Compile Include="Command\CommandTypeTests.cs" />
     <Compile Include="Command\CommandTypeTests.Metadata.cs">
       <DependentUpon>CommandTypeTests.cs</DependentUpon>
     </Compile>
     <Compile Include="Command\HelpCommandTests.cs" />
-    <Compile Include="Command\HelpCommandTests.GetMultiValueIndicator.cs">
-      <DependentUpon>HelpCommandTests.cs</DependentUpon>
-    </Compile>
     <Compile Include="Command\CommandOptionTests.AssignValueTests.cs">
       <DependentUpon>CommandOptionTests.cs</DependentUpon>
     </Compile>
@@ -96,6 +95,13 @@
     <Compile Include="Converters\StringConverterTests.cs" />
     <Compile Include="Converters\TimeSpanConverterTests.cs" />
     <Compile Include="Converters\UriConverterTests.cs" />
+    <Compile Include="DefaultHelpWriterTests.cs" />
+    <Compile Include="DefaultHelpWriterTests.GetMultiValueIndicator.cs">
+      <DependentUpon>DefaultHelpWriterTests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DefaultHelpWriterTests.WriteCommandListing.cs">
+      <DependentUpon>DefaultHelpWriterTests.cs</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\ConverterAttributeExtensionsTests.cs" />
     <Compile Include="Extensions\ConverterAttributeExtensionsTests.BuildConverter.cs">
       <DependentUpon>ConverterAttributeExtensionsTests.cs</DependentUpon>
