@@ -67,14 +67,16 @@ namespace MGR.CommandLineParser
             var commandName = GetNextCommandLineItem(argsEnumerator);
             if (commandName == null)
             {
-                currentDependencyResolver.WriteGlobalHelp(_parserOptions);
+                var helpWriter = currentDependencyResolver.ResolveDependency<IHelpWriter>();
+                helpWriter.WriteCommandListing(_parserOptions);
                 return new CommandResult<ICommand>(null, CommandResultCode.NoCommandName);
             }
             var commandTypeProvider = currentDependencyResolver.ResolveDependency<ICommandTypeProvider>();
             var commandType = commandTypeProvider.GetCommandType(commandName);
             if (commandType == null)
             {
-                currentDependencyResolver.WriteGlobalHelp(_parserOptions);
+                var helpWriter = currentDependencyResolver.ResolveDependency<IHelpWriter>();
+                helpWriter.WriteCommandListing(_parserOptions);
                 return new CommandResult<ICommand>(null, CommandResultCode.NoCommandFound);
             }
             return ParseImpl(argsEnumerator, currentDependencyResolver, commandType);
@@ -95,8 +97,8 @@ namespace MGR.CommandLineParser
             var validation = Validate(command, dependencyResolver, commandType.Metadata.Name);
             if (!validation.Item1)
             {
-                var helpCommand = dependencyResolver.GetHelpCommand(_parserOptions);
-                helpCommand.WriteHelp(commandType);
+                var helpWriter = dependencyResolver.ResolveDependency<IHelpWriter>();
+                helpWriter.WriteHelpForCommand(_parserOptions, commandType);
                 return new CommandResult<ICommand>(command, CommandResultCode.CommandParameterNotValid, validation.Item2);
             }
             return new CommandResult<ICommand>(command, CommandResultCode.Ok);

@@ -63,14 +63,8 @@ namespace MGR.CommandLineParser.Command
         {
             if (Help)
             {
-                var commandTypeProvider = CurrentDependencyResolverScope.ResolveDependency<ICommandTypeProvider>();
-                var helpCommand = commandTypeProvider.GetCommandType(HelpCommand.Name)
-                    .CreateCommand(CurrentDependencyResolverScope, ParserOptions) as HelpCommand;
-                if (helpCommand == null)
-                {
-                    throw new CommandLineParserException(Constants.ExceptionMessages.CommandBaseUnableToFindHelpCommand);
-                }
-                helpCommand.WriteHelp(CommandType);
+                var helpWriter = CurrentDependencyResolverScope.ResolveDependency<IHelpWriter>();
+                helpWriter.WriteHelpForCommand(ParserOptions, CommandType);
                 return 0;
             }
             return ExecuteCommand();

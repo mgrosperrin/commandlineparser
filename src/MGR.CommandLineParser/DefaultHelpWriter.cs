@@ -22,7 +22,7 @@ namespace MGR.CommandLineParser
             _console = console;
             _commandTypeProvider = commandTypeProvider;
         }
-        
+
         /// <inheritdoc />
         public void WriteCommandListing(IParserOptions parserOptions)
         {
@@ -45,38 +45,42 @@ namespace MGR.CommandLineParser
         }
 
         /// <inheritdoc />
-        public void WriteHelpForCommand(IParserOptions parserOptions, CommandType commandType)
+        public void WriteHelpForCommand(IParserOptions parserOptions, params CommandType[] commandTypes)
         {
             Guard.NotNull(parserOptions, nameof(parserOptions));
-            Guard.NotNull(commandType, nameof(commandType));
+            Guard.NotNull(commandTypes, nameof(commandTypes));
+            Guard.NotNull(commandTypes, nameof(commandTypes));
 
             WriteGeneralInformation(parserOptions);
 
-            var metadata = commandType.Metadata;
-            _console.WriteLine(parserOptions.Logo);
-            _console.WriteLine(Strings.HelpCommand_CommandUsageFormat, parserOptions.CommandLineName, metadata.Name, metadata.Usage);
-            _console.WriteLine(metadata.Description);
-            _console.WriteLine();
-
-            if (commandType.Options.Any())
+            foreach (var commandType in commandTypes)
             {
-                _console.WriteLine(Strings.HelpCommand_OptionsListTitle);
-                var maxOptionWidth = commandType.Options.Max(o => o.DisplayInfo.Name.Length) + 2;
-                var maxAltOptionWidth = commandType.Options.Max(o => (o.DisplayInfo.ShortName ?? string.Empty).Length);
-                foreach (var commandOption in commandType.Options)
+                var metadata = commandType.Metadata;
+                _console.WriteLine(parserOptions.Logo);
+                _console.WriteLine(Strings.HelpCommand_CommandUsageFormat, parserOptions.CommandLineName, metadata.Name, metadata.Usage);
+                _console.WriteLine(metadata.Description);
+                _console.WriteLine();
+
+                if (commandType.Options.Any())
                 {
-                    _console.Write(" -{0, -" + (maxOptionWidth + 2) + "}", commandOption.DisplayInfo.Name + GetMultiValueIndicator(commandOption));
-                    _console.Write(" {0, -" + (maxAltOptionWidth + 4) + "}", FormatShortName(commandOption.DisplayInfo.ShortName));
+                    _console.WriteLine(Strings.HelpCommand_OptionsListTitle);
+                    var maxOptionWidth = commandType.Options.Max(o => o.DisplayInfo.Name.Length) + 2;
+                    var maxAltOptionWidth = commandType.Options.Max(o => (o.DisplayInfo.ShortName ?? string.Empty).Length);
+                    foreach (var commandOption in commandType.Options)
+                    {
+                        _console.Write(" -{0, -" + (maxOptionWidth + 2) + "}", commandOption.DisplayInfo.Name + GetMultiValueIndicator(commandOption));
+                        _console.Write(" {0, -" + (maxAltOptionWidth + 4) + "}", FormatShortName(commandOption.DisplayInfo.ShortName));
 
-                    _console.PrintJustified((10 + maxAltOptionWidth + maxOptionWidth), commandOption.DisplayInfo.Description);
-                    _console.WriteLine();
+                        _console.PrintJustified((10 + maxAltOptionWidth + maxOptionWidth), commandOption.DisplayInfo.Description);
+                        _console.WriteLine();
+                    }
                 }
-            }
 
-            var samples = commandType.Metadata.Samples;
-            foreach (var usage in samples)
-            {
-                _console.WriteLine(usage);
+                var samples = commandType.Metadata.Samples;
+                foreach (var usage in samples)
+                {
+                    _console.WriteLine(usage);
+                } 
             }
         }
 
