@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MGR.CommandLineParser.Properties
-{
-
-
+namespace MGR.CommandLineParser.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -23,15 +23,15 @@ namespace MGR.CommandLineParser.Properties
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
-
+        
         private static global::System.Resources.ResourceManager resourceMan;
-
+        
         private static global::System.Globalization.CultureInfo resourceCulture;
-
+        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Strings() {
         }
-
+        
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace MGR.CommandLineParser.Properties
                 return resourceMan;
             }
         }
-
+        
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -59,7 +59,7 @@ namespace MGR.CommandLineParser.Properties
                 resourceCulture = value;
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
@@ -68,7 +68,7 @@ namespace MGR.CommandLineParser.Properties
                 return ResourceManager.GetString("Command_HelpOption_DescriptionMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to ?.
         /// </summary>
@@ -77,7 +77,7 @@ namespace MGR.CommandLineParser.Properties
                 return ResourceManager.GetString("Command_HelpOption_ShortNameMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to WARNING: {0}.
         /// </summary>
@@ -86,70 +86,70 @@ namespace MGR.CommandLineParser.Properties
                 return ResourceManager.GetString("Console_WarningFormat", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to {0} Command help :.
         /// </summary>
-        public static string HelpCommand_CommandTitleFormat {
+        public static string DefaultHelpWriter_CommandTitleFormat {
             get {
-                return ResourceManager.GetString("HelpCommand_CommandTitleFormat", resourceCulture);
+                return ResourceManager.GetString("DefaultHelpWriter_CommandTitleFormat", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Usage: {0} {1} {2}.
         /// </summary>
-        public static string HelpCommand_CommandUsageFormat {
+        public static string DefaultHelpWriter_CommandUsageFormat {
             get {
-                return ResourceManager.GetString("HelpCommand_CommandUsageFormat", resourceCulture);
+                return ResourceManager.GetString("DefaultHelpWriter_CommandUsageFormat", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to {0} &lt;command&gt;.
         /// </summary>
-        public static string HelpCommand_GlobalCommandLineCommandFormat {
+        public static string DefaultHelpWriter_GlobalCommandLineCommandFormat {
             get {
-                return ResourceManager.GetString("HelpCommand_GlobalCommandLineCommandFormat", resourceCulture);
+                return ResourceManager.GetString("DefaultHelpWriter_GlobalCommandLineCommandFormat", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Available commands:.
         /// </summary>
-        public static string HelpCommand_GlobalHelp_AvailableCommands {
+        public static string DefaultHelpWriter_GlobalHelp_AvailableCommands {
             get {
-                return ResourceManager.GetString("HelpCommand_GlobalHelp_AvailableCommands", resourceCulture);
+                return ResourceManager.GetString("DefaultHelpWriter_GlobalHelp_AvailableCommands", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Type &apos;{0} &lt;command&gt;&apos; for help on a specific command..
         /// </summary>
-        public static string HelpCommand_GlobalHelpCommandUsageFormat {
+        public static string DefaultHelpWriter_GlobalHelpCommandUsageFormat {
             get {
-                return ResourceManager.GetString("HelpCommand_GlobalHelpCommandUsageFormat", resourceCulture);
+                return ResourceManager.GetString("DefaultHelpWriter_GlobalHelpCommandUsageFormat", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Usage: {0} [args] [parserOptions].
         /// </summary>
-        public static string HelpCommand_GlobalUsageFormat {
+        public static string DefaultHelpWriter_GlobalUsageFormat {
             get {
-                return ResourceManager.GetString("HelpCommand_GlobalUsageFormat", resourceCulture);
+                return ResourceManager.GetString("DefaultHelpWriter_GlobalUsageFormat", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Options:.
         /// </summary>
-        public static string HelpCommand_OptionsListTitle {
+        public static string DefaultHelpWriter_OptionsListTitle {
             get {
-                return ResourceManager.GetString("HelpCommand_OptionsListTitle", resourceCulture);
+                return ResourceManager.GetString("DefaultHelpWriter_OptionsListTitle", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Command {0} : invalid arguments :.
         /// </summary>
@@ -158,7 +158,7 @@ namespace MGR.CommandLineParser.Properties
                 return ResourceManager.GetString("Parser_CommandInvalidArgumentsFormat", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to {0} Version: {1}.
         /// </summary>

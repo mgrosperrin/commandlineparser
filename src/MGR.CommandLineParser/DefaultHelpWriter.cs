@@ -30,7 +30,7 @@ namespace MGR.CommandLineParser
 
             WriteGeneralInformation(parserOptions);
 
-            _console.WriteLine(Strings.HelpCommand_GlobalHelp_AvailableCommands);
+            _console.WriteLine(Strings.DefaultHelpWriter_GlobalHelp_AvailableCommands);
             _console.WriteLine();
             var commandTypes = _commandTypeProvider.GetAllVisibleCommandsTypes().ToList();
             var maxNameLength = commandTypes.Max(m => m.Metadata.Name.Length);
@@ -49,7 +49,6 @@ namespace MGR.CommandLineParser
         {
             Guard.NotNull(parserOptions, nameof(parserOptions));
             Guard.NotNull(commandTypes, nameof(commandTypes));
-            Guard.NotNull(commandTypes, nameof(commandTypes));
 
             WriteGeneralInformation(parserOptions);
 
@@ -57,13 +56,13 @@ namespace MGR.CommandLineParser
             {
                 var metadata = commandType.Metadata;
                 _console.WriteLine(parserOptions.Logo);
-                _console.WriteLine(Strings.HelpCommand_CommandUsageFormat, parserOptions.CommandLineName, metadata.Name, metadata.Usage);
+                _console.WriteLine(Strings.DefaultHelpWriter_CommandUsageFormat, parserOptions.CommandLineName, metadata.Name, metadata.Usage);
                 _console.WriteLine(metadata.Description);
                 _console.WriteLine();
 
                 if (commandType.Options.Any())
                 {
-                    _console.WriteLine(Strings.HelpCommand_OptionsListTitle);
+                    _console.WriteLine(Strings.DefaultHelpWriter_OptionsListTitle);
                     var maxOptionWidth = commandType.Options.Max(o => o.DisplayInfo.Name.Length) + 2;
                     var maxAltOptionWidth = commandType.Options.Max(o => (o.DisplayInfo.ShortName ?? string.Empty).Length);
                     foreach (var commandOption in commandType.Options)
@@ -80,7 +79,7 @@ namespace MGR.CommandLineParser
                 foreach (var usage in samples)
                 {
                     _console.WriteLine(usage);
-                } 
+                }
             }
         }
 
@@ -89,8 +88,8 @@ namespace MGR.CommandLineParser
             Guard.NotNull(parserOptions, nameof(parserOptions));
 
             _console.WriteLine(parserOptions.Logo);
-            _console.WriteLine(Strings.HelpCommand_GlobalUsageFormat, string.Format(CultureInfo.CurrentUICulture, Strings.HelpCommand_GlobalCommandLineCommandFormat, parserOptions.CommandLineName).Trim());
-            _console.WriteLine(Strings.HelpCommand_GlobalHelpCommandUsageFormat, string.Format(CultureInfo.CurrentUICulture, "{0} {1}", parserOptions.CommandLineName, HelpCommand.Name).Trim());
+            _console.WriteLine(Strings.DefaultHelpWriter_GlobalUsageFormat, string.Format(CultureInfo.CurrentUICulture, Strings.DefaultHelpWriter_GlobalCommandLineCommandFormat, parserOptions.CommandLineName).Trim());
+            _console.WriteLine(Strings.DefaultHelpWriter_GlobalHelpCommandUsageFormat, string.Format(CultureInfo.CurrentUICulture, "{0} {1}", parserOptions.CommandLineName, HelpCommand.Name).Trim());
             _console.WriteLine();
         }
 

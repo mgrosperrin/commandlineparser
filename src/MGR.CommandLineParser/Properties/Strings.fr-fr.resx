@@ -126,25 +126,25 @@
   <data name="Console_WarningFormat" xml:space="preserve">
     <value>ATTENTION : {0}</value>
   </data>
-  <data name="HelpCommand_CommandTitleFormat" xml:space="preserve">
+  <data name="DefaultHelpWriter_CommandTitleFormat" xml:space="preserve">
     <value>Aide pour la commande {0} :</value>
   </data>
-  <data name="HelpCommand_CommandUsageFormat" xml:space="preserve">
+  <data name="DefaultHelpWriter_CommandUsageFormat" xml:space="preserve">
     <value>Utilisation : {0} {1} {2}</value>
   </data>
-  <data name="HelpCommand_GlobalCommandLineCommandFormat" xml:space="preserve">
+  <data name="DefaultHelpWriter_GlobalCommandLineCommandFormat" xml:space="preserve">
     <value>{0} &lt;command&gt;</value>
   </data>
-  <data name="HelpCommand_GlobalHelpCommandUsageFormat" xml:space="preserve">
+  <data name="DefaultHelpWriter_GlobalHelpCommandUsageFormat" xml:space="preserve">
     <value>Taper '{0} &lt;command&gt;' pour obtenir l'aide d'une commande spécifique.</value>
   </data>
-  <data name="HelpCommand_GlobalHelp_AvailableCommands" xml:space="preserve">
+  <data name="DefaultHelpWriter_GlobalHelp_AvailableCommands" xml:space="preserve">
     <value>Commandes disponibles :</value>
   </data>
-  <data name="HelpCommand_GlobalUsageFormat" xml:space="preserve">
+  <data name="DefaultHelpWriter_GlobalUsageFormat" xml:space="preserve">
     <value>Utilisation : {0} [args] [parserOptions]</value>
   </data>
-  <data name="HelpCommand_OptionsListTitle" xml:space="preserve">
+  <data name="DefaultHelpWriter_OptionsListTitle" xml:space="preserve">
     <value>Options :</value>
   </data>
   <data name="ParserOptions_LogoFormat" xml:space="preserve">
