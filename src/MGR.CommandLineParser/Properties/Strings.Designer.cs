@@ -9,7 +9,6 @@
 //------------------------------------------------------------------------------
 
 namespace MGR.CommandLineParser.Properties {
-    using System;
     
     
     /// <summary>
@@ -133,7 +132,7 @@ namespace MGR.CommandLineParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Usage: {0} [args] [parserOptions].
+        ///   Looks up a localized string similar to Usage: {0} [options] [args].
         /// </summary>
         public static string DefaultHelpWriter_GlobalUsageFormat {
             get {

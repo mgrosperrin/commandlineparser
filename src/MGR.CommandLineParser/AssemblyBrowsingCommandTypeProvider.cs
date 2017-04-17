@@ -13,7 +13,7 @@ namespace MGR.CommandLineParser
     public sealed class AssemblyBrowsingCommandTypeProvider : ICommandTypeProvider
     {
         private readonly IAssemblyProvider _assemblyProvider;
-        private readonly Lazy<Dictionary<string, CommandType>> _commands;
+        private readonly Lazy<Dictionary<string, ICommandType>> _commands;
 
         private readonly IEnumerable<IConverter> _converters;
 
@@ -21,18 +21,18 @@ namespace MGR.CommandLineParser
         {
             _assemblyProvider = assemblyProvider;
             _converters = converters;
-            _commands = new Lazy<Dictionary<string, CommandType>>(SearchAllCommandTypes);
+            _commands = new Lazy<Dictionary<string, ICommandType>>(SearchAllCommandTypes);
         }
 
         /// <inheritdoc />
-        public IEnumerable<CommandType> GetAllCommandTypes()
+        public IEnumerable<ICommandType> GetAllCommandTypes()
         {
             var commandTypes = _commands.Value;
             return commandTypes.Values;
         }
 
         /// <inheritdoc />
-        public CommandType GetCommandType(string commandName)
+        public ICommandType GetCommandType(string commandName)
         {
             var commandTypes = _commands.Value;
             if (commandTypes.ContainsKey(commandName))
@@ -43,7 +43,7 @@ namespace MGR.CommandLineParser
         }
 
         /// <inheritdoc />
-        public CommandType GetCommandType<TCommand>() where TCommand : ICommand
+        public ICommandType GetCommandType<TCommand>() where TCommand : ICommand
         {
             var commandTypes = _commands.Value;
             var typeOfCommand = typeof (TCommand);
@@ -63,13 +63,13 @@ namespace MGR.CommandLineParser
             return commandType;
         }
 
-        private Dictionary<string, CommandType> SearchAllCommandTypes()
+        private Dictionary<string, ICommandType> SearchAllCommandTypes()
         {
             var assemblies = _assemblyProvider.GetAssembliesToBrowse().ToList();
             var types = assemblies.GetTypes(type => type.IsType<ICommand>()).ToList();
 
-            var commandTypes = types.Select(commandType => new CommandType(commandType, _converters)).ToList();
-            var commandTypesByName = commandTypes.ToDictionary(commandType => commandType.Metadata.Name, StringComparer.OrdinalIgnoreCase);
+            var commandTypes = types.Select(commandType => new CommandType(commandType, _converters)).ToList<ICommandType>();
+            var commandTypesByName = commandTypes.ToDictionary(commandType => commandType.Metadata.Name, _ => _, StringComparer.OrdinalIgnoreCase);
             return commandTypesByName;
         }
     }

@@ -65,6 +65,7 @@
     <Compile Include="Command\ConverterKeyValueAttribute.cs" />
     <Compile Include="Command\HelpCommand.cs" />
     <Compile Include="Command\ICommand.cs" />
+    <Compile Include="Command\ICommandMetadata.cs" />
     <Compile Include="Command\IgnoreOptionPropertyAttribute.cs" />
     <Compile Include="Command\LocalizableString.cs" />
     <Compile Include="Constants.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Guard.cs" />
     <Compile Include="IAssemblyProvider.cs" />
     <Compile Include="ICommandActivator.cs" />
+    <Compile Include="ICommandType.cs" />
     <Compile Include="ICommandTypeProvider.cs" />
     <Compile Include="IConsole.cs" />
     <Compile Include="IDependencyResolver.cs" />

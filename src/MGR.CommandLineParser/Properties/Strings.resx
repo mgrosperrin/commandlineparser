@@ -145,7 +145,7 @@
     <value>Available commands:</value>
   </data>
   <data name="DefaultHelpWriter_GlobalUsageFormat" xml:space="preserve">
-    <value>Usage: {0} [args] [parserOptions]</value>
+    <value>Usage: {0} [options] [args]</value>
   </data>
   <data name="DefaultHelpWriter_OptionsListTitle" xml:space="preserve">
     <value>Options:</value>

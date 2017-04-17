@@ -142,7 +142,7 @@
     <value>Commandes disponibles :</value>
   </data>
   <data name="DefaultHelpWriter_GlobalUsageFormat" xml:space="preserve">
-    <value>Utilisation : {0} [args] [parserOptions]</value>
+    <value>Utilisation : {0} [options] [args]</value>
   </data>
   <data name="DefaultHelpWriter_OptionsListTitle" xml:space="preserve">
     <value>Options :</value>

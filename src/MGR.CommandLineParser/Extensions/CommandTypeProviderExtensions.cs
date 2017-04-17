@@ -17,7 +17,7 @@ namespace MGR.CommandLineParser.Command
         /// </summary>
         /// <param name="commandTypeProvider">The <see cref="ICommandTypeProvider" />.</param>
         /// <returns>The visible <see cref="CommandType" />.</returns>
-        public static IEnumerable<CommandType> GetAllVisibleCommandsTypes(this ICommandTypeProvider commandTypeProvider)
+        public static IEnumerable<ICommandType> GetAllVisibleCommandsTypes(this ICommandTypeProvider commandTypeProvider)
         {
             Guard.NotNull(commandTypeProvider, nameof(commandTypeProvider));
 

@@ -20,7 +20,7 @@
           <CodeCoverage>
             <ModulePaths>
               <Exclude>
-                <ModulePath>.*tests.*</ModulePath>
+                <ModulePath>.*Tests.*</ModulePath>
                 <ModulePath>.*xunit.*</ModulePath>
               </Exclude>
             </ModulePaths>

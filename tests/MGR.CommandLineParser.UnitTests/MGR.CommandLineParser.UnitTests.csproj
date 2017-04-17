@@ -161,6 +161,7 @@
       <DependentUpon>TypeExtensionsTests.cs</DependentUpon>
     </Compile>
     <Compile Include="LangageSwitcher.cs" />
+    <Compile Include="StringConsole.cs" />
     <Compile Include="TypeHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

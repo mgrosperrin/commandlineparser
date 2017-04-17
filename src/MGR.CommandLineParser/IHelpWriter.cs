@@ -16,6 +16,6 @@
         /// </summary>
         /// <param name="parserOptions">The options of the parser.</param>
         /// <param name="commandTypes">The <see cref="CommandType" /> of the commands to display help.</param>
-        void WriteHelpForCommand(IParserOptions parserOptions, params CommandType[] commandTypes);
+        void WriteHelpForCommand(IParserOptions parserOptions, params ICommandType[] commandTypes);
     }
 }

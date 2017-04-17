@@ -5,7 +5,7 @@ namespace MGR.CommandLineParser.Command
     /// <summary>
     ///     Represents the metadata of a command.
     /// </summary>
-    public sealed class CommandMetadata
+    internal sealed class CommandMetadata : ICommandMetadata
     {
         internal CommandMetadata(Type commandType)
         {

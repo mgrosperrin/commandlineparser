@@ -91,7 +91,7 @@ namespace MGR.CommandLineParser
             return argsEnumerator.Current;
         }
 
-        private CommandResult<ICommand> ParseImpl(IEnumerator<string> argsEnumerator, IDependencyResolverScope dependencyResolver, CommandType commandType)
+        private CommandResult<ICommand> ParseImpl(IEnumerator<string> argsEnumerator, IDependencyResolverScope dependencyResolver, ICommandType commandType)
         {
             var command = ExtractCommandLineOptions(commandType, dependencyResolver, argsEnumerator);
             var validation = Validate(command, dependencyResolver, commandType.Metadata.Name);
@@ -126,7 +126,7 @@ namespace MGR.CommandLineParser
             return Tuple.Create(isValid, results);
         }
 
-        private ICommand ExtractCommandLineOptions(CommandType commandType, IDependencyResolverScope dependencyResolver, IEnumerator<string> argsEnumerator)
+        private ICommand ExtractCommandLineOptions(ICommandType commandType, IDependencyResolverScope dependencyResolver, IEnumerator<string> argsEnumerator)
         {
             var command = commandType.CreateCommand(dependencyResolver, _parserOptions);
             var alwaysPutInArgumentList = false;

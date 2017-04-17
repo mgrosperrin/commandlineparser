@@ -15,7 +15,7 @@ namespace MGR.CommandLineParser
         ///     Returns all commands types.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        IEnumerable<CommandType> GetAllCommandTypes();
+        IEnumerable<ICommandType> GetAllCommandTypes();
 
         /// <summary>
         ///     Retrive the <see cref="CommandType" /> of the command with the specified <paramref name="commandName" />.
@@ -25,13 +25,13 @@ namespace MGR.CommandLineParser
         ///     The <see cref="CommandType" /> of the command with the specified <paramref name="commandName" /> or null if
         ///     the command's type is not found.
         /// </returns>
-        CommandType GetCommandType(string commandName);
+        ICommandType GetCommandType(string commandName);
         /// <summary>
         /// Retrive the <see cref="CommandType" /> of the command of the specified <typeparamref name="TCommand"/>.
         /// </summary>
         /// <typeparam name="TCommand">The type of the command.</typeparam>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
-        CommandType GetCommandType<TCommand>() where TCommand : ICommand;
+        ICommandType GetCommandType<TCommand>() where TCommand : ICommand;
     }
 }

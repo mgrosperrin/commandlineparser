@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using MGR.CommandLineParser.Command;
@@ -31,21 +33,43 @@ namespace MGR.CommandLineParser
             WriteGeneralInformation(parserOptions);
 
             _console.WriteLine(Strings.DefaultHelpWriter_GlobalHelp_AvailableCommands);
-            _console.WriteLine();
             var commandTypes = _commandTypeProvider.GetAllVisibleCommandsTypes().ToList();
-            var maxNameLength = commandTypes.Max(m => m.Metadata.Name.Length);
-            foreach (var commandType in commandTypes)
+            WriteDescriptionForSomeCommands(commandTypes);
+        }
+
+        private void WriteDescriptionForSomeCommands(List<ICommandType> commandTypes)
+        {
+            if (commandTypes.Any())
             {
-                _console.Write(" {0, -" + maxNameLength + "}   ", commandType.Metadata.Name);
-                // Starting index of the description
-                var descriptionPadding = maxNameLength + 4;
-                _console.PrintJustified(descriptionPadding, commandType.Metadata.Description);
-                _console.WriteLine();
+                WriteDescriptionForAllCommands(commandTypes);
+            }
+            else
+            {
+                _console.WriteLine("No commands found.");
             }
         }
 
+        private void WriteDescriptionForAllCommands(List<ICommandType> commandTypes)
+        {
+            var maxNameLength = commandTypes.Max(m => m.Metadata.Name.Length);
+            foreach (var commandType in commandTypes)
+            {
+                WriteDescriptionForOneCommand(commandType, maxNameLength);
+            }
+        }
+
+        [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+        private void WriteDescriptionForOneCommand(ICommandType commandType, int maxNameLength)
+        {
+            _console.Write($" {{0, -{maxNameLength}}}   ", commandType.Metadata.Name);
+            // Starting index of the description
+            var descriptionPadding = maxNameLength + 4;
+            _console.PrintJustified(descriptionPadding, commandType.Metadata.Description);
+            _console.WriteLine();
+        }
+
         /// <inheritdoc />
-        public void WriteHelpForCommand(IParserOptions parserOptions, params CommandType[] commandTypes)
+        public void WriteHelpForCommand(IParserOptions parserOptions, params ICommandType[] commandTypes)
         {
             Guard.NotNull(parserOptions, nameof(parserOptions));
             Guard.NotNull(commandTypes, nameof(commandTypes));
