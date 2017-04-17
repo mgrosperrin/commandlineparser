@@ -12,7 +12,7 @@ namespace MGR.CommandLineParser.Command
         /// <summary>
         ///     Name of the help command.
         /// </summary>
-        public const string Name = nameof(Help);
+        public const string Name = "help";
 
         /// <summary>
         ///     Show detailled help for all commands.
