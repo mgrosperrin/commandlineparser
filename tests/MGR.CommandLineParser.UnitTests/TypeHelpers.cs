@@ -8,10 +8,8 @@ namespace MGR.CommandLineParser.UnitTests
     {
         public static string ExtractPropertyName<T>(Expression<Func<T>> propertyExpression)
         {
-            if (propertyExpression == null)
-            {
-                throw new ArgumentNullException(nameof(propertyExpression));
-            }
+            Guard.NotNull(propertyExpression, nameof(propertyExpression));
+
             var memberExpression = propertyExpression.Body as MemberExpression;
             if (memberExpression == null)
             {

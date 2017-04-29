@@ -65,6 +65,7 @@
     <Compile Include="Command\ConverterKeyValueAttribute.cs" />
     <Compile Include="Command\HelpCommand.cs" />
     <Compile Include="Command\ICommand.cs" />
+    <Compile Include="Command\ICommandMetadata.cs" />
     <Compile Include="Command\IgnoreOptionPropertyAttribute.cs" />
     <Compile Include="Command\LocalizableString.cs" />
     <Compile Include="Constants.cs" />
@@ -92,11 +93,11 @@
     <Compile Include="DefaultDependencyResolver.cs" />
     <Compile Include="AssemblyBrowsingCommandTypeProvider.cs" />
     <Compile Include="DefaultDependencyResolverScope.cs" />
+    <Compile Include="DefaultHelpWriter.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\CommandTypeProviderExtensions.cs" />
     <Compile Include="Extensions\ConverterAttributeExtensions.cs" />
     <Compile Include="Extensions\ConverterExtensions.cs" />
-    <Compile Include="Extensions\DependencyResolverScopeExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\PropertyInfoExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
@@ -105,10 +106,12 @@
     <Compile Include="Guard.cs" />
     <Compile Include="IAssemblyProvider.cs" />
     <Compile Include="ICommandActivator.cs" />
+    <Compile Include="ICommandType.cs" />
     <Compile Include="ICommandTypeProvider.cs" />
     <Compile Include="IConsole.cs" />
     <Compile Include="IDependencyResolver.cs" />
     <Compile Include="Command\OptionDisplayInfo.cs" />
+    <Compile Include="IHelpWriter.cs" />
     <Compile Include="IParser.cs" />
     <Compile Include="IParserOptions.cs" />
     <Compile Include="IDependencyResolverScope.cs" />
@@ -132,6 +135,7 @@
     <EmbeddedResource Include="Properties\Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

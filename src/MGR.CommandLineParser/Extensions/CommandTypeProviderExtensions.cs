@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 // ReSharper disable CheckNamespace
@@ -18,12 +17,10 @@ namespace MGR.CommandLineParser.Command
         /// </summary>
         /// <param name="commandTypeProvider">The <see cref="ICommandTypeProvider" />.</param>
         /// <returns>The visible <see cref="CommandType" />.</returns>
-        public static IEnumerable<CommandType> GetAllVisibleCommandsTypes(this ICommandTypeProvider commandTypeProvider)
+        public static IEnumerable<ICommandType> GetAllVisibleCommandsTypes(this ICommandTypeProvider commandTypeProvider)
         {
-            if (commandTypeProvider == null)
-            {
-                throw new ArgumentNullException(nameof(commandTypeProvider));
-            }
+            Guard.NotNull(commandTypeProvider, nameof(commandTypeProvider));
+
             var allCommandTypes = commandTypeProvider.GetAllCommandTypes();
             var visibleCommandTypes = allCommandTypes.Where(commandType => !commandType.Metadata.HideFromHelpListing);
             return visibleCommandTypes;

@@ -12,7 +12,7 @@ namespace MGR.CommandLineParser.Command
     public sealed class CommandOption
     {
         private readonly MethodInfo _miAddMethod ;
-        private CommandOption(PropertyInfo propertyInfo, CommandMetadata commandMetadata, List<IConverter> converters)
+        private CommandOption(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters)
         {
             PropertyOption = propertyInfo;
             CommandMetadata = commandMetadata;
@@ -47,7 +47,7 @@ namespace MGR.CommandLineParser.Command
         /// <summary>
         ///     Gets the command to which the option relates.
         /// </summary>
-        public CommandMetadata CommandMetadata { get; }
+        public ICommandMetadata CommandMetadata { get; }
 
         /// <summary>
         ///     Gets the default value of the option.
@@ -140,7 +140,7 @@ namespace MGR.CommandLineParser.Command
             }
         }
 
-        internal static CommandOption Create(PropertyInfo propertyInfo, CommandMetadata commandMetadata, List<IConverter> converters)
+        internal static CommandOption Create(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters)
         {
             Guard.NotNull(propertyInfo, nameof(propertyInfo));
             Guard.NotNull(commandMetadata, nameof(commandMetadata));
