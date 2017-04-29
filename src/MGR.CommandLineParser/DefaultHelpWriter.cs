@@ -63,9 +63,7 @@ namespace MGR.CommandLineParser
         {
             _console.Write($" {{0, -{maxNameLength}}}   ", commandType.Metadata.Name);
             // Starting index of the description
-            var descriptionPadding = maxNameLength + 4;
-            _console.PrintJustified(descriptionPadding, commandType.Metadata.Description);
-            _console.WriteLine();
+            _console.WriteLine(commandType.Metadata.Description);
         }
 
         /// <inheritdoc />
@@ -91,10 +89,12 @@ namespace MGR.CommandLineParser
                     var maxAltOptionWidth = commandType.Options.Max(o => (o.DisplayInfo.ShortName ?? string.Empty).Length);
                     foreach (var commandOption in commandType.Options)
                     {
-                        _console.Write(" -{0, -" + (maxOptionWidth + 2) + "}", commandOption.DisplayInfo.Name + GetMultiValueIndicator(commandOption));
-                        _console.Write(" {0, -" + (maxAltOptionWidth + 4) + "}", FormatShortName(commandOption.DisplayInfo.ShortName));
-
-                        _console.PrintJustified((10 + maxAltOptionWidth + maxOptionWidth), commandOption.DisplayInfo.Description);
+                        var optionName = commandOption.DisplayInfo.Name + GetMultiValueIndicator(commandOption);
+                        var optionShortName = FormatShortName(commandOption.DisplayInfo.ShortName);
+                        _console.Write(" -{0, -" + maxOptionWidth + "}", optionName);
+                        _console.Write("{0, -" + (maxAltOptionWidth + 4) + "}", optionShortName);
+                        
+                        _console.Write(commandOption.DisplayInfo.Description);
                         _console.WriteLine();
                     }
                 }

@@ -44,7 +44,7 @@ No commands found.
 
                 helpWriter.WriteCommandListing(parserOptions);
 
-                var actual = console.AsString();
+                var actual = console.OutAsString();
                 Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
             }
 
@@ -76,7 +76,46 @@ Available commands:
 
                 helpWriter.WriteCommandListing(parserOptions);
 
-                var actual = console.AsString();
+                var actual = console.OutAsString();
+                Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
+            }
+
+            [Fact]
+            public void TwoCommandTypesDisplayOnlyGeneralInformationThenHelpForTheCommand()
+            {
+                var console = new StringConsole();
+                var commandTypeProviderMock = new Mock<ICommandTypeProvider>();
+                var commandMetadata1Mock = new Mock<ICommandMetadata>();
+                commandMetadata1Mock.SetupGet(_ => _.HideFromHelpListing).Returns(false);
+                commandMetadata1Mock.SetupGet(_ => _.Name).Returns("build");
+                commandMetadata1Mock.SetupGet(_ => _.Description).Returns("description for build command");
+                var commandType1Mock = new Mock<ICommandType>();
+                commandType1Mock.SetupGet(_ => _.Metadata).Returns(commandMetadata1Mock.Object);
+                var commandMetadata2Mock = new Mock<ICommandMetadata>();
+                commandMetadata2Mock.SetupGet(_ => _.HideFromHelpListing).Returns(false);
+                commandMetadata2Mock.SetupGet(_ => _.Name).Returns("test");
+                commandMetadata2Mock.SetupGet(_ => _.Description).Returns("description for test command");
+                var commandType2Mock = new Mock<ICommandType>();
+                commandType2Mock.SetupGet(_ => _.Metadata).Returns(commandMetadata2Mock.Object);
+                commandTypeProviderMock.Setup(_ => _.GetAllCommandTypes()).Returns(new[] { commandType1Mock.Object, commandType2Mock.Object });
+                var helpWriter = new DefaultHelpWriter(console, commandTypeProviderMock.Object);
+                var parserOptions = new ParserOptions
+                {
+                    Logo = "Logo Unit Test",
+                    CommandLineName = "tool.exe"
+                };
+                var expected = @"Logo Unit Test
+Usage: tool.exe <command> [options] [args]
+Type 'tool.exe help <command>' for help on a specific command.
+
+Available commands:
+ build   description for build command
+ test    description for test command
+";
+
+                helpWriter.WriteCommandListing(parserOptions);
+
+                var actual = console.OutAsString();
                 Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
             }
         }

@@ -63,7 +63,6 @@
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ConsoleLoggingTestsBase.cs" />
-    <Compile Include="MockedConsole.cs" />
     <Compile Include="ParsingTests\ErrorParsingTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseDeleteCommandTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseImportCommandTests.cs" />
@@ -88,6 +87,10 @@
     <ProjectReference Include="..\MGR.CommandLineParser.Tests.Commands\MGR.CommandLineParser.Tests.Commands.csproj">
       <Project>{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}</Project>
       <Name>MGR.CommandLineParser.Tests.Commands</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MGR.CommandLineParser.UnitTests\MGR.CommandLineParser.UnitTests.csproj">
+      <Project>{22f60d05-f6db-4410-80ad-e558ef1bdf6f}</Project>
+      <Name>MGR.CommandLineParser.UnitTests</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

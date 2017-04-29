@@ -48,11 +48,5 @@
         /// <param name="format">A composite format string.</param>
         /// <param name="args">An array of objects to write using <paramref name="format"/>.</param>
         void WriteWarning(string format, params object[] args);
-        /// <summary>
-        /// Writes the specified string value, followed by the current line terminator to the standard output stream, justified to the console size, starting at the specified <paramref name="startIndex"/>.
-        /// </summary>
-        /// <param name="startIndex"></param>
-        /// <param name="value"></param>
-        void PrintJustified(int startIndex, string value);
     }
 }
