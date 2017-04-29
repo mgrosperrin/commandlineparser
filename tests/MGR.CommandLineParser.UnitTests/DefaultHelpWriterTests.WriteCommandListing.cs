@@ -42,9 +42,12 @@ Available commands:
 No commands found.
 ";
 
-                helpWriter.WriteCommandListing(parserOptions);
-
+                using (new LangageSwitcher("en-us"))
+                {
+                    helpWriter.WriteCommandListing(parserOptions);
+                }
                 var actual = console.OutAsString();
+
                 Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
             }
 
@@ -74,9 +77,12 @@ Available commands:
  test   test command
 ";
 
-                helpWriter.WriteCommandListing(parserOptions);
-
+                using (new LangageSwitcher("en-us"))
+                {
+                    helpWriter.WriteCommandListing(parserOptions);
+                }
                 var actual = console.OutAsString();
+
                 Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
             }
 
@@ -113,9 +119,12 @@ Available commands:
  test    description for test command
 ";
 
-                helpWriter.WriteCommandListing(parserOptions);
-
+                using (new LangageSwitcher("en-us"))
+                {
+                    helpWriter.WriteCommandListing(parserOptions);
+                }
                 var actual = console.OutAsString();
+
                 Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
             }
         }
