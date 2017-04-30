@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using MGR.CommandLineParser.Command;
+using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.Command;
+using MGR.CommandLineParser.Extensibility.DependencyInjection;
 using MGR.CommandLineParser.Properties;
 
 namespace MGR.CommandLineParser

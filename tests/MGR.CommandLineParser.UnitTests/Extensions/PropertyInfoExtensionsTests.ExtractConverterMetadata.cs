@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Converters;
+using MGR.CommandLineParser.Extensibility.Converters;
 using Xunit;
 
 namespace MGR.CommandLineParser.UnitTests.Extensions

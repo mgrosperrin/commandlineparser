@@ -5,7 +5,8 @@ using System.Linq;
 using JetBrains.Annotations;
 using MGR.CommandLineParser;
 using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Converters;
+using MGR.CommandLineParser.Extensibility.Command;
+using MGR.CommandLineParser.Extensibility.Converters;
 
 // ReSharper disable CheckNamespace
 

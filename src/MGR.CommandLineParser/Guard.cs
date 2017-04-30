@@ -1,6 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
-using MGR.CommandLineParser.Converters;
+using MGR.CommandLineParser.Extensibility.Converters;
 
 namespace MGR.CommandLineParser
 {

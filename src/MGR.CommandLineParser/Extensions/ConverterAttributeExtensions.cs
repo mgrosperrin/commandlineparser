@@ -1,5 +1,5 @@
 ﻿using System;
-using MGR.CommandLineParser.Converters;
+using MGR.CommandLineParser.Extensibility.Converters;
 
 // ReSharper disable CheckNamespace
 

@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Converters;
+using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.Command;
+using MGR.CommandLineParser.Extensibility.Converters;
+using MGR.CommandLineParser.Extensibility.DependencyInjection;
 
 namespace MGR.CommandLineParser
 {
