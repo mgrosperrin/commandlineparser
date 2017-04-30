@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using MGR.CommandLineParser.Converters;
+using MGR.CommandLineParser.Extensibility.Converters;
 
 namespace MGR.CommandLineParser
 {

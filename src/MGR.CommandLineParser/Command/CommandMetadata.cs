@@ -1,4 +1,5 @@
 ﻿using System;
+using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser.Command
 {

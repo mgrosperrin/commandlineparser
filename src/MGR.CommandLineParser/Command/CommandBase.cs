@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.Command;
+using MGR.CommandLineParser.Extensibility.DependencyInjection;
 using MGR.CommandLineParser.Properties;
 
 namespace MGR.CommandLineParser.Command

@@ -51,8 +51,8 @@
     <Compile Include="..\CommonFiles\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AssemblyProviderBase.cs" />
-    <Compile Include="BasicCommandActivator.cs" />
+    <Compile Include="Extensibility\AssemblyProviderBase.cs" />
+    <Compile Include="Extensibility\BasicCommandActivator.cs" />
     <Compile Include="CommandLineParserException.cs" />
     <Compile Include="CommandType.cs" />
     <Compile Include="CommandResultCode.cs" />
@@ -60,40 +60,40 @@
     <Compile Include="Command\CommandAttribute.cs" />
     <Compile Include="Command\CommandBase.cs" />
     <Compile Include="Command\CommandMetadata.cs" />
-    <Compile Include="Command\CommandOption.cs" />
+    <Compile Include="Extensibility\Command\CommandOption.cs" />
     <Compile Include="Command\ConverterAttribute.cs" />
     <Compile Include="Command\ConverterKeyValueAttribute.cs" />
     <Compile Include="Command\HelpCommand.cs" />
     <Compile Include="Command\ICommand.cs" />
-    <Compile Include="Command\ICommandMetadata.cs" />
+    <Compile Include="Extensibility\Command\ICommandMetadata.cs" />
     <Compile Include="Command\IgnoreOptionPropertyAttribute.cs" />
     <Compile Include="Command\LocalizableString.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Converters\BooleanConverter.cs" />
-    <Compile Include="Converters\ByteConverter.cs" />
-    <Compile Include="Converters\CharConverter.cs" />
-    <Compile Include="Converters\Converters.cs" />
-    <Compile Include="Converters\DateTimeConverter.cs" />
-    <Compile Include="Converters\DecimalConverter.cs" />
-    <Compile Include="Converters\DoubleConverter.cs" />
-    <Compile Include="Converters\EnumConverter.cs" />
-    <Compile Include="Converters\FileSystemInfoConverter.cs" />
-    <Compile Include="Converters\GuidConverter.cs" />
-    <Compile Include="Converters\IConverter.cs" />
-    <Compile Include="Converters\Int16Converter.cs" />
-    <Compile Include="Converters\Int32Converter.cs" />
-    <Compile Include="Converters\Int64Converter.cs" />
-    <Compile Include="Converters\KeyValueConverter.cs" />
-    <Compile Include="Converters\SingleConverter.cs" />
-    <Compile Include="Converters\StringConverter.cs" />
-    <Compile Include="Converters\TimeSpanConverter.cs" />
-    <Compile Include="Converters\UriConverter.cs" />
-    <Compile Include="CurrentDirectoryAssemblyProvider.cs" />
-    <Compile Include="DefaultConsole.cs" />
-    <Compile Include="DefaultDependencyResolver.cs" />
-    <Compile Include="AssemblyBrowsingCommandTypeProvider.cs" />
-    <Compile Include="DefaultDependencyResolverScope.cs" />
-    <Compile Include="DefaultHelpWriter.cs" />
+    <Compile Include="Extensibility\Converters\BooleanConverter.cs" />
+    <Compile Include="Extensibility\Converters\ByteConverter.cs" />
+    <Compile Include="Extensibility\Converters\CharConverter.cs" />
+    <Compile Include="Extensibility\Converters\Converters.cs" />
+    <Compile Include="Extensibility\Converters\DateTimeConverter.cs" />
+    <Compile Include="Extensibility\Converters\DecimalConverter.cs" />
+    <Compile Include="Extensibility\Converters\DoubleConverter.cs" />
+    <Compile Include="Extensibility\Converters\EnumConverter.cs" />
+    <Compile Include="Extensibility\Converters\FileSystemInfoConverter.cs" />
+    <Compile Include="Extensibility\Converters\GuidConverter.cs" />
+    <Compile Include="Extensibility\Converters\IConverter.cs" />
+    <Compile Include="Extensibility\Converters\Int16Converter.cs" />
+    <Compile Include="Extensibility\Converters\Int32Converter.cs" />
+    <Compile Include="Extensibility\Converters\Int64Converter.cs" />
+    <Compile Include="Extensibility\Converters\KeyValueConverter.cs" />
+    <Compile Include="Extensibility\Converters\SingleConverter.cs" />
+    <Compile Include="Extensibility\Converters\StringConverter.cs" />
+    <Compile Include="Extensibility\Converters\TimeSpanConverter.cs" />
+    <Compile Include="Extensibility\Converters\UriConverter.cs" />
+    <Compile Include="Extensibility\CurrentDirectoryAssemblyProvider.cs" />
+    <Compile Include="Extensibility\DefaultConsole.cs" />
+    <Compile Include="Extensibility\DependencyInjection\DefaultDependencyResolver.cs" />
+    <Compile Include="Extensibility\AssemblyBrowsingCommandTypeProvider.cs" />
+    <Compile Include="Extensibility\DependencyInjection\DefaultDependencyResolverScope.cs" />
+    <Compile Include="Extensibility\DefaultHelpWriter.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\CommandTypeProviderExtensions.cs" />
     <Compile Include="Extensions\ConverterAttributeExtensions.cs" />
@@ -104,17 +104,17 @@
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Guard.cs" />
-    <Compile Include="IAssemblyProvider.cs" />
-    <Compile Include="ICommandActivator.cs" />
-    <Compile Include="ICommandType.cs" />
-    <Compile Include="ICommandTypeProvider.cs" />
-    <Compile Include="IConsole.cs" />
-    <Compile Include="IDependencyResolver.cs" />
-    <Compile Include="Command\OptionDisplayInfo.cs" />
-    <Compile Include="IHelpWriter.cs" />
+    <Compile Include="Extensibility\IAssemblyProvider.cs" />
+    <Compile Include="Extensibility\ICommandActivator.cs" />
+    <Compile Include="Extensibility\Command\ICommandType.cs" />
+    <Compile Include="Extensibility\ICommandTypeProvider.cs" />
+    <Compile Include="Extensibility\IConsole.cs" />
+    <Compile Include="Extensibility\DependencyInjection\IDependencyResolver.cs" />
+    <Compile Include="Extensibility\Command\OptionDisplayInfo.cs" />
+    <Compile Include="Extensibility\IHelpWriter.cs" />
     <Compile Include="IParser.cs" />
     <Compile Include="IParserOptions.cs" />
-    <Compile Include="IDependencyResolverScope.cs" />
+    <Compile Include="Extensibility\DependencyInjection\IDependencyResolverScope.cs" />
     <Compile Include="ParserBuilder.cs" />
     <Compile Include="ParserBuilderOptions.cs" />
     <Compile Include="Properties\JetBrains.Annotations.cs" />
@@ -126,9 +126,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="RecursiveAssemblyProvider.cs" />
-    <Compile Include="DependencyResolver.cs" />
-    <Compile Include="DependencyResolverCommandActivator.cs" />
+    <Compile Include="Extensibility\RecursiveAssemblyProvider.cs" />
+    <Compile Include="Extensibility\DependencyInjection\DependencyResolver.cs" />
+    <Compile Include="Extensibility\DependencyResolverCommandActivator.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Strings.fr-fr.resx" />
@@ -146,6 +146,7 @@
   <ItemGroup>
     <None Include="MGR.CommandLineParser.nuspec" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

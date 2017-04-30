@@ -12,4 +12,10 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(MGR))]
 [assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(MGR), Scope = "namespace", Target = "MGR.CommandLineParser")]
 [assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(MGR), Scope = "namespace", Target = "MGR.CommandLineParser.Command")]
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(MGR), Scope = "namespace", Target = "MGR.CommandLineParser.Converters")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(MGR), Scope = "namespace", Target = "MGR.CommandLineParser.Extensibility")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(MGR), Scope = "namespace", Target = "MGR.CommandLineParser.Extensibility.Command")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(MGR), Scope = "namespace", Target = "MGR.CommandLineParser.Extensibility.Converters")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(MGR), Scope = "namespace", Target = "MGR.CommandLineParser.Extensibility.DependencyInjection")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MGR.CommandLineParser.Extensibility.Command")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MGR.CommandLineParser.Extensibility.DependencyInjection")]
+

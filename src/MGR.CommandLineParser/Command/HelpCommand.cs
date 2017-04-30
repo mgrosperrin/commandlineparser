@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using JetBrains.Annotations;
+using MGR.CommandLineParser.Extensibility;
 
 namespace MGR.CommandLineParser.Command
 {

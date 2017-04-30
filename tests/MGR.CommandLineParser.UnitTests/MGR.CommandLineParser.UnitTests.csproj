@@ -66,40 +66,39 @@
     <Compile Include="..\..\src\CommonFiles\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Command\CommandTypeTests.CreateCommand.cs">
+    <Compile Include="Extensibility\Command\CommandTypeTests.CreateCommand.cs">
       <DependentUpon>CommandTypeTests.cs</DependentUpon>
     </Compile>
-    <Compile Include="Command\CommandTypeTests.cs" />
-    <Compile Include="Command\CommandTypeTests.Metadata.cs">
+    <Compile Include="Extensibility\Command\CommandTypeTests.cs" />
+    <Compile Include="Extensibility\Command\CommandTypeTests.Metadata.cs">
       <DependentUpon>CommandTypeTests.cs</DependentUpon>
     </Compile>
-    <Compile Include="Command\HelpCommandTests.cs" />
-    <Compile Include="Command\CommandOptionTests.AssignValueTests.cs">
+    <Compile Include="Extensibility\Command\CommandOptionTests.AssignValueTests.cs">
       <DependentUpon>CommandOptionTests.cs</DependentUpon>
     </Compile>
-    <Compile Include="Command\CommandOptionTests.cs" />
-    <Compile Include="Converters\BooleanConverterTests.cs" />
-    <Compile Include="Converters\ByteConverterTests.cs" />
-    <Compile Include="Converters\CharConverterTests.cs" />
-    <Compile Include="Converters\DateTimeConverterTests.cs" />
-    <Compile Include="Converters\DecimalConverterTests.cs" />
-    <Compile Include="Converters\DoubleConverterTests.cs" />
-    <Compile Include="Converters\EnumConverterTests.cs" />
-    <Compile Include="Converters\FileSystemInfoConverterTests.cs" />
-    <Compile Include="Converters\GuidConverterTests.cs" />
-    <Compile Include="Converters\Int16ConverterTests.cs" />
-    <Compile Include="Converters\Int32ConverterTests.cs" />
-    <Compile Include="Converters\Int64ConverterTests.cs" />
-    <Compile Include="Converters\KeyValueConverterTests.cs" />
-    <Compile Include="Converters\SingleConvertersTests.cs" />
-    <Compile Include="Converters\StringConverterTests.cs" />
-    <Compile Include="Converters\TimeSpanConverterTests.cs" />
-    <Compile Include="Converters\UriConverterTests.cs" />
-    <Compile Include="DefaultHelpWriterTests.cs" />
-    <Compile Include="DefaultHelpWriterTests.GetMultiValueIndicator.cs">
+    <Compile Include="Extensibility\Command\CommandOptionTests.cs" />
+    <Compile Include="Extensibility\Converters\BooleanConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\ByteConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\CharConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\DateTimeConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\DecimalConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\DoubleConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\EnumConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\FileSystemInfoConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\GuidConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\Int16ConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\Int32ConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\Int64ConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\KeyValueConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\SingleConvertersTests.cs" />
+    <Compile Include="Extensibility\Converters\StringConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\TimeSpanConverterTests.cs" />
+    <Compile Include="Extensibility\Converters\UriConverterTests.cs" />
+    <Compile Include="Extensibility\DefaultHelpWriterTests.cs" />
+    <Compile Include="Extensibility\DefaultHelpWriterTests.GetMultiValueIndicator.cs">
       <DependentUpon>DefaultHelpWriterTests.cs</DependentUpon>
     </Compile>
-    <Compile Include="DefaultHelpWriterTests.WriteCommandListing.cs">
+    <Compile Include="Extensibility\DefaultHelpWriterTests.WriteCommandListing.cs">
       <DependentUpon>DefaultHelpWriterTests.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\ConverterAttributeExtensionsTests.cs" />
