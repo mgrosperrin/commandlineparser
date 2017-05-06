@@ -19,18 +19,14 @@ namespace MGR.CommandLineParser.Extensibility
         /// <inheritdoc />
         private IEnumerable<string> GetFilesToLoad()
         {
-            var directory = Path.GetDirectoryName(typeof (AssemblyProviderBase).Assembly.CodeBase);
-            if (!string.IsNullOrEmpty(directory))
+            var thisDirectory = Environment.CurrentDirectory;
+            foreach (var item in Directory.EnumerateFiles(thisDirectory, "*.exe", SearchOption))
             {
-                var thisDirectory = new Uri(directory).AbsolutePath;
-                foreach (var item in Directory.EnumerateFiles(thisDirectory, "*.exe", SearchOption))
-                {
-                    yield return new FileInfo(item).FullName;
-                }
-                foreach (var item in Directory.EnumerateFiles(thisDirectory, "*.dll", SearchOption))
-                {
-                    yield return new FileInfo(item).FullName;
-                }
+                yield return new FileInfo(item).FullName;
+            }
+            foreach (var item in Directory.EnumerateFiles(thisDirectory, "*.dll", SearchOption))
+            {
+                yield return new FileInfo(item).FullName;
             }
         }
 
