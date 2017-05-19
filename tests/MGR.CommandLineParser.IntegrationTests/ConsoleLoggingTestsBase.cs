@@ -8,7 +8,12 @@ namespace MGR.CommandLineParser.IntegrationTests
     {
         static ConsoleLoggingTestsBase()
         {
-            DefaultDependencyResolver.RegisterDependency<IConsole>(() => _ => new StringConsole());
+            DefaultDependencyResolver.RegisterDependency<IConsole>(() =>
+                {
+                    StringConsole.Current.Reset();
+                    return _ => StringConsole.Current;
+                }
+            );
         }
     }
 }

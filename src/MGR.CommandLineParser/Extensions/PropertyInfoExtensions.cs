@@ -152,7 +152,8 @@ namespace System.Reflection
             var optionDisplyInfo = new OptionDisplayInfo
             {
                 Name = source.Name,
-                ShortName = source.Name
+                ShortName = source.Name,
+                Description = ""
             };
             var displayAttribute = source.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
             if (displayAttribute != null)

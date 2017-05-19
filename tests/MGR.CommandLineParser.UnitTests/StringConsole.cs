@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using MGR.CommandLineParser.Extensibility;
 
@@ -6,6 +7,11 @@ namespace MGR.CommandLineParser.UnitTests
 {
     public class StringConsole : IConsole
     {
+        [ThreadStatic]
+        private static StringConsole _currentConsole;
+        public static StringConsole Current => _currentConsole ?? (_currentConsole = new StringConsole());
+
+
         private readonly StringBuilder _consoleOutBuilder = new StringBuilder();
         private readonly StringBuilder _consoleErrorBuilder = new StringBuilder();
         private readonly DefaultConsole _console;
@@ -57,5 +63,11 @@ namespace MGR.CommandLineParser.UnitTests
 
         public string OutAsString() => _consoleOutBuilder.ToString();
         public string ErrorAsString() => _consoleErrorBuilder.ToString();
+
+        public void Reset()
+        {
+            _consoleOutBuilder.Clear();
+            _consoleErrorBuilder.Clear();
+        }
     }
 }

@@ -75,6 +75,7 @@
     <Compile Include="ParsingTests\ParseCommandTests\ParseSetApiKeyCommandTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseSourcesCommandTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseSpecCommandTests.cs" />
+    <Compile Include="ParsingTests\ParseCommandTests\ParseTestCommandTests.cs" />
     <Compile Include="ParsingTests\ParseCommandTests\ParseUpdateCommandTests.cs" />
     <Compile Include="ParsingTests\ParseUniqueCommandTests\ParseUniqueIntTestCommandTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

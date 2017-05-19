@@ -78,7 +78,6 @@ namespace MGR.CommandLineParser.Extensibility
             foreach (var commandType in commandTypes)
             {
                 var metadata = commandType.Metadata;
-                _console.WriteLine(parserOptions.Logo);
                 _console.WriteLine(Strings.DefaultHelpWriter_CommandUsageFormat, parserOptions.CommandLineName, metadata.Name, metadata.Usage);
                 _console.WriteLine(metadata.Description);
                 _console.WriteLine();
