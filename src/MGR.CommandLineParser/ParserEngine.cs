@@ -20,12 +20,11 @@ namespace MGR.CommandLineParser
             _parserOptions = parserOptions;
         }
 
-        public CommandResult<TCommand> Parse<TCommand>(IDependencyResolverScope dependencyResolverScope, IEnumerable<string> args) where TCommand : class, ICommand
+        public CommandResult<TCommand> Parse<TCommand>(IDependencyResolverScope dependencyResolverScope, IEnumerator<string> argumentsEnumerator) where TCommand : class, ICommand
         {
             var commandTypeProvider = dependencyResolverScope.ResolveDependency<ICommandTypeProvider>();
             var commandType = commandTypeProvider.GetCommandType<TCommand>();
-            var argsEnumerator = args.GetArgumentEnumerator();
-            var parsingResult = ParseImpl(argsEnumerator, dependencyResolverScope, commandType);
+            var parsingResult = ParseImpl(argumentsEnumerator, dependencyResolverScope, commandType);
             if (parsingResult.Command == null)
             {
                 return new CommandResult<TCommand>(default(TCommand), parsingResult.ReturnCode);
@@ -33,10 +32,9 @@ namespace MGR.CommandLineParser
             return new CommandResult<TCommand>((TCommand)parsingResult.Command, parsingResult.ReturnCode, parsingResult.ValidationResults.ToList());
         }
 
-        public CommandResult<ICommand> Parse(IDependencyResolverScope dependencyResolverScope, IEnumerable<string> args)
+        public CommandResult<ICommand> Parse(IDependencyResolverScope dependencyResolverScope, IEnumerator<string> argumentsEnumerator)
         {
-            var argsEnumerator = args.GetArgumentEnumerator();
-            var commandName = argsEnumerator.GetNextCommandLineItem();
+            var commandName = argumentsEnumerator.GetNextCommandLineItem();
             if (commandName == null)
             {
                 var helpWriter = dependencyResolverScope.ResolveDependency<IHelpWriter>();
@@ -51,13 +49,13 @@ namespace MGR.CommandLineParser
                 helpWriter.WriteCommandListing(_parserOptions);
                 return new CommandResult<ICommand>(null, CommandResultCode.NoCommandFound);
             }
-            return ParseImpl(argsEnumerator, dependencyResolverScope, commandType);
+            return ParseImpl(argumentsEnumerator, dependencyResolverScope, commandType);
 
         }
 
-        private CommandResult<ICommand> ParseImpl(IEnumerator<string> argsEnumerator, IDependencyResolverScope dependencyResolver, ICommandType commandType)
+        private CommandResult<ICommand> ParseImpl(IEnumerator<string> argumentsEnumerator, IDependencyResolverScope dependencyResolver, ICommandType commandType)
         {
-            var command = ExtractCommandLineOptions(commandType, dependencyResolver, argsEnumerator);
+            var command = ExtractCommandLineOptions(commandType, dependencyResolver, argumentsEnumerator);
             var validation = Validate(command, dependencyResolver, commandType.Metadata.Name);
             if (!validation.Item1)
             {
@@ -67,13 +65,13 @@ namespace MGR.CommandLineParser
             }
             return new CommandResult<ICommand>(command, CommandResultCode.Ok);
         }
-        private ICommand ExtractCommandLineOptions(ICommandType commandType, IDependencyResolverScope dependencyResolver, IEnumerator<string> argsEnumerator)
+        private ICommand ExtractCommandLineOptions(ICommandType commandType, IDependencyResolverScope dependencyResolver, IEnumerator<string> argumentsEnumerator)
         {
             var command = commandType.CreateCommand(dependencyResolver, _parserOptions);
             var alwaysPutInArgumentList = false;
             while (true)
             {
-                var argument = argsEnumerator.GetNextCommandLineItem();
+                var argument = argumentsEnumerator.GetNextCommandLineItem();
                 if (argument == null)
                 {
                     break;
@@ -111,7 +109,7 @@ namespace MGR.CommandLineParser
                 }
                 else
                 {
-                    value = value ?? argsEnumerator.GetNextCommandLineItem();
+                    value = value ?? argumentsEnumerator.GetNextCommandLineItem();
                 }
 
                 if (value == null)

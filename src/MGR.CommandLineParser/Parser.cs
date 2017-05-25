@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.DependencyInjection;
 
@@ -27,37 +28,40 @@ namespace MGR.CommandLineParser
         ///     Parse a command line considering a unique command.
         /// </summary>
         /// <typeparam name="TCommand">Used this unique type of command.</typeparam>
-        /// <param name="args">The command line args.</param>
+        /// <param name="arguments">The command line args.</param>
         /// <returns>The result of the parsing.</returns>
-        public CommandResult<TCommand> Parse<TCommand>(IEnumerable<string> args) where TCommand : class, ICommand
+        public CommandResult<TCommand> Parse<TCommand>(IEnumerable<string> arguments) where TCommand : class, ICommand
         {
-            if (args == null)
-            {
-                return new CommandResult<TCommand>(default(TCommand), CommandResultCode.NoArgs);
-            }
-            var dependencyResolverScope = DependencyResolver.Current.CreateScope();
-
-            var parserEngine = new ParserEngine(_parserOptions);
-            var result = parserEngine.Parse<TCommand>(dependencyResolverScope, args);
-
-            return result;
+            return ParseArguments(arguments,
+                (parserEngine, dependencyResolverScope, argumentsEnumerator) =>
+                    parserEngine.Parse<TCommand>(dependencyResolverScope, argumentsEnumerator));
         }
 
         /// <summary>
         ///     Parse a command line.
         /// </summary>
-        /// <param name="args">The command line args.</param>
+        /// <param name="arguments">The command line args.</param>
         /// <returns>The result of the parsing.</returns>
-        public CommandResult<ICommand> Parse(IEnumerable<string> args)
+        public CommandResult<ICommand> Parse(IEnumerable<string> arguments)
         {
-            if (args == null)
+            return ParseArguments(arguments,
+                (parserEngine, dependencyResolverScope, argumentsEnumerator) =>
+                parserEngine.Parse(dependencyResolverScope, argumentsEnumerator));
+        }
+
+        private CommandResult<TCommand> ParseArguments<TCommand>(IEnumerable<string> arguments, Func<ParserEngine, IDependencyResolverScope, IEnumerator<string>, CommandResult<TCommand>> callParse)
+            where TCommand : class, ICommand
+        {
+            if (arguments == null)
             {
-                return new CommandResult<ICommand>(null, CommandResultCode.NoArgs);
+                return new CommandResult<TCommand>(null, CommandResultCode.NoArgs);
             }
             var dependencyResolverScope = DependencyResolver.Current.CreateScope();
 
             var parserEngine = new ParserEngine(_parserOptions);
-            var result = parserEngine.Parse(dependencyResolverScope, args);
+            var argumentsEnumerator = arguments.GetArgumentsEnumerator();
+
+            var result = callParse(parserEngine, dependencyResolverScope, argumentsEnumerator);
 
             return result;
         }
