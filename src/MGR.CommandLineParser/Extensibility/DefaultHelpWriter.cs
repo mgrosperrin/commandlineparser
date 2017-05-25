@@ -78,7 +78,6 @@ namespace MGR.CommandLineParser.Extensibility
             foreach (var commandType in commandTypes)
             {
                 var metadata = commandType.Metadata;
-                _console.WriteLine(parserOptions.Logo);
                 _console.WriteLine(Strings.DefaultHelpWriter_CommandUsageFormat, parserOptions.CommandLineName, metadata.Name, metadata.Usage);
                 _console.WriteLine(metadata.Description);
                 _console.WriteLine();
@@ -94,16 +93,21 @@ namespace MGR.CommandLineParser.Extensibility
                         var optionShortName = FormatShortName(commandOption.DisplayInfo.ShortName);
                         _console.Write(" -{0, -" + maxOptionWidth + "}", optionName);
                         _console.Write("{0, -" + (maxAltOptionWidth + 4) + "}", optionShortName);
-                        
+
                         _console.Write(commandOption.DisplayInfo.Description);
                         _console.WriteLine();
                     }
                 }
 
                 var samples = commandType.Metadata.Samples;
-                foreach (var usage in samples)
+                if (samples.Length > 0)
                 {
-                    _console.WriteLine(usage);
+                    _console.WriteLine();
+                    _console.WriteLine("Samples:");
+                    foreach (var usage in samples)
+                    {
+                        _console.WriteLine(usage);
+                    }
                 }
             }
         }

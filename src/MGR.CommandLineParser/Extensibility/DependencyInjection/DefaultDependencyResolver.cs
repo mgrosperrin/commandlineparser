@@ -15,8 +15,6 @@ namespace MGR.CommandLineParser.Extensibility.DependencyInjection
         internal static readonly DefaultDependencyResolver Current = new DefaultDependencyResolver();
 
         private readonly List<IConverter> _converters = Converters.Converters.GetAll();
-        private ICommandTypeProvider _commandTypeProvider;
-        private IHelpWriter _helpWriter;
 
         private readonly Dictionary<Type, Func<Func<IDependencyResolverScope, IEnumerable<object>>>> _multiplyRegistredDependencies =
             new Dictionary<Type, Func<Func<IDependencyResolverScope, IEnumerable<object>>>>();
@@ -29,8 +27,18 @@ namespace MGR.CommandLineParser.Extensibility.DependencyInjection
             SaveDependency<IConsole>(() => _ => DefaultConsole.Instance);
             SaveDependency<ICommandActivator>(() => _ => BasicCommandActivator.Instance);
             SaveDependency<IAssemblyProvider>(() => _ => CurrentDirectoryAssemblyProvider.Instance);
-            SaveDependency<ICommandTypeProvider>(() => _ => _commandTypeProvider ?? (_commandTypeProvider = new AssemblyBrowsingCommandTypeProvider(_.ResolveDependency<IAssemblyProvider>(), _.ResolveDependencies<IConverter>())));
-            SaveDependency<IHelpWriter>(() => _ => _helpWriter ?? (_helpWriter = new DefaultHelpWriter(_.ResolveDependency<IConsole>(), _.ResolveDependency<ICommandTypeProvider>())));
+            SaveDependency<ICommandTypeProvider>(() =>
+            {
+                ICommandTypeProvider commandTypeProvider = null;
+                return _ => commandTypeProvider ?? (commandTypeProvider = new AssemblyBrowsingCommandTypeProvider(_.ResolveDependency<IAssemblyProvider>(),
+                                    _.ResolveDependencies<IConverter>()));
+            });
+            SaveDependency<IHelpWriter>(() =>
+            {
+                IHelpWriter helpWriter = null;
+                return _ => helpWriter ?? (helpWriter =
+                                new DefaultHelpWriter(_.ResolveDependency<IConsole>(), _.ResolveDependency<ICommandTypeProvider>()));
+            });
         }
 
         /// <inheritdoc />
@@ -143,11 +151,6 @@ namespace MGR.CommandLineParser.Extensibility.DependencyInjection
             else
             {
                 _multiplyRegistredDependencies.Add(serviceType, servicesFactory);
-            }
-            // This code is here to avoid the CC0052 issue with _commandTypeProvider (https://github.com/code-cracker/code-cracker/issues/544)
-            if (_commandTypeProvider == null)
-            {
-                _commandTypeProvider = null;
             }
         }
     }
