@@ -30,7 +30,7 @@ var commandLineParserPdbFile = outputBinariesDir + File("MGR.CommandLineParser.p
 var commandLineParserXmlFile = outputBinariesDir + File("MGR.CommandLineParser.xml");
 
 var branchName = "";
-var nugetPackagePublicationFeed = "";
+var nugetPackagePublicationFeed = "https://www.nuget.org/api/v2/package";
 var version = "0.0.0";
 var subVersion = "";
 var shaHash = "";
