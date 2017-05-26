@@ -3,7 +3,7 @@ using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands
 {
-    [CommandDisplay(Description = "PushCommandDescription", Usage = "PushCommandUsageDescription")]
+    [Command(Description = "PushCommandDescription", Usage = "PushCommandUsageDescription")]
     public class PushCommand : CommandBase
     {
         [Display(Description = "PushCommandCreateOnlyDescription", ShortName = "co")]

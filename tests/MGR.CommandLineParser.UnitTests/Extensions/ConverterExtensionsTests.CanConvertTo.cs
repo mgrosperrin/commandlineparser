@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using MGR.CommandLineParser.Converters;
+using MGR.CommandLineParser.Extensibility.Converters;
 using Moq;
 using Xunit;
 

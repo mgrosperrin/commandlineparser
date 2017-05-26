@@ -4,7 +4,7 @@ using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands
 {
-    [CommandDisplay(Description = "SetApiKeyCommandDescription", Usage = "SetApiKeyCommandUsageDescription")]
+    [Command(Description = "SetApiKeyCommandDescription", Usage = "SetApiKeyCommandUsageDescription")]
     public class SetApiKeyCommand : CommandBase
     {
         [Display(Description = "SetApiKeyCommandSourceDescription", ShortName = "src")]

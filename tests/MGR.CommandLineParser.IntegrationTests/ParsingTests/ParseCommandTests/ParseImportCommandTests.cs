@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using MGR.CommandLineParser.IntegrationTests.Commands;
+using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeleteCommand.cs" />
+    <Compile Include="HiddenCommand.cs" />
     <Compile Include="ImportCommand.cs" />
     <Compile Include="InstallCommand.cs" />
     <Compile Include="IntTestCommand.cs" />

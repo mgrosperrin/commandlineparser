@@ -126,28 +126,28 @@
   <data name="Console_WarningFormat" xml:space="preserve">
     <value>WARNING: {0}</value>
   </data>
-  <data name="HelpCommand_CommandTitleFormat" xml:space="preserve">
+  <data name="DefaultHelpWriter_CommandTitleFormat" xml:space="preserve">
     <value>{0} Command help :</value>
   </data>
   <data name="ParserOptions_LogoFormat" xml:space="preserve">
     <value>{0} Version: {1}</value>
   </data>
-  <data name="HelpCommand_CommandUsageFormat" xml:space="preserve">
+  <data name="DefaultHelpWriter_CommandUsageFormat" xml:space="preserve">
     <value>Usage: {0} {1} {2}</value>
   </data>
-  <data name="HelpCommand_GlobalCommandLineCommandFormat" xml:space="preserve">
+  <data name="DefaultHelpWriter_GlobalCommandLineCommandFormat" xml:space="preserve">
     <value>{0} &lt;command&gt;</value>
   </data>
-  <data name="HelpCommand_GlobalHelpCommandUsageFormat" xml:space="preserve">
+  <data name="DefaultHelpWriter_GlobalHelpCommandUsageFormat" xml:space="preserve">
     <value>Type '{0} &lt;command&gt;' for help on a specific command.</value>
   </data>
-  <data name="HelpCommand_GlobalHelp_AvailableCommands" xml:space="preserve">
+  <data name="DefaultHelpWriter_GlobalHelp_AvailableCommands" xml:space="preserve">
     <value>Available commands:</value>
   </data>
-  <data name="HelpCommand_GlobalUsageFormat" xml:space="preserve">
-    <value>Usage: {0} [args] [parserOptions]</value>
+  <data name="DefaultHelpWriter_GlobalUsageFormat" xml:space="preserve">
+    <value>Usage: {0} [options] [args]</value>
   </data>
-  <data name="HelpCommand_OptionsListTitle" xml:space="preserve">
+  <data name="DefaultHelpWriter_OptionsListTitle" xml:space="preserve">
     <value>Options:</value>
   </data>
   <data name="Parser_CommandInvalidArgumentsFormat" xml:space="preserve">

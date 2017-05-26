@@ -7,7 +7,7 @@ namespace System.Collections.Generic
 {
     internal static class EnumerableExtensions
     {
-        internal static IEnumerator<string> GetArgumentEnumerator([NotNull]this IEnumerable<string> arguments)
+        internal static IEnumerator<string> GetArgumentsEnumerator([NotNull]this IEnumerable<string> arguments)
         {
             var enumerable = arguments as IList<string> ?? arguments.ToList();
             var firstArgument = enumerable.FirstOrDefault();

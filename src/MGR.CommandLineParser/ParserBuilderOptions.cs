@@ -27,7 +27,7 @@ namespace MGR.CommandLineParser
             var parserOptions = new ParserOptions
             {
                 CommandLineName = CommandLineName,
-                Logo = Logo
+                Logo = Logo ?? string.Empty
             };
 
             return parserOptions;

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using MGR.CommandLineParser.Converters;
+using MGR.CommandLineParser.Extensibility.Converters;
 
 namespace MGR.CommandLineParser
 {
@@ -77,8 +77,6 @@ namespace MGR.CommandLineParser
 
             internal static readonly Func<string, Type, string> EnumConverterParsedValueIsNotOfConcreteType =
                 (value, concreteTargetType) => string.Format(CultureInfo.CurrentCulture, "The specified value '{0}' is not correct the type '{1}'.", value, concreteTargetType);
-
-            internal static readonly string CommandBaseUnableToFindHelpCommand = "Unable to locate HelpCommand";
         }
     }
 }

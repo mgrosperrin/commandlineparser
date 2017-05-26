@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGR.CommandLineParser", "src\MGR.CommandLineParser\MGR.CommandLineParser.csproj", "{EF6019C2-2C4D-4874-BBBF-D76CA30F7E8D}"
 EndProject
@@ -39,6 +39,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{07E4D8F7
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGR.CommandLineParser.Tests.Commands", "tests\MGR.CommandLineParser.Tests.Commands\MGR.CommandLineParser.Tests.Commands.csproj", "{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{172E24C2-BF99-4DA9-A7DF-8C0BB44C138D}"
+	ProjectSection(SolutionItems) = preProject
+		docs\customize-command-display.md = docs\customize-command-display.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

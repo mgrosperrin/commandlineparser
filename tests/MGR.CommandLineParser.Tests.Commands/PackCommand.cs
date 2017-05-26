@@ -5,7 +5,7 @@ using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands
 {
-    [CommandDisplay(Description = "PackageCommandDescription", Usage = "PackageCommandUsageSummary")]
+    [Command(Description = "PackageCommandDescription", Usage = "PackageCommandUsageSummary")]
     public class PackCommand : CommandBase
     {
         // Target file paths to exclude when building the lib package for symbol server scenario

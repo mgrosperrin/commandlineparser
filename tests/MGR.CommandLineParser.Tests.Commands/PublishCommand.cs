@@ -3,7 +3,7 @@ using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands
 {
-    [CommandDisplay(Description = "PublishCommandDescription", Usage = "PublishCommandUsageDescription")]
+    [Command(Description = "PublishCommandDescription", Usage = "PublishCommandUsageDescription")]
     public class PublishCommand : CommandBase
     {
         [Display(Description = "PublishCommandSourceDescription", ShortName = "src")]

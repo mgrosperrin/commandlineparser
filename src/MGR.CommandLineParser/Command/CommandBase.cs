@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.Command;
+using MGR.CommandLineParser.Extensibility.DependencyInjection;
 using MGR.CommandLineParser.Properties;
 
 namespace MGR.CommandLineParser.Command
@@ -40,7 +43,7 @@ namespace MGR.CommandLineParser.Command
         /// <summary>
         ///     Gets the <see cref="CommandType" /> of the command.
         /// </summary>
-        protected CommandType CommandType { get; private set; }
+        protected ICommandType CommandType { get; private set; }
 
         /// <summary>
         ///     Gets or sets the indicator for showing the help of the command.
@@ -63,14 +66,8 @@ namespace MGR.CommandLineParser.Command
         {
             if (Help)
             {
-                var commandTypeProvider = CurrentDependencyResolverScope.ResolveDependency<ICommandTypeProvider>();
-                var helpCommand = commandTypeProvider.GetCommandType(HelpCommand.Name)
-                    .CreateCommand(CurrentDependencyResolverScope, ParserOptions) as HelpCommand;
-                if (helpCommand == null)
-                {
-                    throw new CommandLineParserException(Constants.ExceptionMessages.CommandBaseUnableToFindHelpCommand);
-                }
-                helpCommand.WriteHelp(CommandType);
+                var helpWriter = CurrentDependencyResolverScope.ResolveDependency<IHelpWriter>();
+                helpWriter.WriteHelpForCommand(ParserOptions, CommandType);
                 return 0;
             }
             return ExecuteCommand();
@@ -83,7 +80,7 @@ namespace MGR.CommandLineParser.Command
         /// <param name="dependencyResolverScope">The <see cref="IDependencyResolverScope" />.</param>
         /// <param name="commandType">The <see cref="CommandType" /> of the command.</param>
         public virtual void Configure(IParserOptions parserOptions, IDependencyResolverScope dependencyResolverScope,
-            CommandType commandType)
+            ICommandType commandType)
         {
             ParserOptions = parserOptions;
             CurrentDependencyResolverScope = dependencyResolverScope;

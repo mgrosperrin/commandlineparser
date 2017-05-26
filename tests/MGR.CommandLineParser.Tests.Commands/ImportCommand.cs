@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.IntegrationTests.Commands
+namespace MGR.CommandLineParser.Tests.Commands
 {
     public class ImportCommand : CommandBase
     {

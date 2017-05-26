@@ -3,7 +3,7 @@ using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands
 {
-    [CommandDisplay(Description = "SpecCommandDescription", Usage = "SpecCommandUsageSummary")]
+    [Command(Description = "SpecCommandDescription", Usage = "SpecCommandUsageSummary")]
     public class SpecCommand : CommandBase
     {
         internal static readonly string SampleProjectUrl = "http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE";
