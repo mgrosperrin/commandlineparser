@@ -134,6 +134,10 @@
     <Compile Include="Extensions\PropertyInfoExtensionsTests.ShouldBeIgnored.cs">
       <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\StringExtensionsTests.AsKebabCase.cs">
+      <DependentUpon>StringExtensionsTests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\StringExtensionsTests.cs" />
     <Compile Include="Extensions\TypeExtensionsTests.cs" />
     <Compile Include="Extensions\TypeExtensionsTests.GetCollectionType.cs">
       <DependentUpon>TypeExtensionsTests.cs</DependentUpon>
