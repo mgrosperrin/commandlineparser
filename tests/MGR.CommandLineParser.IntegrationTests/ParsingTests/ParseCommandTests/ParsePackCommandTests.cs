@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
-using MGR.CommandLineParser.Extensibility;
+﻿using System.Collections.Generic;
 using MGR.CommandLineParser.Tests.Commands;
 using MGR.CommandLineParser.UnitTests;
 using Xunit;
@@ -16,10 +12,10 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
         {
             // Arrange
             var parserBuild = new ParserBuilder()
-                    .Logo("Display help for pack command")
-                    .CommandLineName("myPackTest.exe");
+                .Logo("Display help for pack command")
+                .CommandLineName("myPackTest.exe");
             var parser = parserBuild.BuildParser();
-            IEnumerable<string> args = new[] { "pack", "/help" };
+            IEnumerable<string> args = new[] {"pack", "/help"};
             var expectedReturnCode = CommandResultCode.Ok;
             var expectedResult = 0;
             var expectedHelp = @"Display help for pack command
@@ -30,19 +26,19 @@ Usage: myPackTest.exe Pack PackageCommandUsageSummary
 PackageCommandDescription
 
 Options:
- -OutputDirectory         PackageCommandOutputDirDescription
- -BasePath                PackageCommandBasePathDescription
- -Verbose                 PackageCommandVerboseDescription
- -Version                 PackageCommandVersionDescription
- -Exclude+                PackageCommandExcludeDescription
- -Symbols                 PackageCommandSymbolsDescription
- -Tool                    PackageCommandToolDescription
- -Build                   PackageCommandBuildDescription
- -MSBuildVersion          CommandMSBuildVersion
- -NoDefaultExcludes       PackageCommandNoDefaultExcludes
- -NoPackageAnalysis       PackageCommandNoRunAnalysis
- -Properties#             PackageCommandPropertiesDescription
- -Help               (?)  Help
+ -OutputDirectory|output-directory            PackageCommandOutputDirDescription
+ -BasePath|base-path                          PackageCommandBasePathDescription
+ -Verbose                                     PackageCommandVerboseDescription
+ -Version                                     PackageCommandVersionDescription
+ -Exclude+                                    PackageCommandExcludeDescription
+ -Symbols                                     PackageCommandSymbolsDescription
+ -Tool                                        PackageCommandToolDescription
+ -Build                                       PackageCommandBuildDescription
+ -MSBuildVersion|msbuild-version              CommandMSBuildVersion
+ -NoDefaultExcludes|no-default-excludes       PackageCommandNoDefaultExcludes
+ -NoPackageAnalysis|no-package-analysis       PackageCommandNoRunAnalysis
+ -Properties#                                 PackageCommandPropertiesDescription
+ -Help                                   (?)  Help
 ";
 
             // Act

@@ -26,11 +26,11 @@ Usage: myListTest.exe List ListCommandUsageDescription
 ListCommandDescription
 
 Options:
- -Source+           ListCommandSourceDescription
- -Verbose           ListCommandVerboseListDescription
- -AllVersions       ListCommandAllVersionsDescription
- -Prerelease        ListCommandPrerelease
- -Help         (?)  Help
+ -Source+                        ListCommandSourceDescription
+ -Verbose                        ListCommandVerboseListDescription
+ -AllVersions|all-versions       ListCommandAllVersionsDescription
+ -Prerelease                     ListCommandPrerelease
+ -Help                      (?)  Help
 
 Samples:
 List sample 1
