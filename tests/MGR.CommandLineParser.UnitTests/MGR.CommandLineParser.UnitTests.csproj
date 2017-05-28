@@ -66,15 +66,18 @@
     <Compile Include="..\..\src\CommonFiles\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Extensibility\Command\CommandOptionTests.AssignValue.cs">
+      <DependentUpon>CommandOptionTests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Extensibility\Command\CommandOptionTests.FindOption.cs">
+      <DependentUpon>CommandOptionTests.cs</DependentUpon>
+    </Compile>
     <Compile Include="Extensibility\Command\CommandTypeTests.CreateCommand.cs">
       <DependentUpon>CommandTypeTests.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensibility\Command\CommandTypeTests.cs" />
     <Compile Include="Extensibility\Command\CommandTypeTests.Metadata.cs">
       <DependentUpon>CommandTypeTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensibility\Command\CommandOptionTests.AssignValueTests.cs">
-      <DependentUpon>CommandOptionTests.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensibility\Command\CommandOptionTests.cs" />
     <Compile Include="Extensibility\Converters\BooleanConverterTests.cs" />

@@ -149,7 +149,7 @@ namespace System.Reflection
         internal static OptionDisplayInfo ExtractOptionDisplayInfoMetadata(this PropertyInfo source)
         {
             Guard.NotNull(source, nameof(source));
-            var optionDisplyInfo = new OptionDisplayInfo
+            var optionDisplayInfo = new OptionDisplayInfo
             {
                 Name = source.Name,
                 ShortName = source.Name,
@@ -158,11 +158,16 @@ namespace System.Reflection
             var displayAttribute = source.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
             if (displayAttribute != null)
             {
-                optionDisplyInfo.Name = displayAttribute.GetName() ?? source.Name;
-                optionDisplyInfo.ShortName = displayAttribute.GetShortName();
-                optionDisplyInfo.Description = displayAttribute.GetDescription();
+                optionDisplayInfo.Name = displayAttribute.GetName() ?? source.Name;
+                optionDisplayInfo.ShortName = displayAttribute.GetShortName();
+                optionDisplayInfo.Description = displayAttribute.GetDescription();
             }
-            return optionDisplyInfo;
+            var nameAsKebabCase = optionDisplayInfo.Name.AsKebabCase();
+            if (!nameAsKebabCase.Equals(optionDisplayInfo.Name, StringComparison.CurrentCultureIgnoreCase))
+            {
+                optionDisplayInfo.AlternateNames = new[] { nameAsKebabCase };
+            }
+            return optionDisplayInfo;
         }
 
         internal static object ExtractDefaultValue([NotNull] this PropertyInfo source, [NotNull] Func<object, object> valueConverter)
