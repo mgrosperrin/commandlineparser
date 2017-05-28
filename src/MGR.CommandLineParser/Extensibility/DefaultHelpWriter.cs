@@ -16,6 +16,7 @@ namespace MGR.CommandLineParser.Extensibility
     {
         internal const string CollectionIndicator = "+";
         internal const string DictionaryIndicator = "#";
+        internal const string MultiOptionNameSeparator = "|";
 
         private readonly IConsole _console;
         private readonly ICommandTypeProvider _commandTypeProvider;
@@ -85,11 +86,18 @@ namespace MGR.CommandLineParser.Extensibility
                 if (commandType.Options.Any())
                 {
                     _console.WriteLine(Strings.DefaultHelpWriter_OptionsListTitle);
-                    var maxOptionWidth = commandType.Options.Max(o => o.DisplayInfo.Name.Length) + 2;
+                    var maxOptionWidth = commandType.Options.Max(o => o.DisplayInfo.Name.Length + o.DisplayInfo.AlternateNames.Sum(
+                        alternateName => alternateName.Length + 1)) + 2;
                     var maxAltOptionWidth = commandType.Options.Max(o => (o.DisplayInfo.ShortName ?? string.Empty).Length);
                     foreach (var commandOption in commandType.Options)
                     {
-                        var optionName = commandOption.DisplayInfo.Name + GetMultiValueIndicator(commandOption);
+                        var alternateNames = string.Join(MultiOptionNameSeparator, commandOption.DisplayInfo.AlternateNames);
+                        var prefixAlternateNames = MultiOptionNameSeparator;
+                        if (string.IsNullOrEmpty(alternateNames))
+                        {
+                            prefixAlternateNames = String.Empty;
+                        }
+                        var optionName = string.Concat(commandOption.DisplayInfo.Name, prefixAlternateNames, alternateNames, GetMultiValueIndicator(commandOption));
                         var optionShortName = FormatShortName(commandOption.DisplayInfo.ShortName);
                         _console.Write(" -{0, -" + maxOptionWidth + "}", optionName);
                         _console.Write("{0, -" + (maxAltOptionWidth + 4) + "}", optionShortName);
