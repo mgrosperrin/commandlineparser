@@ -118,6 +118,8 @@
     <Compile Include="Extensions\ConverterExtensionsTests.CanConvertTo.cs">
       <DependentUpon>ConverterExtensionsTests.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\EnumeratorExtensionsTests.PrependWith.cs" />
+    <Compile Include="Extensions\EnumeratorExtensionsTests.cs" />
     <Compile Include="Extensions\PropertyInfoExtensionsTests.cs" />
     <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractConverterMetadata.cs">
       <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>

@@ -12,5 +12,15 @@ namespace System.Collections.Generic
             }
             return argsEnumerator.Current;
         }
+
+        public static IEnumerator<string> PrefixWith(this IEnumerator<string> argsEnumerator, string prefix)
+        {
+            var list = new List<string> {prefix};
+            while (argsEnumerator != null && argsEnumerator.MoveNext())
+            {
+                list.Add(argsEnumerator.Current);
+            }
+            return list.GetEnumerator();
+        }
     }
 }
