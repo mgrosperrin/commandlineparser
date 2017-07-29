@@ -49,6 +49,13 @@ namespace MGR.CommandLineParser
                 parserEngine.Parse(dependencyResolverScope, argumentsEnumerator));
         }
 
+        public CommandResult<ICommand> ParseWithDefaultCommand<TCommand>(IEnumerable<string> arguments) where TCommand : class, ICommand
+        {
+            return ParseArguments(arguments,
+                (parserEngine, dependencyResolverScope, argumentsEnumerator) =>
+                    parserEngine.ParseWithDefaultCommand<TCommand>(dependencyResolverScope, argumentsEnumerator));
+        }
+
         private CommandResult<TCommand> ParseArguments<TCommand>(IEnumerable<string> arguments, Func<ParserEngine, IDependencyResolverScope, IEnumerator<string>, CommandResult<TCommand>> callParse)
             where TCommand : class, ICommand
         {
