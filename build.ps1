@@ -60,7 +60,7 @@ if (!(Test-Path $CAKE_EXE)) {
 }
 
 # Start Cake
-$CakeInvokeExpression = "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseDryRun $UseExperimental -mygetFeed=`"$MyGetFeed`" -buildNumber=`"$BuildNumber`""
+$CakeInvokeExpression = "$CAKE_EXE `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseDryRun $UseExperimental -mygetFeed=`"$MyGetFeed`""
 Invoke-Expression $CakeInvokeExpression 
 Write-Host
 exit $LASTEXITCODE
