@@ -4,7 +4,7 @@ Param(
     [ValidateSet("Release", "Debug")]
     [string]$Configuration = "Release",
     [ValidateSet("Quiet", "Minimal", "Normal", "Verbose", "Diagnostic")]
-    [string]$Verbosity = "Verbose",
+    [string]$Verbosity = "Minimal",
 	[string]$MyGetFeed,
 	[string]$BuildNumber,
     [switch]$Experimental,
