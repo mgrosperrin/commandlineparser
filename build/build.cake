@@ -5,7 +5,6 @@
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var mygetFeed = Argument("mygetFeed", "");
-var buildNumber = Argument("buildNumber", "");
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -29,11 +28,9 @@ var commandLineParserDllFile = outputBinariesDir + File("MGR.CommandLineParser.d
 var commandLineParserPdbFile = outputBinariesDir + File("MGR.CommandLineParser.pdb");
 var commandLineParserXmlFile = outputBinariesDir + File("MGR.CommandLineParser.xml");
 
-var branchName = "";
 var nugetPackagePublicationFeed = "https://www.nuget.org/api/v2/package";
-var version = "0.0.0";
-var subVersion = "";
-var shaHash = "";
+var informationalVersion = "1.0.0";
+var sha1Hash = "";
 var publishPackage = true;
 var packagePublishingApiKeyName = "NUGET_API_KEY";
 var isBuildingPR = HasEnvironmentVariable("APPVEYOR_PULL_REQUEST_NUMBER");
@@ -62,46 +59,75 @@ Task("Install-Tools-Packages")
     var gitLinkInstallSettings =  new NuGetInstallSettings {
         OutputDirectory = toolsDir,
         ExcludeVersion = true,
-        Version = "2.4.1",
+        Version = "2.4.0",
         ToolPath = nugetFile
     };
     NuGetInstall("gitlink", gitLinkInstallSettings);
 });
 
+public string GetBranchName(GitVersion gitVersion)
+{
+	var branchName = EnvironmentVariable("APPVEYOR_REPO_BRANCH") ?? gitVersion.BranchName ?? "<Not Set>";
+	return branchName;
+}
+
+public string GetPreReleaseNumber(string branchName, GitVersion gitVersion)
+{
+	if(branchName != gitVersion.BranchName)
+	{
+		return "1";
+	}
+	return gitVersion.PreReleaseNumber;
+}
+
 Task("Prepare-Build")
     .IsDependentOn("Install-Tools-Packages")
     .Does(() =>
 {
-    var gitVersionSettings = new GitVersionSettings
-    {
-        ToolPath = gitVersionFile
+	var assemblyInfoSettings = new AssemblyInfoSettings {
+        Version = informationalVersion,
+        FileVersion = informationalVersion,
+        InformationalVersion = informationalVersion
     };
-    var gitVersion = GitVersion(gitVersionSettings);
-    version = gitVersion.MajorMinorPatch;
-    branchName = gitVersion.BranchName;
-    shaHash = gitVersion.Sha;
-    if (branchName == "dev")
+	if(!isBuildingPR)
     {
-        subVersion = "-alpha" + buildNumber;
-        nugetPackagePublicationFeed = mygetFeed;
-        packagePublishingApiKeyName = "MYGET_API_KEY";
-        publishPackage = !string.IsNullOrEmpty(nugetPackagePublicationFeed);
-    }
-    else if (branchName.StartsWith("release-"))
-    {
-        subVersion = "-beta" + buildNumber;
-    }
-    else if (branchName != "master")
-    {
-        publishPackage = false;
-    }
-    publishPackage = publishPackage && HasEnvironmentVariable(packagePublishingApiKeyName) && !isBuildingPR;
-    
-    var assemblyInfoSettings = new AssemblyInfoSettings {
-        Version = version,
-        FileVersion = version,
-        InformationalVersion = version + subVersion
-    };
+		var gitVersionSettings = new GitVersionSettings
+		{
+			ToolPath = gitVersionFile
+		};
+		var gitVersion = GitVersion(gitVersionSettings);
+		var subVersion = "";
+		var version = gitVersion.MajorMinorPatch;
+		var branchName = GetBranchName(gitVersion);
+		var buildNumber = GetPreReleaseNumber(branchName, gitVersion);
+		sha1Hash = gitVersion.Sha;
+		if (branchName == "dev")
+		{
+			subVersion = "-alpha" + buildNumber;
+			nugetPackagePublicationFeed = mygetFeed;
+			packagePublishingApiKeyName = "MYGET_API_KEY";
+			publishPackage = !string.IsNullOrEmpty(nugetPackagePublicationFeed);
+		}
+		else if (branchName.StartsWith("release-"))
+		{
+			subVersion = "-beta" + buildNumber;
+		}
+		else if (branchName != "master")
+		{
+			publishPackage = false;
+		}
+		informationalVersion = version + subVersion;
+		assemblyInfoSettings = new AssemblyInfoSettings {
+			Version = version,
+			FileVersion = version,
+			InformationalVersion = informationalVersion
+		};
+	}
+	else
+	{
+		publishPackage = false;
+	}
+	publishPackage &= HasEnvironmentVariable(packagePublishingApiKeyName);
     CreateAssemblyInfo(versionAssemblyFile, assemblyInfoSettings);
 });
 
@@ -145,12 +171,12 @@ Task("Create-Package")
     var gitLinkSettings = new GitLinkSettings {
         PdbDirectoryPath = outputBinariesDir,
         ToolPath = gitLinkFile,
-        ShaHash = shaHash
+        ShaHash = sha1Hash
     };
     GitLink(rootDir, gitLinkSettings);
     var nuGetPackSettings = new NuGetPackSettings{
         ToolPath = nugetFile,
-        Version = version + subVersion,
+        Version = informationalVersion,
         Files = new List<NuSpecContent> {
             new NuSpecContent{
                 Source = commandLineParserDllFile,

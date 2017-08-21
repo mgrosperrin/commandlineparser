@@ -32,6 +32,26 @@ namespace MGR.CommandLineParser
             return new CommandResult<TCommand>((TCommand)parsingResult.Command, parsingResult.ReturnCode, parsingResult.ValidationResults.ToList());
         }
 
+        public CommandResult<ICommand> ParseWithDefaultCommand<TCommand>(IDependencyResolverScope dependencyResolverScope, IEnumerator<string> argumentsEnumerator)
+            where TCommand : class, ICommand
+        {
+            var commandName = argumentsEnumerator.GetNextCommandLineItem();
+            if (commandName == null)
+            {
+                var noArgumentsCommandResult = Parse<TCommand>(dependencyResolverScope, argumentsEnumerator);
+                return new CommandResult<ICommand>(noArgumentsCommandResult.Command, noArgumentsCommandResult.ReturnCode, noArgumentsCommandResult.ValidationResults.ToList());
+            }
+            var commandTypeProvider = dependencyResolverScope.ResolveDependency<ICommandTypeProvider>();
+            var commandType = commandTypeProvider.GetCommandType(commandName);
+            if (commandType == null)
+            {
+                var noArgumentsCommandResult = Parse<TCommand>(dependencyResolverScope, argumentsEnumerator.PrefixWith(commandName));
+                return new CommandResult<ICommand>(noArgumentsCommandResult.Command, noArgumentsCommandResult.ReturnCode, noArgumentsCommandResult.ValidationResults.ToList());
+            }
+            return ParseImpl(argumentsEnumerator, dependencyResolverScope, commandType);
+
+        }
+
         public CommandResult<ICommand> Parse(IDependencyResolverScope dependencyResolverScope, IEnumerator<string> argumentsEnumerator)
         {
             var commandName = argumentsEnumerator.GetNextCommandLineItem();

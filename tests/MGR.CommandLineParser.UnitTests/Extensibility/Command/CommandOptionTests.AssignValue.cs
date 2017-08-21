@@ -115,7 +115,6 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
 
                 #endregion
             }
-
         }
     }
 }

@@ -66,15 +66,18 @@
     <Compile Include="..\..\src\CommonFiles\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Extensibility\Command\CommandOptionTests.AssignValue.cs">
+      <DependentUpon>CommandOptionTests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Extensibility\Command\CommandOptionTests.FindOption.cs">
+      <DependentUpon>CommandOptionTests.cs</DependentUpon>
+    </Compile>
     <Compile Include="Extensibility\Command\CommandTypeTests.CreateCommand.cs">
       <DependentUpon>CommandTypeTests.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensibility\Command\CommandTypeTests.cs" />
     <Compile Include="Extensibility\Command\CommandTypeTests.Metadata.cs">
       <DependentUpon>CommandTypeTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensibility\Command\CommandOptionTests.AssignValueTests.cs">
-      <DependentUpon>CommandOptionTests.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensibility\Command\CommandOptionTests.cs" />
     <Compile Include="Extensibility\Converters\BooleanConverterTests.cs" />
@@ -115,6 +118,8 @@
     <Compile Include="Extensions\ConverterExtensionsTests.CanConvertTo.cs">
       <DependentUpon>ConverterExtensionsTests.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\EnumeratorExtensionsTests.PrependWith.cs" />
+    <Compile Include="Extensions\EnumeratorExtensionsTests.cs" />
     <Compile Include="Extensions\PropertyInfoExtensionsTests.cs" />
     <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractConverterMetadata.cs">
       <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
@@ -134,6 +139,10 @@
     <Compile Include="Extensions\PropertyInfoExtensionsTests.ShouldBeIgnored.cs">
       <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\StringExtensionsTests.AsKebabCase.cs">
+      <DependentUpon>StringExtensionsTests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\StringExtensionsTests.cs" />
     <Compile Include="Extensions\TypeExtensionsTests.cs" />
     <Compile Include="Extensions\TypeExtensionsTests.GetCollectionType.cs">
       <DependentUpon>TypeExtensionsTests.cs</DependentUpon>
