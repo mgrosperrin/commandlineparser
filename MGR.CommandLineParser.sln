@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGR.CommandLineParser", "src\MGR.CommandLineParser\MGR.CommandLineParser.csproj", "{EF6019C2-2C4D-4874-BBBF-D76CA30F7E8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser", "src\MGR.CommandLineParser\MGR.CommandLineParser.csproj", "{EF6019C2-2C4D-4874-BBBF-D76CA30F7E8D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{569ED12A-DA23-4457-B304-6B00C0CB335E}"
 EndProject
@@ -45,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{172E24C2-B
 		docs\customize-command-display.md = docs\customize-command-display.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FB795A12-C939-492F-9377-4C468D01EF3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,9 +78,13 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{EF6019C2-2C4D-4874-BBBF-D76CA30F7E8D} = {FB795A12-C939-492F-9377-4C468D01EF3C}
 		{22F60D05-F6DB-4410-80AD-E558EF1BDF6F} = {569ED12A-DA23-4457-B304-6B00C0CB335E}
 		{7FD4CEB3-040B-4581-9B7C-EF8CB99B0951} = {569ED12A-DA23-4457-B304-6B00C0CB335E}
 		{F192F36D-7EDD-4E1E-82A4-95CA11665D2B} = {0B84161D-C735-43F0-A525-4ED42CC4B17C}
 		{A422BACE-2758-4ABD-9DAA-ADF289FCCE65} = {569ED12A-DA23-4457-B304-6B00C0CB335E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {827031C5-AE76-4B4C-9503-E13F15B497E9}
 	EndGlobalSection
 EndGlobal

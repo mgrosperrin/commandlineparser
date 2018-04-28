@@ -1,203 +1,22 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\xunit.runner.visualstudio.2.0.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\..\packages\xunit.runner.visualstudio.2.0.1\build\net20\xunit.runner.visualstudio.props')" />
-  <Import Project="..\..\packages\xunit.core.2.0.0\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.core.props" Condition="Exists('..\..\packages\xunit.core.2.0.0\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.core.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{22F60D05-F6DB-4410-80AD-E558EF1BDF6F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MGR.CommandLineParser.UnitTests</RootNamespace>
-    <AssemblyName>MGR.CommandLineParser.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Moq, Version=4.2.1507.118, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Moq.4.2.1507.0118\lib\net40\Moq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="xunit.abstractions">
-      <HintPath>..\..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="xunit.assert">
-      <HintPath>..\..\packages\xunit.assert.2.0.0\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.assert.dll</HintPath>
-    </Reference>
-    <Reference Include="xunit.core">
-      <HintPath>..\..\packages\xunit.extensibility.core.2.0.0\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.core.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="Moq" Version="4.8.2" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\..\src\CommonFiles\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\CommonFiles\VersionAssemblyInfo.cs">
-      <Link>Properties\VersionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Extensibility\Command\CommandOptionTests.AssignValue.cs">
-      <DependentUpon>CommandOptionTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensibility\Command\CommandOptionTests.FindOption.cs">
-      <DependentUpon>CommandOptionTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensibility\Command\CommandTypeTests.CreateCommand.cs">
-      <DependentUpon>CommandTypeTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensibility\Command\CommandTypeTests.cs" />
-    <Compile Include="Extensibility\Command\CommandTypeTests.Metadata.cs">
-      <DependentUpon>CommandTypeTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensibility\Command\CommandOptionTests.cs" />
-    <Compile Include="Extensibility\Converters\BooleanConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\ByteConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\CharConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\DateTimeConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\DecimalConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\DoubleConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\EnumConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\FileSystemInfoConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\GuidConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\Int16ConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\Int32ConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\Int64ConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\KeyValueConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\SingleConvertersTests.cs" />
-    <Compile Include="Extensibility\Converters\StringConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\TimeSpanConverterTests.cs" />
-    <Compile Include="Extensibility\Converters\UriConverterTests.cs" />
-    <Compile Include="Extensibility\DefaultHelpWriterTests.cs" />
-    <Compile Include="Extensibility\DefaultHelpWriterTests.GetMultiValueIndicator.cs">
-      <DependentUpon>DefaultHelpWriterTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensibility\DefaultHelpWriterTests.WriteCommandListing.cs">
-      <DependentUpon>DefaultHelpWriterTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\ConverterAttributeExtensionsTests.cs" />
-    <Compile Include="Extensions\ConverterAttributeExtensionsTests.BuildConverter.cs">
-      <DependentUpon>ConverterAttributeExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\ConverterAttributeExtensionsTests.BuildKeyConverter.cs">
-      <DependentUpon>ConverterAttributeExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\ConverterAttributeExtensionsTests.BuildValueConverter.cs">
-      <DependentUpon>ConverterAttributeExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\ConverterExtensionsTests.cs" />
-    <Compile Include="Extensions\ConverterExtensionsTests.CanConvertTo.cs">
-      <DependentUpon>ConverterExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\EnumeratorExtensionsTests.PrependWith.cs" />
-    <Compile Include="Extensions\EnumeratorExtensionsTests.cs" />
-    <Compile Include="Extensions\PropertyInfoExtensionsTests.cs" />
-    <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractConverterMetadata.cs">
-      <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractDefaultValue.cs">
-      <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractOptionDisplayInfoMetadata.cs">
-      <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\PropertyInfoExtensionsTests.ExtractIsRequiredMetadata.cs">
-      <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\PropertyInfoExtensionsTests.IsValidOptionProperty.cs">
-      <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\PropertyInfoExtensionsTests.ShouldBeIgnored.cs">
-      <DependentUpon>PropertyInfoExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\StringExtensionsTests.AsKebabCase.cs">
-      <DependentUpon>StringExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\StringExtensionsTests.cs" />
-    <Compile Include="Extensions\TypeExtensionsTests.cs" />
-    <Compile Include="Extensions\TypeExtensionsTests.GetCollectionType.cs">
-      <DependentUpon>TypeExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\TypeExtensionsTests.GetDictionaryType.cs">
-      <DependentUpon>TypeExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\TypeExtensionsTests.GetUnderlyingCollectionType.cs">
-      <DependentUpon>TypeExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\TypeExtensionsTests.GetUnderlyingDictionaryType.cs">
-      <DependentUpon>TypeExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\TypeExtensionsTests.GetUnderlyingGenericType.cs">
-      <DependentUpon>TypeExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\TypeExtensionsTests.IsCollectionType.cs">
-      <DependentUpon>TypeExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\TypeExtensionsTests.IsDictionaryType.cs">
-      <DependentUpon>TypeExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\TypeExtensionsTests.IsMultiValuedType.cs">
-      <DependentUpon>TypeExtensionsTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LangageSwitcher.cs" />
-    <Compile Include="StringConsole.cs" />
-    <Compile Include="TypeHelpers.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <ProjectReference Include="..\..\src\MGR.CommandLineParser\MGR.CommandLineParser.csproj" />
+    <ProjectReference Include="..\MGR.CommandLineParser.Tests.Commands\MGR.CommandLineParser.Tests.Commands.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\MGR.CommandLineParser\MGR.CommandLineParser.csproj">
-      <Project>{ef6019c2-2c4d-4874-bbbf-d76ca30f7e8d}</Project>
-      <Name>MGR.CommandLineParser</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\xunit.core.2.0.0\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.0.0\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.core.props'))" />
-    <Error Condition="!Exists('..\..\packages\xunit.runner.visualstudio.2.0.1\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.visualstudio.2.0.1\build\net20\xunit.runner.visualstudio.props'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
