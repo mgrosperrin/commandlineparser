@@ -38,16 +38,19 @@ List sample number 2
 ";
 
             // Act
-            var actual = parser.Parse(args);
-            var actualResult = actual.Execute();
+            using (new LangageSwitcher("en-us"))
+            {
+                var actual = parser.Parse(args);
+                var actualResult = actual.Execute();
 
-            // Assert
-            Assert.True(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ReturnCode);
-            Assert.IsType<ListCommand>(actual.Command);
-            var actualHelp = StringConsole.Current.OutAsString();
-            Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences: true);
-            Assert.Equal(expectedResult, actualResult);
+                // Assert
+                Assert.True(actual.IsValid);
+                Assert.Equal(expectedReturnCode, actual.ReturnCode);
+                Assert.IsType<ListCommand>(actual.Command);
+                var actualHelp = StringConsole.Current.OutAsString();
+                Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences: true);
+                Assert.Equal(expectedResult, actualResult);
+            }
         }
     }
 }
