@@ -15,7 +15,7 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
                 .Logo("Display help for pack command")
                 .CommandLineName("myPackTest.exe");
             var parser = parserBuild.BuildParser();
-            IEnumerable<string> args = new[] {"pack", "/help"};
+            IEnumerable<string> args = new[] { "pack", "/help" };
             var expectedReturnCode = CommandResultCode.Ok;
             var expectedResult = 0;
             var expectedHelp = @"Display help for pack command
@@ -42,16 +42,19 @@ Options:
 ";
 
             // Act
-            var actual = parser.Parse(args);
-            var actualResult = actual.Execute();
+            using (new LangageSwitcher("en-us"))
+            {
+                var actual = parser.Parse(args);
+                var actualResult = actual.Execute();
 
-            // Assert
-            Assert.True(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ReturnCode);
-            Assert.IsType<PackCommand>(actual.Command);
-            var actualHelp = StringConsole.Current.OutAsString();
-            Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences: true);
-            Assert.Equal(expectedResult, actualResult);
+                // Assert
+                Assert.True(actual.IsValid);
+                Assert.Equal(expectedReturnCode, actual.ReturnCode);
+                Assert.IsType<PackCommand>(actual.Command);
+                var actualHelp = StringConsole.Current.OutAsString();
+                Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences: true);
+                Assert.Equal(expectedResult, actualResult);
+            }
         }
     }
 }
