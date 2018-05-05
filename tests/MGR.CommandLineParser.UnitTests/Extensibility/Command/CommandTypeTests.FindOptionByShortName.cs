@@ -13,15 +13,13 @@ using Xunit;
 
 namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
 {
-    public partial class CommandOptionTests
+    public partial class CommandTypeTests
     {
-        public class FindOption
+        public class FindOptionByShortName
         {
             [Theory]
-            [InlineData("property-list")]
-            [InlineData("PropertyList")]
             [InlineData("pl")]
-            public void D(string optionName)
+            public void FoundWithLongOrAlternateName(string optionName)
             {
                 // Arrange
                 var testCommandType = new CommandType(typeof(FindOption.TestCommand),
@@ -34,7 +32,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                 var expectedPropertyInfo = typeof(FindOption.TestCommand).GetProperty(propertyName);
 
                 // Act
-                var actual = testCommandType.FindOption(optionName);
+                var actual = testCommandType.FindOptionByShortName(optionName);
 
                 // Assert
                 Assert.NotNull(actual);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MGR.CommandLineParser.Tests.Commands;
+using MGR.CommandLineParser.UnitTests;
 using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
@@ -15,7 +16,7 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
             var fileArgument = @"C:\temp\file.txt";
             var expectedOutputDirectory = @"C:\Temp";
             var expectedOutputFile = @"C:\Temp\otherfile.txt";
-            IEnumerable<string> args = new[] { "import", fileArgument, "/p:50", @"/o:" + expectedOutputDirectory, @"/of:" + expectedOutputFile };
+            IEnumerable<string> args = new[] { "import", fileArgument, "-p:50", @"-o:" + expectedOutputDirectory, @"-of:" + expectedOutputFile };
             var expectedReturnCode = CommandResultCode.Ok;
             var expectedMaxParallel = 50;
             var expectedNbOfArguments = 1;
@@ -36,6 +37,22 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
             for (var i = 0; i < expectedNbOfArguments; i++)
             {
                 Assert.Equal(expectedArgumentsValue[i], actual.Command.Arguments[i]);
+            }
+        }
+        [Fact]
+        public void ParseWithInvalidShortOption()
+        {
+            // Arrange
+            var parserBuild = new ParserBuilder();
+            var parser = parserBuild.BuildParser();
+            IEnumerable<string> args = new[] { "import", "/p:50" };
+            var expectedMessage = "There is no option 'p' for the command 'Import'.";
+            
+            // Act & Assert
+            using (new LangageSwitcher("en-us"))
+            {
+                var actual = Assert.Throws<CommandLineParserException>(() => parser.Parse(args));
+                Assert.Equal(expectedMessage, actual.Message);
             }
         }
     }

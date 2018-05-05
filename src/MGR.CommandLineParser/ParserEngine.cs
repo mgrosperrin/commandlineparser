@@ -108,7 +108,16 @@ namespace MGR.CommandLineParser
                     continue;
                 }
 
-                var optionText = argument.Substring(1);
+                CommandOption option;
+                int starterLength = 1;
+                Func<ICommandType, string, CommandOption> commandOptionFinder = (_commandType, optionName) => _commandType.FindOption(optionName);
+                if (argument.StartsWith(Constants.ShortNameOptionStarter))
+                {
+                    starterLength = Constants.ShortNameOptionStarter.Length;
+                    var defaultCommandOptionFinder = commandOptionFinder;
+                    commandOptionFinder = (_commandType, optionName) => _commandType.FindOptionByShortName(optionName) ?? defaultCommandOptionFinder(_commandType, optionName);
+                }
+                var optionText = argument.Substring(starterLength);
                 string value = null;
                 var splitIndex = optionText.IndexOf(Constants.OptionSplitter);
                 if (splitIndex > 0)
@@ -117,7 +126,7 @@ namespace MGR.CommandLineParser
                     optionText = optionText.Substring(0, splitIndex);
                 }
 
-                var option = commandType.FindOption(optionText);
+                option = commandOptionFinder(commandType, optionText);
                 if (option == null)
                 {
                     throw new CommandLineParserException(Constants.ExceptionMessages.FormatParserOptionNotFoundForCommand(commandType.Metadata.Name, optionText));

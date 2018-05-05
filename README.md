@@ -1,12 +1,10 @@
 MGR.Commandlineparser
 =================
 
-[![Join the chat at https://gitter.im/mgrosperrin/commandlineparser](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mgrosperrin/commandlineparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 _**Build status**_
 
-| dev | [![Build status][appveyor-dev-svg]][appveyor-dev] |
-|-----|--------|
+| dev        | [![Build status][appveyor-dev-svg]][appveyor-dev]       |
+|------------|---------------------------------------------------------|
 | **master** | [![Build status][appveyor-master-svg]][appveyor-master] |
 
 
@@ -16,7 +14,8 @@ _**Build status**_
 
 MGR.CommandLineParser is a multi-command line parser. It uses [System.ComponentModel.DataAnnotations](http://msdn.microsoft.com/fr-fr/library/system.componentmodel.dataannotations.aspx) to declare and validate the commands.
 
-#How to use it ?
+# How to use it ?
+You can find more docs [here](docs/index.md)
 I. **Install MGR.CommandLineParser**
 
 MGR.CommandLineParser is available through [NuGet][nuget]:
