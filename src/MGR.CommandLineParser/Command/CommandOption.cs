@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Reflection;
 using JetBrains.Annotations;
-using MGR.CommandLineParser.Command;
+using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 
-namespace MGR.CommandLineParser.Extensibility.Command
+namespace MGR.CommandLineParser.Command
 {
     /// <summary>
     ///     Represents an option of a command.
     /// </summary>
-    public sealed class CommandOption
+    internal sealed class CommandOption : ICommandOption
     {
-        private readonly MethodInfo _miAddMethod ;
+        private readonly MethodInfo _miAddMethod;
         private CommandOption(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters)
         {
             PropertyOption = propertyInfo;
@@ -28,7 +28,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
         /// </summary>
         [NotNull]
         public OptionDisplayInfo DisplayInfo { get; }
-        
+
         /// <summary>
         ///     Gets the converter for the option.
         /// </summary>
@@ -88,11 +88,19 @@ namespace MGR.CommandLineParser.Extensibility.Command
                 AssignValueInternal(DefaultValue, command);
             }
         }
-        internal void AssignValue(string optionValue, ICommand command)
+
+        public bool OptionalValue => OptionType == typeof(bool);
+
+        public void AssignValue(string optionValue, ICommand command)
         {
             if (!OptionType.IsType(Converter.TargetType))
             {
                 throw new CommandLineParserException(Constants.ExceptionMessages.ParserSpecifiedConverterNotValidToAssignValue(OptionType, Converter.TargetType));
+            }
+
+            if (OptionType == typeof(bool) && optionValue == null)
+            {
+                optionValue = true.ToString();
             }
             var convertedValue = ConvertValue(optionValue);
             AssignValueInternal(convertedValue, command);

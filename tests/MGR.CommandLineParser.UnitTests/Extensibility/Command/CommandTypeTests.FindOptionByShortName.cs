@@ -27,18 +27,18 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                 var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
                 dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
                     .Returns(BasicCommandActivator.Instance);
-                var expectedAlternateNames = new[]{"property-list"};
-                var propertyName = nameof(TestCommand.PropertyList);
-                var expectedPropertyInfo = typeof(FindOption.TestCommand).GetProperty(propertyName);
+                var testCommand = testCommandType.CreateCommand(dependencyResolverScopeMock.Object, new ParserOptions()) as FindOption.TestCommand;
 
                 // Act
                 var actual = testCommandType.FindOptionByShortName(optionName);
 
                 // Assert
                 Assert.NotNull(actual);
-                Assert.Equal(propertyName, actual.DisplayInfo.Name);
-                Assert.Equal(expectedAlternateNames, actual.DisplayInfo.AlternateNames);
-                Assert.Equal(expectedPropertyInfo, actual.PropertyOption);
+                Assert.NotNull(testCommand);
+                Assert.False(actual.OptionalValue);
+                actual.AssignValue("42", testCommand);
+                Assert.Single(testCommand.PropertyList);
+                Assert.Equal(42, testCommand.PropertyList.First());
 
             }
 
