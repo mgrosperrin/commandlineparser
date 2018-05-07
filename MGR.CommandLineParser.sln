@@ -7,13 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{569ED12A-DA23-4457-B304-6B00C0CB335E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGR.CommandLineParser.UnitTests", "tests\MGR.CommandLineParser.UnitTests\MGR.CommandLineParser.UnitTests.csproj", "{22F60D05-F6DB-4410-80AD-E558EF1BDF6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.UnitTests", "tests\MGR.CommandLineParser.UnitTests\MGR.CommandLineParser.UnitTests.csproj", "{22F60D05-F6DB-4410-80AD-E558EF1BDF6F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{0B84161D-C735-43F0-A525-4ED42CC4B17C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGR.CommandLineParser.IntegrationTests", "tests\MGR.CommandLineParser.IntegrationTests\MGR.CommandLineParser.IntegrationTests.csproj", "{7FD4CEB3-040B-4581-9B7C-EF8CB99B0951}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.IntegrationTests", "tests\MGR.CommandLineParser.IntegrationTests\MGR.CommandLineParser.IntegrationTests.csproj", "{7FD4CEB3-040B-4581-9B7C-EF8CB99B0951}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleApp", "samples\SimpleApp\SimpleApp.csproj", "{F192F36D-7EDD-4E1E-82A4-95CA11665D2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleApp", "samples\SimpleApp\SimpleApp.csproj", "{F192F36D-7EDD-4E1E-82A4-95CA11665D2B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonFiles", "CommonFiles", "{B5BDC6B3-1206-4DF3-A76C-22FE55064082}"
 	ProjectSection(SolutionItems) = preProject
@@ -38,11 +38,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{07E4D8F7
 		build.ps1 = build.ps1
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGR.CommandLineParser.Tests.Commands", "tests\MGR.CommandLineParser.Tests.Commands\MGR.CommandLineParser.Tests.Commands.csproj", "{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.Tests.Commands", "tests\MGR.CommandLineParser.Tests.Commands\MGR.CommandLineParser.Tests.Commands.csproj", "{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{172E24C2-BF99-4DA9-A7DF-8C0BB44C138D}"
 	ProjectSection(SolutionItems) = preProject
+		docs\call-command-options.md = docs\call-command-options.md
 		docs\customize-command-display.md = docs\customize-command-display.md
+		docs\index.md = docs\index.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FB795A12-C939-492F-9377-4C468D01EF3C}"

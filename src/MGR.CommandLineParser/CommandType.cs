@@ -50,14 +50,20 @@ namespace MGR.CommandLineParser
             {
                 return om;
             }
-            var shortOption = Options.FirstOrDefault(option => (option.DisplayInfo.ShortName ?? string.Empty).Equals(optionName, StringComparison.OrdinalIgnoreCase));
+            var alternateOption = Options.FirstOrDefault(option => option.DisplayInfo.AlternateNames.Any(alternateName => alternateName.Equals(optionName, StringComparison.OrdinalIgnoreCase)));
+            return alternateOption;
+        }
+
+        public CommandOption FindOptionByShortName(string optionShortName)
+        {
+            var shortOption = Options.FirstOrDefault(option => (option.DisplayInfo.ShortName ?? string.Empty).Equals(optionShortName, StringComparison.OrdinalIgnoreCase));
             if (shortOption != null)
             {
                 return shortOption;
             }
-            var alternateOption = Options.FirstOrDefault(option => option.DisplayInfo.AlternateNames.Any(alternateName => alternateName.Equals(optionName, StringComparison.OrdinalIgnoreCase)));
-            return alternateOption;
+            return null;
         }
+
         /// <summary>
         /// Create the command from its type.
         /// </summary>
