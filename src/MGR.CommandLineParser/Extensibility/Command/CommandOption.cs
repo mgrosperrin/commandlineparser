@@ -18,7 +18,6 @@ namespace MGR.CommandLineParser.Extensibility.Command
             PropertyOption = propertyInfo;
             CommandMetadata = commandMetadata;
             DisplayInfo = propertyInfo.ExtractOptionDisplayInfoMetadata();
-            IsRequired = propertyInfo.ExtractIsRequiredMetadata();
             Converter = propertyInfo.ExtractConverter(converters, DisplayInfo.Name, CommandMetadata.Name);
             DefaultValue = propertyInfo.ExtractDefaultValue(ConvertValue);
             _miAddMethod = PropertyOption.PropertyType.GetMethod("Add");
@@ -29,12 +28,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
         /// </summary>
         [NotNull]
         public OptionDisplayInfo DisplayInfo { get; }
-
-        /// <summary>
-        ///     Gets the indication that the option is required.
-        /// </summary>
-        public bool IsRequired { get; }
-
+        
         /// <summary>
         ///     Gets the converter for the option.
         /// </summary>

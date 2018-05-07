@@ -23,7 +23,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
         /// <summary>
         /// Gets the option of the command type.
         /// </summary>
-        IEnumerable<CommandOption> Options { get; }
+        IEnumerable<ICommandOptionMetadata> Options { get; }
 
         /// <summary>
         /// Create the command from its type.

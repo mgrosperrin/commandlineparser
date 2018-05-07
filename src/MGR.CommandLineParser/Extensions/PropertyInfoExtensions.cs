@@ -167,6 +167,18 @@ namespace System.Reflection
             }
             return null;
         }
+        internal static string ExtractDefaultValue([NotNull] this PropertyInfo source)
+        {
+            Guard.NotNull(source, nameof(source));
+
+            if (!source.PropertyType.IsMultiValuedType())
+            {
+                var defaultValueAttribute = source.GetCustomAttributes(typeof(DefaultValueAttribute), true).OfType<DefaultValueAttribute>().FirstOrDefault();
+                var originalDefaultValue = defaultValueAttribute?.Value;
+                return originalDefaultValue?.ToString();
+            }
+            return null;
+        }
 
         /// <summary>
         /// Indicates if the given <see cref="PropertyInfo"/> should be ignored as option by the parse.

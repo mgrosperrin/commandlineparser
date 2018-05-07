@@ -89,20 +89,20 @@ namespace MGR.CommandLineParser.Extensibility
                     var maxOptionWidth = commandType.Options.Max(o => o.DisplayInfo.Name.Length + o.DisplayInfo.AlternateNames.Sum(
                         alternateName => alternateName.Length + 1)) + 2;
                     var maxAltOptionWidth = commandType.Options.Max(o => (o.DisplayInfo.ShortName ?? string.Empty).Length);
-                    foreach (var commandOption in commandType.Options)
+                    foreach (var commandOptionMetadata in commandType.Options)
                     {
-                        var alternateNames = string.Join(MultiOptionNameSeparator, commandOption.DisplayInfo.AlternateNames);
+                        var alternateNames = string.Join(MultiOptionNameSeparator, commandOptionMetadata.DisplayInfo.AlternateNames);
                         var prefixAlternateNames = MultiOptionNameSeparator;
                         if (string.IsNullOrEmpty(alternateNames))
                         {
                             prefixAlternateNames = String.Empty;
                         }
-                        var optionName = string.Concat(commandOption.DisplayInfo.Name, prefixAlternateNames, alternateNames, GetMultiValueIndicator(commandOption));
-                        var optionShortName = FormatShortName(commandOption.DisplayInfo.ShortName);
+                        var optionName = string.Concat(commandOptionMetadata.DisplayInfo.Name, prefixAlternateNames, alternateNames, GetMultiValueIndicator(commandOptionMetadata));
+                        var optionShortName = FormatShortName(commandOptionMetadata.DisplayInfo.ShortName);
                         _console.Write(" -{0, -" + maxOptionWidth + "}", optionName);
                         _console.Write("{0, -" + (maxAltOptionWidth + 4) + "}", optionShortName);
 
-                        _console.Write(commandOption.DisplayInfo.Description);
+                        _console.Write(commandOptionMetadata.DisplayInfo.Description);
                         _console.WriteLine();
                     }
                 }
@@ -130,17 +130,17 @@ namespace MGR.CommandLineParser.Extensibility
             _console.WriteLine();
         }
 
-        internal static string GetMultiValueIndicator(CommandOption commandOption)
+        internal static string GetMultiValueIndicator(ICommandOptionMetadata commandOptionMetadata)
         {
-            if (commandOption.PropertyOption.PropertyType.IsCollectionType())
+            switch (commandOptionMetadata.CollectionType)
             {
-                return CollectionIndicator;
+                case CommandOptionCollectionType.Collection:
+                    return CollectionIndicator;
+                case CommandOptionCollectionType.Dictionary:
+                    return DictionaryIndicator;
+                default:
+                    return string.Empty;
             }
-            if (commandOption.PropertyOption.PropertyType.IsDictionaryType())
-            {
-                return DictionaryIndicator;
-            }
-            return string.Empty;
         }
 
         private static string FormatShortName(string shortName)

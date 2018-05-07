@@ -16,6 +16,7 @@ namespace MGR.CommandLineParser
     internal sealed class CommandType : ICommandType
     {
         private readonly Lazy<CommandMetadata> _commandMetadata;
+        private readonly Lazy<List<ICommandOptionMetadata>> _commandOptionMetadatas;
         private readonly Lazy<List<CommandOption>> _commandOptions;
         /// <summary>
         /// Creates a new <see cref="CommandType"/>.
@@ -26,6 +27,7 @@ namespace MGR.CommandLineParser
         {
             Type = commandType;
             _commandMetadata = new Lazy<CommandMetadata>(() => new CommandMetadata(Type));
+            _commandOptionMetadatas = new Lazy<List<ICommandOptionMetadata>>(() => new List<ICommandOptionMetadata>(ExtractCommandOptionMetadatas(Type, Metadata)));
             _commandOptions = new Lazy<List<CommandOption>>(() => new List<CommandOption>(ExtractCommandOptions(Type, Metadata, converters.ToList())));
 
         }
@@ -41,22 +43,22 @@ namespace MGR.CommandLineParser
         /// <summary>
         /// Gets the option of the command type.
         /// </summary>
-        public IEnumerable<CommandOption> Options => _commandOptions.Value;
+        public IEnumerable<ICommandOptionMetadata> Options => _commandOptionMetadatas.Value;
         /// <inheritdoc />
         public CommandOption FindOption(string optionName)
         {
-            var om = Options.FirstOrDefault(option => option.DisplayInfo.Name.Equals(optionName, StringComparison.OrdinalIgnoreCase));
+            var om = _commandOptions.Value.FirstOrDefault(option => option.DisplayInfo.Name.Equals(optionName, StringComparison.OrdinalIgnoreCase));
             if (om != null)
             {
                 return om;
             }
-            var alternateOption = Options.FirstOrDefault(option => option.DisplayInfo.AlternateNames.Any(alternateName => alternateName.Equals(optionName, StringComparison.OrdinalIgnoreCase)));
+            var alternateOption = _commandOptions.Value.FirstOrDefault(option => option.DisplayInfo.AlternateNames.Any(alternateName => alternateName.Equals(optionName, StringComparison.OrdinalIgnoreCase)));
             return alternateOption;
         }
 
         public CommandOption FindOptionByShortName(string optionShortName)
         {
-            var shortOption = Options.FirstOrDefault(option => (option.DisplayInfo.ShortName ?? string.Empty).Equals(optionShortName, StringComparison.OrdinalIgnoreCase));
+            var shortOption = _commandOptions.Value.FirstOrDefault(option => (option.DisplayInfo.ShortName ?? string.Empty).Equals(optionShortName, StringComparison.OrdinalIgnoreCase));
             if (shortOption != null)
             {
                 return shortOption;
@@ -78,7 +80,7 @@ namespace MGR.CommandLineParser
             var commandActivator = dependencyResolver.ResolveDependency<ICommandActivator>();
             var command = commandActivator.ActivateCommand(Type);
             var commandBase = command as CommandBase;
-            foreach (var commandOption in Options)
+            foreach (var commandOption in _commandOptions.Value)
             {
                 commandOption.AssignDefaultValue(command);
             }
@@ -86,6 +88,17 @@ namespace MGR.CommandLineParser
             return command;
         }
 
+        private static IEnumerable<ICommandOptionMetadata> ExtractCommandOptionMetadatas(Type commandType, ICommandMetadata commandMetadata)
+        {
+            foreach (var propertyInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != nameof(ICommand.Arguments)))
+            {
+                var commandOption = CommandOptionMetadata.Create(propertyInfo, commandMetadata);
+                if (commandOption != null)
+                {
+                    yield return commandOption;
+                }
+            }
+        }
         private static IEnumerable<CommandOption> ExtractCommandOptions(Type commandType, ICommandMetadata commandMetadata, List<IConverter> converters)
         {
             foreach (var propertyInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != nameof(ICommand.Arguments)))
