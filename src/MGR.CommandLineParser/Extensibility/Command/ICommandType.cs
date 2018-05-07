@@ -23,7 +23,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
         /// <summary>
         /// Gets the option of the command type.
         /// </summary>
-        IEnumerable<CommandOption> Options { get; }
+        IEnumerable<ICommandOptionMetadata> Options { get; }
 
         /// <summary>
         /// Create the command from its type.
@@ -37,12 +37,12 @@ namespace MGR.CommandLineParser.Extensibility.Command
         /// </summary>
         /// <param name="optionName">The name (short or long form) of the option.</param>
         /// <returns>The <see cref="CommandOption"/> representing the option of the command.</returns>
-        CommandOption FindOption(string optionName);
+        ICommandOption FindOption(string optionName);
         /// <summary>
         /// Find an option based on its short name.
         /// </summary>
         /// <param name="optionShortName">The short name of the option.</param>
         /// <returns>The <see cref="CommandOption"/> representing the option of the command.</returns>
-        CommandOption FindOptionByShortName(string optionShortName);
+        ICommandOption FindOptionByShortName(string optionShortName);
     }
 }

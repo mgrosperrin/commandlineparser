@@ -108,9 +108,8 @@ namespace MGR.CommandLineParser
                     continue;
                 }
 
-                CommandOption option;
                 int starterLength = 1;
-                Func<ICommandType, string, CommandOption> commandOptionFinder = (_commandType, optionName) => _commandType.FindOption(optionName);
+                Func<ICommandType, string, ICommandOption> commandOptionFinder = (_commandType, optionName) => _commandType.FindOption(optionName);
                 if (argument.StartsWith(Constants.ShortNameOptionStarter))
                 {
                     starterLength = Constants.ShortNameOptionStarter.Length;
@@ -126,24 +125,15 @@ namespace MGR.CommandLineParser
                     optionText = optionText.Substring(0, splitIndex);
                 }
 
-                option = commandOptionFinder(commandType, optionText);
+                var option = commandOptionFinder(commandType, optionText);
                 if (option == null)
                 {
                     throw new CommandLineParserException(Constants.ExceptionMessages.FormatParserOptionNotFoundForCommand(commandType.Metadata.Name, optionText));
                 }
 
-                if (option.OptionType == typeof(bool))
-                {
-                    value = value ?? bool.TrueString;
-                }
-                else
+                if (!option.OptionalValue)
                 {
                     value = value ?? argumentsEnumerator.GetNextCommandLineItem();
-                }
-
-                if (value == null)
-                {
-                    throw new CommandLineParserException(Constants.ExceptionMessages.FormatParserOptionValueRequired(commandType.Metadata.Name, optionText));
                 }
 
                 option.AssignValue(value, command);
