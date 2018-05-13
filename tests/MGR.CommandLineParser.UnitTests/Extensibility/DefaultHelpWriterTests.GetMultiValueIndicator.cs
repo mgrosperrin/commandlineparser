@@ -22,7 +22,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => SimpleIntProperty));
                 var commandMetadata = new CommandMetadata(typeof (GetMultiValueIndicator));
-                var commandOption = CommandOptionMetadata.Create(propertyInfo, commandMetadata);
+                var commandOption = CommandOption.Create(propertyInfo, commandMetadata, new List<IConverter> {new Int32Converter()});
                 var expected = string.Empty;
 
                 // Act
@@ -39,7 +39,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility
                 var propertyInfo = GetType()
                     .GetProperty(TypeHelpers.ExtractPropertyName(() => ListIntProperty));
                 var commandMetadata = new CommandMetadata(typeof (GetMultiValueIndicator));
-                var commandOption = CommandOptionMetadata.Create(propertyInfo, commandMetadata);
+                var commandOption = CommandOption.Create(propertyInfo, commandMetadata, new List<IConverter> {new Int32Converter()});
                 var expected = DefaultHelpWriter.CollectionIndicator;
 
                 // Act
@@ -56,7 +56,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => DictionaryProperty));
                 var commandMetadata = new CommandMetadata(typeof (GetMultiValueIndicator));
-                var commandOption = CommandOptionMetadata.Create(propertyInfo, commandMetadata);
+                var commandOption = CommandOption.Create(propertyInfo, commandMetadata, new List<IConverter> {new StringConverter(), new Int32Converter()});
                 var expected = DefaultHelpWriter.DictionaryIndicator;
 
                 // Act
