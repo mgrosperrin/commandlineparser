@@ -70,23 +70,44 @@ namespace MGR.CommandLineParser
 
         public ICommandOption FindOptionByShortName(string optionShortName)
         {
-            var unwrappedOption = FindUnwrappedOptionByShortName(optionShortName);
-            if (unwrappedOption != null)
+            var unwrappedOptions = FindUnwrappedOptionByShortName(optionShortName);
+            if (unwrappedOptions != null)
             {
-                return new WrapCommandOption(optionShortName, Metadata.Name, unwrappedOption);
+                return new WrapCommandOption(optionShortName, Metadata.Name, unwrappedOptions);
             }
 
             return null;
         }
 
-        private ICommandOption FindUnwrappedOptionByShortName(string optionShortName)
+        private ICommandOption[] FindUnwrappedOptionByShortName(string optionShortName)
         {
             var shortOption = _commandOptions.Value.FirstOrDefault(option => (option.DisplayInfo.ShortName ?? string.Empty).Equals(optionShortName, StringComparison.OrdinalIgnoreCase));
             if (shortOption != null)
             {
-                return shortOption;
+                return new ICommandOption[]{ shortOption};
             }
-            return null;
+            return FindUnwrappedCombinedBooleanOptionsByShortName(optionShortName);
+        }
+
+        private ICommandOption[] FindUnwrappedCombinedBooleanOptionsByShortName(string optionShortName)
+        {
+            var shortName = optionShortName;
+            var options = new List<ICommandOption>();
+            while (!string.IsNullOrEmpty(shortName))
+            {
+                var shortOption = _commandOptions.Value.FirstOrDefault(option => !string.IsNullOrEmpty(option.DisplayInfo.ShortName) && shortName.StartsWith(option.DisplayInfo.ShortName, StringComparison.OrdinalIgnoreCase));
+                if (shortOption != null)
+                {
+                    options.Add(shortOption);
+                    shortName = shortName.Substring(shortOption.DisplayInfo.ShortName.Length);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return options.ToArray();
+
         }
 
         /// <summary>
