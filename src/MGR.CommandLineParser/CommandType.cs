@@ -16,7 +16,7 @@ namespace MGR.CommandLineParser
     internal sealed class CommandType : ICommandType
     {
         private readonly Lazy<CommandMetadata> _commandMetadata;
-        private readonly Lazy<List<Option>> _commandOptions;
+        private readonly Lazy<List<CommandOption>> _commandOptions;
         /// <summary>
         /// Creates a new <see cref="CommandType"/>.
         /// </summary>
@@ -26,7 +26,7 @@ namespace MGR.CommandLineParser
         {
             Type = commandType;
             _commandMetadata = new Lazy<CommandMetadata>(() => new CommandMetadata(Type));
-            _commandOptions = new Lazy<List<Option>>(() => new List<Option>(ExtractCommandOptions(Type, Metadata, converters.ToList())));
+            _commandOptions = new Lazy<List<CommandOption>>(() => new List<CommandOption>(ExtractCommandOptions(Type, Metadata, converters.ToList())));
 
         }
         /// <summary>
@@ -41,9 +41,9 @@ namespace MGR.CommandLineParser
         /// <summary>
         /// Gets the option of the command type.
         /// </summary>
-        public IEnumerable<ICommandOptionMetadata> Options => _commandOptions.Value.Select(option => option.CommandOptionMetadata);
+        public IEnumerable<ICommandOptionMetadata> Options => _commandOptions.Value;
 
-        internal IEnumerable<ICommandOption> CommandOptions => _commandOptions.Value.Select(option => option.CommandOption);
+        internal IEnumerable<ICommandOption> CommandOptions => _commandOptions.Value;
 
         /// <inheritdoc />
         public ICommandOption FindOption(string optionName)
@@ -59,13 +59,13 @@ namespace MGR.CommandLineParser
 
         private ICommandOption FindUnwrappedOption(string optionName)
         {
-            var om = _commandOptions.Value.FirstOrDefault(option => option.CommandOptionMetadata.DisplayInfo.Name.Equals(optionName, StringComparison.OrdinalIgnoreCase));
+            var om = _commandOptions.Value.FirstOrDefault(option => option.DisplayInfo.Name.Equals(optionName, StringComparison.OrdinalIgnoreCase));
             if (om != null)
             {
-                return om.CommandOption;
+                return om;
             }
-            var alternateOption = _commandOptions.Value.FirstOrDefault(option => option.CommandOptionMetadata.DisplayInfo.AlternateNames.Any(alternateName => alternateName.Equals(optionName, StringComparison.OrdinalIgnoreCase)));
-            return alternateOption?.CommandOption;
+            var alternateOption = _commandOptions.Value.FirstOrDefault(option => option.DisplayInfo.AlternateNames.Any(alternateName => alternateName.Equals(optionName, StringComparison.OrdinalIgnoreCase)));
+            return alternateOption;
         }
 
         public ICommandOption FindOptionByShortName(string optionShortName)
@@ -81,10 +81,10 @@ namespace MGR.CommandLineParser
 
         private ICommandOption FindUnwrappedOptionByShortName(string optionShortName)
         {
-            var shortOption = _commandOptions.Value.FirstOrDefault(option => (option.CommandOptionMetadata.DisplayInfo.ShortName ?? string.Empty).Equals(optionShortName, StringComparison.OrdinalIgnoreCase));
+            var shortOption = _commandOptions.Value.FirstOrDefault(option => (option.DisplayInfo.ShortName ?? string.Empty).Equals(optionShortName, StringComparison.OrdinalIgnoreCase));
             if (shortOption != null)
             {
-                return shortOption.CommandOption;
+                return shortOption;
             }
             return null;
         }
@@ -104,9 +104,9 @@ namespace MGR.CommandLineParser
             var command = commandActivator.ActivateCommand(Type);
             foreach (var commandOption in _commandOptions.Value)
             {
-                if (!string.IsNullOrEmpty(commandOption.CommandOptionMetadata.DefaultValue))
+                if (!string.IsNullOrEmpty(commandOption.DefaultValue))
                 {
-                    commandOption.CommandOption.AssignValue(commandOption.CommandOptionMetadata.DefaultValue, command);
+                    commandOption.AssignValue(commandOption.DefaultValue, command);
                 }
             }
             var commandBase = command as CommandBase;
@@ -114,18 +114,14 @@ namespace MGR.CommandLineParser
             return command;
         }
 
-        private static IEnumerable<Option> ExtractCommandOptions(Type commandType, ICommandMetadata commandMetadata, List<IConverter> converters)
+        private static IEnumerable<CommandOption> ExtractCommandOptions(Type commandType, ICommandMetadata commandMetadata, List<IConverter> converters)
         {
             foreach (var propertyInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != nameof(ICommand.Arguments)))
             {
                 var commandOption = CommandOption.Create(propertyInfo, commandMetadata, converters);
                 if (commandOption != null)
                 {
-                    var commandOptionMetadata = CommandOptionMetadata.Create(propertyInfo, commandMetadata);
-                    if (commandOptionMetadata != null)
-                    {
-                        yield return new Option(commandOption, commandOptionMetadata);
-                    }
+                    yield return commandOption;
                 }
             }
         }
