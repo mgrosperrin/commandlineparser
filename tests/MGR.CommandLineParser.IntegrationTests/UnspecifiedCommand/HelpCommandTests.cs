@@ -3,9 +3,9 @@ using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.UnitTests;
 using Xunit;
 
-namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
+namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
 {
-    public class ParseTestCommandTests : ConsoleLoggingTestsBase
+    public class HelpCommandTests : ConsoleLoggingTestsBase
     {
         [Fact]
         public void ShowGenericHelpForAllCommand()
@@ -15,7 +15,7 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
                 .Logo("Display generic help")
                 .CommandLineName("myHelpTest.exe");
             var parser = parserBuild.BuildParser();
-            IEnumerable<string> args = new[] { "help" };
+            IEnumerable<string> args = new[] {"help"};
             var expectedReturnCode = CommandResultCode.Ok;
             var expectedResult = 0;
             var expectedHelp = @"Display generic help

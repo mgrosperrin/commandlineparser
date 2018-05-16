@@ -3,9 +3,9 @@ using System.Linq;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
-namespace MGR.CommandLineParser.IntegrationTests.ParseSpecificCommand
+namespace MGR.CommandLineParser.IntegrationTests.SpecificCommand
 {
-    public class ParseSimpleArgument : ConsoleLoggingTestsBase
+    public class SimpleOptionsTests : ConsoleLoggingTestsBase
     {
         [Fact]
         public void ParseWithValidArgs()

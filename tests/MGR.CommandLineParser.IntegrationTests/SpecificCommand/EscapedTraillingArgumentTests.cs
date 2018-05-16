@@ -1,23 +1,21 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
-namespace MGR.CommandLineParser.IntegrationTests.ParseSpecificCommand
+namespace MGR.CommandLineParser.IntegrationTests.SpecificCommand
 {
-    public class ParseCollectionArgument : ConsoleLoggingTestsBase
+    public class EscapedTraillingArgumentTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ParseWithValidListArgs()
+        public void ParseWithValidArgsAnDoubleDash()
         {
             // Arrange
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
-            IEnumerable<string> args = new[]
-                {"-Strvalue:custom value", "-i", "42", "-il", "42", "Custom argument value", "-b"};
+            IEnumerable<string> args = new[] {"-Strvalue:custom value", "-i", "42", "Custom argument value", "-b", "--", "firstArg", "-i", "32"};
             var expectedReturnCode = CommandResultCode.Ok;
             var expectedStrValue = "custom value";
-            var expectedNbOfArguments = 1;
+            var expectedNbOfArguments = 4;
             var expectedArgumentsValue = "Custom argument value";
             var expectedIntValue = 42;
 
@@ -30,11 +28,9 @@ namespace MGR.CommandLineParser.IntegrationTests.ParseSpecificCommand
             Assert.IsType<IntTestCommand>(actual.Command);
             Assert.Equal(expectedStrValue, actual.Command.StrValue);
             Assert.Equal(expectedIntValue, actual.Command.IntValue);
-            Assert.NotNull(actual.Command.IntListValue);
+            Assert.Null(actual.Command.IntListValue);
             Assert.Equal(expectedNbOfArguments, actual.Command.Arguments.Count);
-            Assert.Equal(expectedArgumentsValue, actual.Command.Arguments.Single());
-            Assert.Equal(expectedNbOfArguments, actual.Command.IntListValue.Count);
-            Assert.Equal(expectedIntValue, actual.Command.IntListValue.Single());
+            Assert.Equal(new List<string> {expectedArgumentsValue, "firstArg", "-i", "32"}, actual.Command.Arguments);
             Assert.True(actual.Command.BoolValue);
         }
     }

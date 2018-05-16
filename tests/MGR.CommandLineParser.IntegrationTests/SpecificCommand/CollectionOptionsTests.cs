@@ -1,21 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
-namespace MGR.CommandLineParser.IntegrationTests.ParseSpecificCommand
+namespace MGR.CommandLineParser.IntegrationTests.SpecificCommand
 {
-    public class ParseEscapedTraillingArgument : ConsoleLoggingTestsBase
+    public class CollectionOptionsTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ParseWithValidArgsAnDoubleDash()
+        public void ParseWithValidListArgs()
         {
             // Arrange
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
-            IEnumerable<string> args = new[] {"-Strvalue:custom value", "-i", "42", "Custom argument value", "-b", "--", "firstArg", "-i", "32"};
+            IEnumerable<string> args = new[]
+                {"-Strvalue:custom value", "-i", "42", "-il", "42", "Custom argument value", "-b"};
             var expectedReturnCode = CommandResultCode.Ok;
             var expectedStrValue = "custom value";
-            var expectedNbOfArguments = 4;
+            var expectedNbOfArguments = 1;
             var expectedArgumentsValue = "Custom argument value";
             var expectedIntValue = 42;
 
@@ -28,9 +30,11 @@ namespace MGR.CommandLineParser.IntegrationTests.ParseSpecificCommand
             Assert.IsType<IntTestCommand>(actual.Command);
             Assert.Equal(expectedStrValue, actual.Command.StrValue);
             Assert.Equal(expectedIntValue, actual.Command.IntValue);
-            Assert.Null(actual.Command.IntListValue);
+            Assert.NotNull(actual.Command.IntListValue);
             Assert.Equal(expectedNbOfArguments, actual.Command.Arguments.Count);
-            Assert.Equal(new List<string> {expectedArgumentsValue, "firstArg", "-i", "32"}, actual.Command.Arguments);
+            Assert.Equal(expectedArgumentsValue, actual.Command.Arguments.Single());
+            Assert.Equal(expectedNbOfArguments, actual.Command.IntListValue.Count);
+            Assert.Equal(expectedIntValue, actual.Command.IntListValue.Single());
             Assert.True(actual.Command.BoolValue);
         }
     }
