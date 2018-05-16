@@ -2,26 +2,10 @@
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
-namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
+namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
 {
-    public class ParseDeleteCommandTests : ConsoleLoggingTestsBase
+    public class SimpleOptionsTests : ConsoleLoggingTestsBase
     {
-        [Fact]
-        public void ParseWithInValidArgs()
-        {
-            // Arrange
-            var parserBuild = new ParserBuilder();
-            var parser = parserBuild.BuildParser();
-            IEnumerable<string> args = new[] {"delete", "-Source:custom value", "-pn", "ApiKey", "MyApiKey", "Custom argument value", "b"};
-            var expectedMessageException = @"There is no option 'pn' for the command 'Delete'.";
-
-            // Act
-            var actual = Assert.Throws<CommandLineParserException>(() => parser.Parse(args));
-
-            // Assert
-            Assert.Equal(expectedMessageException, actual.Message);
-        }
-
         [Fact]
         public void ParseWithValidArgs()
         {
@@ -49,7 +33,9 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
             Assert.Null(((DeleteCommand) actual.Command).Settings);
             Assert.Equal(expectedNbOfArguments, ((DeleteCommand) actual.Command).Arguments.Count);
             for (var i = 0; i < expectedNbOfArguments; i++)
+            {
                 Assert.Equal(expectedArgumentsValue[i], actual.Command.Arguments[i]);
+            }
         }
     }
 }

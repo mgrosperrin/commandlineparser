@@ -2,9 +2,9 @@
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
-namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
+namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
 {
-    public class ParseSetApiKeyCommandTests : ConsoleLoggingTestsBase
+    public class OptionsHasDefaultValueTests : ConsoleLoggingTestsBase
     {
         [Fact]
         public void ParseWithValidArgsAndDefaultValue()
@@ -25,8 +25,8 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
             Assert.True(actual.IsValid);
             Assert.Equal(expectedReturnCode, actual.ReturnCode);
             Assert.IsType<SetApiKeyCommand>(actual.Command);
-            Assert.Equal(expectedSource, ((SetApiKeyCommand)actual.Command).Source);
-            Assert.Equal(expectedNbOfArguments, ((SetApiKeyCommand)actual.Command).Arguments.Count);
+            Assert.Equal(expectedSource, ((SetApiKeyCommand) actual.Command).Source);
+            Assert.Equal(expectedNbOfArguments, ((SetApiKeyCommand) actual.Command).Arguments.Count);
         }
     }
 }
