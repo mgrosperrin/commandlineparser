@@ -96,7 +96,7 @@ namespace MGR.CommandLineParser
                 {
                     break;
                 }
-                if (argument.Equals(Constants.DoubleDash))
+                if (argument.Equals(Constants.EndOfOptions))
                 {
                     alwaysPutInArgumentList = true;
                     continue;
@@ -108,13 +108,13 @@ namespace MGR.CommandLineParser
                     continue;
                 }
 
-                int starterLength = 1;
-                Func<ICommandType, string, ICommandOption> commandOptionFinder = (_commandType, optionName) => _commandType.FindOption(optionName);
-                if (argument.StartsWith(Constants.ShortNameOptionStarter))
+                int starterLength = 2;
+                Func<ICommandType, string, ICommandOption> commandOptionFinder = (ct, optionName) => ct.FindOption(optionName);
+                if (!argument.StartsWith(Constants.LongNameOptionStarter))
                 {
                     starterLength = Constants.ShortNameOptionStarter.Length;
                     var defaultCommandOptionFinder = commandOptionFinder;
-                    commandOptionFinder = (_commandType, optionName) => _commandType.FindOptionByShortName(optionName) ?? defaultCommandOptionFinder(_commandType, optionName);
+                    commandOptionFinder = (ct, optionName) => ct.FindOptionByShortName(optionName) ?? defaultCommandOptionFinder(ct, optionName);
                 }
                 var optionText = argument.Substring(starterLength);
                 string value = null;

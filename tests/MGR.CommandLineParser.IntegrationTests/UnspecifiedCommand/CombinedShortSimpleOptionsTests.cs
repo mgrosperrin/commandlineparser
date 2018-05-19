@@ -12,7 +12,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             // Arrange
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
-            IEnumerable<string> args = new[] { "pack", "-Version:abc", "-vt" };
+            IEnumerable<string> args = new[] { "pack", "--Version:abc", "-vt" };
             var expectedReturnCode = CommandResultCode.Ok;
             var expectedVersion = "abc";
 
@@ -34,7 +34,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             // Arrange
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
-            IEnumerable<string> args = new[] { "pack", "-Version:abc", "-vt:-", "-b" };
+            IEnumerable<string> args = new[] { "pack", "--Version:abc", "-vt:-", "-b" };
             var expectedReturnCode = CommandResultCode.Ok;
             var expectedVersion = "abc";
 
