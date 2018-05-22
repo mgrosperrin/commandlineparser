@@ -18,8 +18,8 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             File.WriteAllLines(tempResponseFile, new[]
             {
                 "install",
-                "-version:12.34",
-                "-excludeVersion"
+                "--version:12.34",
+                "--excludeVersion"
             });
 
             // Act

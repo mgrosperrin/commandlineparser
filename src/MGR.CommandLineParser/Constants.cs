@@ -6,10 +6,11 @@ namespace MGR.CommandLineParser
 {
     internal static class Constants
     {
+        internal static readonly string LongNameOptionStarter = "--";
         internal static readonly string ShortNameOptionStarter = "-";
-        internal static readonly string[] OptionStarter = {"/", ShortNameOptionStarter };
+        internal static readonly string[] OptionStarter = { LongNameOptionStarter, ShortNameOptionStarter };
         internal static readonly char[] OptionSplitter = {':'};
-        internal static readonly string DoubleDash = "--";
+        internal static readonly string EndOfOptions = "--";
         internal const string CommandSuffix = nameof(Command);
 
         internal static class ExceptionMessages

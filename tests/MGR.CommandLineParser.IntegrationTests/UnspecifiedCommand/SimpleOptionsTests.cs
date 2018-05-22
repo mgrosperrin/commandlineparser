@@ -12,7 +12,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             // Arrange
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
-            IEnumerable<string> args = new[] {"delete", "-Source:custom value", "-np", "-ApiKey", "MyApiKey", "Custom argument value", "b"};
+            IEnumerable<string> args = new[] {"delete", "--Source:custom value", "-np", "--ApiKey", "MyApiKey", "Custom argument value", "b"};
             var expectedReturnCode = CommandResultCode.Ok;
             var expectedSource = "custom value";
             var expectedApiKey = "MyApiKey";
