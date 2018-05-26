@@ -22,11 +22,12 @@ namespace MGR.CommandLineParser
         /// </summary>
         /// <param name="commandType">The type of the command.</param>
         /// <param name="converters">The converters.</param>
-        public CommandType(Type commandType, IEnumerable<IConverter> converters)
+        /// <param name="optionAlternateNameGenerators">The generators of alternate name..</param>
+        public CommandType(Type commandType, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Type = commandType;
             _commandMetadata = new Lazy<CommandMetadata>(() => new CommandMetadata(Type));
-            _commandOptions = new Lazy<List<CommandOption>>(() => new List<CommandOption>(ExtractCommandOptions(Type, Metadata, converters.ToList())));
+            _commandOptions = new Lazy<List<CommandOption>>(() => new List<CommandOption>(ExtractCommandOptions(Type, Metadata, converters.ToList(), optionAlternateNameGenerators)));
 
         }
         /// <summary>
@@ -135,11 +136,11 @@ namespace MGR.CommandLineParser
             return command;
         }
 
-        private static IEnumerable<CommandOption> ExtractCommandOptions(Type commandType, ICommandMetadata commandMetadata, List<IConverter> converters)
+        private static IEnumerable<CommandOption> ExtractCommandOptions(Type commandType, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             foreach (var propertyInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != nameof(ICommand.Arguments)))
             {
-                var commandOption = CommandOption.Create(propertyInfo, commandMetadata, converters);
+                var commandOption = CommandOption.Create(propertyInfo, commandMetadata, converters, optionAlternateNameGenerators);
                 if (commandOption != null)
                 {
                     yield return commandOption;

@@ -13,11 +13,11 @@ namespace MGR.CommandLineParser.Command
     internal sealed class CommandOption : ICommandOption, ICommandOptionMetadata
     {
         private readonly MethodInfo _miAddMethod;
-        private CommandOption(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters)
+        private CommandOption(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             PropertyOption = propertyInfo;
             CommandMetadata = commandMetadata;
-            DisplayInfo = propertyInfo.ExtractOptionDisplayInfoMetadata();
+            DisplayInfo = propertyInfo.ExtractOptionDisplayInfoMetadata(optionAlternateNameGenerators);
             Converter = propertyInfo.ExtractConverter(converters, DisplayInfo.Name, CommandMetadata.Name);
             IsRequired = propertyInfo.ExtractIsRequiredMetadata();
             DefaultValue = propertyInfo.ExtractDefaultValue();
@@ -136,11 +136,12 @@ namespace MGR.CommandLineParser.Command
             }
         }
 
-        internal static CommandOption Create(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters)
+        internal static CommandOption Create(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Guard.NotNull(propertyInfo, nameof(propertyInfo));
             Guard.NotNull(commandMetadata, nameof(commandMetadata));
             Guard.NotNull(converters, nameof(converters));
+            Guard.NotNull(optionAlternateNameGenerators, nameof(optionAlternateNameGenerators));
 
             if (propertyInfo.ShouldBeIgnored())
             {
@@ -152,7 +153,7 @@ namespace MGR.CommandLineParser.Command
                     Constants.ExceptionMessages.ParserExtractMetadataPropertyShouldBeWritableOrICollection(
                         propertyInfo.Name, commandMetadata.Name));
             }
-            var commandOption = new CommandOption(propertyInfo, commandMetadata, converters);
+            var commandOption = new CommandOption(propertyInfo, commandMetadata, converters, optionAlternateNameGenerators);
             return commandOption;
         }
         internal static CommandOptionCollectionType GetMultiValueIndicator(PropertyInfo propertyInfo)

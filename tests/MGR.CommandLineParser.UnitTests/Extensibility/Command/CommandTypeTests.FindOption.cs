@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 using MGR.CommandLineParser.Extensibility.DependencyInjection;
 using Moq;
@@ -24,7 +25,8 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
             {
                 // Arrange
                 var testCommandType = new CommandType(typeof(FindOption.TestCommand),
-                    new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() });
+                    new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() },
+                    new List<IOptionAlternateNameGenerator>{new KebabCaseOptionAlternateNameGenerator()});
                 var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
                 dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
                     .Returns(BasicCommandActivator.Instance);
