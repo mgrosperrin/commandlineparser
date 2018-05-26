@@ -17,11 +17,13 @@ namespace MGR.CommandLineParser.Extensibility
         private readonly Lazy<Dictionary<string, ICommandType>> _commands;
 
         private readonly IEnumerable<IConverter> _converters;
+        private readonly IEnumerable<IOptionAlternateNameGenerator> _optionAlternateNameGenerators;
 
-        internal AssemblyBrowsingCommandTypeProvider(IAssemblyProvider assemblyProvider, IEnumerable<IConverter> converters)
+        internal AssemblyBrowsingCommandTypeProvider(IAssemblyProvider assemblyProvider, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             _assemblyProvider = assemblyProvider;
             _converters = converters;
+            _optionAlternateNameGenerators = optionAlternateNameGenerators;
             _commands = new Lazy<Dictionary<string, ICommandType>>(SearchAllCommandTypes);
         }
 
@@ -56,7 +58,7 @@ namespace MGR.CommandLineParser.Extensibility
                     commandType = commandTypes.Values.FirstOrDefault(ct => ct.Type == typeOfCommand);
                     if (commandType == null)
                     {
-                        commandType = new CommandType(typeOfCommand, _converters);
+                        commandType = new CommandType(typeOfCommand, _converters, _optionAlternateNameGenerators);
                         commandTypes.Add(commandType.Metadata.Name, commandType);
                     }
                 }
@@ -69,7 +71,7 @@ namespace MGR.CommandLineParser.Extensibility
             var assemblies = _assemblyProvider.GetAssembliesToBrowse().ToList();
             var types = assemblies.GetTypes(type => TypeExtensions.IsType<ICommand>(type)).ToList();
 
-            var commandTypes = types.Select(commandType => new CommandType(commandType, _converters)).ToList<ICommandType>();
+            var commandTypes = types.Select(commandType => new CommandType(commandType, _converters, _optionAlternateNameGenerators)).ToList<ICommandType>();
             var commandTypesByName = commandTypes.ToDictionary(commandType => commandType.Metadata.Name, _ => _, StringComparer.OrdinalIgnoreCase);
             return commandTypesByName;
         }

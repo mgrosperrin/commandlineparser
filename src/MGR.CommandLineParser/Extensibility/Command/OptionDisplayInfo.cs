@@ -15,7 +15,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
         /// <summary>
         ///     Creates a new <see cref="OptionDisplayInfo" />.
         /// </summary>
-        public OptionDisplayInfo(PropertyInfo propertyInfo)
+        public OptionDisplayInfo(PropertyInfo propertyInfo, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Guard.NotNull(propertyInfo, nameof(propertyInfo));
             Name = propertyInfo.Name;
@@ -29,13 +29,11 @@ namespace MGR.CommandLineParser.Extensibility.Command
                 Description = displayAttribute.GetDescription();
             }
 
-            var alternateNames = new List<string>();
-            var nameAsKebabCase = Name.AsKebabCase();
-            if (!nameAsKebabCase.Equals(Name, StringComparison.CurrentCultureIgnoreCase))
-            {
-                alternateNames.Add(nameAsKebabCase);
-            }
-            AlternateNames = alternateNames.AsEnumerable();
+            AlternateNames = optionAlternateNameGenerators.SelectMany(
+                    oang => oang.GenerateAlternateNames(this, propertyInfo))
+                .Distinct(StringComparer.CurrentCultureIgnoreCase)
+                .Where(alternameName => !alternameName.Equals(Name, StringComparison.CurrentCultureIgnoreCase))
+                .ToList();
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 
 namespace MGR.CommandLineParser.Extensibility.DependencyInjection
@@ -25,13 +26,15 @@ namespace MGR.CommandLineParser.Extensibility.DependencyInjection
         {
             SaveDependencies<IConverter>(() => _ => _converters);
             SaveDependency<IConsole>(() => _ => DefaultConsole.Instance);
+            SaveDependencies<IOptionAlternateNameGenerator>(() => _ => new KebabCaseOptionAlternateNameGenerator());
             SaveDependency<ICommandActivator>(() => _ => BasicCommandActivator.Instance);
             SaveDependency<IAssemblyProvider>(() => _ => CurrentDirectoryAssemblyProvider.Instance);
             SaveDependency<ICommandTypeProvider>(() =>
             {
                 ICommandTypeProvider commandTypeProvider = null;
                 return _ => commandTypeProvider ?? (commandTypeProvider = new AssemblyBrowsingCommandTypeProvider(_.ResolveDependency<IAssemblyProvider>(),
-                                    _.ResolveDependencies<IConverter>()));
+                                    _.ResolveDependencies<IConverter>(),
+                                _.ResolveDependencies<IOptionAlternateNameGenerator>()));
             });
             SaveDependency<IHelpWriter>(() =>
             {
@@ -60,6 +63,16 @@ namespace MGR.CommandLineParser.Extensibility.DependencyInjection
             Current.SaveDependency(serviceFactory);
         }
 
+        /// <summary>
+        ///     Register a new item in a collection of services.
+        /// </summary>
+        /// <typeparam name="T">The type of the contract of the service.</typeparam>
+        /// <param name="serviceFactory">A factory to get one implementation of the service.</param>
+        [PublicAPI]
+        public static void RegisterDependencies<T>([NotNull] Func<Func<IDependencyResolverScope, T>> serviceFactory) where T : class
+        {
+            Current.SaveDependencies(serviceFactory);
+        }
         /// <summary>
         ///     Register a collection of services.
         /// </summary>
@@ -139,6 +152,30 @@ namespace MGR.CommandLineParser.Extensibility.DependencyInjection
             else
             {
                 _singlyRegistredDependencies.Add(serviceType, serviceFactory);
+            }
+        }
+        private void SaveDependencies<T>([NotNull] Func<Func<IDependencyResolverScope, T>> serviceFactory) where T : class
+        {
+            var serviceType = typeof(T);
+            if (_multiplyRegistredDependencies.ContainsKey(serviceType))
+            {
+                var currentDependencies = _multiplyRegistredDependencies[serviceType];
+                Func<Func<IDependencyResolverScope, IEnumerable<T>>> newDependencies = () =>
+                {
+                    var currentDependenciesScoped = currentDependencies();
+                    var newDependencyScoped = serviceFactory();
+                    return scope =>
+                        currentDependenciesScoped(scope).OfType<T>().Append(newDependencyScoped(scope));
+                };
+                _multiplyRegistredDependencies[serviceType] = newDependencies;
+            }
+            else
+            {
+                _multiplyRegistredDependencies.Add(serviceType, () =>
+                {
+                    var serviceFactoryScoped = serviceFactory();
+                    return scope => new[] { serviceFactoryScoped(scope) };
+                });
             }
         }
         private void SaveDependencies<T>([NotNull] Func<Func<IDependencyResolverScope, IEnumerable<T>>> servicesFactory) where T : class

@@ -146,10 +146,10 @@ namespace System.Reflection
         }
 
         [NotNull]
-        internal static OptionDisplayInfo ExtractOptionDisplayInfoMetadata(this PropertyInfo source)
+        internal static OptionDisplayInfo ExtractOptionDisplayInfoMetadata(this PropertyInfo source, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Guard.NotNull(source, nameof(source));
-            var optionDisplayInfo = new OptionDisplayInfo(source);
+            var optionDisplayInfo = new OptionDisplayInfo(source, optionAlternateNameGenerators);
             return optionDisplayInfo;
         }
 
