@@ -1,10 +1,10 @@
-using System.IO;
+﻿using System.IO;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
-namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
+namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
 {
-    public class ParseInstallCommandTests : ConsoleLoggingTestsBase
+    public class ArgumentsInResponseFileTests : ConsoleLoggingTestsBase
     {
         [Fact]
         public void ParseWithAResponseFile()
@@ -18,18 +18,18 @@ namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
             File.WriteAllLines(tempResponseFile, new[]
             {
                 "install",
-                "-version:12.34",
-                "-excludeVersion"
+                "--version:12.34",
+                "--excludeVersion"
             });
 
             // Act
-            var actual = parser.Parse(new[] {"@" + tempResponseFile});
+            var actual = parser.Parse(new[] { "@" + tempResponseFile });
 
             // Assert
             Assert.True(actual.IsValid);
             Assert.Empty(actual.ValidationResults);
             Assert.IsType<InstallCommand>(actual.Command);
-            var installCommand = (InstallCommand) actual.Command;
+            var installCommand = (InstallCommand)actual.Command;
             Assert.Empty(installCommand.Source);
             Assert.True(string.IsNullOrEmpty(installCommand.OutputDirectory));
             Assert.Equal("12.34", installCommand.Version);

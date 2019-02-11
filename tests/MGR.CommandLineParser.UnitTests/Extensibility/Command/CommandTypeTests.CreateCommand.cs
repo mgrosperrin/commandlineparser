@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 using MGR.CommandLineParser.Extensibility.DependencyInjection;
 using Moq;
@@ -24,7 +25,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                         new GuidConverter(),
                         new Int32Converter(),
                         new BooleanConverter()
-                    });
+                    }, new List<IOptionAlternateNameGenerator>());
                 var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
                 dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
                     .Returns(BasicCommandActivator.Instance);

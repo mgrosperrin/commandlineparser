@@ -146,27 +146,10 @@ namespace System.Reflection
         }
 
         [NotNull]
-        internal static OptionDisplayInfo ExtractOptionDisplayInfoMetadata(this PropertyInfo source)
+        internal static OptionDisplayInfo ExtractOptionDisplayInfoMetadata(this PropertyInfo source, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Guard.NotNull(source, nameof(source));
-            var optionDisplayInfo = new OptionDisplayInfo
-            {
-                Name = source.Name,
-                ShortName = source.Name,
-                Description = ""
-            };
-            var displayAttribute = source.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
-            if (displayAttribute != null)
-            {
-                optionDisplayInfo.Name = displayAttribute.GetName() ?? source.Name;
-                optionDisplayInfo.ShortName = displayAttribute.GetShortName();
-                optionDisplayInfo.Description = displayAttribute.GetDescription();
-            }
-            var nameAsKebabCase = optionDisplayInfo.Name.AsKebabCase();
-            if (!nameAsKebabCase.Equals(optionDisplayInfo.Name, StringComparison.CurrentCultureIgnoreCase))
-            {
-                optionDisplayInfo.AlternateNames = new[] { nameAsKebabCase };
-            }
+            var optionDisplayInfo = new OptionDisplayInfo(source, optionAlternateNameGenerators);
             return optionDisplayInfo;
         }
 
@@ -181,6 +164,18 @@ namespace System.Reflection
                 var originalDefaultValue = defaultValueAttribute?.Value;
                 var defaultValue = valueConverter(originalDefaultValue);
                 return defaultValue;
+            }
+            return null;
+        }
+        internal static string ExtractDefaultValue([NotNull] this PropertyInfo source)
+        {
+            Guard.NotNull(source, nameof(source));
+
+            if (!source.PropertyType.IsMultiValuedType())
+            {
+                var defaultValueAttribute = source.GetCustomAttributes(typeof(DefaultValueAttribute), true).OfType<DefaultValueAttribute>().FirstOrDefault();
+                var originalDefaultValue = defaultValueAttribute?.Value;
+                return originalDefaultValue?.ToString();
             }
             return null;
         }

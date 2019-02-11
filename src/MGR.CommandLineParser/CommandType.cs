@@ -22,11 +22,12 @@ namespace MGR.CommandLineParser
         /// </summary>
         /// <param name="commandType">The type of the command.</param>
         /// <param name="converters">The converters.</param>
-        public CommandType(Type commandType, IEnumerable<IConverter> converters)
+        /// <param name="optionAlternateNameGenerators">The generators of alternate name..</param>
+        public CommandType(Type commandType, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Type = commandType;
             _commandMetadata = new Lazy<CommandMetadata>(() => new CommandMetadata(Type));
-            _commandOptions = new Lazy<List<CommandOption>>(() => new List<CommandOption>(ExtractCommandOptions(Type, Metadata, converters.ToList())));
+            _commandOptions = new Lazy<List<CommandOption>>(() => new List<CommandOption>(ExtractCommandOptions(Type, Metadata, converters.ToList(), optionAlternateNameGenerators)));
 
         }
         /// <summary>
@@ -41,23 +42,75 @@ namespace MGR.CommandLineParser
         /// <summary>
         /// Gets the option of the command type.
         /// </summary>
-        public IEnumerable<CommandOption> Options => _commandOptions.Value;
+        public IEnumerable<ICommandOptionMetadata> Options => _commandOptions.Value;
+
+        internal IEnumerable<ICommandOption> CommandOptions => _commandOptions.Value;
+
         /// <inheritdoc />
-        public CommandOption FindOption(string optionName)
+        public ICommandOption FindOption(string optionName)
         {
-            var om = Options.FirstOrDefault(option => option.DisplayInfo.Name.Equals(optionName, StringComparison.OrdinalIgnoreCase));
+            var unwrappedOption = FindUnwrappedOption(optionName);
+            if (unwrappedOption != null)
+            {
+                return new WrapCommandOption(optionName, Metadata.Name, unwrappedOption);
+            }
+
+            return null;
+        }
+
+        private ICommandOption FindUnwrappedOption(string optionName)
+        {
+            var om = _commandOptions.Value.FirstOrDefault(option => option.DisplayInfo.Name.Equals(optionName, StringComparison.OrdinalIgnoreCase));
             if (om != null)
             {
                 return om;
             }
-            var shortOption = Options.FirstOrDefault(option => (option.DisplayInfo.ShortName ?? string.Empty).Equals(optionName, StringComparison.OrdinalIgnoreCase));
-            if (shortOption != null)
-            {
-                return shortOption;
-            }
-            var alternateOption = Options.FirstOrDefault(option => option.DisplayInfo.AlternateNames.Any(alternateName => alternateName.Equals(optionName, StringComparison.OrdinalIgnoreCase)));
+            var alternateOption = _commandOptions.Value.FirstOrDefault(option => option.DisplayInfo.AlternateNames.Any(alternateName => alternateName.Equals(optionName, StringComparison.OrdinalIgnoreCase)));
             return alternateOption;
         }
+
+        public ICommandOption FindOptionByShortName(string optionShortName)
+        {
+            var unwrappedOptions = FindUnwrappedOptionByShortName(optionShortName);
+            if (unwrappedOptions != null)
+            {
+                return new WrapCommandOption(optionShortName, Metadata.Name, unwrappedOptions);
+            }
+
+            return null;
+        }
+
+        private ICommandOption[] FindUnwrappedOptionByShortName(string optionShortName)
+        {
+            var shortOption = _commandOptions.Value.FirstOrDefault(option => (option.DisplayInfo.ShortName ?? string.Empty).Equals(optionShortName, StringComparison.OrdinalIgnoreCase));
+            if (shortOption != null)
+            {
+                return new ICommandOption[]{ shortOption};
+            }
+            return FindUnwrappedCombinedBooleanOptionsByShortName(optionShortName);
+        }
+
+        private ICommandOption[] FindUnwrappedCombinedBooleanOptionsByShortName(string optionShortName)
+        {
+            var shortName = optionShortName;
+            var options = new List<ICommandOption>();
+            while (!string.IsNullOrEmpty(shortName))
+            {
+                var shortOption = _commandOptions.Value.FirstOrDefault(option => !string.IsNullOrEmpty(option.DisplayInfo.ShortName) && shortName.StartsWith(option.DisplayInfo.ShortName, StringComparison.OrdinalIgnoreCase));
+                if (shortOption != null)
+                {
+                    options.Add(shortOption);
+                    shortName = shortName.Substring(shortOption.DisplayInfo.ShortName.Length);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return options.ToArray();
+
+        }
+
         /// <summary>
         /// Create the command from its type.
         /// </summary>
@@ -71,20 +124,23 @@ namespace MGR.CommandLineParser
 
             var commandActivator = dependencyResolver.ResolveDependency<ICommandActivator>();
             var command = commandActivator.ActivateCommand(Type);
-            var commandBase = command as CommandBase;
-            foreach (var commandOption in Options)
+            foreach (var commandOption in _commandOptions.Value)
             {
-                commandOption.AssignDefaultValue(command);
+                if (!string.IsNullOrEmpty(commandOption.DefaultValue))
+                {
+                    commandOption.AssignValue(commandOption.DefaultValue, command);
+                }
             }
+            var commandBase = command as CommandBase;
             commandBase?.Configure(parserOptions, dependencyResolver, this);
             return command;
         }
 
-        private static IEnumerable<CommandOption> ExtractCommandOptions(Type commandType, ICommandMetadata commandMetadata, List<IConverter> converters)
+        private static IEnumerable<CommandOption> ExtractCommandOptions(Type commandType, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             foreach (var propertyInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != nameof(ICommand.Arguments)))
             {
-                var commandOption = CommandOption.Create(propertyInfo, commandMetadata, converters);
+                var commandOption = CommandOption.Create(propertyInfo, commandMetadata, converters, optionAlternateNameGenerators);
                 if (commandOption != null)
                 {
                     yield return commandOption;

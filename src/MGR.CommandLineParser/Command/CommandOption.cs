@@ -2,25 +2,26 @@
 using System.Collections.Generic;
 using System.Reflection;
 using JetBrains.Annotations;
-using MGR.CommandLineParser.Command;
+using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 
-namespace MGR.CommandLineParser.Extensibility.Command
+namespace MGR.CommandLineParser.Command
 {
     /// <summary>
     ///     Represents an option of a command.
     /// </summary>
-    public sealed class CommandOption
+    internal sealed class CommandOption : ICommandOption, ICommandOptionMetadata
     {
-        private readonly MethodInfo _miAddMethod ;
-        private CommandOption(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters)
+        private readonly MethodInfo _miAddMethod;
+        private CommandOption(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             PropertyOption = propertyInfo;
             CommandMetadata = commandMetadata;
-            DisplayInfo = propertyInfo.ExtractOptionDisplayInfoMetadata();
-            IsRequired = propertyInfo.ExtractIsRequiredMetadata();
+            DisplayInfo = propertyInfo.ExtractOptionDisplayInfoMetadata(optionAlternateNameGenerators);
             Converter = propertyInfo.ExtractConverter(converters, DisplayInfo.Name, CommandMetadata.Name);
-            DefaultValue = propertyInfo.ExtractDefaultValue(ConvertValue);
+            IsRequired = propertyInfo.ExtractIsRequiredMetadata();
+            DefaultValue = propertyInfo.ExtractDefaultValue();
+            CollectionType = GetMultiValueIndicator(propertyInfo);
             _miAddMethod = PropertyOption.PropertyType.GetMethod("Add");
         }
 
@@ -31,34 +32,27 @@ namespace MGR.CommandLineParser.Extensibility.Command
         public OptionDisplayInfo DisplayInfo { get; }
 
         /// <summary>
-        ///     Gets the indication that the option is required.
-        /// </summary>
-        public bool IsRequired { get; }
-
-        /// <summary>
         ///     Gets the converter for the option.
         /// </summary>
-        public IConverter Converter { get; }
+        internal IConverter Converter { get; }
 
         /// <summary>
         ///     Gets the <see cref="PropertyInfo" /> that represents the option.
         /// </summary>
-        public PropertyInfo PropertyOption { get; }
+        internal PropertyInfo PropertyOption { get; }
 
         /// <summary>
         ///     Gets the command to which the option relates.
         /// </summary>
-        public ICommandMetadata CommandMetadata { get; }
+        internal ICommandMetadata CommandMetadata { get; }
 
-        /// <summary>
-        ///     Gets the default value of the option.
-        /// </summary>
-        public object DefaultValue { get; }
-
+        public bool IsRequired { get; }
+        public CommandOptionCollectionType CollectionType { get; }
+        public string DefaultValue { get; }
         /// <summary>
         ///     Gets the underlying type of the option.
         /// </summary>
-        public Type OptionType
+        internal Type OptionType
         {
             get
             {
@@ -75,7 +69,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public object ConvertValue(object value)
+        internal object ConvertValue(object value)
         {
             if (value != null)
             {
@@ -87,18 +81,19 @@ namespace MGR.CommandLineParser.Extensibility.Command
             }
             return value;
         }
-        internal void AssignDefaultValue(ICommand command)
-        {
-            if (DefaultValue != null)
-            {
-                AssignValueInternal(DefaultValue, command);
-            }
-        }
-        internal void AssignValue(string optionValue, ICommand command)
+
+        public bool OptionalValue => OptionType == typeof(bool);
+
+        public void AssignValue(string optionValue, ICommand command)
         {
             if (!OptionType.IsType(Converter.TargetType))
             {
                 throw new CommandLineParserException(Constants.ExceptionMessages.ParserSpecifiedConverterNotValidToAssignValue(OptionType, Converter.TargetType));
+            }
+
+            if (OptionType == typeof(bool) && optionValue == null)
+            {
+                optionValue = true.ToString();
             }
             var convertedValue = ConvertValue(optionValue);
             AssignValueInternal(convertedValue, command);
@@ -141,11 +136,12 @@ namespace MGR.CommandLineParser.Extensibility.Command
             }
         }
 
-        internal static CommandOption Create(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters)
+        internal static CommandOption Create(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Guard.NotNull(propertyInfo, nameof(propertyInfo));
             Guard.NotNull(commandMetadata, nameof(commandMetadata));
             Guard.NotNull(converters, nameof(converters));
+            Guard.NotNull(optionAlternateNameGenerators, nameof(optionAlternateNameGenerators));
 
             if (propertyInfo.ShouldBeIgnored())
             {
@@ -157,8 +153,20 @@ namespace MGR.CommandLineParser.Extensibility.Command
                     Constants.ExceptionMessages.ParserExtractMetadataPropertyShouldBeWritableOrICollection(
                         propertyInfo.Name, commandMetadata.Name));
             }
-            var commandOption = new CommandOption(propertyInfo, commandMetadata, converters);
+            var commandOption = new CommandOption(propertyInfo, commandMetadata, converters, optionAlternateNameGenerators);
             return commandOption;
+        }
+        internal static CommandOptionCollectionType GetMultiValueIndicator(PropertyInfo propertyInfo)
+        {
+            if (propertyInfo.PropertyType.IsDictionaryType())
+            {
+                return CommandOptionCollectionType.Dictionary;
+            }
+            if (propertyInfo.PropertyType.IsCollectionType())
+            {
+                return CommandOptionCollectionType.Collection;
+            }
+            return CommandOptionCollectionType.None;
         }
     }
 }

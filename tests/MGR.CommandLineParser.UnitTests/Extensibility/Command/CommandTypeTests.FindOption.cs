@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 using MGR.CommandLineParser.Extensibility.DependencyInjection;
 using Moq;
@@ -13,38 +14,38 @@ using Xunit;
 
 namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
 {
-    public partial class CommandOptionTests
+    public partial class CommandTypeTests
     {
         public class FindOption
         {
             [Theory]
             [InlineData("property-list")]
             [InlineData("PropertyList")]
-            [InlineData("pl")]
-            public void D(string optionName)
+            public void FoundWithLongOrAlternateName(string optionName)
             {
                 // Arrange
                 var testCommandType = new CommandType(typeof(FindOption.TestCommand),
-                    new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() });
+                    new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() },
+                    new List<IOptionAlternateNameGenerator>{new KebabCaseOptionAlternateNameGenerator()});
                 var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
                 dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
                     .Returns(BasicCommandActivator.Instance);
-                var expectedAlternateNames = new[]{"property-list"};
-                var propertyName = nameof(TestCommand.PropertyList);
-                var expectedPropertyInfo = typeof(FindOption.TestCommand).GetProperty(propertyName);
+                var testCommand = testCommandType.CreateCommand(dependencyResolverScopeMock.Object, new ParserOptions()) as TestCommand;
 
                 // Act
                 var actual = testCommandType.FindOption(optionName);
 
                 // Assert
                 Assert.NotNull(actual);
-                Assert.Equal(propertyName, actual.DisplayInfo.Name);
-                Assert.Equal(expectedAlternateNames, actual.DisplayInfo.AlternateNames);
-                Assert.Equal(expectedPropertyInfo, actual.PropertyOption);
+                Assert.NotNull(testCommand);
+                Assert.False(actual.OptionalValue);
+                actual.AssignValue("42", testCommand);
+                Assert.Single(testCommand.PropertyList);
+                Assert.Equal(42, testCommand.PropertyList.First());
 
             }
 
-            private class TestCommand : ICommand
+            internal class TestCommand : ICommand
             {
                 [Display(ShortName = "pl")]
                 public List<int> PropertyList { get; set; }

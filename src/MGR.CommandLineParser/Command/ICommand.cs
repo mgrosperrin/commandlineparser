@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.Composition;
 
 namespace MGR.CommandLineParser.Command
 {
     /// <summary>
     /// Defines a command.
     /// </summary>
-    [InheritedExport]
     public interface ICommand
     {
         /// <summary>

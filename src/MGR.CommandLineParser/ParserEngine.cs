@@ -96,7 +96,7 @@ namespace MGR.CommandLineParser
                 {
                     break;
                 }
-                if (argument.Equals(Constants.DoubleDash))
+                if (argument.Equals(Constants.EndOfOptions))
                 {
                     alwaysPutInArgumentList = true;
                     continue;
@@ -108,7 +108,15 @@ namespace MGR.CommandLineParser
                     continue;
                 }
 
-                var optionText = argument.Substring(1);
+                int starterLength = 2;
+                Func<ICommandType, string, ICommandOption> commandOptionFinder = (ct, optionName) => ct.FindOption(optionName);
+                if (!argument.StartsWith(Constants.LongNameOptionStarter))
+                {
+                    starterLength = Constants.ShortNameOptionStarter.Length;
+                    var defaultCommandOptionFinder = commandOptionFinder;
+                    commandOptionFinder = (ct, optionName) => ct.FindOptionByShortName(optionName) ?? defaultCommandOptionFinder(ct, optionName);
+                }
+                var optionText = argument.Substring(starterLength);
                 string value = null;
                 var splitIndex = optionText.IndexOf(Constants.OptionSplitter);
                 if (splitIndex > 0)
@@ -117,24 +125,15 @@ namespace MGR.CommandLineParser
                     optionText = optionText.Substring(0, splitIndex);
                 }
 
-                var option = commandType.FindOption(optionText);
+                var option = commandOptionFinder(commandType, optionText);
                 if (option == null)
                 {
                     throw new CommandLineParserException(Constants.ExceptionMessages.FormatParserOptionNotFoundForCommand(commandType.Metadata.Name, optionText));
                 }
 
-                if (option.OptionType == typeof(bool))
-                {
-                    value = value ?? bool.TrueString;
-                }
-                else
+                if (!option.OptionalValue)
                 {
                     value = value ?? argumentsEnumerator.GetNextCommandLineItem();
-                }
-
-                if (value == null)
-                {
-                    throw new CommandLineParserException(Constants.ExceptionMessages.FormatParserOptionValueRequired(commandType.Metadata.Name, optionText));
                 }
 
                 option.AssignValue(value, command);

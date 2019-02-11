@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
+﻿using System.Collections.Generic;
 using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.UnitTests;
 using Xunit;
 
-namespace MGR.CommandLineParser.IntegrationTests.ParsingTests.ParseCommandTests
+namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
 {
-    public class ParseTestCommandTests : ConsoleLoggingTestsBase
+    public class HelpCommandTests : ConsoleLoggingTestsBase
     {
         [Fact]
         public void ShowGenericHelpForAllCommand()
@@ -44,16 +40,19 @@ Available commands:
 ";
 
             // Act
-            var actual = parser.Parse(args);
-            var actualResult = actual.Execute();
+            using (new LangageSwitcher("en-us"))
+            {
+                var actual = parser.Parse(args);
+                var actualResult = actual.Execute();
 
-            // Assert
-            Assert.True(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ReturnCode);
-            Assert.IsType<HelpCommand>(actual.Command);
-            var actualHelp = StringConsole.Current.OutAsString();
-            Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences:true);
-            Assert.Equal(expectedResult, actualResult);
+                // Assert
+                Assert.True(actual.IsValid);
+                Assert.Equal(expectedReturnCode, actual.ReturnCode);
+                Assert.IsType<HelpCommand>(actual.Command);
+                var actualHelp = StringConsole.Current.OutAsString();
+                Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences: true);
+                Assert.Equal(expectedResult, actualResult);
+            }
         }
     }
 }

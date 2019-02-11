@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 using MGR.CommandLineParser.Extensibility.DependencyInjection;
 using Moq;
@@ -19,7 +20,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
             {
                 // Arrange
                 var testCommandType = new CommandType(typeof (TestCommand),
-                    new List<IConverter> {new StringConverter(), new GuidConverter(), new Int32Converter()});
+                    new List<IConverter> {new StringConverter(), new GuidConverter(), new Int32Converter()}, new List<IOptionAlternateNameGenerator>());
                 var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
                 dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
                     .Returns(BasicCommandActivator.Instance);
@@ -46,7 +47,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
             {
                 // Arrange
                 var testCommandType = new CommandType(typeof (TestCommand),
-                    new List<IConverter> {new StringConverter(), new GuidConverter(), new Int32Converter()});
+                    new List<IConverter> {new StringConverter(), new GuidConverter(), new Int32Converter()}, new List<IOptionAlternateNameGenerator>());
                 var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
                 dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
                     .Returns(BasicCommandActivator.Instance);
@@ -77,7 +78,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
             {
                 // Arrange
                 var testCommandType = new CommandType(typeof (TestCommand),
-                    new List<IConverter> {new StringConverter(), new GuidConverter(), new Int32Converter()});
+                    new List<IConverter> {new StringConverter(), new GuidConverter(), new Int32Converter()}, new List<IOptionAlternateNameGenerator>());
                 var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
                 dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
                     .Returns(BasicCommandActivator.Instance);

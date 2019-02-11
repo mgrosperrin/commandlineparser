@@ -16,9 +16,8 @@ var rootDir = Directory(absoluteRootDir.FullPath);
 var artifactsDir = rootDir + Directory("artifacts");
 var toolsDir = artifactsDir + Directory("tools");
 var nugetFile = toolsDir + File("nuget.exe");
-var xunitRunnerFile = toolsDir + Directory("xunit.runner.console") + Directory("tools") + File("xunit.console.exe");
+var xunitRunnerPath = toolsDir + Directory("xunit.runner.console") + Directory("tools") + Directory("netcoreapp2.0");
 var gitVersionFile = toolsDir + Directory("GitVersion.CommandLine") + Directory("tools") + File("GitVersion.exe");
-var gitLinkFile = toolsDir + Directory("GitLink") + Directory("lib") + Directory("net45") + File("GitLink.exe");
 var outputBinariesDir = artifactsDir + Directory("bin");
 var packagesDir = rootDir + Directory("packages/");
 var solutionFile = rootDir + File("MGR.CommandLineParser.sln");
@@ -56,13 +55,6 @@ Task("Install-Tools-Packages")
     };
     NuGetInstall("GitVersion.CommandLine", defaultInstallSettings);
     NuGetInstall("xunit.runner.console", defaultInstallSettings);
-    var gitLinkInstallSettings =  new NuGetInstallSettings {
-        OutputDirectory = toolsDir,
-        ExcludeVersion = true,
-        Version = "2.4.0",
-        ToolPath = nugetFile
-    };
-    NuGetInstall("gitlink", gitLinkInstallSettings);
 });
 
 public string GetBranchName(GitVersion gitVersion)
@@ -73,11 +65,11 @@ public string GetBranchName(GitVersion gitVersion)
 
 public string GetPreReleaseNumber(string branchName, GitVersion gitVersion)
 {
-	if(branchName != gitVersion.BranchName)
+	if(branchName != gitVersion.BranchName || gitVersion.PreReleaseNumber == null)
 	{
 		return "1";
 	}
-	return gitVersion.PreReleaseNumber;
+	return gitVersion.PreReleaseNumber.Value.ToString();
 }
 
 Task("Prepare-Build")
@@ -146,9 +138,11 @@ Task("Build")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
 {
-    DotNetBuild(solutionFile, settings =>
+    MSBuild(solutionFile, settings =>
         settings.SetConfiguration(configuration)
-                .WithProperty("OutputPath", new string[]{outputBinariesDir}));
+				.SetVerbosity(Verbosity.Minimal)
+                .WithProperty("OutputPath", new string[]{outputBinariesDir})
+				.WithProperty("SourceLinkCreate", "true"));
 });
 
 Task("Run-Unit-Tests")
@@ -156,11 +150,10 @@ Task("Run-Unit-Tests")
     .Does(() =>
 {
     var testsDlls = GetFiles(outputBinariesDir.Path + "/*Tests.dll");
-    var xunit2Settings = new XUnit2Settings {
-        ToolPath = xunitRunnerFile,
-        OutputDirectory = outputBinariesDir
+    var settings = new DotNetCoreVSTestSettings {
+        TestAdapterPath = xunitRunnerPath
     };
-    XUnit2(testsDlls, xunit2Settings);
+	DotNetCoreVSTest(testsDlls, settings);
 });
 
 Task("Create-Package")
@@ -168,27 +161,21 @@ Task("Create-Package")
     .WithCriteria(() => !isBuildingPR)
     .Does(() =>
 {
-    var gitLinkSettings = new GitLinkSettings {
-        PdbDirectoryPath = outputBinariesDir,
-        ToolPath = gitLinkFile,
-        ShaHash = sha1Hash
-    };
-    GitLink(rootDir, gitLinkSettings);
     var nuGetPackSettings = new NuGetPackSettings{
         ToolPath = nugetFile,
         Version = informationalVersion,
         Files = new List<NuSpecContent> {
             new NuSpecContent{
                 Source = commandLineParserDllFile,
-                Target = "lib/net40"
+                Target = "lib\\netstandard2.0"
             },
             new NuSpecContent{
                 Source = commandLineParserPdbFile,
-                Target = "lib/net40"
+                Target = "lib\\netstandard2.0"
             },
             new NuSpecContent{
                 Source = commandLineParserXmlFile,
-                Target = "lib/net40"
+                Target = "lib\\netstandard2.0"
             }
         },
         OutputDirectory = artifactsDir
@@ -200,7 +187,7 @@ Task("Create-Package")
         var resourceName = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(resourceFileFullPath));
         nuGetPackSettings.Files.Add(new NuSpecContent{
             Source = resourceFile.FullPath,
-            Target = "lib/net40/" + resourceName
+            Target = "lib\\netstandard2.0\\" + resourceName
         });
     }
     NuGetPack(commandLineParserNuspecFile, nuGetPackSettings);

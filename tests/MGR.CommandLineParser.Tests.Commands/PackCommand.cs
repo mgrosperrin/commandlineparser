@@ -31,7 +31,7 @@ namespace MGR.CommandLineParser.Tests.Commands
         [Display(Description = "PackageCommandBasePathDescription")]
         public string BasePath { get; set; }
 
-        [Display(Description = "PackageCommandVerboseDescription")]
+        [Display(Description = "PackageCommandVerboseDescription", ShortName = "v")]
         public bool Verbose { get; set; }
 
         [Display(Description = "PackageCommandVersionDescription")]
@@ -43,10 +43,10 @@ namespace MGR.CommandLineParser.Tests.Commands
         [Display(Description = "PackageCommandSymbolsDescription")]
         public bool Symbols { get; set; }
 
-        [Display(Description = "PackageCommandToolDescription")]
+        [Display(Description = "PackageCommandToolDescription", ShortName = "t")]
         public bool Tool { get; set; }
 
-        [Display(Description = "PackageCommandBuildDescription")]
+        [Display(Description = "PackageCommandBuildDescription", ShortName = "b")]
         public bool Build { get; set; }
         [Display(Description = "CommandMSBuildVersion")]
         public string MSBuildVersion { get; set; }
