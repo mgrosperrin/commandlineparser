@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using JetBrains.Annotations;
 using MGR.CommandLineParser.Extensibility;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MGR.CommandLineParser.Command
 {
@@ -26,8 +27,8 @@ namespace MGR.CommandLineParser.Command
         /// <returns>Return 0 is everything was right, an negative error code otherwise.</returns>
         protected override int ExecuteCommand()
         {
-            var commandTypeProvider = CurrentDependencyResolverScope.ResolveDependency<ICommandTypeProvider>();
-            var helpWriter = CurrentDependencyResolverScope.ResolveDependency<IHelpWriter>();
+            var commandTypeProvider = CurrentDependencyResolverScope.GetRequiredService<ICommandTypeProvider>();
+            var helpWriter = CurrentDependencyResolverScope.GetRequiredService<IHelpWriter>();
             var commandType = commandTypeProvider.GetCommandType(Arguments.FirstOrDefault() ?? string.Empty);
             if (commandType == null)
             {

@@ -12,11 +12,10 @@ namespace MGR.CommandLineParser.Extensibility
     public abstract class AssemblyProviderBase : IAssemblyProvider
     {
         /// <summary>
-        /// Gets the recursivity options for browsing the current folder.
+        /// Gets the recursively options for browsing the current folder.
         /// </summary>
         protected abstract SearchOption SearchOption { get; }
 
-        /// <inheritdoc />
         private IEnumerable<string> GetFilesToLoad()
         {
             var thisDirectory = Environment.CurrentDirectory;
@@ -40,15 +39,19 @@ namespace MGR.CommandLineParser.Extensibility
             {
                 try
                 {
-                    Assembly.LoadFrom(assemblyFile);
+                    Assembly.Load(assemblyFile);
                 }
 
-#pragma warning disable CC0004 // Catch block cannot be empty
                 // ReSharper disable once EmptyGeneralCatchClause
+#pragma warning disable CC0004 // Catch block cannot be empty
+#pragma warning disable S2486 // Generic exceptions should not be ignored
                 catch
-#pragma warning restore CC0004 // Catch block cannot be empty
+#pragma warning disable S108 // Nested blocks of code should not be left empty
                 {
                 }
+#pragma warning restore S108 // Nested blocks of code should not be left empty
+#pragma warning restore CC0004 // Catch block cannot be empty
+#pragma warning restore S2486 // Generic exceptions should not be ignored
             }
 
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();

@@ -15,25 +15,26 @@ _**Build status**_
 MGR.CommandLineParser is a multi-command line parser. It uses [System.ComponentModel.DataAnnotations](http://msdn.microsoft.com/fr-fr/library/system.componentmodel.dataannotations.aspx) to declare and validate the commands.
 
 # How to use it ?
-You can find more docs [here](docs/index.md)
+You can find **more docs [here](docs/index.md)**
 
-I. **Install MGR.CommandLineParser**
+**I. Install MGR.CommandLineParser**
 
 MGR.CommandLineParser is available through [NuGet][nuget]:
 
     PM> Install-Package MGR.CommandLineParser
 
-II. **Declare your own commands**
+**II. Declare your own commands**
 
-After adding MGR.CommandLineParser to your project, you have to define your own commands:
+After adding `MGR.CommandLineParser` to your project, you have to define your own commands:
 
 * by implementing the interface `MGR.CommandLineParser.Command.ICommand`;
 * by extending the abstract class `MGR.CommandLineParser.Command.CommandBase`.
 
 To personnalize your commands, you add some properties to your class, and implement `Execute` (if you directly implement `ICommand`), or override `ExecuteCommand` (if you override `CommandBase`).
+
 For example :
 via `MGR.CommandLineParser.Command.ICommand`;
-```
+``` c#
 public class HelloWorldCommand : ICommand
 {
     [Display(ShortName = "n", Description = "The name to display")]
@@ -53,8 +54,9 @@ public class HelloWorldCommand : ICommand
     }
 }
 ```
+
 Via `MGR.CommandLineParser.Command.CommandBase`.
-```
+```c#
 public class HelloWorldCommand : CommandBase
 {
     [Display(ShortName = "n", Description = "The name to display")]
@@ -73,11 +75,10 @@ public class HelloWorldCommand : CommandBase
 }
 ```
 
-III. **Parse the command line**
+**III. Parse the command line**
 
-Then  simplest way to parse the command line is to call the `Parse` method on a `IParser` instance :
-Then call the `Parse` method on a `IParser` instance :
-```
+The simplest way to parse the command line is to call the `Parse` method on a `IParser` instance :
+```c#
 var parserBuilder = new ParserBuilder();
 IParser parser = parserBuilder.BuildParser();
 CommandResult<ICommand> commandResult = parser.Parse(args);
@@ -87,8 +88,9 @@ if(commandResult.IsValid)
 }
 return commandResult.ReturnCode;
 ```
+
 Or if you have define only one command for your program :
-```
+```c#
 var parserBuilder = new ParserBuilder();
 IParser parser = parserBuilder.BuildParser();
 CommandResult<HelloWorldCommand> commandResult = parser.Parse<HelloWorldCommand>(args);
@@ -102,13 +104,15 @@ return commandResult.ReturnCode;
 In the first case, the first item in the `args` parameter must be the name of the command (the name of the type, minus the suffix `Command` if present).
 In the other case, the name of the command should be omitted.
 
-Depending on the value of `args`, the result will be (when not providing the type of the command to the `Parse` method) :
+Depending on the value of `args`, the result will be (when not providing the type of the command to the `Parse` method):
 
-* `args` is null : return code is `CommandResultCode.NoArgs` (-100);
-* `args` is an empty enumeration of string : return code is `CommandResultCode.NoCommandName` (-200) and the global help is printed to the console;
-* `args` doesn't begin by `HelloWorld` or `Help` (the default help command) : return code is `CommandResultCode.NoCommandFound` (-300) and the global help is printed to the console;
-* `args` is just `HelloWorld` : return code is `CommandResultCode.CommandParameterNotValid` (-400) and the help for the `HelloWorldCommand` is printed to the console;
-* `args` is `HelloWorld -n Matthias` : return code is `CommandResultCode.Ok` (0) and `Hello world Matthias !` is printed to the console.
+| Value of args | Result |
+|------|--------|
+|`null`|return code is `CommandResultCode.NoArgs` (-100)|
+|empty enumeration of string|return code is `CommandResultCode.NoCommandName` (-200) and the global help is printed to the console|
+|doesn't begin by `HelloWorld` or `Help` (the default help command)|return code is `CommandResultCode.NoCommandFound` (-300) and the global help is printed to the console|
+|`HelloWorld`|return code is `CommandResultCode.CommandParameterNotValid` (-400) and the help for the `HelloWorldCommand` is printed to the console|
+|`HelloWorld --name Matthias` or `HelloWorld -n Matthias`|return code is `CommandResultCode.Ok` (0) and `Hello world Matthias !` is printed to the console|
 
 
    [appveyor-dev]: https://ci.appveyor.com/project/mgrosperrin/commandlineparser

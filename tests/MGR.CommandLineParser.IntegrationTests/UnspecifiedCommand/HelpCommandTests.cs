@@ -14,7 +14,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var parserBuild = new ParserBuilder()
                 .Logo("Display generic help")
                 .CommandLineName("myHelpTest.exe");
-            var parser = parserBuild.BuildParser();
+            var parser = parserBuild.BuildParser(CreateServiceProvider());
             IEnumerable<string> args = new[] {"help"};
             var expectedReturnCode = CommandResultCode.Ok;
             var expectedResult = 0;

@@ -6,8 +6,8 @@ using System.Linq;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.Command;
-using MGR.CommandLineParser.Extensibility.DependencyInjection;
 using MGR.CommandLineParser.Properties;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MGR.CommandLineParser
 {
@@ -20,11 +20,11 @@ namespace MGR.CommandLineParser
             _parserOptions = parserOptions;
         }
 
-        public CommandResult<TCommand> Parse<TCommand>(IDependencyResolverScope dependencyResolverScope, IEnumerator<string> argumentsEnumerator) where TCommand : class, ICommand
+        public CommandResult<TCommand> Parse<TCommand>(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator) where TCommand : class, ICommand
         {
-            var commandTypeProvider = dependencyResolverScope.ResolveDependency<ICommandTypeProvider>();
+            var commandTypeProvider = serviceProvider.GetRequiredService<ICommandTypeProvider>();
             var commandType = commandTypeProvider.GetCommandType<TCommand>();
-            var parsingResult = ParseImpl(argumentsEnumerator, dependencyResolverScope, commandType);
+            var parsingResult = ParseImpl(argumentsEnumerator, serviceProvider, commandType);
             if (parsingResult.Command == null)
             {
                 return new CommandResult<TCommand>(default(TCommand), parsingResult.ReturnCode);
@@ -32,62 +32,62 @@ namespace MGR.CommandLineParser
             return new CommandResult<TCommand>((TCommand)parsingResult.Command, parsingResult.ReturnCode, parsingResult.ValidationResults.ToList());
         }
 
-        public CommandResult<ICommand> ParseWithDefaultCommand<TCommand>(IDependencyResolverScope dependencyResolverScope, IEnumerator<string> argumentsEnumerator)
+        public CommandResult<ICommand> ParseWithDefaultCommand<TCommand>(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
             where TCommand : class, ICommand
         {
             var commandName = argumentsEnumerator.GetNextCommandLineItem();
             if (commandName == null)
             {
-                var noArgumentsCommandResult = Parse<TCommand>(dependencyResolverScope, argumentsEnumerator);
+                var noArgumentsCommandResult = Parse<TCommand>(serviceProvider, argumentsEnumerator);
                 return new CommandResult<ICommand>(noArgumentsCommandResult.Command, noArgumentsCommandResult.ReturnCode, noArgumentsCommandResult.ValidationResults.ToList());
             }
-            var commandTypeProvider = dependencyResolverScope.ResolveDependency<ICommandTypeProvider>();
+            var commandTypeProvider = serviceProvider.GetRequiredService<ICommandTypeProvider>();
             var commandType = commandTypeProvider.GetCommandType(commandName);
             if (commandType == null)
             {
-                var noArgumentsCommandResult = Parse<TCommand>(dependencyResolverScope, argumentsEnumerator.PrefixWith(commandName));
+                var noArgumentsCommandResult = Parse<TCommand>(serviceProvider, argumentsEnumerator.PrefixWith(commandName));
                 return new CommandResult<ICommand>(noArgumentsCommandResult.Command, noArgumentsCommandResult.ReturnCode, noArgumentsCommandResult.ValidationResults.ToList());
             }
-            return ParseImpl(argumentsEnumerator, dependencyResolverScope, commandType);
+            return ParseImpl(argumentsEnumerator, serviceProvider, commandType);
 
         }
 
-        public CommandResult<ICommand> Parse(IDependencyResolverScope dependencyResolverScope, IEnumerator<string> argumentsEnumerator)
+        public CommandResult<ICommand> Parse(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
         {
             var commandName = argumentsEnumerator.GetNextCommandLineItem();
             if (commandName == null)
             {
-                var helpWriter = dependencyResolverScope.ResolveDependency<IHelpWriter>();
+                var helpWriter = serviceProvider.GetRequiredService<IHelpWriter>();
                 helpWriter.WriteCommandListing(_parserOptions);
                 return new CommandResult<ICommand>(null, CommandResultCode.NoCommandName);
             }
-            var commandTypeProvider = dependencyResolverScope.ResolveDependency<ICommandTypeProvider>();
+            var commandTypeProvider = serviceProvider.GetRequiredService<ICommandTypeProvider>();
             var commandType = commandTypeProvider.GetCommandType(commandName);
             if (commandType == null)
             {
-                var helpWriter = dependencyResolverScope.ResolveDependency<IHelpWriter>();
+                var helpWriter = serviceProvider.GetRequiredService<IHelpWriter>();
                 helpWriter.WriteCommandListing(_parserOptions);
                 return new CommandResult<ICommand>(null, CommandResultCode.NoCommandFound);
             }
-            return ParseImpl(argumentsEnumerator, dependencyResolverScope, commandType);
+            return ParseImpl(argumentsEnumerator, serviceProvider, commandType);
 
         }
 
-        private CommandResult<ICommand> ParseImpl(IEnumerator<string> argumentsEnumerator, IDependencyResolverScope dependencyResolver, ICommandType commandType)
+        private CommandResult<ICommand> ParseImpl(IEnumerator<string> argumentsEnumerator, IServiceProvider serviceProvider, ICommandType commandType)
         {
-            var command = ExtractCommandLineOptions(commandType, dependencyResolver, argumentsEnumerator);
-            var validation = Validate(command, dependencyResolver, commandType.Metadata.Name);
+            var command = ExtractCommandLineOptions(commandType, serviceProvider, argumentsEnumerator);
+            var validation = Validate(command, serviceProvider, commandType.Metadata.Name);
             if (!validation.Item1)
             {
-                var helpWriter = dependencyResolver.ResolveDependency<IHelpWriter>();
+                var helpWriter = serviceProvider.GetRequiredService<IHelpWriter>();
                 helpWriter.WriteHelpForCommand(_parserOptions, commandType);
                 return new CommandResult<ICommand>(command, CommandResultCode.CommandParameterNotValid, validation.Item2);
             }
             return new CommandResult<ICommand>(command, CommandResultCode.Ok);
         }
-        private ICommand ExtractCommandLineOptions(ICommandType commandType, IDependencyResolverScope dependencyResolver, IEnumerator<string> argumentsEnumerator)
+        private ICommand ExtractCommandLineOptions(ICommandType commandType, IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
         {
-            var command = commandType.CreateCommand(dependencyResolver, _parserOptions);
+            var command = commandType.CreateCommand(serviceProvider, _parserOptions);
             var alwaysPutInArgumentList = false;
             while (true)
             {
@@ -108,7 +108,7 @@ namespace MGR.CommandLineParser
                     continue;
                 }
 
-                int starterLength = 2;
+                var starterLength = 2;
                 Func<ICommandType, string, ICommandOption> commandOptionFinder = (ct, optionName) => ct.FindOption(optionName);
                 if (!argument.StartsWith(Constants.LongNameOptionStarter))
                 {
@@ -141,7 +141,7 @@ namespace MGR.CommandLineParser
             return command;
         }
 
-        private static Tuple<bool, List<ValidationResult>> Validate(ICommand command, IDependencyResolverScope dependencyResolver, string commandName)
+        private static Tuple<bool, List<ValidationResult>> Validate(ICommand command, IServiceProvider serviceProvider, string commandName)
         {
             var validationContext = new ValidationContext(command, null, null);
             var results = new List<ValidationResult>();
@@ -149,7 +149,7 @@ namespace MGR.CommandLineParser
             var isValid = Validator.TryValidateObject(command, validationContext, results, true);
             if (!isValid)
             {
-                var console = dependencyResolver.ResolveDependency<IConsole>();
+                var console = serviceProvider.GetRequiredService<IConsole>();
                 console.WriteError(Strings.Parser_CommandInvalidArgumentsFormat, commandName);
                 foreach (var validation in results)
                 {

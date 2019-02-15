@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.Command;
-using MGR.CommandLineParser.Extensibility.DependencyInjection;
 using MGR.CommandLineParser.Properties;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MGR.CommandLineParser.Command
 {
@@ -28,12 +29,12 @@ namespace MGR.CommandLineParser.Command
         /// <summary>
         ///     Gets the console used by the parser (if the command needs to writes something).
         /// </summary>
-        protected IConsole Console => CurrentDependencyResolverScope.ResolveDependency<IConsole>();
+        protected IConsole Console => CurrentDependencyResolverScope.GetRequiredService<IConsole>();
 
         /// <summary>
-        ///     Gets the <see cref="IDependencyResolverScope" /> of the parsing operation.
+        ///     Gets the <see cref="IServiceScope" /> of the parsing operation.
         /// </summary>
-        protected IDependencyResolverScope CurrentDependencyResolverScope { get; private set; }
+        protected IServiceProvider CurrentDependencyResolverScope { get; private set; }
 
         /// <summary>
         ///     Gets the <see cref="IParserOptions" /> of the parser.
@@ -66,7 +67,7 @@ namespace MGR.CommandLineParser.Command
         {
             if (Help)
             {
-                var helpWriter = CurrentDependencyResolverScope.ResolveDependency<IHelpWriter>();
+                var helpWriter = CurrentDependencyResolverScope.GetRequiredService<IHelpWriter>();
                 helpWriter.WriteHelpForCommand(ParserOptions, CommandType);
                 return 0;
             }
@@ -77,13 +78,13 @@ namespace MGR.CommandLineParser.Command
         ///     Configure the command with the <see cref="IParserOptions" /> and the <see cref="IConsole" /> of the parser.
         /// </summary>
         /// <param name="parserOptions">The <see cref="IParserOptions" />.</param>
-        /// <param name="dependencyResolverScope">The <see cref="IDependencyResolverScope" />.</param>
+        /// <param name="serviceProvider">The <see cref="IServiceScope" />.</param>
         /// <param name="commandType">The <see cref="CommandType" /> of the command.</param>
-        public virtual void Configure(IParserOptions parserOptions, IDependencyResolverScope dependencyResolverScope,
+        public virtual void Configure(IParserOptions parserOptions, IServiceProvider serviceProvider,
             ICommandType commandType)
         {
             ParserOptions = parserOptions;
-            CurrentDependencyResolverScope = dependencyResolverScope;
+            CurrentDependencyResolverScope = serviceProvider;
             CommandType = commandType;
         }
 

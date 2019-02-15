@@ -45,6 +45,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{172E24C2-B
 	ProjectSection(SolutionItems) = preProject
 		docs\call-command-options.md = docs\call-command-options.md
 		docs\customize-command-display.md = docs\customize-command-display.md
+		docs\customize-internal-of-parser.md = docs\customize-internal-of-parser.md
 		docs\index.md = docs\index.md
 	EndProjectSection
 EndProject

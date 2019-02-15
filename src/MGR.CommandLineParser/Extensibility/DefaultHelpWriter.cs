@@ -21,7 +21,12 @@ namespace MGR.CommandLineParser.Extensibility
         private readonly IConsole _console;
         private readonly ICommandTypeProvider _commandTypeProvider;
 
-        internal DefaultHelpWriter(IConsole console, ICommandTypeProvider commandTypeProvider)
+        /// <summary>
+        /// Create a new <see cref="DefaultHelpWriter"/>.
+        /// </summary>
+        /// <param name="console"></param>
+        /// <param name="commandTypeProvider"></param>
+        public DefaultHelpWriter(IConsole console, ICommandTypeProvider commandTypeProvider)
         {
             _console = console;
             _commandTypeProvider = commandTypeProvider;
@@ -132,6 +137,7 @@ namespace MGR.CommandLineParser.Extensibility
 
         internal static string GetMultiValueIndicator(ICommandOptionMetadata commandOptionMetadata)
         {
+#pragma warning disable CC0073 // Add braces to switch sections.
             switch (commandOptionMetadata.CollectionType)
             {
                 case CommandOptionCollectionType.Collection:
@@ -141,6 +147,7 @@ namespace MGR.CommandLineParser.Extensibility
                 default:
                     return string.Empty;
             }
+#pragma warning restore CC0073 // Add braces to switch sections.
         }
 
         private static string FormatShortName(string shortName)

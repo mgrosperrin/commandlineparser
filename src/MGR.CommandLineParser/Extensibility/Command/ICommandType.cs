@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Extensibility.DependencyInjection;
 
 namespace MGR.CommandLineParser.Extensibility.Command
 {
@@ -28,10 +27,10 @@ namespace MGR.CommandLineParser.Extensibility.Command
         /// <summary>
         /// Create the command from its type.
         /// </summary>
-        /// <param name="dependencyResolver">The scoped dependendy resolver.</param>
+        /// <param name="serviceProvider">The scoped dependendy resolver.</param>
         /// <param name="parserOptions">The options of the current parser.</param>
         /// <returns></returns>
-        ICommand CreateCommand(IDependencyResolverScope dependencyResolver, IParserOptions parserOptions);
+        ICommand CreateCommand(IServiceProvider serviceProvider, IParserOptions parserOptions);
         /// <summary>
         /// Find an option based on its name.
         /// </summary>

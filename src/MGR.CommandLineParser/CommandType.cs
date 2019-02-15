@@ -6,7 +6,7 @@ using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
-using MGR.CommandLineParser.Extensibility.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MGR.CommandLineParser
 {
@@ -114,15 +114,15 @@ namespace MGR.CommandLineParser
         /// <summary>
         /// Create the command from its type.
         /// </summary>
-        /// <param name="dependencyResolver">The scoped dependendy resolver.</param>
+        /// <param name="serviceProvider">The scoped dependendy resolver.</param>
         /// <param name="parserOptions">The options of the current parser.</param>
         /// <returns></returns>
-        public ICommand CreateCommand(IDependencyResolverScope dependencyResolver, IParserOptions parserOptions)
+        public ICommand CreateCommand(IServiceProvider serviceProvider, IParserOptions parserOptions)
         {
-            Guard.NotNull(dependencyResolver, nameof(dependencyResolver));
+            Guard.NotNull(serviceProvider, nameof(serviceProvider));
             Guard.NotNull(parserOptions, nameof(parserOptions));
 
-            var commandActivator = dependencyResolver.ResolveDependency<ICommandActivator>();
+            var commandActivator = serviceProvider.GetRequiredService<ICommandActivator>();
             var command = commandActivator.ActivateCommand(Type);
             foreach (var commandOption in _commandOptions.Value)
             {
@@ -132,7 +132,7 @@ namespace MGR.CommandLineParser
                 }
             }
             var commandBase = command as CommandBase;
-            commandBase?.Configure(parserOptions, dependencyResolver, this);
+            commandBase?.Configure(parserOptions, serviceProvider, this);
             return command;
         }
 

@@ -4,7 +4,6 @@ using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
-using MGR.CommandLineParser.Extensibility.DependencyInjection;
 using Moq;
 using Xunit;
 
@@ -26,8 +25,8 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                         new Int32Converter(),
                         new BooleanConverter()
                     }, new List<IOptionAlternateNameGenerator>());
-                var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
-                dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
+                var serviceProviderMock = new Mock<IServiceProvider>();
+                serviceProviderMock.Setup(_ => _.GetService(typeof(ICommandActivator)))
                     .Returns(BasicCommandActivator.Instance);
                 var optionName = nameof(TestBadConverterCommand.PropertySimpleWithBadConverter);
                 var expectedMessageException =
@@ -37,7 +36,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                 // Act
                 var actualException =
                     Assert.Throws<CommandLineParserException>(
-                        () => testCommandType.CreateCommand(dependencyResolverScopeMock.Object, new ParserOptions()));
+                        () => testCommandType.CreateCommand(serviceProviderMock.Object, new ParserOptions()));
 
                 // Assert
                 Assert.Equal(expectedMessageException, actualException.Message);

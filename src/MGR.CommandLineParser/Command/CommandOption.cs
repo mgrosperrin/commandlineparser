@@ -71,13 +71,10 @@ namespace MGR.CommandLineParser.Command
         /// <returns></returns>
         internal object ConvertValue(object value)
         {
-            if (value != null)
+            if (value != null && !value.GetType().IsType(OptionType))
             {
-                if (!value.GetType().IsType(OptionType))
-                {
-                    var conververtedDefaultValue = Converter.Convert(value.ToString(), OptionType);
-                    return conververtedDefaultValue;
-                }
+                var conververtedDefaultValue = Converter.Convert(value.ToString(), OptionType);
+                return conververtedDefaultValue;
             }
             return value;
         }

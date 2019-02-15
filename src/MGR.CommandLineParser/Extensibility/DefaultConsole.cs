@@ -14,7 +14,10 @@ namespace MGR.CommandLineParser.Extensibility
         private readonly TextWriter _consoleOut;
         private readonly TextWriter _consoleError;
 
-        internal DefaultConsole() : this(Console.Out, Console.Error) { }
+        /// <summary>
+        /// Create a new <see cref="DefaultConsole"/>.
+        /// </summary>
+        public DefaultConsole() : this(Console.Out, Console.Error) { }
 
         internal DefaultConsole(TextWriter consoleOut, TextWriter consoleError)
         {
