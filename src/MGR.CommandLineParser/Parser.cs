@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using MGR.CommandLineParser.Command;
+using MGR.CommandLineParser.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace MGR.CommandLineParser
 {
@@ -31,8 +35,8 @@ namespace MGR.CommandLineParser
         /// <typeparam name="TCommand">Used this unique type of command.</typeparam>
         /// <param name="arguments">The command line args.</param>
         /// <returns>The result of the parsing.</returns>
-        public CommandResult<TCommand> Parse<TCommand>(IEnumerable<string> arguments) where TCommand : class, ICommand  => ParseArguments(arguments, (parserEngine, dependencyResolverScope, argumentsEnumerator) =>
-                    parserEngine.Parse<TCommand>(dependencyResolverScope, argumentsEnumerator));
+        public CommandResult<TCommand> Parse<TCommand>(IEnumerable<string> arguments) where TCommand : class, ICommand => ParseArguments(arguments, (parserEngine, dependencyResolverScope, argumentsEnumerator) =>
+                   parserEngine.Parse<TCommand>(dependencyResolverScope, argumentsEnumerator));
 
         /// <summary>
         ///     Parse a command line.
@@ -59,12 +63,17 @@ namespace MGR.CommandLineParser
                 return new CommandResult<TCommand>(null, CommandResultCode.NoArgs);
             }
 
-            var parserEngine = new ParserEngine(_parserOptions);
-            var argumentsEnumerator = arguments.GetArgumentsEnumerator();
+            var loggerFactory = _serviceProvider.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
+            var logger = loggerFactory.CreateLogger<LoggerCategory.Parser>();
+            using (logger.BeginParsingArguments(Guid.NewGuid().ToString()))
+            {
+                logger.CreationOfParserEngine();
+                var parserEngine = new ParserEngine(_parserOptions, loggerFactory);
+                var argumentsEnumerator = arguments.GetArgumentsEnumerator();
 
-            var result = callParse(parserEngine, _serviceProvider, argumentsEnumerator);
-
-            return result;
+                var result = callParse(parserEngine, _serviceProvider, argumentsEnumerator);
+                return result;
+            }
         }
     }
 }
