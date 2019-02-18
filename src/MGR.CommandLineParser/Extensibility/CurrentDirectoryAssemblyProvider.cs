@@ -15,7 +15,10 @@ namespace MGR.CommandLineParser.Extensibility
         [SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
         [PublicAPI, NotNull]
         public static readonly IAssemblyProvider Instance = new CurrentDirectoryAssemblyProvider();
-        private CurrentDirectoryAssemblyProvider() { }
+        /// <summary>
+        /// Create a new <see cref="CurrentDirectoryAssemblyProvider"/>.
+        /// </summary>
+
         /// <inheritdoc />
         protected override SearchOption SearchOption => SearchOption.TopDirectoryOnly;
     }

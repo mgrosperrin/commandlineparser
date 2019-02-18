@@ -5,7 +5,6 @@ using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
-using MGR.CommandLineParser.Extensibility.DependencyInjection;
 using Moq;
 using Xunit;
 
@@ -21,11 +20,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                 // Arrange
                 var testCommandType = new CommandType(typeof (TestCommand),
                     new List<IConverter> {new StringConverter(), new GuidConverter(), new Int32Converter()}, new List<IOptionAlternateNameGenerator>());
-                var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
-                dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
+                var serviceProviderMock = new Mock<IServiceProvider>();
+                serviceProviderMock.Setup(_ => _.GetService(typeof(ICommandActivator)))
                     .Returns(BasicCommandActivator.Instance);
                 var testCommand =
-                    testCommandType.CreateCommand(dependencyResolverScopeMock.Object, new ParserOptions()) as
+                    testCommandType.CreateCommand(serviceProviderMock.Object, new ParserOptions()) as
                         TestCommand;
                 var optionName = nameof(TestCommand.PropertyList);
                 var expected = 42;
@@ -48,11 +47,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                 // Arrange
                 var testCommandType = new CommandType(typeof (TestCommand),
                     new List<IConverter> {new StringConverter(), new GuidConverter(), new Int32Converter()}, new List<IOptionAlternateNameGenerator>());
-                var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
-                dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
+                var serviceProviderMock = new Mock<IServiceProvider>();
+                serviceProviderMock.Setup(_ => _.GetService(typeof(ICommandActivator)))
                     .Returns(BasicCommandActivator.Instance);
                 var testCommand =
-                    testCommandType.CreateCommand(dependencyResolverScopeMock.Object, new ParserOptions()) as
+                    testCommandType.CreateCommand(serviceProviderMock.Object, new ParserOptions()) as
                         TestCommand;
                 var optionName = nameof(TestCommand.PropertyDictionary);
                 var expectedKey = "keyTest";
@@ -79,11 +78,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                 // Arrange
                 var testCommandType = new CommandType(typeof (TestCommand),
                     new List<IConverter> {new StringConverter(), new GuidConverter(), new Int32Converter()}, new List<IOptionAlternateNameGenerator>());
-                var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
-                dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
+                var serviceProviderMock = new Mock<IServiceProvider>();
+                serviceProviderMock.Setup(_ => _.GetService(typeof(ICommandActivator)))
                     .Returns(BasicCommandActivator.Instance);
                 var testCommand =
-                    testCommandType.CreateCommand(dependencyResolverScopeMock.Object, new ParserOptions()) as
+                    testCommandType.CreateCommand(serviceProviderMock.Object, new ParserOptions()) as
                         TestCommand;
                 var optionName = nameof(TestCommand.PropertySimple);
                 var expected = 42;

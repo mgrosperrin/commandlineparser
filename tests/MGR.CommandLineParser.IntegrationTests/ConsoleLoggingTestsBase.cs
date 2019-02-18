@@ -1,19 +1,19 @@
+using System;
 using MGR.CommandLineParser.Extensibility;
-using MGR.CommandLineParser.Extensibility.DependencyInjection;
 using MGR.CommandLineParser.UnitTests;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MGR.CommandLineParser.IntegrationTests
 {
     public abstract class ConsoleLoggingTestsBase
     {
-        static ConsoleLoggingTestsBase()
+        protected static IServiceProvider CreateServiceProvider()
         {
-            DefaultDependencyResolver.RegisterDependency<IConsole>(() =>
-                {
-                    StringConsole.Current.Reset();
-                    return _ => StringConsole.Current;
-                }
-            );
+            StringConsole.Current.Reset();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddCommandLineParser()
+                .AddTransient<IConsole>(_ => StringConsole.Current);
+            return serviceCollection.BuildServiceProvider().CreateScope().ServiceProvider;
         }
     }
 }

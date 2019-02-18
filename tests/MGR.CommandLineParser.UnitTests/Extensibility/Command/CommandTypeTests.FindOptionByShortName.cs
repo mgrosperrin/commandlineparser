@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
-using MGR.CommandLineParser.Extensibility.DependencyInjection;
 using Moq;
 using Xunit;
 
@@ -23,12 +20,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
             public void FoundWithLongOrAlternateName(string optionName)
             {
                 // Arrange
-                var testCommandType = new CommandType(typeof(FindOption.TestCommand),
+                var testCommandType = new CommandType(typeof(TestCommand),
                     new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() }, new List<IOptionAlternateNameGenerator>());
-                var dependencyResolverScopeMock = new Mock<IDependencyResolverScope>();
-                dependencyResolverScopeMock.Setup(_ => _.ResolveDependency<ICommandActivator>())
+                var serviceProviderMock = new Mock<IServiceProvider>();
+                serviceProviderMock.Setup(_ => _.GetService(typeof(ICommandActivator)))
                     .Returns(BasicCommandActivator.Instance);
-                var testCommand = testCommandType.CreateCommand(dependencyResolverScopeMock.Object, new ParserOptions()) as FindOption.TestCommand;
+                var testCommand = testCommandType.CreateCommand(serviceProviderMock.Object, new ParserOptions()) as TestCommand;
 
                 // Act
                 var actual = testCommandType.FindOptionByShortName(optionName);

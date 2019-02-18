@@ -14,7 +14,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var parserBuild = new ParserBuilder()
                 .Logo("Display help for list command")
                 .CommandLineName("myListTest.exe");
-            var parser = parserBuild.BuildParser();
+            var parser = parserBuild.BuildParser(CreateServiceProvider());
             IEnumerable<string> args = new[] {"list", "--help"};
             var expectedReturnCode = CommandResultCode.Ok;
             var expectedResult = 0;
@@ -60,7 +60,7 @@ List sample number 2
             var parserBuild = new ParserBuilder()
                 .Logo("Display help for pack command")
                 .CommandLineName("myPackTest.exe");
-            var parser = parserBuild.BuildParser();
+            var parser = parserBuild.BuildParser(CreateServiceProvider());
             IEnumerable<string> args = new[] { "pack", "--help" };
             var expectedReturnCode = CommandResultCode.Ok;
             var expectedResult = 0;

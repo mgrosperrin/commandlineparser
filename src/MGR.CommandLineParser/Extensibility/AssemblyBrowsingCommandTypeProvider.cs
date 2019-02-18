@@ -19,7 +19,13 @@ namespace MGR.CommandLineParser.Extensibility
         private readonly IEnumerable<IConverter> _converters;
         private readonly IEnumerable<IOptionAlternateNameGenerator> _optionAlternateNameGenerators;
 
-        internal AssemblyBrowsingCommandTypeProvider(IAssemblyProvider assemblyProvider, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        /// <summary>
+        /// Create a new <see cref="AssemblyBrowsingCommandTypeProvider"/>.
+        /// </summary>
+        /// <param name="assemblyProvider"></param>
+        /// <param name="converters"></param>
+        /// <param name="optionAlternateNameGenerators"></param>
+        public AssemblyBrowsingCommandTypeProvider(IAssemblyProvider assemblyProvider, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             _assemblyProvider = assemblyProvider;
             _converters = converters;
