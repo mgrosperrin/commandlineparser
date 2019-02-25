@@ -72,6 +72,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var expectedExceptionMessage = SourceParameterName;
 
                 // Act
+                // ReSharper disable once ExpressionIsAlwaysNull
                 var actualException = Assert.Throws<ArgumentNullException>(() => testedType.GetUnderlyingGenericType());
 
                 // Assert

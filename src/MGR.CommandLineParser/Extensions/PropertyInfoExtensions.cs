@@ -5,17 +5,12 @@ using System.Linq;
 using JetBrains.Annotations;
 using MGR.CommandLineParser;
 using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Extensibility.Command;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Converters;
 
-// ReSharper disable CheckNamespace
-
+// ReSharper disable once CheckNamespace
 namespace System.Reflection
-// ReSharper restore CheckNamespace
 {
-    /// <summary>
-    /// Extensions methods for the type <see cref="PropertyInfo"/>.
-    /// </summary>
     internal static class PropertyInfoExtensions
     {
         internal static bool IsValidOptionProperty(this PropertyInfo source)
@@ -31,7 +26,7 @@ namespace System.Reflection
             Guard.NotNullOrEmpty(optionName, nameof(optionName));
             Guard.NotNullOrEmpty(commandName, nameof(commandName));
 
-            var converter = GetConverterFromAttribute(source, optionName, commandName)
+            var converter = GetConverterFromAttribute(source, commandName)
                                 ?? GetKeyValueConverterFromAttribute(source, optionName, commandName)
                                 ?? FindConverter(source, converters, optionName, commandName);
             if (converter == null)
@@ -73,7 +68,7 @@ namespace System.Reflection
             return keyConverter;
         }
 
-        private static IConverter GetConverterFromAttribute(PropertyInfo propertyInfo, string optionName, string commandName)
+        private static IConverter GetConverterFromAttribute(PropertyInfo propertyInfo, string commandName)
         {
             var converterAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterAttribute), true).FirstOrDefault() as ConverterAttribute;
             if (converterAttribute != null)
@@ -82,7 +77,7 @@ namespace System.Reflection
 
                 if (!converter.CanConvertTo(propertyInfo.PropertyType))
                 {
-                    throw new CommandLineParserException(Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(optionName, commandName, propertyInfo.PropertyType, converter.TargetType));
+                    throw new CommandLineParserException(Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(propertyInfo.Name, commandName, propertyInfo.PropertyType, converter.TargetType));
                 }
                 return converter;
             }
@@ -146,10 +141,10 @@ namespace System.Reflection
         }
 
         [NotNull]
-        internal static OptionDisplayInfo ExtractOptionDisplayInfoMetadata(this PropertyInfo source, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        internal static ClassBasedOptionDisplayInfo ExtractOptionDisplayInfoMetadata(this PropertyInfo source, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Guard.NotNull(source, nameof(source));
-            var optionDisplayInfo = new OptionDisplayInfo(source, optionAlternateNameGenerators);
+            var optionDisplayInfo = new ClassBasedOptionDisplayInfo(source, optionAlternateNameGenerators);
             return optionDisplayInfo;
         }
 

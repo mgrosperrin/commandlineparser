@@ -1,9 +1,7 @@
 ﻿using System;
 
-// ReSharper disable CheckNamespace
-
+// ReSharper disable once CheckNamespace
 namespace MGR.CommandLineParser.Extensibility.Converters
-// ReSharper restore CheckNamespace
 {
     /// <summary>
     ///     Extensions methods for the type <see cref="IConverter" />.

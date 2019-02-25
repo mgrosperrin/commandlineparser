@@ -19,10 +19,10 @@ namespace MGR.CommandLineParser
             }
         }
 
-        public string Logo { get; set; }
-        public string CommandLineName { get; set; }
+        internal string Logo { get; set; }
+        internal string CommandLineName { get; set; }
 
-        public IParserOptions ToParserOptions()
+        internal IParserOptions ToParserOptions()
         {
             var parserOptions = new ParserOptions
             {

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SimpleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "commit -m\"Test test\""
+    }
+  }
+}

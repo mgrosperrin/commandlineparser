@@ -25,7 +25,7 @@ namespace MGR.CommandLineParser.Command
         {
             if (_cachedResult == null)
             {
-                if ((_propertyValue == null) || (_resourceType == null))
+                if (_propertyValue == null || _resourceType == null)
                 {
                     _cachedResult = () => _propertyValue;
                 }
@@ -33,14 +33,14 @@ namespace MGR.CommandLineParser.Command
                 {
                     var property = _resourceType.GetProperty(_propertyValue);
                     var flag = false;
-                    if ((!_resourceType.IsVisible || (property == null)) || (property.PropertyType != typeof (string)))
+                    if (!_resourceType.IsVisible || property == null || property.PropertyType != typeof (string))
                     {
                         flag = true;
                     }
                     else
                     {
                         var getMethod = property.GetGetMethod();
-                        if (((getMethod == null) || !getMethod.IsPublic) || !getMethod.IsStatic)
+                        if (getMethod == null || !getMethod.IsPublic || !getMethod.IsStatic)
                         {
                             flag = true;
                         }

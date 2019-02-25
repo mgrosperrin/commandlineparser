@@ -23,5 +23,9 @@ namespace MGR.CommandLineParser.Tests.Commands
         {
             throw new NotImplementedException();
         }
+
+        public IntTestCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
     }
 }

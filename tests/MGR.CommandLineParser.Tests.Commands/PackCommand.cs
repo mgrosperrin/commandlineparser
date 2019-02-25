@@ -64,5 +64,9 @@ namespace MGR.CommandLineParser.Tests.Commands
         public IEnumerable<object> Rules { get; set; }
 
         protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
+
+        public PackCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
     }
 }

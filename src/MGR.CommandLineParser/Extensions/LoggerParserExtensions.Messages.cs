@@ -14,7 +14,7 @@ namespace Microsoft.Extensions.Logging
         private static readonly Action<ILogger<LoggerCategory.Parser>, Exception> CreationOfParserEngineAction = LoggerMessage.Define(LogLevel.Debug, CreateParserId(ParserEventId.CreationOfParserEngine), "Creation of the parser engine");
         private static readonly Action<ILogger<LoggerCategory.Parser>, Type, Exception> ParseForSpecificCommandTypeAction = LoggerMessage.Define<Type>(LogLevel.Information, CreateParserId(ParserEventId.ParseForSpecificCommandType), "Parse for a specific command type: '{SpecificCommandType}'");
         private static readonly Action<ILogger<LoggerCategory.Parser>, Exception> NoCommandFoundAfterSpecificParsingAction = LoggerMessage.Define(LogLevel.Warning, CreateParserId(ParserEventId.NoCommandFoundAfterSpecificParsing), "No command found after parsing a specific type");
-        private static readonly Action<ILogger<LoggerCategory.Parser>, Type, CommandResultCode, int, Exception> CommandFoundAfterSpecificParsingAction = LoggerMessage.Define<Type, CommandResultCode, int>(LogLevel.Information, CreateParserId(ParserEventId.CommandFoundAfterSpecificParsing), "Command found after parsing a specific type: Type '{CommandType}', ReturnCode: {ReturnCode}, Number of failed validations: {NbFailedValidations}");
+        private static readonly Action<ILogger<LoggerCategory.Parser>, Type, CommandParsingResultCode, int, Exception> CommandFoundAfterSpecificParsingAction = LoggerMessage.Define<Type, CommandParsingResultCode, int>(LogLevel.Information, CreateParserId(ParserEventId.CommandFoundAfterSpecificParsing), "Command found after parsing a specific type: Type '{CommandType}', ParsingResultCode: {ParsingResultCode}, Number of failed validations: {NbFailedValidations}");
         private static readonly Action<ILogger<LoggerCategory.Parser>, Type, Exception> ParseWithDefaultCommandTypeAction = LoggerMessage.Define<Type>(LogLevel.Information, CreateParserId(ParserEventId.ParseWithDefaultCommandType), "Parsing with default command type: '{DefaultCommandType}'");
         private static readonly Action<ILogger<LoggerCategory.Parser>, string, Exception> ArgumentProvidedWithDefaultCommandTypeAction = LoggerMessage.Define<string>(LogLevel.Information, CreateParserId(ParserEventId.ArgumentProvidedWithDefaultCommandType), "Argument provided that can be command name: '{CommandName}'");
         private static readonly Action<ILogger<LoggerCategory.Parser>, string, Exception> CommandFoundWithDefaultCommandTypeAction = LoggerMessage.Define<string>(LogLevel.Information, CreateParserId(ParserEventId.CommandFoundWithDefaultCommandType), "Command type found for command name '{CommandName}' when parsing with default command type");
@@ -44,11 +44,11 @@ namespace Microsoft.Extensions.Logging
             NoCommandFoundAfterSpecificParsingAction(logger, null);
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CommandFoundAfterSpecificParsing(this ILogger<LoggerCategory.Parser> logger, Type commandType, CommandResultCode returnCode, IEnumerable<ValidationResult> validationResults)
+        public static void CommandFoundAfterSpecificParsing(this ILogger<LoggerCategory.Parser> logger, Type commandType, CommandParsingResultCode parsingResultCode, IEnumerable<ValidationResult> validationResults)
         {
             if (logger.IsEnabled(LogLevel.Information))
             {
-                CommandFoundAfterSpecificParsingAction(logger, commandType, returnCode, validationResults.Count(), null);
+                CommandFoundAfterSpecificParsingAction(logger, commandType, parsingResultCode, validationResults.Count(), null);
             }
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

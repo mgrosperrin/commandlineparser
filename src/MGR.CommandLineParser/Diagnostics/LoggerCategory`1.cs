@@ -15,7 +15,7 @@ namespace MGR.CommandLineParser.Diagnostics
         {
             const string outerClassName = "." + nameof(LoggerCategory);
 
-            var name = loggerCategoryType.FullName.Replace('+', '.');
+            var name = (loggerCategoryType.FullName ?? string.Empty).Replace('+', '.');
             var index = name.IndexOf(outerClassName, StringComparison.Ordinal);
             if (index >= 0)
             {

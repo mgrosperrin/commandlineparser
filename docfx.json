@@ -1,0 +1,66 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+            "**/*.csproj"
+          ],
+          "exclude": [
+            "**/bin/**",
+            "**/obj/**"
+          ],
+          "src": "src"
+        }
+      ],
+      "dest": "artifacts/docs/obj/api",
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.yml"
+        ],
+        "src": "artifacts/docs/obj/api",
+        "dest": "api"
+      },
+      {
+        "files": [
+          "*.md",
+          "docs/**/*.md",
+          "toc.yml"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "docs/images/**/*.*"
+        ]
+      }
+    ],
+    "dest": "artifacts/_site",
+    "globalMetadata": {
+      "_appTitle": "MGR.CommandLineParser documentation site",
+      "_enableSearch": true,
+      "_gitContribue": {
+        "repo": "https://github.com/mgrosperrin/commandlineparser",
+        "branch": "dev"
+      },
+      "_gitUrlPattern": "github"
+    },
+    "fileMetadataFiles": [],
+    "template": [
+      "default"
+    ],
+    "postProcessors": [],
+    "markdownEngineName": "markdig",
+    "noLangKeyword": false,
+    "keepFileLink": false,
+    "cleanupCacheHistory": false,
+    "disableGitFeatures": false
+  }
+}

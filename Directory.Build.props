@@ -1,0 +1,32 @@
+﻿<Project>
+    <PropertyGroup>
+        <Product>MGR.CommandLineParser</Product>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <DocumentationFile>bin\$(Configuration)\netstandard2.0\$(MSBuildProjectName).xml</DocumentationFile>
+        <LangVersion>latest</LangVersion>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+        <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+        <WarningsAsErrors />
+        <DebugType>portable</DebugType>
+        <IsPackable>true</IsPackable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)$(Product).ruleset</CodeAnalysisRuleSet>
+
+        <Authors>Matthias GROSPERRIN</Authors>
+        <Company></Company>
+        <PackageProjectUrl>https://github.com/mgrosperrin/commandlineparser</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/mgrosperrin/commandlineparser</RepositoryUrl>
+        <Description>MGR.CommandLineParser is a multi-command line parser. It uses System.ComponentModel.DataAnnotations to declare the commands.</Description>
+        <RepositoryType>git</RepositoryType>
+        <Copyright>Copyright © Matthias GROSPERRIN</Copyright>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <Optimize>true</Optimize>
+    </PropertyGroup>
+
+</Project>
