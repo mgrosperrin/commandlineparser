@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
@@ -34,7 +35,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
             [Command(Description = "My great description", Usage = "test arg [option]")]
             private class TestCommand : ICommand
             {
-                public int Execute()
+                public Task<int> ExecuteAsync()
                 {
                     throw new NotImplementedException();
                 }

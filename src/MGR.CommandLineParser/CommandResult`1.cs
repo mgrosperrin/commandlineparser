@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser
@@ -50,13 +51,13 @@ namespace MGR.CommandLineParser
         /// </summary>
         /// <returns>Returns the result of the Execute method of the command.</returns>
         /// <exception cref="CommandLineParserException">Thrown if the underlying command is null, or if the command is in an invalid state.</exception>
-        public int Execute()
+        public Task<int> ExecuteAsync()
         {
             if (_command == null || !IsValid)
             {
                 throw new CommandLineParserException(Constants.ExceptionMessages.NoValidCommand);
             }
-            return Command.Execute();
+            return Command.ExecuteAsync();
         }
 
         /// <inheritdoc />

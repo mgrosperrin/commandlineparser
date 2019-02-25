@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.Command;
@@ -48,7 +49,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
 
                 #region ICommand Members
 
-                public int Execute()
+                public Task<int> ExecuteAsync()
                 {
                     throw new NotImplementedException();
                 }

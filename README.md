@@ -43,14 +43,14 @@ public class HelloWorldCommand : ICommand
 
     public IList<string> Arguments {get; set;}
 
-    public int Execute()
+    public Task<int> ExecuteAsync()
     {
         Console.WriteLine("Hello world {0} !", Name);
         if(Arguments.Count > 0)
         {
             Console.WriteLine("Arguments : {0}", string.Join("," Arguments));
         }
-        return 0;
+        return Task.FromResult(0);
     }
 }
 ```
@@ -63,14 +63,14 @@ public class HelloWorldCommand : CommandBase
     [Required]
     public string Name {get; set;}
 
-    protected override int ExecuteCommand()
+    protected override Task<int> ExecuteCommandasync()
     {
         Console.WriteLine("Hello world {0} !", Name);
         if(Arguments.Count > 0)
         {
             Console.WriteLine("Arguments : {0}", string.Join("," Arguments));
         }
-        return 0;
+        return Task.FromResult(0);
     }
 }
 ```
@@ -96,7 +96,7 @@ IParser parser = parserBuilder.BuildParser();
 CommandResult<HelloWorldCommand> commandResult = parser.Parse<HelloWorldCommand>(args);
 if(commandResult.IsValid)
 {
-    return commandResult.Execute();
+    return commandResult.ExecuteAsync();
 }
 return commandResult.ReturnCode;
 ```
