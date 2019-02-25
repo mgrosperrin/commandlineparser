@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands
@@ -17,9 +18,6 @@ namespace MGR.CommandLineParser.Tests.Commands
         [Display(ShortName = "of")]
         public FileInfo OutputFile { get; set; }
 
-        protected override int ExecuteCommand()
-        {
-            return 0;
-        }
+        protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
     }
 }

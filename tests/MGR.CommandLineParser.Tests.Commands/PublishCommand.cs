@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands
@@ -9,6 +10,6 @@ namespace MGR.CommandLineParser.Tests.Commands
         [Display(Description = "PublishCommandSourceDescription", ShortName = "src")]
         public string Source { get; set; }
 
-        protected override int ExecuteCommand() => 0;
+        protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
     }
 }

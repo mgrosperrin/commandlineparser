@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.UnitTests;
 using Xunit;
@@ -8,7 +9,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
     public class HelpCommandTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ShowGenericHelpForAllCommand()
+        public async Task ShowGenericHelpForAllCommand()
         {
             // Arrange
             var parserBuild = new ParserBuilder()
@@ -43,7 +44,7 @@ Available commands:
             using (new LangageSwitcher("en-us"))
             {
                 var actual = parser.Parse(args);
-                var actualResult = actual.Execute();
+                var actualResult = await actual.ExecuteAsync();
 
                 // Assert
                 Assert.True(actual.IsValid);

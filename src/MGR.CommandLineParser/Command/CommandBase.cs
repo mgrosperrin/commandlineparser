@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.Command;
@@ -63,15 +64,15 @@ namespace MGR.CommandLineParser.Command
         ///     Executes the command.
         /// </summary>
         /// <returns> Return 0 is everything was right, an negative error code otherwise. </returns>
-        public virtual int Execute()
+        public virtual Task<int> ExecuteAsync()
         {
             if (Help)
             {
                 var helpWriter = CurrentDependencyResolverScope.GetRequiredService<IHelpWriter>();
                 helpWriter.WriteHelpForCommand(ParserOptions, CommandType);
-                return 0;
+                return Task.FromResult(0);
             }
-            return ExecuteCommand();
+            return ExecuteCommandAsync();
         }
 
         /// <summary>
@@ -92,6 +93,6 @@ namespace MGR.CommandLineParser.Command
         ///     Executes the command.
         /// </summary>
         /// <returns> Return 0 is everything was right, an negative error code otherwise. </returns>
-        protected abstract int ExecuteCommand();
+        protected abstract Task<int> ExecuteCommandAsync();
     }
 }

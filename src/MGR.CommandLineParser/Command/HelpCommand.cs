@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MGR.CommandLineParser.Extensibility;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,7 @@ namespace MGR.CommandLineParser.Command
         ///     Executes the command.
         /// </summary>
         /// <returns>Return 0 is everything was right, an negative error code otherwise.</returns>
-        protected override int ExecuteCommand()
+        protected override Task<int> ExecuteCommandAsync()
         {
             var commandTypeProvider = CurrentDependencyResolverScope.GetRequiredService<ICommandTypeProvider>();
             var helpWriter = CurrentDependencyResolverScope.GetRequiredService<IHelpWriter>();
@@ -38,7 +39,7 @@ namespace MGR.CommandLineParser.Command
             {
                 helpWriter.WriteHelpForCommand(ParserOptions, commandType);
             }
-            return 0;
+            return Task.FromResult(0);
         }
 
         private void WriteHelpWhenNoCommandAreSpecified(ICommandTypeProvider commandTypeProvider, IHelpWriter helpWriter)
