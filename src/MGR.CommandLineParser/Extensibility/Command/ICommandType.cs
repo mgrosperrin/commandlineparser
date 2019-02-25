@@ -10,11 +10,6 @@ namespace MGR.CommandLineParser.Extensibility.Command
     public interface ICommandType
     {
         /// <summary>
-        ///     Gets the type of the command.
-        /// </summary>
-        Type Type { get; }
-
-        /// <summary>
         /// Gets the name of the command.
         /// </summary>
         ICommandMetadata Metadata { get; }
@@ -22,12 +17,12 @@ namespace MGR.CommandLineParser.Extensibility.Command
         /// <summary>
         /// Gets the option of the command type.
         /// </summary>
-        IEnumerable<ICommandOptionMetadata> Options { get; }
+        IEnumerable<ICommandOption> Options { get; }
 
         /// <summary>
         /// Create the command from its type.
         /// </summary>
-        /// <param name="serviceProvider">The scoped dependendy resolver.</param>
+        /// <param name="serviceProvider">The scoped dependency resolver.</param>
         /// <param name="parserOptions">The options of the current parser.</param>
         /// <returns></returns>
         ICommand CreateCommand(IServiceProvider serviceProvider, IParserOptions parserOptions);

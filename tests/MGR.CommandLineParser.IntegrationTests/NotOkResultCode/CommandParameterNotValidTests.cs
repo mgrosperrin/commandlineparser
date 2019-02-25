@@ -14,7 +14,7 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] {"IntTest", "-i", "42", "Custom argument value", "-b"};
-            var expectedReturnCode = CommandResultCode.CommandParameterNotValid;
+            var expectedReturnCode = CommandParsingResultCode.CommandParametersNotValid;
             var expectedNbOfArguments = 1;
             var expectedArgumentsValue = "Custom argument value";
             var expectedIntValue = 42;
@@ -24,7 +24,7 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
 
             // Assert
             Assert.False(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ReturnCode);
+            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
             Assert.IsType<IntTestCommand>(actual.Command);
             Assert.Equal(expectedIntValue, ((IntTestCommand) actual.Command).IntValue);
             Assert.Null(((IntTestCommand) actual.Command).IntListValue);
@@ -40,7 +40,7 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] { "-i", "42", "Custom argument value", "-b" };
-            var expectedReturnCode = CommandResultCode.CommandParameterNotValid;
+            var expectedReturnCode = CommandParsingResultCode.CommandParametersNotValid;
             var expectedNbOfArguments = 1;
             var expectedArgumentsValue = "Custom argument value";
             var expectedIntValue = 42;
@@ -50,7 +50,7 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
 
             // Assert
             Assert.False(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ReturnCode);
+            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
             Assert.IsType<IntTestCommand>(actual.Command);
             Assert.Equal(expectedIntValue, actual.Command.IntValue);
             Assert.Null(actual.Command.IntListValue);

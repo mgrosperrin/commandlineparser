@@ -10,7 +10,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
     /// <summary>
     ///     Represents the display information of an option.
     /// </summary>
-    public sealed class OptionDisplayInfo
+    public sealed class OptionDisplayInfo : IOptionDisplayInfo
     {
         /// <summary>
         ///     Creates a new <see cref="OptionDisplayInfo" />.
@@ -20,7 +20,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
             Guard.NotNull(propertyInfo, nameof(propertyInfo));
             Name = propertyInfo.Name;
             ShortName = propertyInfo.Name;
-            Description = "";
+            Description = string.Empty;
             var displayAttribute = propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
             if (displayAttribute != null)
             {
@@ -30,9 +30,9 @@ namespace MGR.CommandLineParser.Extensibility.Command
             }
 
             AlternateNames = optionAlternateNameGenerators.SelectMany(
-                    oang => oang.GenerateAlternateNames(this, propertyInfo))
+                    generator => generator.GenerateAlternateNames(this, propertyInfo))
                 .Distinct(StringComparer.CurrentCultureIgnoreCase)
-                .Where(alternameName => !alternameName.Equals(Name, StringComparison.CurrentCultureIgnoreCase))
+                .Where(alternateName => !alternateName.Equals(Name, StringComparison.CurrentCultureIgnoreCase))
                 .ToList();
         }
 

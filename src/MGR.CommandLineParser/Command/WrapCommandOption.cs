@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MGR.CommandLineParser.Extensibility.Command;
 
@@ -30,6 +31,11 @@ namespace MGR.CommandLineParser.Command
             {
                 commandOption.AssignValue(optionValue, command);
             }
+        }
+
+        public ICommandOptionMetadata Metadata
+        {
+            get { throw new InvalidOperationException(); }
         }
     }
 }

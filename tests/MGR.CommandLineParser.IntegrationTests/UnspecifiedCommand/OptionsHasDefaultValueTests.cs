@@ -14,7 +14,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[]
                 {"SetApiKey"};
-            var expectedReturnCode = CommandResultCode.Ok;
+            var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedSource = "DefaultSource";
             var expectedNbOfArguments = 0;
 
@@ -23,7 +23,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
 
             // Assert
             Assert.True(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ReturnCode);
+            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
             Assert.IsType<SetApiKeyCommand>(actual.Command);
             Assert.Equal(expectedSource, ((SetApiKeyCommand) actual.Command).Source);
             Assert.Equal(expectedNbOfArguments, ((SetApiKeyCommand) actual.Command).Arguments.Count);

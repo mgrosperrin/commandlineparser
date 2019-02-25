@@ -60,7 +60,7 @@ namespace MGR.CommandLineParser
         {
             if (arguments == null)
             {
-                return new CommandResult<TCommand>(null, CommandResultCode.NoArgs);
+                return new CommandResult<TCommand>(null, CommandParsingResultCode.NoArgumentsProvided);
             }
 
             var loggerFactory = _serviceProvider.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;

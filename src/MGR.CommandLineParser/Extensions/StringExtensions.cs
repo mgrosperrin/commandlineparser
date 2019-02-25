@@ -30,7 +30,7 @@ namespace System
             {
                 return source;
             }
-            
+
             var builder = new StringBuilder();
             builder.Append(char.ToLower(source.First(), CultureInfo.CurrentUICulture));
             var introduceDash = false;

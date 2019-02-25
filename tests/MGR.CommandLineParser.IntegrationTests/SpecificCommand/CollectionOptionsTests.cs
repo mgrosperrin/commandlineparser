@@ -15,7 +15,7 @@ namespace MGR.CommandLineParser.IntegrationTests.SpecificCommand
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[]
                 {"-Strvalue:custom value", "-i", "42", "-il", "42", "Custom argument value", "-b"};
-            var expectedReturnCode = CommandResultCode.Ok;
+            var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedStrValue = "custom value";
             var expectedNbOfArguments = 1;
             var expectedArgumentsValue = "Custom argument value";
@@ -26,7 +26,7 @@ namespace MGR.CommandLineParser.IntegrationTests.SpecificCommand
 
             // Assert
             Assert.True(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ReturnCode);
+            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
             Assert.IsType<IntTestCommand>(actual.Command);
             Assert.Equal(expectedStrValue, actual.Command.StrValue);
             Assert.Equal(expectedIntValue, actual.Command.IntValue);

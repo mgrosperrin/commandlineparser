@@ -17,7 +17,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
                 .CommandLineName("myHelpTest.exe");
             var parser = parserBuild.BuildParser(CreateServiceProvider());
             IEnumerable<string> args = new[] {"help"};
-            var expectedReturnCode = CommandResultCode.Ok;
+            var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedResult = 0;
             var expectedHelp = @"Display generic help
 Usage: myHelpTest.exe <command> [options] [args]
@@ -48,7 +48,7 @@ Available commands:
 
                 // Assert
                 Assert.True(actual.IsValid);
-                Assert.Equal(expectedReturnCode, actual.ReturnCode);
+                Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
                 Assert.IsType<HelpCommand>(actual.Command);
                 var actualHelp = StringConsole.Current.OutAsString();
                 Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences: true);

@@ -29,7 +29,7 @@ namespace MGR.CommandLineParser.Command
         ///     Gets the display informations of the option.
         /// </summary>
         [NotNull]
-        public OptionDisplayInfo DisplayInfo { get; }
+        public IOptionDisplayInfo DisplayInfo { get; }
 
         /// <summary>
         ///     Gets the converter for the option.
@@ -95,6 +95,8 @@ namespace MGR.CommandLineParser.Command
             var convertedValue = ConvertValue(optionValue);
             AssignValueInternal(convertedValue, command);
         }
+
+        public ICommandOptionMetadata Metadata => this;
 
         private void AssignValueInternal(object convertedValue, ICommand command)
         {

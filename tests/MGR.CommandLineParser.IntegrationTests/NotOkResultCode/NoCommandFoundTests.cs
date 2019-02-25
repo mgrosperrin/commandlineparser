@@ -12,14 +12,14 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] {"NotValid", "-option:true"};
-            var expectedReturnCode = CommandResultCode.NoCommandFound;
+            var expectedReturnCode = CommandParsingResultCode.NoCommandFound;
 
             // Act
             var actual = parser.Parse(args);
 
             // Assert
             Assert.False(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ReturnCode);
+            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
             Assert.Null(actual.Command);
         }
     }

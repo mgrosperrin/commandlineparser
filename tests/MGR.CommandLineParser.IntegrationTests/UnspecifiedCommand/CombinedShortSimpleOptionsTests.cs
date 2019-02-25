@@ -13,7 +13,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] { "pack", "--Version:abc", "-vt" };
-            var expectedReturnCode = CommandResultCode.Ok;
+            var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedVersion = "abc";
 
             // Act
@@ -21,7 +21,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
 
             // Assert
             Assert.True(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ReturnCode);
+            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
             Assert.IsType<PackCommand>(actual.Command);
             Assert.True(((PackCommand)actual.Command).Verbose);
             Assert.True(((PackCommand)actual.Command).Tool);
@@ -35,7 +35,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] { "pack", "--Version:abc", "-vt:-", "-b" };
-            var expectedReturnCode = CommandResultCode.Ok;
+            var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedVersion = "abc";
 
             // Act
@@ -43,7 +43,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
 
             // Assert
             Assert.True(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ReturnCode);
+            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
             Assert.IsType<PackCommand>(actual.Command);
             Assert.False(((PackCommand)actual.Command).Verbose);
             Assert.False(((PackCommand)actual.Command).Tool);

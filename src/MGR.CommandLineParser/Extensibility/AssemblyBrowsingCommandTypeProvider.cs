@@ -5,7 +5,6 @@ using System.Reflection;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
-using Microsoft.Extensions.Logging;
 
 namespace MGR.CommandLineParser.Extensibility
 {
@@ -15,11 +14,10 @@ namespace MGR.CommandLineParser.Extensibility
     public sealed class AssemblyBrowsingCommandTypeProvider : ICommandTypeProvider
     {
         private readonly IAssemblyProvider _assemblyProvider;
-        private readonly Lazy<Dictionary<string, ICommandType>> _commands;
+        private readonly Lazy<Dictionary<string, CommandType>> _commands;
 
         private readonly IEnumerable<IConverter> _converters;
         private readonly IEnumerable<IOptionAlternateNameGenerator> _optionAlternateNameGenerators;
-        private readonly ILogger<AssemblyBrowsingCommandTypeProvider> _logger;
 
         /// <summary>
         /// Create a new <see cref="AssemblyBrowsingCommandTypeProvider"/>.
@@ -27,14 +25,12 @@ namespace MGR.CommandLineParser.Extensibility
         /// <param name="assemblyProvider"></param>
         /// <param name="converters"></param>
         /// <param name="optionAlternateNameGenerators"></param>
-        /// <param name="logger"></param>
-        public AssemblyBrowsingCommandTypeProvider(IAssemblyProvider assemblyProvider, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators, ILogger<AssemblyBrowsingCommandTypeProvider> logger)
+        public AssemblyBrowsingCommandTypeProvider(IAssemblyProvider assemblyProvider, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             _assemblyProvider = assemblyProvider;
             _converters = converters;
             _optionAlternateNameGenerators = optionAlternateNameGenerators;
-            _logger = logger;
-            _commands = new Lazy<Dictionary<string, ICommandType>>(SearchAllCommandTypes);
+            _commands = new Lazy<Dictionary<string, CommandType>>(SearchAllCommandTypes);
         }
 
         /// <inheritdoc />
@@ -76,12 +72,12 @@ namespace MGR.CommandLineParser.Extensibility
             return commandType;
         }
 
-        private Dictionary<string, ICommandType> SearchAllCommandTypes()
+        private Dictionary<string, CommandType> SearchAllCommandTypes()
         {
             var assemblies = _assemblyProvider.GetAssembliesToBrowse().ToList();
             var types = assemblies.GetTypes(type => TypeExtensions.IsType<ICommand>(type)).ToList();
 
-            var commandTypes = types.Select(commandType => new CommandType(commandType, _converters, _optionAlternateNameGenerators)).ToList<ICommandType>();
+            var commandTypes = types.Select(commandType => new CommandType(commandType, _converters, _optionAlternateNameGenerators)).ToList();
             var commandTypesByName = commandTypes.ToDictionary(commandType => commandType.Metadata.Name, _ => _, StringComparer.OrdinalIgnoreCase);
             return commandTypesByName;
         }

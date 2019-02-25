@@ -16,14 +16,12 @@ namespace MGR.CommandLineParser
     internal class ParserEngine
     {
         private readonly IParserOptions _parserOptions;
-        private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<LoggerCategory.Parser> _logger;
 
         public ParserEngine(IParserOptions parserOptions, ILoggerFactory loggerFactory)
         {
             _parserOptions = parserOptions;
-            _loggerFactory = loggerFactory;
-            _logger = _loggerFactory.CreateLogger<LoggerCategory.Parser>();
+            _logger = loggerFactory.CreateLogger<LoggerCategory.Parser>();
         }
 
         public CommandResult<TCommand> Parse<TCommand>(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator) where TCommand : class, ICommand
@@ -36,11 +34,11 @@ namespace MGR.CommandLineParser
                 if (parsingResult.Command == null)
                 {
                     _logger.NoCommandFoundAfterSpecificParsing();
-                    return new CommandResult<TCommand>(default(TCommand), parsingResult.ReturnCode);
+                    return new CommandResult<TCommand>(default(TCommand), parsingResult.ParsingResultCode);
                 }
 
-                _logger.CommandFoundAfterSpecificParsing(parsingResult.Command.GetType(), parsingResult.ReturnCode, parsingResult.ValidationResults);
-                return new CommandResult<TCommand>((TCommand) parsingResult.Command, parsingResult.ReturnCode,
+                _logger.CommandFoundAfterSpecificParsing(parsingResult.Command.GetType(), parsingResult.ParsingResultCode, parsingResult.ValidationResults);
+                return new CommandResult<TCommand>((TCommand) parsingResult.Command, parsingResult.ParsingResultCode,
                     parsingResult.ValidationResults.ToList());
             }
         }
@@ -64,14 +62,14 @@ namespace MGR.CommandLineParser
 
                     _logger.NoCommandTypeFoundWithDefaultCommandType(commandName, typeof(TCommand));
                     var withArgumentsCommandResult = Parse<TCommand>(serviceProvider, argumentsEnumerator.PrefixWith(commandName));
-                    return new CommandResult<ICommand>(withArgumentsCommandResult.Command, withArgumentsCommandResult.ReturnCode,
+                    return new CommandResult<ICommand>(withArgumentsCommandResult.Command, withArgumentsCommandResult.ParsingResultCode,
                         withArgumentsCommandResult.ValidationResults.ToList());
 
                 }
 
                 _logger.NoArgumentProvidedWithDefaultCommandType(typeof(TCommand));
                 var noArgumentsCommandResult = Parse<TCommand>(serviceProvider, argumentsEnumerator);
-                return new CommandResult<ICommand>(noArgumentsCommandResult.Command, noArgumentsCommandResult.ReturnCode,
+                return new CommandResult<ICommand>(noArgumentsCommandResult.Command, noArgumentsCommandResult.ParsingResultCode,
                     noArgumentsCommandResult.ValidationResults.ToList());
             }
         }
@@ -85,7 +83,7 @@ namespace MGR.CommandLineParser
                 _logger.NoCommandNameForNotAlreadyKnownCommand();
                 var helpWriter = serviceProvider.GetRequiredService<IHelpWriter>();
                 helpWriter.WriteCommandListing(_parserOptions);
-                return new CommandResult<ICommand>(null, CommandResultCode.NoCommandName);
+                return new CommandResult<ICommand>(null, CommandParsingResultCode.NoCommandNameProvided);
             }
 
             using (_logger.BeginParsingUsingCommandName(commandName))
@@ -98,7 +96,7 @@ namespace MGR.CommandLineParser
                     _logger.NoCommandTypeFoundForNotAlreadyKnownCommand(commandName);
                     var helpWriter = serviceProvider.GetRequiredService<IHelpWriter>();
                     helpWriter.WriteCommandListing(_parserOptions);
-                    return new CommandResult<ICommand>(null, CommandResultCode.NoCommandFound);
+                    return new CommandResult<ICommand>(null, CommandParsingResultCode.NoCommandFound);
                 }
 
                 _logger.CommandTypeFoundForNotAlreadyKnownCommand(commandName);
@@ -116,9 +114,9 @@ namespace MGR.CommandLineParser
                 _logger.ParsedCommandIsNotValid();
                 var helpWriter = serviceProvider.GetRequiredService<IHelpWriter>();
                 helpWriter.WriteHelpForCommand(_parserOptions, commandType);
-                return new CommandResult<ICommand>(command, CommandResultCode.CommandParameterNotValid, validation.Item2);
+                return new CommandResult<ICommand>(command, CommandParsingResultCode.CommandParametersNotValid, validation.Item2);
             }
-            return new CommandResult<ICommand>(command, CommandResultCode.Ok);
+            return new CommandResult<ICommand>(command, CommandParsingResultCode.Success);
         }
         private ICommand ExtractCommandLineOptions(ICommandType commandType, IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
         {

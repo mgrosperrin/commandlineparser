@@ -18,5 +18,10 @@ namespace MGR.CommandLineParser.Extensibility.Command
         /// <param name="optionValue"></param>
         /// <param name="command"></param>
         void AssignValue(string optionValue, ICommand command);
+
+        /// <summary>
+        /// Gets the metadata of the option.
+        /// </summary>
+        ICommandOptionMetadata Metadata { get; }
     }
 }

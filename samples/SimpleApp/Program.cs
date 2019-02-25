@@ -9,7 +9,7 @@ namespace SimpleApp
 {
     internal class Program
     {
-        private static int Main()
+        private static int Main(string[] args)
         {
             //Console.ReadLine();
             var arguments = new[] { "pack", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "-Properties", "Configuration=Release", "-Build", "-Symbols", "-MSBuildVersion", "14" };

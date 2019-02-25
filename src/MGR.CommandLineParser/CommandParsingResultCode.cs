@@ -3,20 +3,20 @@
     /// <summary>
     /// Built-in list of result code.
     /// </summary>
-    public enum CommandResultCode
+    public enum CommandParsingResultCode
     {
         /// <summary>
         /// The parsing and the option's validation was fine.
         /// </summary>
-        Ok = 0,
+        Success = 0,
         /// <summary>
         /// The args parameter of the Parse command is null.
         /// </summary>
-        NoArgs = -100,
+        NoArgumentsProvided = -100,
         /// <summary>
         /// There is no command name in the command-line.
         /// </summary>
-        NoCommandName = -200,
+        NoCommandNameProvided = -200,
         /// <summary>
         /// The requested command was not found.
         /// </summary>
@@ -24,6 +24,6 @@
         /// <summary>
         /// The specified parameter for the options of the command are not valid.
         /// </summary>
-        CommandParameterNotValid = -400
+        CommandParametersNotValid = -400
     }
 }

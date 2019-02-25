@@ -17,7 +17,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var expectedOutputDirectory = @"C:\Temp";
             var expectedOutputFile = @"C:\Temp\otherfile.txt";
             IEnumerable<string> args = new[] {"import", fileArgument, "-p:50", @"-o:" + expectedOutputDirectory, @"-of:" + expectedOutputFile};
-            var expectedReturnCode = CommandResultCode.Ok;
+            var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedMaxParallel = 50;
             var expectedNbOfArguments = 1;
             var expectedArgumentsValue = new List<string> {fileArgument};
@@ -27,7 +27,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
 
             // Assert
             Assert.True(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ReturnCode);
+            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
             Assert.IsType<ImportCommand>(actual.Command);
             var importCommand = (ImportCommand) actual.Command;
             Assert.Equal(expectedOutputDirectory, importCommand.OutputDirectory.FullName);
@@ -47,7 +47,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[]
                 {"IntTest", "--Strvalue:custom value", "-i", "42", "Custom argument value", "-b"};
-            var expectedReturnCode = CommandResultCode.Ok;
+            var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedStrValue = "custom value";
             var expectedNbOfArguments = 1;
             var expectedArgumentsValue = "Custom argument value";
@@ -58,7 +58,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
 
             // Assert
             Assert.True(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ReturnCode);
+            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
             Assert.IsType<IntTestCommand>(actual.Command);
             Assert.Equal(expectedStrValue, ((IntTestCommand)actual.Command).StrValue);
             Assert.Equal(expectedIntValue, ((IntTestCommand)actual.Command).IntValue);

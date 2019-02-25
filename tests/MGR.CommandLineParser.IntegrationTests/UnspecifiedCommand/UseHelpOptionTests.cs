@@ -17,7 +17,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
                 .CommandLineName("myListTest.exe");
             var parser = parserBuild.BuildParser(CreateServiceProvider());
             IEnumerable<string> args = new[] {"list", "--help"};
-            var expectedReturnCode = CommandResultCode.Ok;
+            var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedResult = 0;
             var expectedHelp = @"Display help for list command
 Usage: myListTest.exe <command> [options] [args]
@@ -46,7 +46,7 @@ List sample number 2
 
                 // Assert
                 Assert.True(actual.IsValid);
-                Assert.Equal(expectedReturnCode, actual.ReturnCode);
+                Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
                 Assert.IsType<ListCommand>(actual.Command);
                 var actualHelp = StringConsole.Current.OutAsString();
                 Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences: true);
@@ -63,7 +63,7 @@ List sample number 2
                 .CommandLineName("myPackTest.exe");
             var parser = parserBuild.BuildParser(CreateServiceProvider());
             IEnumerable<string> args = new[] { "pack", "--help" };
-            var expectedReturnCode = CommandResultCode.Ok;
+            var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedResult = 0;
             var expectedHelp = @"Display help for pack command
 Usage: myPackTest.exe <command> [options] [args]
@@ -96,7 +96,7 @@ Options:
 
                 // Assert
                 Assert.True(actual.IsValid);
-                Assert.Equal(expectedReturnCode, actual.ReturnCode);
+                Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
                 Assert.IsType<PackCommand>(actual.Command);
                 var actualHelp = StringConsole.Current.OutAsString();
                 Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences: true);

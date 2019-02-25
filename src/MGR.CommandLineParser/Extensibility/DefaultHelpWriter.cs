@@ -91,23 +91,23 @@ namespace MGR.CommandLineParser.Extensibility
                 if (commandType.Options.Any())
                 {
                     _console.WriteLine(Strings.DefaultHelpWriter_OptionsListTitle);
-                    var maxOptionWidth = commandType.Options.Max(o => o.DisplayInfo.Name.Length + o.DisplayInfo.AlternateNames.Sum(
+                    var maxOptionWidth = commandType.Options.Max(o => o.Metadata.DisplayInfo.Name.Length + o.Metadata.DisplayInfo.AlternateNames.Sum(
                         alternateName => alternateName.Length + 1)) + 2;
-                    var maxAltOptionWidth = commandType.Options.Max(o => (o.DisplayInfo.ShortName ?? string.Empty).Length);
+                    var maxAltOptionWidth = commandType.Options.Max(o => (o.Metadata.DisplayInfo.ShortName ?? string.Empty).Length);
                     foreach (var commandOptionMetadata in commandType.Options)
                     {
-                        var alternateNames = string.Join(MultiOptionNameSeparator, commandOptionMetadata.DisplayInfo.AlternateNames);
+                        var alternateNames = string.Join(MultiOptionNameSeparator, commandOptionMetadata.Metadata.DisplayInfo.AlternateNames);
                         var prefixAlternateNames = MultiOptionNameSeparator;
                         if (string.IsNullOrEmpty(alternateNames))
                         {
                             prefixAlternateNames = String.Empty;
                         }
-                        var optionName = string.Concat(commandOptionMetadata.DisplayInfo.Name, prefixAlternateNames, alternateNames, GetMultiValueIndicator(commandOptionMetadata));
-                        var optionShortName = FormatShortName(commandOptionMetadata.DisplayInfo.ShortName);
+                        var optionName = string.Concat(commandOptionMetadata.Metadata.DisplayInfo.Name, prefixAlternateNames, alternateNames, GetMultiValueIndicator(commandOptionMetadata.Metadata));
+                        var optionShortName = FormatShortName(commandOptionMetadata.Metadata.DisplayInfo.ShortName);
                         _console.Write(" -{0, -" + maxOptionWidth + "}", optionName);
                         _console.Write("{0, -" + (maxAltOptionWidth + 4) + "}", optionShortName);
 
-                        _console.Write(commandOptionMetadata.DisplayInfo.Description);
+                        _console.Write(commandOptionMetadata.Metadata.DisplayInfo.Description);
                         _console.WriteLine();
                     }
                 }

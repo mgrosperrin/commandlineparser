@@ -13,7 +13,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] {"delete", "--Source:custom value", "-np", "--ApiKey", "MyApiKey", "Custom argument value", "b"};
-            var expectedReturnCode = CommandResultCode.Ok;
+            var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedSource = "custom value";
             var expectedApiKey = "MyApiKey";
             var expectedNbOfArguments = 2;
@@ -24,7 +24,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
 
             // Assert
             Assert.True(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ReturnCode);
+            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
             Assert.IsType<DeleteCommand>(actual.Command);
             Assert.Equal(expectedSource, ((DeleteCommand) actual.Command).Source);
             Assert.Equal(expectedApiKey, ((DeleteCommand) actual.Command).ApiKey);
