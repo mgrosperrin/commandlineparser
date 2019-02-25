@@ -19,6 +19,8 @@ namespace MGR.CommandLineParser
         /// <returns>The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> so that additional calls can be chained.</returns>
         public static IServiceCollection AddCommandLineParser(this IServiceCollection services)
         {
+            services.AddLogging();
+
             services.TryAddSingleton<IConsole, DefaultConsole>();
             services.TryAddSingleton<IAssemblyProvider, CurrentDirectoryAssemblyProvider>();
             services.TryAddScoped<ICommandTypeProvider, AssemblyBrowsingCommandTypeProvider>();

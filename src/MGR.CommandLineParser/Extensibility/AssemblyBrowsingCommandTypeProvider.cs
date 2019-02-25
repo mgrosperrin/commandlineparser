@@ -5,6 +5,7 @@ using System.Reflection;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
+using Microsoft.Extensions.Logging;
 
 namespace MGR.CommandLineParser.Extensibility
 {
@@ -18,6 +19,7 @@ namespace MGR.CommandLineParser.Extensibility
 
         private readonly IEnumerable<IConverter> _converters;
         private readonly IEnumerable<IOptionAlternateNameGenerator> _optionAlternateNameGenerators;
+        private readonly ILogger<AssemblyBrowsingCommandTypeProvider> _logger;
 
         /// <summary>
         /// Create a new <see cref="AssemblyBrowsingCommandTypeProvider"/>.
@@ -25,11 +27,13 @@ namespace MGR.CommandLineParser.Extensibility
         /// <param name="assemblyProvider"></param>
         /// <param name="converters"></param>
         /// <param name="optionAlternateNameGenerators"></param>
-        public AssemblyBrowsingCommandTypeProvider(IAssemblyProvider assemblyProvider, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        /// <param name="logger"></param>
+        public AssemblyBrowsingCommandTypeProvider(IAssemblyProvider assemblyProvider, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators, ILogger<AssemblyBrowsingCommandTypeProvider> logger)
         {
             _assemblyProvider = assemblyProvider;
             _converters = converters;
             _optionAlternateNameGenerators = optionAlternateNameGenerators;
+            _logger = logger;
             _commands = new Lazy<Dictionary<string, ICommandType>>(SearchAllCommandTypes);
         }
 
