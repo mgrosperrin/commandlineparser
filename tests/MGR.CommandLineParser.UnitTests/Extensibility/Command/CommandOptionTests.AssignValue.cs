@@ -24,16 +24,16 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                 var serviceProviderMock = new Mock<IServiceProvider>();
                 serviceProviderMock.Setup(_ => _.GetService(typeof(ICommandActivator)))
                     .Returns(BasicCommandActivator.Instance);
-                var testCommand =
-                    testCommandType.CreateCommand(serviceProviderMock.Object, new ParserOptions()) as
-                        TestCommand;
+                var classBasedCommandObject =
+                    (ClassBasedCommandObject)testCommandType.CreateCommand(serviceProviderMock.Object, new ParserOptions());
+                var testCommand = (TestCommand)classBasedCommandObject.Command;
                 var optionName = nameof(TestCommand.PropertyList);
                 var expected = 42;
                 var expectedLength = 1;
                 var option = "42";
 
                 // Act
-                testCommandType.FindOption(optionName).AssignValue(option, testCommand);
+                classBasedCommandObject.FindOption(optionName).AssignValue(option);
 
                 // Assert
                 Assert.NotNull(testCommand.PropertyList);
@@ -51,9 +51,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                 var serviceProviderMock = new Mock<IServiceProvider>();
                 serviceProviderMock.Setup(_ => _.GetService(typeof(ICommandActivator)))
                     .Returns(BasicCommandActivator.Instance);
-                var testCommand =
-                    testCommandType.CreateCommand(serviceProviderMock.Object, new ParserOptions()) as
-                        TestCommand;
+                var classBasedCommandObject =
+                    (ClassBasedCommandObject)testCommandType.CreateCommand(serviceProviderMock.Object, new ParserOptions());
+                var testCommand = (TestCommand)classBasedCommandObject.Command;
                 var optionName = nameof(TestCommand.PropertyDictionary);
                 var expectedKey = "keyTest";
                 var guid = "18591394-096C-476F-A8B7-71903E27DAB5";
@@ -62,7 +62,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                 var option = "keyTest=" + guid;
 
                 // Act
-                testCommandType.FindOption(optionName).AssignValue(option, testCommand);
+                classBasedCommandObject.FindOption(optionName).AssignValue(option);
 
                 // Assert
                 Assert.NotNull(testCommand.PropertyDictionary);
@@ -82,15 +82,15 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                 var serviceProviderMock = new Mock<IServiceProvider>();
                 serviceProviderMock.Setup(_ => _.GetService(typeof(ICommandActivator)))
                     .Returns(BasicCommandActivator.Instance);
-                var testCommand =
-                    testCommandType.CreateCommand(serviceProviderMock.Object, new ParserOptions()) as
-                        TestCommand;
+                var classBasedCommandObject =
+                    (ClassBasedCommandObject)testCommandType.CreateCommand(serviceProviderMock.Object, new ParserOptions());
+                var testCommand = (TestCommand)classBasedCommandObject.Command;
                 var optionName = nameof(TestCommand.PropertySimple);
                 var expected = 42;
                 var option = "42";
 
                 // Act
-                testCommandType.FindOption(optionName).AssignValue(option, testCommand);
+                classBasedCommandObject.FindOption(optionName).AssignValue(option);
 
                 // Assert
                 Assert.Equal(expected, testCommand.PropertySimple);

@@ -20,7 +20,7 @@ namespace MGR.CommandLineParser.Command
 
         public bool OptionalValue => _commandOptions.Aggregate(true, (optionalValue, commandOption) => optionalValue && commandOption.OptionalValue);
 
-        public void AssignValue(string optionValue, ICommand command)
+        public void AssignValue(string optionValue)
         {
             if (!OptionalValue && optionValue == null)
             {
@@ -29,7 +29,7 @@ namespace MGR.CommandLineParser.Command
 
             foreach (var commandOption in _commandOptions)
             {
-                commandOption.AssignValue(optionValue, command);
+                commandOption.AssignValue(optionValue);
             }
         }
 

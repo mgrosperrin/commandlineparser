@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using MGR.CommandLineParser;
 using MGR.CommandLineParser.Tests.Commands;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +10,7 @@ namespace SimpleApp
 {
     internal class Program
     {
-        private static int Main(string[] args)
+        private static async Task<int> Main(string[] args)
         {
             //Console.ReadLine();
             var arguments = new[] { "pack", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "-Properties", "Configuration=Release", "-Build", "-Symbols", "-MSBuildVersion", "14" };
@@ -24,19 +25,19 @@ namespace SimpleApp
             var serviceProvider = serviceCollection.BuildServiceProvider();
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser(serviceProvider);
-            //var commandResult = parser.Parse(arguments);
-            //Console.WriteLine(commandResult.Command);
+            var commandResult = parser.Parse(arguments);
+            Console.WriteLine(commandResult.Command);
 
-            //var defaultCommandResult = parser.ParseWithDefaultCommand<PackCommand>(arguments);
-            //Console.WriteLine(defaultCommandResult.Command);
+            var defaultCommandResult = parser.ParseWithDefaultCommand<PackCommand>(arguments);
+            Console.WriteLine(defaultCommandResult.Command);
             var defaultPackCommandResult = parser.ParseWithDefaultCommand<PackCommand>(defaultPackArguments);
             Console.WriteLine(defaultPackCommandResult.Command);
-            //var defaultDeleteCommandResult = parser.ParseWithDefaultCommand<PackCommand>(defaultDeleteArguments);
-            //Console.WriteLine(defaultDeleteCommandResult.Command);
-            //Console.ReadLine();
-            //if (commandResult.IsValid)
+            var defaultDeleteCommandResult = parser.ParseWithDefaultCommand<PackCommand>(defaultDeleteArguments);
+            Console.WriteLine(defaultDeleteCommandResult.Command);
+            Console.ReadLine();
+            if (commandResult.IsValid)
             {
-              //  return commandResult.Execute();
+                return await commandResult.ExecuteAsync();
             }
             Thread.Sleep(TimeSpan.FromSeconds(10));
             return 0;//(int)commandResult.ReturnCode;

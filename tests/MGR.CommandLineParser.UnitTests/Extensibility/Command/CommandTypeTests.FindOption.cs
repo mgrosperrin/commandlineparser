@@ -28,16 +28,18 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                 var serviceProviderMock = new Mock<IServiceProvider>();
                 serviceProviderMock.Setup(_ => _.GetService(typeof(ICommandActivator)))
                     .Returns(BasicCommandActivator.Instance);
-                var testCommand = testCommandType.CreateCommand(serviceProviderMock.Object, new ParserOptions()) as TestCommand;
+                var classBasedCommandObject =
+                    (ClassBasedCommandObject)testCommandType.CreateCommand(serviceProviderMock.Object, new ParserOptions());
+                var testCommand = (TestCommand)classBasedCommandObject.Command;
 
                 // Act
-                var actual = testCommandType.FindOption(optionName);
+                var actual = classBasedCommandObject.FindOption(optionName);
 
                 // Assert
                 Assert.NotNull(actual);
                 Assert.NotNull(testCommand);
                 Assert.False(actual.OptionalValue);
-                actual.AssignValue("42", testCommand);
+                actual.AssignValue("42");
                 Assert.Single(testCommand.PropertyList);
                 Assert.Equal(42, testCommand.PropertyList.First());
 

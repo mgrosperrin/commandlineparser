@@ -38,7 +38,7 @@ namespace MGR.CommandLineParser
                 }
 
                 _logger.CommandFoundAfterSpecificParsing(parsingResult.Command.GetType(), parsingResult.ParsingResultCode, parsingResult.ValidationResults);
-                return new CommandResult<TCommand>((TCommand) parsingResult.Command, parsingResult.ParsingResultCode,
+                return new CommandResult<TCommand>((TCommand)parsingResult.Command, parsingResult.ParsingResultCode,
                     parsingResult.ValidationResults.ToList());
             }
         }
@@ -88,7 +88,6 @@ namespace MGR.CommandLineParser
 
             using (_logger.BeginParsingUsingCommandName(commandName))
             {
-                _logger.LogInformation("The command name is {commandName}", commandName);
                 var commandTypeProvider = serviceProvider.GetRequiredService<ICommandTypeProvider>();
                 var commandType = commandTypeProvider.GetCommandType(commandName);
                 if (commandType == null)
@@ -107,20 +106,20 @@ namespace MGR.CommandLineParser
 
         private CommandResult<ICommand> ParseImpl(IEnumerator<string> argumentsEnumerator, IServiceProvider serviceProvider, ICommandType commandType)
         {
-            var command = ExtractCommandLineOptions(commandType, serviceProvider, argumentsEnumerator);
-            var validation = Validate(command, serviceProvider, commandType.Metadata.Name);
+            var commandObject = ExtractCommandLineOptions(commandType, serviceProvider, argumentsEnumerator);
+            var validation = Validate(commandObject, serviceProvider, commandType.Metadata.Name);
             if (!validation.Item1)
             {
                 _logger.ParsedCommandIsNotValid();
                 var helpWriter = serviceProvider.GetRequiredService<IHelpWriter>();
                 helpWriter.WriteHelpForCommand(_parserOptions, commandType);
-                return new CommandResult<ICommand>(command, CommandParsingResultCode.CommandParametersNotValid, validation.Item2);
+                return new CommandResult<ICommand>(commandObject.Command, CommandParsingResultCode.CommandParametersNotValid, validation.Item2);
             }
-            return new CommandResult<ICommand>(command, CommandParsingResultCode.Success);
+            return new CommandResult<ICommand>(commandObject.Command, CommandParsingResultCode.Success);
         }
-        private ICommand ExtractCommandLineOptions(ICommandType commandType, IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
+        private ClassBasedCommandObject ExtractCommandLineOptions(ICommandType commandType, IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
         {
-            var command = commandType.CreateCommand(serviceProvider, _parserOptions);
+            var commandObject = commandType.CreateCommand(serviceProvider, _parserOptions);
             var alwaysPutInArgumentList = false;
             while (true)
             {
@@ -137,17 +136,17 @@ namespace MGR.CommandLineParser
 
                 if (alwaysPutInArgumentList || !argument.StartsWith(StringComparison.OrdinalIgnoreCase, Constants.OptionStarter))
                 {
-                    command.Arguments.Add(argument);
+                    commandObject.AddArguments(argument);
                     continue;
                 }
 
                 var starterLength = 2;
-                Func<ICommandType, string, ICommandOption> commandOptionFinder = (ct, optionName) => ct.FindOption(optionName);
+                Func<ICommandObject, string, ICommandOption> commandOptionFinder = (co, optionName) => co.FindOption(optionName);
                 if (!argument.StartsWith(Constants.LongNameOptionStarter))
                 {
                     starterLength = Constants.ShortNameOptionStarter.Length;
                     var defaultCommandOptionFinder = commandOptionFinder;
-                    commandOptionFinder = (ct, optionName) => ct.FindOptionByShortName(optionName) ?? defaultCommandOptionFinder(ct, optionName);
+                    commandOptionFinder = (co, optionName) => co.FindOptionByShortName(optionName) ?? defaultCommandOptionFinder(co, optionName);
                 }
                 var optionText = argument.Substring(starterLength);
                 string value = null;
@@ -158,7 +157,7 @@ namespace MGR.CommandLineParser
                     optionText = optionText.Substring(0, splitIndex);
                 }
 
-                var option = commandOptionFinder(commandType, optionText);
+                var option = commandOptionFinder(commandObject, optionText);
                 if (option == null)
                 {
                     throw new CommandLineParserException(Constants.ExceptionMessages.FormatParserOptionNotFoundForCommand(commandType.Metadata.Name, optionText));
@@ -169,13 +168,14 @@ namespace MGR.CommandLineParser
                     value = value ?? argumentsEnumerator.GetNextCommandLineItem();
                 }
 
-                option.AssignValue(value, command);
+                option.AssignValue(value);
             }
-            return command;
+            return commandObject as ClassBasedCommandObject;
         }
 
-        private static Tuple<bool, List<ValidationResult>> Validate(ICommand command, IServiceProvider serviceProvider, string commandName)
+        private static Tuple<bool, List<ValidationResult>> Validate(ClassBasedCommandObject commandObject, IServiceProvider serviceProvider, string commandName)
         {
+            var command = commandObject.Command;
             var validationContext = new ValidationContext(command, null, null);
             var results = new List<ValidationResult>();
 
