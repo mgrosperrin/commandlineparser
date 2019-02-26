@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser.Command
@@ -62,6 +63,8 @@ namespace MGR.CommandLineParser.Command
 
             return null;
         }
+
+        public Task<int> ExecuteAsync() => Command.ExecuteAsync();
 
         private ICommandOption[] FindUnwrappedOptionByShortName(string optionShortName)
         {

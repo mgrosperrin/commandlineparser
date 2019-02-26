@@ -24,26 +24,28 @@ namespace MGR.CommandLineParser
             _logger = loggerFactory.CreateLogger<LoggerCategory.Parser>();
         }
 
-        public CommandResult<TCommand> Parse<TCommand>(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator) where TCommand : class, ICommand
+        public ParsingResult Parse<TCommand>(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator) where TCommand : class, ICommand
         {
             using (_logger.BeginParsingForSpecificCommandType(typeof(TCommand)))
             {
                 var commandTypeProvider = serviceProvider.GetRequiredService<ICommandTypeProvider>();
                 var commandType = commandTypeProvider.GetCommandType<TCommand>();
                 var parsingResult = ParseImpl(argumentsEnumerator, serviceProvider, commandType);
-                if (parsingResult.Command == null)
+                if (parsingResult.ParsingResultCode == CommandParsingResultCode.NoCommandFound)
                 {
                     _logger.NoCommandFoundAfterSpecificParsing();
-                    return new CommandResult<TCommand>(default(TCommand), parsingResult.ParsingResultCode);
+                }
+                else
+                {
+                    _logger.CommandFoundAfterSpecificParsing(parsingResult.Command.GetType(), parsingResult.ParsingResultCode,
+                        parsingResult.ValidationResults);
                 }
 
-                _logger.CommandFoundAfterSpecificParsing(parsingResult.Command.GetType(), parsingResult.ParsingResultCode, parsingResult.ValidationResults);
-                return new CommandResult<TCommand>((TCommand)parsingResult.Command, parsingResult.ParsingResultCode,
-                    parsingResult.ValidationResults.ToList());
+                return parsingResult;
             }
         }
 
-        public CommandResult<ICommand> ParseWithDefaultCommand<TCommand>(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
+        public ParsingResult ParseWithDefaultCommand<TCommand>(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
             where TCommand : class, ICommand
         {
             using (_logger.BeginParsingWithDefaultCommandType(typeof(TCommand)))
@@ -62,19 +64,17 @@ namespace MGR.CommandLineParser
 
                     _logger.NoCommandTypeFoundWithDefaultCommandType(commandName, typeof(TCommand));
                     var withArgumentsCommandResult = Parse<TCommand>(serviceProvider, argumentsEnumerator.PrefixWith(commandName));
-                    return new CommandResult<ICommand>(withArgumentsCommandResult.Command, withArgumentsCommandResult.ParsingResultCode,
-                        withArgumentsCommandResult.ValidationResults.ToList());
+                    return withArgumentsCommandResult;
 
                 }
 
                 _logger.NoArgumentProvidedWithDefaultCommandType(typeof(TCommand));
                 var noArgumentsCommandResult = Parse<TCommand>(serviceProvider, argumentsEnumerator);
-                return new CommandResult<ICommand>(noArgumentsCommandResult.Command, noArgumentsCommandResult.ParsingResultCode,
-                    noArgumentsCommandResult.ValidationResults.ToList());
+                return noArgumentsCommandResult;
             }
         }
 
-        public CommandResult<ICommand> Parse(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
+        public ParsingResult Parse(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
         {
             _logger.ParseForNotAlreadyKnownCommand();
             var commandName = argumentsEnumerator.GetNextCommandLineItem();
@@ -83,7 +83,7 @@ namespace MGR.CommandLineParser
                 _logger.NoCommandNameForNotAlreadyKnownCommand();
                 var helpWriter = serviceProvider.GetRequiredService<IHelpWriter>();
                 helpWriter.WriteCommandListing(_parserOptions);
-                return new CommandResult<ICommand>(null, CommandParsingResultCode.NoCommandNameProvided);
+                return new ParsingResult(null, null, CommandParsingResultCode.NoCommandNameProvided);
             }
 
             using (_logger.BeginParsingUsingCommandName(commandName))
@@ -95,7 +95,7 @@ namespace MGR.CommandLineParser
                     _logger.NoCommandTypeFoundForNotAlreadyKnownCommand(commandName);
                     var helpWriter = serviceProvider.GetRequiredService<IHelpWriter>();
                     helpWriter.WriteCommandListing(_parserOptions);
-                    return new CommandResult<ICommand>(null, CommandParsingResultCode.NoCommandFound);
+                    return new ParsingResult(null, null, CommandParsingResultCode.NoCommandFound);
                 }
 
                 _logger.CommandTypeFoundForNotAlreadyKnownCommand(commandName);
@@ -104,7 +104,7 @@ namespace MGR.CommandLineParser
 
         }
 
-        private CommandResult<ICommand> ParseImpl(IEnumerator<string> argumentsEnumerator, IServiceProvider serviceProvider, ICommandType commandType)
+        private ParsingResult ParseImpl(IEnumerator<string> argumentsEnumerator, IServiceProvider serviceProvider, ICommandType commandType)
         {
             var commandObject = ExtractCommandLineOptions(commandType, serviceProvider, argumentsEnumerator);
             var validation = Validate(commandObject, serviceProvider, commandType.Metadata.Name);
@@ -113,11 +113,11 @@ namespace MGR.CommandLineParser
                 _logger.ParsedCommandIsNotValid();
                 var helpWriter = serviceProvider.GetRequiredService<IHelpWriter>();
                 helpWriter.WriteHelpForCommand(_parserOptions, commandType);
-                return new CommandResult<ICommand>(commandObject.Command, CommandParsingResultCode.CommandParametersNotValid, validation.Item2);
+                return new ParsingResult(commandObject, validation.Item2, CommandParsingResultCode.CommandParametersNotValid);
             }
-            return new CommandResult<ICommand>(commandObject.Command, CommandParsingResultCode.Success);
+            return new ParsingResult(commandObject, null, CommandParsingResultCode.Success);
         }
-        private ClassBasedCommandObject ExtractCommandLineOptions(ICommandType commandType, IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
+        private ICommandObject ExtractCommandLineOptions(ICommandType commandType, IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
         {
             var commandObject = commandType.CreateCommand(serviceProvider, _parserOptions);
             var alwaysPutInArgumentList = false;
@@ -170,7 +170,7 @@ namespace MGR.CommandLineParser
 
                 option.AssignValue(value);
             }
-            return commandObject as ClassBasedCommandObject;
+            return commandObject;
         }
 
         private static Tuple<bool, List<ValidationResult>> Validate(ClassBasedCommandObject commandObject, IServiceProvider serviceProvider, string commandName)

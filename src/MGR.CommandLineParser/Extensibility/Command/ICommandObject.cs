@@ -1,4 +1,6 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace MGR.CommandLineParser.Extensibility.Command
 {
     /// <summary>
@@ -23,5 +25,14 @@ namespace MGR.CommandLineParser.Extensibility.Command
         /// <param name="optionShortName">The short name of the option.</param>
         /// <returns>The <see cref="ICommandOption"/> representing the option of the command.</returns>
         ICommandOption FindOptionByShortName(string optionShortName);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        Task<int> ExecuteAsync();
+        /// <summary>
+        ///
+        /// </summary>
+        void Validate();
     }
 }

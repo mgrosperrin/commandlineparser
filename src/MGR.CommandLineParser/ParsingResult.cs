@@ -1,22 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
+using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser
 {
     /// <summary>
     ///
     /// </summary>
-    public abstract class ParsingResult
+    public sealed class ParsingResult
     {
+        private readonly ICommandObject _commandObject;
+
         /// <summary>
         ///
         /// </summary>
+        /// <param name="commandObject"></param>
         /// <param name="validationResults"></param>
         /// <param name="parsingResultCode"></param>
-        protected ParsingResult(IEnumerable<ValidationResult> validationResults, CommandParsingResultCode parsingResultCode)
+        public ParsingResult(ICommandObject commandObject, IEnumerable<ValidationResult> validationResults, CommandParsingResultCode parsingResultCode)
         {
-            ValidationResults = validationResults;
+            _commandObject = commandObject;
+            ValidationResults = validationResults ?? Enumerable.Empty<ValidationResult>();
             ParsingResultCode = parsingResultCode;
         }
         /// <summary>
@@ -27,7 +33,7 @@ namespace MGR.CommandLineParser
         /// <summary>
         /// Defines if the command is in a valid state (parsing/validating the options).
         /// </summary>
-        public abstract bool IsValid { get; }
+        public bool IsValid => ParsingResultCode == CommandParsingResultCode.Success && !ValidationResults.Any();
 
         /// <summary>
         /// The return code of the parsing.
@@ -38,6 +44,13 @@ namespace MGR.CommandLineParser
         ///
         /// </summary>
         /// <returns></returns>
-        public abstract Task<int> ExecuteAsync();
+        public Task<int> ExecuteAsync()
+        {
+            if (_commandObject == null || !IsValid)
+            {
+                throw new CommandLineParserException(Constants.ExceptionMessages.NoValidCommand);
+            }
+            return _commandObject.ExecuteAsync();
+        }
     }
 }
