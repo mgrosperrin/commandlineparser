@@ -51,6 +51,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{172E24C2-B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FB795A12-C939-492F-9377-4C468D01EF3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGR.CommandLineParser.LambdaCommand", "src\MGR.CommandLineParser.LambdaCommand\MGR.CommandLineParser.LambdaCommand.csproj", "{731CA244-AF2D-4FDE-802D-4D70A66CD2B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{731CA244-AF2D-4FDE-802D-4D70A66CD2B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{731CA244-AF2D-4FDE-802D-4D70A66CD2B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{731CA244-AF2D-4FDE-802D-4D70A66CD2B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{731CA244-AF2D-4FDE-802D-4D70A66CD2B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +93,7 @@ Global
 		{7FD4CEB3-040B-4581-9B7C-EF8CB99B0951} = {569ED12A-DA23-4457-B304-6B00C0CB335E}
 		{F192F36D-7EDD-4E1E-82A4-95CA11665D2B} = {0B84161D-C735-43F0-A525-4ED42CC4B17C}
 		{A422BACE-2758-4ABD-9DAA-ADF289FCCE65} = {569ED12A-DA23-4457-B304-6B00C0CB335E}
+		{731CA244-AF2D-4FDE-802D-4D70A66CD2B2} = {FB795A12-C939-492F-9377-4C468D01EF3C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {827031C5-AE76-4B4C-9503-E13F15B497E9}
