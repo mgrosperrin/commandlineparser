@@ -3,10 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace MGR.CommandLineParser.Extensibility
+namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     /// <summary>
-    /// Defines the contract for the provider of assemblies to load, used by <see cref="AssemblyBrowsingCommandTypeProvider"/>.
+    /// Defines the contract for the provider of assemblies to load, used by <see cref="AssemblyBrowsingClassBasedCommandTypeProvider"/>.
     /// </summary>
     public interface IAssemblyProvider
     {

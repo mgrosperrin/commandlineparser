@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.Command;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MGR.CommandLineParser.Command
@@ -18,7 +20,7 @@ namespace MGR.CommandLineParser.Command
         public const string Name = "help";
 
         /// <summary>
-        ///     Show detailled help for all commands.
+        ///     Show detailed help for all commands.
         /// </summary>
         public bool All { get; set; }
 
@@ -28,12 +30,12 @@ namespace MGR.CommandLineParser.Command
         /// <returns>Return 0 is everything was right, an negative error code otherwise.</returns>
         protected override Task<int> ExecuteCommandAsync()
         {
-            var commandTypeProvider = CurrentDependencyResolverScope.GetRequiredService<ICommandTypeProvider>();
+            var commandTypeProviders = CurrentDependencyResolverScope.GetServices<ICommandTypeProvider>().ToList();
             var helpWriter = CurrentDependencyResolverScope.GetRequiredService<IHelpWriter>();
-            var commandType = commandTypeProvider.GetCommandType(Arguments.FirstOrDefault() ?? string.Empty);
+            var commandType = commandTypeProviders.GetCommandType(Arguments.FirstOrDefault() ?? string.Empty);
             if (commandType == null)
             {
-                WriteHelpWhenNoCommandAreSpecified(commandTypeProvider, helpWriter);
+                WriteHelpWhenNoCommandAreSpecified(commandTypeProviders, helpWriter);
             }
             else
             {
@@ -42,11 +44,11 @@ namespace MGR.CommandLineParser.Command
             return Task.FromResult(0);
         }
 
-        private void WriteHelpWhenNoCommandAreSpecified(ICommandTypeProvider commandTypeProvider, IHelpWriter helpWriter)
+        private void WriteHelpWhenNoCommandAreSpecified(IEnumerable<ICommandTypeProvider> commandTypeProviders, IHelpWriter helpWriter)
         {
             if (All)
             {
-                var commands = commandTypeProvider.GetAllVisibleCommandsTypes();
+                var commands = commandTypeProviders.GetAllVisibleCommandsTypes();
                 helpWriter.WriteHelpForCommand(ParserOptions, commands.ToArray());
             }
             else

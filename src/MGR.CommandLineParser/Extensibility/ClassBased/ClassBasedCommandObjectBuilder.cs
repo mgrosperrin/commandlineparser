@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
-using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Properties;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MGR.CommandLineParser.Command
+namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     internal class ClassBasedCommandObjectBuilder : ICommandObjectBuilder
     {
@@ -16,7 +16,7 @@ namespace MGR.CommandLineParser.Command
         private readonly ICommandMetadata _commandMetadata;
         private readonly ICommand _command;
 
-        internal ClassBasedCommandObjectBuilder(ICommandMetadata commandMetadata, IEnumerable<CommandOptionMetadata> commandOptionMetadatas, ICommand command)
+        internal ClassBasedCommandObjectBuilder(ICommandMetadata commandMetadata, IEnumerable<ClassBasedCommandOptionMetadata> commandOptionMetadatas, ICommand command)
         {
             _commandMetadata = commandMetadata;
             _command = command;
@@ -30,24 +30,12 @@ namespace MGR.CommandLineParser.Command
             _command.Arguments.Add(argument);
         }
 
-        /// <inheritdoc />
         public ICommandOption FindOption(string optionName)
         {
-            var unwrappedOption = FindUnwrappedOption(optionName);
-            if (unwrappedOption != null)
+            var commandOption = _commandOptions.FirstOrDefault(option => option.Metadata.DisplayInfo.Name.Equals(optionName, StringComparison.OrdinalIgnoreCase));
+            if (commandOption != null)
             {
-                return new WrapCommandOption(optionName, _commandMetadata.Name, unwrappedOption);
-            }
-
-            return null;
-        }
-
-        private ICommandOption FindUnwrappedOption(string optionName)
-        {
-            var om = _commandOptions.FirstOrDefault(option => option.Metadata.DisplayInfo.Name.Equals(optionName, StringComparison.OrdinalIgnoreCase));
-            if (om != null)
-            {
-                return om;
+                return commandOption;
             }
             var alternateOption = _commandOptions.FirstOrDefault(option => option.Metadata.DisplayInfo.AlternateNames.Any(alternateName => alternateName.Equals(optionName, StringComparison.OrdinalIgnoreCase)));
             return alternateOption;
@@ -55,16 +43,15 @@ namespace MGR.CommandLineParser.Command
 
         public ICommandOption FindOptionByShortName(string optionShortName)
         {
-            var unwrappedOptions = FindUnwrappedOptionByShortName(optionShortName);
-            if (unwrappedOptions != null)
+            var shortOption = _commandOptions.FirstOrDefault(option => (option.Metadata.DisplayInfo.ShortName ?? string.Empty).Equals(optionShortName, StringComparison.OrdinalIgnoreCase));
+            if (shortOption != null)
             {
-                return new WrapCommandOption(optionShortName, _commandMetadata.Name, unwrappedOptions);
+                return shortOption;
             }
-
-            return null;
+            return FindCombinedBooleanOptionsByShortName(optionShortName);
         }
 
-        public ICommandObject Generate() => new ClassBaseCommandObject(_command);
+        public ICommandObject Generate() => new ClassBasedCommandObject(_command);
 
         public CommandValidationResult Validate(IServiceProvider serviceProvider)
         {
@@ -88,17 +75,7 @@ namespace MGR.CommandLineParser.Command
             return new CommandValidationResult(isValid, results);
         }
 
-        private ICommandOption[] FindUnwrappedOptionByShortName(string optionShortName)
-        {
-            var shortOption = _commandOptions.FirstOrDefault(option => (option.Metadata.DisplayInfo.ShortName ?? string.Empty).Equals(optionShortName, StringComparison.OrdinalIgnoreCase));
-            if (shortOption != null)
-            {
-                return new[] { shortOption };
-            }
-            return FindUnwrappedCombinedBooleanOptionsByShortName(optionShortName);
-        }
-
-        private ICommandOption[] FindUnwrappedCombinedBooleanOptionsByShortName(string optionShortName)
+        private ICommandOption FindCombinedBooleanOptionsByShortName(string optionShortName)
         {
             var shortName = optionShortName;
             var options = new List<ICommandOption>();
@@ -115,8 +92,7 @@ namespace MGR.CommandLineParser.Command
                     return null;
                 }
             }
-            return options.ToArray();
-
+            return new WrapCommandOption(optionShortName, _commandMetadata.Name, options);
         }
     }
 }

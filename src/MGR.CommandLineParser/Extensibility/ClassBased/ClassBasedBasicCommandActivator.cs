@@ -1,16 +1,16 @@
 ﻿using System;
 using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Extensibility
+namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     /// <summary>
     /// Basic command activator that uses <code>Activator.CreateInstance</code> to instantiate commands.
     /// </summary>
-    public sealed class BasicCommandActivator : ICommandActivator
+    public sealed class ClassBasedBasicCommandActivator : IClassBasedCommandActivator
     {
-        internal static readonly ICommandActivator Instance = new BasicCommandActivator();
+        internal static readonly IClassBasedCommandActivator Instance = new ClassBasedBasicCommandActivator();
 
-        private BasicCommandActivator()
+        private ClassBasedBasicCommandActivator()
         {
         }
 

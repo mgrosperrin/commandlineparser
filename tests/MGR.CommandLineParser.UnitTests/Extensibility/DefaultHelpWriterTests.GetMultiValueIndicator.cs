@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility;
-using MGR.CommandLineParser.Extensibility.Command;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Converters;
 using Xunit;
 
@@ -21,8 +20,8 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility
                 // Arrange
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => SimpleIntProperty));
-                var commandMetadata = new CommandMetadata(typeof (GetMultiValueIndicator));
-                var commandOption = CommandOptionMetadata.Create(propertyInfo, commandMetadata, new List<IConverter> {new Int32Converter()}, new List<IOptionAlternateNameGenerator>());
+                var commandMetadata = new ClassBasedCommandMetadata(typeof (GetMultiValueIndicator));
+                var commandOption = ClassBasedCommandOptionMetadata.Create(propertyInfo, commandMetadata, new List<IConverter> {new Int32Converter()}, new List<IOptionAlternateNameGenerator>());
                 var expected = string.Empty;
 
                 // Act
@@ -38,8 +37,8 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility
                 // Arrange
                 var propertyInfo = GetType()
                     .GetProperty(TypeHelpers.ExtractPropertyName(() => ListIntProperty));
-                var commandMetadata = new CommandMetadata(typeof (GetMultiValueIndicator));
-                var commandOption = CommandOptionMetadata.Create(propertyInfo, commandMetadata, new List<IConverter> {new Int32Converter()}, new List<IOptionAlternateNameGenerator>());
+                var commandMetadata = new ClassBasedCommandMetadata(typeof (GetMultiValueIndicator));
+                var commandOption = ClassBasedCommandOptionMetadata.Create(propertyInfo, commandMetadata, new List<IConverter> {new Int32Converter()}, new List<IOptionAlternateNameGenerator>());
                 var expected = DefaultHelpWriter.CollectionIndicator;
 
                 // Act
@@ -55,8 +54,8 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility
                 // Arrange
                 var propertyInfo =
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => DictionaryProperty));
-                var commandMetadata = new CommandMetadata(typeof (GetMultiValueIndicator));
-                var commandOption = CommandOptionMetadata.Create(propertyInfo, commandMetadata, new List<IConverter> {new StringConverter(), new Int32Converter()}, new List<IOptionAlternateNameGenerator>());
+                var commandMetadata = new ClassBasedCommandMetadata(typeof (GetMultiValueIndicator));
+                var commandOption = ClassBasedCommandOptionMetadata.Create(propertyInfo, commandMetadata, new List<IConverter> {new StringConverter(), new Int32Converter()}, new List<IOptionAlternateNameGenerator>());
                 var expected = DefaultHelpWriter.DictionaryIndicator;
 
                 // Act

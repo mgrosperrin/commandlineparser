@@ -3,19 +3,19 @@ using System.Linq;
 using System.Reflection;
 using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Extensibility
+namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     /// <summary>
-    ///     Implementation of <see cref="ICommandActivator" /> based on <see cref="IServiceProvider" />.
+    ///     Implementation of <see cref="IClassBasedCommandActivator" /> based on <see cref="IServiceProvider" />.
     /// </summary>
-    public sealed class DependencyResolverCommandActivator : ICommandActivator
+    public sealed class ClassBasedDependencyResolverCommandActivator : IClassBasedCommandActivator
     {
         private readonly IServiceProvider _serviceProvider;
 
         /// <summary>
-        ///     Creates a new instance of <see cref="DependencyResolverCommandActivator" />.
+        ///     Creates a new instance of <see cref="ClassBasedDependencyResolverCommandActivator" />.
         /// </summary>
-        public DependencyResolverCommandActivator(IServiceProvider serviceProvider)
+        public ClassBasedDependencyResolverCommandActivator(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }

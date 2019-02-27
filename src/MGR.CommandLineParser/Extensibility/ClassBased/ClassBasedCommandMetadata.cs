@@ -1,14 +1,15 @@
 ﻿using System;
+using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.Command;
 
-namespace MGR.CommandLineParser.Command
+namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     /// <summary>
     ///     Represents the metadata of a command.
     /// </summary>
-    internal sealed class CommandMetadata : ICommandMetadata
+    internal sealed class ClassBasedCommandMetadata : ICommandMetadata
     {
-        internal CommandMetadata(Type commandType)
+        internal ClassBasedCommandMetadata(Type commandType)
         {
             Name = commandType.GetFullCommandName();
             var commandAttribute = commandType.GetAttribute<CommandAttribute>();

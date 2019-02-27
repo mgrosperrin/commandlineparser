@@ -4,18 +4,19 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using MGR.CommandLineParser.Extensibility.Command;
 
-namespace MGR.CommandLineParser.Extensibility.Command
+namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     /// <summary>
     ///     Represents the display information of an option.
     /// </summary>
-    public sealed class OptionDisplayInfo : IOptionDisplayInfo
+    public sealed class ClassBasedOptionDisplayInfo : IOptionDisplayInfo
     {
         /// <summary>
-        ///     Creates a new <see cref="OptionDisplayInfo" />.
+        ///     Creates a new <see cref="ClassBasedOptionDisplayInfo" />.
         /// </summary>
-        public OptionDisplayInfo(PropertyInfo propertyInfo, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        public ClassBasedOptionDisplayInfo(PropertyInfo propertyInfo, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Guard.NotNull(propertyInfo, nameof(propertyInfo));
             Name = propertyInfo.Name;

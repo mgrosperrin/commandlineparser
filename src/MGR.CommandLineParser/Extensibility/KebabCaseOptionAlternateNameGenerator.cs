@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 
-namespace MGR.CommandLineParser.Extensibility.Command
+namespace MGR.CommandLineParser.Extensibility
 {
     /// <summary>
     ///     Generates alternate names by camel-casing the original name.
@@ -11,7 +12,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
     {
         /// <inheritdoc cref="GenerateAlternateNames" />
         /// >
-        public IEnumerable<string> GenerateAlternateNames(OptionDisplayInfo optionDisplayInfo, PropertyInfo propertyInfo)
+        public IEnumerable<string> GenerateAlternateNames(ClassBasedOptionDisplayInfo optionDisplayInfo, PropertyInfo propertyInfo)
         {
             var nameAsKebabCase = optionDisplayInfo.Name.AsKebabCase();
             yield return nameAsKebabCase;

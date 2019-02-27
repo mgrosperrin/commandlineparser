@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using MGR.CommandLineParser.Command;
 using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode

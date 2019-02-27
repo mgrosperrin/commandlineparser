@@ -19,17 +19,17 @@ namespace MGR.CommandLineParser.Extensibility
         internal const string MultiOptionNameSeparator = "|";
 
         private readonly IConsole _console;
-        private readonly ICommandTypeProvider _commandTypeProvider;
+        private readonly IEnumerable<ICommandTypeProvider> _commandTypeProviders;
 
         /// <summary>
         /// Create a new <see cref="DefaultHelpWriter"/>.
         /// </summary>
         /// <param name="console"></param>
-        /// <param name="commandTypeProvider"></param>
-        public DefaultHelpWriter(IConsole console, ICommandTypeProvider commandTypeProvider)
+        /// <param name="commandTypeProviders"></param>
+        public DefaultHelpWriter(IConsole console, IEnumerable<ICommandTypeProvider> commandTypeProviders)
         {
             _console = console;
-            _commandTypeProvider = commandTypeProvider;
+            _commandTypeProviders = commandTypeProviders;
         }
 
         /// <inheritdoc />
@@ -40,7 +40,7 @@ namespace MGR.CommandLineParser.Extensibility
             WriteGeneralInformation(parserOptions);
 
             _console.WriteLine(Strings.DefaultHelpWriter_GlobalHelp_AvailableCommands);
-            var commandTypes = _commandTypeProvider.GetAllVisibleCommandsTypes().ToList();
+            var commandTypes = _commandTypeProviders.GetAllVisibleCommandsTypes().ToList();
             WriteDescriptionForSomeCommands(commandTypes);
         }
 

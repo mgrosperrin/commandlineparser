@@ -2,12 +2,12 @@
 using JetBrains.Annotations;
 using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Extensibility
+namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     /// <summary>
     ///     Defines the contract for the activator of <see cref="ICommand" />.
     /// </summary>
-    public interface ICommandActivator
+    public interface IClassBasedCommandActivator
     {
         /// <summary>
         ///     Activates (create an instance) of a <see cref="ICommand" />.

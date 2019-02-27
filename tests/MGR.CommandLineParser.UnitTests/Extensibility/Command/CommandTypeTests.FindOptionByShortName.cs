@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility;
-using MGR.CommandLineParser.Extensibility.Command;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Converters;
 using Moq;
 using Xunit;
@@ -21,11 +21,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
             public void FoundWithLongOrAlternateName(string optionName)
             {
                 // Arrange
-                var testCommandType = new CommandType(typeof(TestCommand),
+                var testCommandType = new ClassBasedCommandType(typeof(TestCommand),
                     new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() }, new List<IOptionAlternateNameGenerator>());
                 var serviceProviderMock = new Mock<IServiceProvider>();
-                serviceProviderMock.Setup(_ => _.GetService(typeof(ICommandActivator)))
-                    .Returns(BasicCommandActivator.Instance);
+                serviceProviderMock.Setup(_ => _.GetService(typeof(IClassBasedCommandActivator)))
+                    .Returns(ClassBasedBasicCommandActivator.Instance);
                 var classBasedCommandObjectBuilder =
                     (ClassBasedCommandObjectBuilder)testCommandType.CreateCommandObjectBuilder(serviceProviderMock.Object, new ParserOptions());
                 var testCommand = (TestCommand)((IClassBasedCommandObject)classBasedCommandObjectBuilder.Generate()).Command;

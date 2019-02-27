@@ -4,31 +4,30 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MGR.CommandLineParser
+namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     /// <summary>
     ///     Represents a type of command.
     /// </summary>
-    internal sealed class CommandType : ICommandType
+    internal sealed class ClassBasedCommandType : ICommandType
     {
-        private readonly Lazy<CommandMetadata> _commandMetadata;
-        private readonly Lazy<List<CommandOptionMetadata>> _commandOptions;
+        private readonly Lazy<ClassBasedCommandMetadata> _commandMetadata;
+        private readonly Lazy<List<ClassBasedCommandOptionMetadata>> _commandOptions;
         /// <summary>
-        /// Creates a new <see cref="CommandType"/>.
+        /// Creates a new <see cref="ClassBasedCommandType"/>.
         /// </summary>
         /// <param name="commandType">The type of the command.</param>
         /// <param name="converters">The converters.</param>
         /// <param name="optionAlternateNameGenerators">The generators of alternate name..</param>
-        public CommandType(Type commandType, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        public ClassBasedCommandType(Type commandType, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Type = commandType;
-            _commandMetadata = new Lazy<CommandMetadata>(() => new CommandMetadata(Type));
-            _commandOptions = new Lazy<List<CommandOptionMetadata>>(() => new List<CommandOptionMetadata>(ExtractCommandOptions(Type, Metadata, converters.ToList(), optionAlternateNameGenerators)));
+            _commandMetadata = new Lazy<ClassBasedCommandMetadata>(() => new ClassBasedCommandMetadata(Type));
+            _commandOptions = new Lazy<List<ClassBasedCommandOptionMetadata>>(() => new List<ClassBasedCommandOptionMetadata>(ExtractCommandOptions(Type, Metadata, converters.ToList(), optionAlternateNameGenerators.ToList())));
 
         }
         /// <summary>
@@ -57,7 +56,7 @@ namespace MGR.CommandLineParser
             Guard.NotNull(serviceProvider, nameof(serviceProvider));
             Guard.NotNull(parserOptions, nameof(parserOptions));
 
-            var commandActivator = serviceProvider.GetRequiredService<ICommandActivator>();
+            var commandActivator = serviceProvider.GetRequiredService<IClassBasedCommandActivator>();
             var command = commandActivator.ActivateCommand(Type);
             var commandObject = new ClassBasedCommandObjectBuilder(Metadata, _commandOptions.Value, command);
 
@@ -66,11 +65,11 @@ namespace MGR.CommandLineParser
             return commandObject;
         }
 
-        private static IEnumerable<CommandOptionMetadata> ExtractCommandOptions(Type commandType, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        private static IEnumerable<ClassBasedCommandOptionMetadata> ExtractCommandOptions(Type commandType, ICommandMetadata commandMetadata, List<IConverter> converters, List<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             foreach (var propertyInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != nameof(ICommand.Arguments)))
             {
-                var commandOption = CommandOptionMetadata.Create(propertyInfo, commandMetadata, converters, optionAlternateNameGenerators);
+                var commandOption = ClassBasedCommandOptionMetadata.Create(propertyInfo, commandMetadata, converters, optionAlternateNameGenerators);
                 if (commandOption != null)
                 {
                     yield return commandOption;

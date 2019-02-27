@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MGR.CommandLineParser.Extensibility.Command;
 
-namespace MGR.CommandLineParser.Command
+namespace MGR.CommandLineParser.Extensibility.Command
 {
     internal class WrapCommandOption : ICommandOption
     {
@@ -11,7 +10,7 @@ namespace MGR.CommandLineParser.Command
         private readonly IEnumerable<ICommandOption> _commandOptions;
         private readonly string _optionText;
 
-        public WrapCommandOption(string optionText, string commandName, params ICommandOption[] commandOptions)
+        public WrapCommandOption(string optionText, string commandName, IEnumerable<ICommandOption> commandOptions)
         {
             _commandOptions = commandOptions;
             _optionText = optionText;

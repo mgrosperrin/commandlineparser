@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Extensibility.Command;
+using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Converters;
 using Xunit;
 
@@ -17,7 +18,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
             {
                 // Arrange
                 var testCommandType =
-                    new CommandType(typeof (TestCommand),
+                    new ClassBasedCommandType(typeof (TestCommand),
                         new List<IConverter>(), new List<IOptionAlternateNameGenerator>());
                 var expectedName = "Test";
                 var expectedDescription = "My great description";

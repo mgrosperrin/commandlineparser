@@ -5,14 +5,14 @@ using JetBrains.Annotations;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 
-namespace MGR.CommandLineParser.Command
+namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     /// <summary>
     ///     Represents an option of a commandObject.
     /// </summary>
-    internal sealed class CommandOptionMetadata : ICommandOptionMetadata
+    internal sealed class ClassBasedCommandOptionMetadata : ICommandOptionMetadata
     {
-        private CommandOptionMetadata(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        private ClassBasedCommandOptionMetadata(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             PropertyOption = propertyInfo;
             CommandMetadata = commandMetadata;
@@ -62,7 +62,7 @@ namespace MGR.CommandLineParser.Command
             }
         }
 
-        internal static CommandOptionMetadata Create(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        internal static ClassBasedCommandOptionMetadata Create(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Guard.NotNull(propertyInfo, nameof(propertyInfo));
             Guard.NotNull(commandMetadata, nameof(commandMetadata));
@@ -79,7 +79,7 @@ namespace MGR.CommandLineParser.Command
                     Constants.ExceptionMessages.ParserExtractMetadataPropertyShouldBeWritableOrICollection(
                         propertyInfo.Name, commandMetadata.Name));
             }
-            var commandOption = new CommandOptionMetadata(propertyInfo, commandMetadata, converters, optionAlternateNameGenerators);
+            var commandOption = new ClassBasedCommandOptionMetadata(propertyInfo, commandMetadata, converters, optionAlternateNameGenerators);
             return commandOption;
         }
         internal static CommandOptionCollectionType GetMultiValueIndicator(PropertyInfo propertyInfo)

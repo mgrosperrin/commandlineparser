@@ -1,4 +1,5 @@
 ﻿using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,8 +24,8 @@ namespace MGR.CommandLineParser
 
             services.TryAddSingleton<IConsole, DefaultConsole>();
             services.TryAddSingleton<IAssemblyProvider, CurrentDirectoryAssemblyProvider>();
-            services.TryAddScoped<ICommandTypeProvider, AssemblyBrowsingCommandTypeProvider>();
-            services.TryAddScoped<ICommandActivator, DependencyResolverCommandActivator>();
+            services.TryAddScoped<ICommandTypeProvider, AssemblyBrowsingClassBasedCommandTypeProvider>();
+            services.TryAddScoped<IClassBasedCommandActivator, ClassBasedDependencyResolverCommandActivator>();
             services.TryAddScoped<IHelpWriter, DefaultHelpWriter>();
             services.TryAddSingleton<IOptionAlternateNameGenerator, KebabCaseOptionAlternateNameGenerator>();
 

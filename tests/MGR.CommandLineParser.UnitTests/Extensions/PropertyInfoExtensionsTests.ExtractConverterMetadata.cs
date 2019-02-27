@@ -311,6 +311,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Act
                 var actualException =
                     Assert.Throws<ArgumentNullException>(
+                        // ReSharper disable once ExpressionIsAlwaysNull
                         () => propertyInfo.ExtractConverter(converters, null, null));
 
                 // Assert
@@ -330,7 +331,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Act
                 var actualException =
                     Assert.Throws<ArgumentNullException>(
+                        // ReSharper disable ExpressionIsAlwaysNull
                         () => propertyInfo.ExtractConverter(converters, optionName, commandName));
+                // ReSharper restore ExpressionIsAlwaysNull
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);
@@ -349,6 +352,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Act
                 var actualException =
                     Assert.Throws<ArgumentNullException>(
+                        // ReSharper disable once ExpressionIsAlwaysNull
                         () => propertyInfo.ExtractConverter(converters, propertyName, commandName));
 
                 // Assert

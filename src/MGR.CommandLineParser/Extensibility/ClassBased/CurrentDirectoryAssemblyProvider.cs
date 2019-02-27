@@ -2,7 +2,7 @@
 using System.IO;
 using JetBrains.Annotations;
 
-namespace MGR.CommandLineParser.Extensibility
+namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     /// <summary>
     /// Implementation of <see cref="IAssemblyProvider"/> for providing all files (*.dll and *.exe) in the current folder not recursivly (this is the current default implementation).

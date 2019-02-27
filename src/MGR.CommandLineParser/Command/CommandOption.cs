@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser.Command
@@ -10,10 +11,10 @@ namespace MGR.CommandLineParser.Command
     internal sealed class CommandOption : ICommandOption
     {
         private readonly MethodInfo _miAddMethod;
-        private readonly CommandOptionMetadata _commandOptionMetadata;
+        private readonly ClassBasedCommandOptionMetadata _commandOptionMetadata;
         private readonly ICommand _command;
 
-        internal CommandOption(CommandOptionMetadata commandOptionMetadata, ICommand command)
+        internal CommandOption(ClassBasedCommandOptionMetadata commandOptionMetadata, ICommand command)
         {
             _commandOptionMetadata = commandOptionMetadata;
             _command = command;

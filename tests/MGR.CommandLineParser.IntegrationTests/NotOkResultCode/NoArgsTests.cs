@@ -1,5 +1,4 @@
-﻿using MGR.CommandLineParser.Command;
-using Xunit;
+﻿using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
 {

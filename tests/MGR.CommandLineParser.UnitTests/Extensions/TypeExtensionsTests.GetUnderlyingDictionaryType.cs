@@ -23,6 +23,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             }
 
             [Fact]
+            // ReSharper disable once InconsistentNaming
             public void IDictionaryStringIntKeyTest()
             {
                 // Arrange
@@ -51,6 +52,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             }
 
             [Fact]
+            // ReSharper disable once InconsistentNaming
             public void IDictionaryStringIntValueTest()
             {
                 // Arrange
@@ -101,6 +103,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
 
                 // Act
                 var actualException =
+                    // ReSharper disable once ExpressionIsAlwaysNull
                     Assert.Throws<ArgumentNullException>(() => testedType.GetUnderlyingDictionaryType(true));
 
                 // Assert

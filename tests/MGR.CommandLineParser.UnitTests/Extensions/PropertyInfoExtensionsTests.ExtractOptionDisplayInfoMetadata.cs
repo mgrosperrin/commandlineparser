@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using MGR.CommandLineParser.Extensibility.Command;
+using MGR.CommandLineParser.Extensibility;
 using Xunit;
 
 namespace MGR.CommandLineParser.UnitTests.Extensions
@@ -123,6 +123,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
 
                 // Act
                 var actualException =
+                    // ReSharper disable once ExpressionIsAlwaysNull
                     Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IOptionAlternateNameGenerator>()));
 
                 // Assert

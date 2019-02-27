@@ -5,7 +5,8 @@ using System.Linq;
 using JetBrains.Annotations;
 using MGR.CommandLineParser;
 using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Extensibility.Command;
+using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Converters;
 
 // ReSharper disable CheckNamespace
@@ -146,10 +147,10 @@ namespace System.Reflection
         }
 
         [NotNull]
-        internal static OptionDisplayInfo ExtractOptionDisplayInfoMetadata(this PropertyInfo source, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        internal static ClassBasedOptionDisplayInfo ExtractOptionDisplayInfoMetadata(this PropertyInfo source, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Guard.NotNull(source, nameof(source));
-            var optionDisplayInfo = new OptionDisplayInfo(source, optionAlternateNameGenerators);
+            var optionDisplayInfo = new ClassBasedOptionDisplayInfo(source, optionAlternateNameGenerators);
             return optionDisplayInfo;
         }
 

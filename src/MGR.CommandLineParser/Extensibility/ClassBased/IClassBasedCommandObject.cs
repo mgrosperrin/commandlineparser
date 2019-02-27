@@ -1,6 +1,7 @@
-﻿using MGR.CommandLineParser.Extensibility.Command;
+﻿using MGR.CommandLineParser.Command;
+using MGR.CommandLineParser.Extensibility.Command;
 
-namespace MGR.CommandLineParser.Command
+namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     /// <summary>
     /// Represents an interface that allow accessing to the raw <see cref="ICommand"/> instance.

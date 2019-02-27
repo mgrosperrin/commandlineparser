@@ -23,6 +23,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             }
 
             [Fact]
+            // ReSharper disable once InconsistentNaming
             public void ICollectionIntTest()
             {
                 // Arrange
@@ -73,6 +74,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
 
                 // Act
                 var actualException =
+                    // ReSharper disable once ExpressionIsAlwaysNull
                     Assert.Throws<ArgumentNullException>(() => testedType.GetUnderlyingCollectionType());
 
                 // Assert

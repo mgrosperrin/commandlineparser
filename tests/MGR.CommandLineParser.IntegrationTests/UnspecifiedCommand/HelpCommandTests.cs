@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.UnitTests;
 using Xunit;
 

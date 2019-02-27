@@ -28,7 +28,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility
                 var console = new StringConsole();
                 var commandTypeProviderMock = new Mock<ICommandTypeProvider>();
                 commandTypeProviderMock.Setup(_ => _.GetAllCommandTypes()).Returns(Enumerable.Empty<ICommandType>);
-                var helpWriter = new DefaultHelpWriter(console, commandTypeProviderMock.Object);
+                var helpWriter = new DefaultHelpWriter(console, new[]{ commandTypeProviderMock.Object});
                 var parserOptions = new ParserOptions
                 {
                     Logo = "Logo Unit Test",
@@ -63,7 +63,7 @@ No commands found.
                 var commandTypeMock = new Mock<ICommandType>();
                 commandTypeMock.SetupGet(_ => _.Metadata).Returns(commandMetadataMock.Object);
                 commandTypeProviderMock.Setup(_ => _.GetAllCommandTypes()).Returns(new[] { commandTypeMock.Object });
-                var helpWriter = new DefaultHelpWriter(console, commandTypeProviderMock.Object);
+                var helpWriter = new DefaultHelpWriter(console, new[] { commandTypeProviderMock.Object });
                 var parserOptions = new ParserOptions
                 {
                     Logo = "Logo Unit Test",
@@ -104,7 +104,7 @@ Available commands:
                 var commandType2Mock = new Mock<ICommandType>();
                 commandType2Mock.SetupGet(_ => _.Metadata).Returns(commandMetadata2Mock.Object);
                 commandTypeProviderMock.Setup(_ => _.GetAllCommandTypes()).Returns(new[] { commandType1Mock.Object, commandType2Mock.Object });
-                var helpWriter = new DefaultHelpWriter(console, commandTypeProviderMock.Object);
+                var helpWriter = new DefaultHelpWriter(console, new[] { commandTypeProviderMock.Object });
                 var parserOptions = new ParserOptions
                 {
                     Logo = "Logo Unit Test",

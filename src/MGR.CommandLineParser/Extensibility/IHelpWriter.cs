@@ -1,4 +1,5 @@
-﻿using MGR.CommandLineParser.Extensibility.Command;
+﻿using MGR.CommandLineParser.Extensibility.ClassBased;
+using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser.Extensibility
 {
@@ -17,7 +18,7 @@ namespace MGR.CommandLineParser.Extensibility
         ///     Write the help for a commant.
         /// </summary>
         /// <param name="parserOptions">The options of the parser.</param>
-        /// <param name="commandTypes">The <see cref="CommandType" /> of the commands to display help.</param>
+        /// <param name="commandTypes">The <see cref="ClassBasedCommandType" /> of the commands to display help.</param>
         void WriteHelpForCommand(IParserOptions parserOptions, params ICommandType[] commandTypes);
     }
 }

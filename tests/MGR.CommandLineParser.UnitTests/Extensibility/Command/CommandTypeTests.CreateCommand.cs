@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility;
-using MGR.CommandLineParser.Extensibility.Command;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Converters;
 using Moq;
 using Xunit;
@@ -18,7 +18,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
             public void PropertyWithNoConverterException()
             {
                 // Arrange
-                var testCommandType = new CommandType(typeof(TestBadConverterCommand),
+                var testCommandType = new ClassBasedCommandType(typeof(TestBadConverterCommand),
                     new List<IConverter>
                     {
                         new StringConverter(),
@@ -27,8 +27,8 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                         new BooleanConverter()
                     }, new List<IOptionAlternateNameGenerator>());
                 var serviceProviderMock = new Mock<IServiceProvider>();
-                serviceProviderMock.Setup(_ => _.GetService(typeof(ICommandActivator)))
-                    .Returns(BasicCommandActivator.Instance);
+                serviceProviderMock.Setup(_ => _.GetService(typeof(IClassBasedCommandActivator)))
+                    .Returns(ClassBasedBasicCommandActivator.Instance);
                 var optionName = nameof(TestBadConverterCommand.PropertySimpleWithBadConverter);
                 var expectedMessageException =
                     Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(optionName,

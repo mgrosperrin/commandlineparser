@@ -24,8 +24,8 @@ namespace MGR.CommandLineParser
         {
             using (_logger.BeginParsingForSpecificCommandType(typeof(TCommand)))
             {
-                var commandTypeProvider = serviceProvider.GetRequiredService<ICommandTypeProvider>();
-                var commandType = commandTypeProvider.GetCommandType<TCommand>();
+                var commandTypeProviders = serviceProvider.GetServices<ICommandTypeProvider>();
+                var commandType = commandTypeProviders.GetCommandType<TCommand>();
                 var parsingResult = ParseImpl(argumentsEnumerator, serviceProvider, commandType);
                 if (parsingResult.ParsingResultCode == CommandParsingResultCode.NoCommandFound)
                 {
@@ -50,8 +50,8 @@ namespace MGR.CommandLineParser
                 if (commandName != null)
                 {
                     _logger.ArgumentProvidedWithDefaultCommandType(commandName);
-                    var commandTypeProvider = serviceProvider.GetRequiredService<ICommandTypeProvider>();
-                    var commandType = commandTypeProvider.GetCommandType(commandName);
+                    var commandTypeProviders = serviceProvider.GetServices<ICommandTypeProvider>();
+                    var commandType = commandTypeProviders.GetCommandType(commandName);
                     if (commandType != null)
                     {
                         _logger.CommandTypeFoundWithDefaultCommandType(commandName);
@@ -84,8 +84,8 @@ namespace MGR.CommandLineParser
 
             using (_logger.BeginParsingUsingCommandName(commandName))
             {
-                var commandTypeProvider = serviceProvider.GetRequiredService<ICommandTypeProvider>();
-                var commandType = commandTypeProvider.GetCommandType(commandName);
+                var commandTypeProviders = serviceProvider.GetServices<ICommandTypeProvider>();
+                var commandType = commandTypeProviders.GetCommandType(commandName);
                 if (commandType == null)
                 {
                     _logger.NoCommandTypeFoundForNotAlreadyKnownCommand(commandName);
