@@ -37,7 +37,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                 // Act
                 var actualException =
                     Assert.Throws<CommandLineParserException>(
-                        () => testCommandType.CreateCommand(serviceProviderMock.Object, new ParserOptions()));
+                        () => testCommandType.CreateCommandObjectBuilder(serviceProviderMock.Object, new ParserOptions()));
 
                 // Assert
                 Assert.Equal(expectedMessageException, actualException.Message);

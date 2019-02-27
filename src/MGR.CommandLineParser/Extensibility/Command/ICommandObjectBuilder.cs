@@ -1,12 +1,12 @@
 ﻿
-using System.Threading.Tasks;
+using System;
 
 namespace MGR.CommandLineParser.Extensibility.Command
 {
     /// <summary>
     /// Encapsulates a command
     /// </summary>
-    public interface ICommandObject
+    public interface ICommandObjectBuilder
     {
         /// <summary>
         ///
@@ -25,14 +25,17 @@ namespace MGR.CommandLineParser.Extensibility.Command
         /// <param name="optionShortName">The short name of the option.</param>
         /// <returns>The <see cref="ICommandOption"/> representing the option of the command.</returns>
         ICommandOption FindOptionByShortName(string optionShortName);
+
         /// <summary>
         ///
         /// </summary>
         /// <returns></returns>
-        Task<int> ExecuteAsync();
+        ICommandObject Generate();
         /// <summary>
         ///
         /// </summary>
-        void Validate();
+        /// <param name="serviceProvider"></param>
+        /// <returns></returns>
+        CommandValidationResult Validate(IServiceProvider serviceProvider);
     }
 }

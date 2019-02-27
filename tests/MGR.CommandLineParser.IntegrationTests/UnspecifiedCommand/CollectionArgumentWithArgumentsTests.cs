@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
@@ -27,15 +28,17 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             // Assert
             Assert.True(actual.IsValid);
             Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-            Assert.IsType<IntTestCommand>(actual.Command);
-            Assert.Equal(expectedStrValue, ((IntTestCommand)actual.Command).StrValue);
-            Assert.Equal(expectedIntValue, ((IntTestCommand)actual.Command).IntValue);
-            Assert.NotNull(((IntTestCommand)actual.Command).IntListValue);
-            Assert.Equal(expectedNbOfArguments, ((IntTestCommand)actual.Command).Arguments.Count);
-            Assert.Equal(expectedArgumentsValue, ((IntTestCommand)actual.Command).Arguments.Single());
-            Assert.Equal(expectedNbOfArguments, ((IntTestCommand)actual.Command).IntListValue.Count);
-            Assert.Equal(expectedIntValue, ((IntTestCommand)actual.Command).IntListValue.Single());
-            Assert.True(((IntTestCommand)actual.Command).BoolValue);
+            Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
+            Assert.IsType<IntTestCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+            var rawCommand = (IntTestCommand) ((IClassBasedCommandObject) actual.CommandObject).Command;
+            Assert.Equal(expectedStrValue, rawCommand.StrValue);
+            Assert.Equal(expectedIntValue, rawCommand.IntValue);
+            Assert.NotNull(rawCommand.IntListValue);
+            Assert.Equal(expectedNbOfArguments, rawCommand.Arguments.Count);
+            Assert.Equal(expectedArgumentsValue, rawCommand.Arguments.Single());
+            Assert.Equal(expectedNbOfArguments, rawCommand.IntListValue.Count);
+            Assert.Equal(expectedIntValue, rawCommand.IntListValue.Single());
+            Assert.True(rawCommand.BoolValue);
         }
     }
 }

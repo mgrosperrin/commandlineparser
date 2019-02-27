@@ -49,7 +49,8 @@ Available commands:
                 // Assert
                 Assert.True(actual.IsValid);
                 Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-                Assert.IsType<HelpCommand>(actual.Command);
+                Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
+                Assert.IsType<HelpCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
                 var actualHelp = StringConsole.Current.OutAsString();
                 Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences: true);
                 Assert.Equal(expectedResult, actualResult);

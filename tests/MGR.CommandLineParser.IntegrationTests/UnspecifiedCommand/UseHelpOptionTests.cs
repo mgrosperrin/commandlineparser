@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Tests.Commands;
 using MGR.CommandLineParser.UnitTests;
 using Xunit;
@@ -47,7 +48,7 @@ List sample number 2
                 // Assert
                 Assert.True(actual.IsValid);
                 Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-                Assert.IsType<ListCommand>(actual.Command);
+                Assert.IsType<ListCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
                 var actualHelp = StringConsole.Current.OutAsString();
                 Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences: true);
                 Assert.Equal(expectedResult, actualResult);
@@ -97,7 +98,8 @@ Options:
                 // Assert
                 Assert.True(actual.IsValid);
                 Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-                Assert.IsType<PackCommand>(actual.Command);
+                Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
+                Assert.IsType<PackCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
                 var actualHelp = StringConsole.Current.OutAsString();
                 Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences: true);
                 Assert.Equal(expectedResult, actualResult);

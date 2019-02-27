@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
@@ -24,9 +25,11 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             // Assert
             Assert.True(actual.IsValid);
             Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-            Assert.IsType<SetApiKeyCommand>(actual.Command);
-            Assert.Equal(expectedSource, ((SetApiKeyCommand) actual.Command).Source);
-            Assert.Equal(expectedNbOfArguments, ((SetApiKeyCommand) actual.Command).Arguments.Count);
+            Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
+            Assert.IsType<SetApiKeyCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+            var rawCommand = (SetApiKeyCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
+            Assert.Equal(expectedSource, rawCommand.Source);
+            Assert.Equal(expectedNbOfArguments, rawCommand.Arguments.Count);
         }
     }
 }

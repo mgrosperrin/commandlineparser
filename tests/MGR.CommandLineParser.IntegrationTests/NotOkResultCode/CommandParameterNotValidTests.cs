@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
@@ -25,12 +26,14 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
             // Assert
             Assert.False(actual.IsValid);
             Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-            Assert.IsType<IntTestCommand>(actual.Command);
-            Assert.Equal(expectedIntValue, ((IntTestCommand) actual.Command).IntValue);
-            Assert.Null(((IntTestCommand) actual.Command).IntListValue);
-            Assert.Equal(expectedNbOfArguments, ((IntTestCommand) actual.Command).Arguments.Count);
-            Assert.Equal(expectedArgumentsValue, ((IntTestCommand) actual.Command).Arguments.Single());
-            Assert.True(((IntTestCommand) actual.Command).BoolValue);
+            Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
+            Assert.IsType<IntTestCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+            var rawCommand = (IntTestCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
+            Assert.Equal(expectedIntValue, rawCommand.IntValue);
+            Assert.Null(rawCommand.IntListValue);
+            Assert.Equal(expectedNbOfArguments, rawCommand.Arguments.Count);
+            Assert.Equal(expectedArgumentsValue, rawCommand.Arguments.Single());
+            Assert.True(rawCommand.BoolValue);
         }
 
         [Fact]
@@ -51,12 +54,14 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
             // Assert
             Assert.False(actual.IsValid);
             Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-            Assert.IsType<IntTestCommand>(actual.Command);
-            Assert.Equal(expectedIntValue, actual.Command.IntValue);
-            Assert.Null(actual.Command.IntListValue);
-            Assert.Equal(expectedNbOfArguments, actual.Command.Arguments.Count);
-            Assert.Equal(expectedArgumentsValue, actual.Command.Arguments.Single());
-            Assert.True(actual.Command.BoolValue);
+            Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
+            Assert.IsType<IntTestCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+            var rawCommand = (IntTestCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
+            Assert.Equal(expectedIntValue, rawCommand.IntValue);
+            Assert.Null(rawCommand.IntListValue);
+            Assert.Equal(expectedNbOfArguments, rawCommand.Arguments.Count);
+            Assert.Equal(expectedArgumentsValue, rawCommand.Arguments.Single());
+            Assert.True(rawCommand.BoolValue);
         }
     }
 }

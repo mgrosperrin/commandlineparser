@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MGR.CommandLineParser.Command;
 using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
@@ -20,7 +21,7 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
             // Assert
             Assert.False(actual.IsValid);
             Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-            Assert.Null(actual.Command);
+            Assert.Null(actual.CommandObject);
         }
     }
 }

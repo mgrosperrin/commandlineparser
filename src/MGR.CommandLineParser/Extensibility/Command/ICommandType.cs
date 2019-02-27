@@ -24,6 +24,6 @@ namespace MGR.CommandLineParser.Extensibility.Command
         /// <param name="serviceProvider">The scoped dependency resolver.</param>
         /// <param name="parserOptions">The options of the current parser.</param>
         /// <returns></returns>
-        ICommandObject CreateCommand(IServiceProvider serviceProvider, IParserOptions parserOptions);
+        ICommandObjectBuilder CreateCommandObjectBuilder(IServiceProvider serviceProvider, IParserOptions parserOptions);
     }
 }

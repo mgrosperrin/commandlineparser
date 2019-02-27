@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
@@ -25,16 +26,18 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             // Assert
             Assert.True(actual.IsValid);
             Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-            Assert.IsType<DeleteCommand>(actual.Command);
-            Assert.Equal(expectedSource, ((DeleteCommand) actual.Command).Source);
-            Assert.Equal(expectedApiKey, ((DeleteCommand) actual.Command).ApiKey);
-            Assert.True(((DeleteCommand) actual.Command).NoPrompt);
-            Assert.Null(((DeleteCommand) actual.Command).SourceProvider);
-            Assert.Null(((DeleteCommand) actual.Command).Settings);
-            Assert.Equal(expectedNbOfArguments, ((DeleteCommand) actual.Command).Arguments.Count);
+            Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
+            Assert.IsType<DeleteCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+            var rawCommand = (DeleteCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
+            Assert.Equal(expectedSource, rawCommand.Source);
+            Assert.Equal(expectedApiKey, rawCommand.ApiKey);
+            Assert.True(rawCommand.NoPrompt);
+            Assert.Null(rawCommand.SourceProvider);
+            Assert.Null(rawCommand.Settings);
+            Assert.Equal(expectedNbOfArguments, rawCommand.Arguments.Count);
             for (var i = 0; i < expectedNbOfArguments; i++)
             {
-                Assert.Equal(expectedArgumentsValue[i], actual.Command.Arguments[i]);
+                Assert.Equal(expectedArgumentsValue[i], ((IClassBasedCommandObject)actual.CommandObject).Command.Arguments[i]);
             }
         }
     }

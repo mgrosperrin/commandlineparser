@@ -26,18 +26,17 @@ namespace SimpleApp
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser(serviceProvider);
             var commandResult = parser.Parse(arguments);
-            Console.WriteLine(commandResult.Command);
 
             var defaultCommandResult = parser.ParseWithDefaultCommand<PackCommand>(arguments);
-            Console.WriteLine(defaultCommandResult.Command);
+
             var defaultPackCommandResult = parser.ParseWithDefaultCommand<PackCommand>(defaultPackArguments);
-            Console.WriteLine(defaultPackCommandResult.Command);
+
             var defaultDeleteCommandResult = parser.ParseWithDefaultCommand<PackCommand>(defaultDeleteArguments);
-            Console.WriteLine(defaultDeleteCommandResult.Command);
-            Console.ReadLine();
+
+            //Console.ReadLine();
             if (commandResult.IsValid)
             {
-                return await commandResult.ExecuteAsync();
+                return await commandResult.CommandObject.ExecuteAsync();
             }
             Thread.Sleep(TimeSpan.FromSeconds(10));
             return 0;//(int)commandResult.ReturnCode;

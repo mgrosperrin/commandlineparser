@@ -52,14 +52,14 @@ namespace MGR.CommandLineParser
         /// <param name="serviceProvider">The scoped dependendy resolver.</param>
         /// <param name="parserOptions">The options of the current parser.</param>
         /// <returns></returns>
-        public ICommandObject CreateCommand(IServiceProvider serviceProvider, IParserOptions parserOptions)
+        public ICommandObjectBuilder CreateCommandObjectBuilder(IServiceProvider serviceProvider, IParserOptions parserOptions)
         {
             Guard.NotNull(serviceProvider, nameof(serviceProvider));
             Guard.NotNull(parserOptions, nameof(parserOptions));
 
             var commandActivator = serviceProvider.GetRequiredService<ICommandActivator>();
             var command = commandActivator.ActivateCommand(Type);
-            var commandObject = new ClassBasedCommandObject(Metadata, _commandOptions.Value, command);
+            var commandObject = new ClassBasedCommandObjectBuilder(Metadata, _commandOptions.Value, command);
 
             var commandBase = command as CommandBase;
             commandBase?.Configure(parserOptions, serviceProvider, this);

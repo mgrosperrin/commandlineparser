@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser
 {
@@ -39,6 +38,11 @@ namespace MGR.CommandLineParser
         /// The return code of the parsing.
         /// </summary>
         public CommandParsingResultCode ParsingResultCode { get; }
+
+        /// <summary>
+        /// Gets the raw command object;
+        /// </summary>
+        public ICommandObject CommandObject => _commandObject;
 
         /// <summary>
         ///

@@ -1,34 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
+using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.Command;
+using MGR.CommandLineParser.Properties;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MGR.CommandLineParser.Command
 {
-    internal class ClassBasedCommandObject : ICommandObject
+    internal class ClassBasedCommandObjectBuilder : ICommandObjectBuilder
     {
-        private readonly IEnumerable<CommandOptionMetadata> _commandOptionMetadatas;
         private readonly IEnumerable<ICommandOption> _commandOptions;
         private readonly ICommandMetadata _commandMetadata;
+        private readonly ICommand _command;
 
-        public ClassBasedCommandObject(ICommandMetadata commandMetadata, IEnumerable<CommandOptionMetadata> commandOptionMetadatas, ICommand command)
+        internal ClassBasedCommandObjectBuilder(ICommandMetadata commandMetadata, IEnumerable<CommandOptionMetadata> commandOptionMetadatas, ICommand command)
         {
-            _commandOptionMetadatas = commandOptionMetadatas;
             _commandMetadata = commandMetadata;
-            Command = command;
+            _command = command;
 
-            _commandOptions = _commandOptionMetadatas.Select(metadata =>
+            _commandOptions = commandOptionMetadatas.Select(metadata =>
                 new CommandOption(metadata, command)).ToList();
         }
 
-        public ICommand Command { get; }
-
         public void AddArguments(string argument)
         {
-            Command.Arguments.Add(argument);
+            _command.Arguments.Add(argument);
         }
-
 
         /// <inheritdoc />
         public ICommandOption FindOption(string optionName)
@@ -64,7 +64,29 @@ namespace MGR.CommandLineParser.Command
             return null;
         }
 
-        public Task<int> ExecuteAsync() => Command.ExecuteAsync();
+        public ICommandObject Generate() => new ClassBaseCommandObject(_command);
+
+        public CommandValidationResult Validate(IServiceProvider serviceProvider)
+        {
+            var validationContext = new ValidationContext(_command, null, null);
+            var results = new List<ValidationResult>();
+
+            var isValid = Validator.TryValidateObject(_command, validationContext, results, true);
+            if (!isValid)
+            {
+                var console = serviceProvider.GetRequiredService<IConsole>();
+                console.WriteError(Strings.Parser_CommandInvalidArgumentsFormat, _commandMetadata.Name);
+                foreach (var validation in results)
+                {
+                    console.WriteError(string.Format(CultureInfo.CurrentUICulture, "-{0} :", validation.ErrorMessage));
+                    foreach (var memberName in validation.MemberNames)
+                    {
+                        console.WriteError(string.Format(CultureInfo.CurrentUICulture, "  -{0}", memberName));
+                    }
+                }
+            }
+            return new CommandValidationResult(isValid, results);
+        }
 
         private ICommandOption[] FindUnwrappedOptionByShortName(string optionShortName)
         {
