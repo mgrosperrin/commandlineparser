@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using JetBrains.Annotations;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 
@@ -10,24 +9,28 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
     /// <summary>
     ///     Represents an option of a commandObject.
     /// </summary>
-    internal sealed class ClassBasedCommandOptionMetadata : ICommandOptionMetadata
+    internal sealed class ClassBasedCommandOptionMetadata : CommandOptionMetadataBase
     {
         private ClassBasedCommandOptionMetadata(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        :base(propertyInfo.ExtractIsRequiredMetadata(),
+            GetMultiValueIndicator(propertyInfo.PropertyType),
+            propertyInfo.ExtractOptionDisplayInfoMetadata(optionAlternateNameGenerators),
+            propertyInfo.ExtractDefaultValue())
         {
             PropertyOption = propertyInfo;
             CommandMetadata = commandMetadata;
-            DisplayInfo = propertyInfo.ExtractOptionDisplayInfoMetadata(optionAlternateNameGenerators);
+            //DisplayInfo = propertyInfo.ExtractOptionDisplayInfoMetadata(optionAlternateNameGenerators);
             Converter = propertyInfo.ExtractConverter(converters, DisplayInfo.Name, CommandMetadata.Name);
-            IsRequired = propertyInfo.ExtractIsRequiredMetadata();
-            DefaultValue = propertyInfo.ExtractDefaultValue();
-            CollectionType = GetMultiValueIndicator(propertyInfo);
+            //IsRequired = propertyInfo.ExtractIsRequiredMetadata();
+            //DefaultValue = propertyInfo.ExtractDefaultValue();
+            //CollectionType = GetMultiValueIndicator(propertyInfo);
         }
 
-        /// <summary>
-        ///     Gets the display information of the option.
-        /// </summary>
-        [NotNull]
-        public IOptionDisplayInfo DisplayInfo { get; }
+        ///// <summary>
+        /////     Gets the display information of the option.
+        ///// </summary>
+        //[NotNull]
+        //public IOptionDisplayInfo DisplayInfo { get; }
 
         /// <summary>
         ///     Gets the converter for the option.
@@ -44,9 +47,9 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
         /// </summary>
         internal ICommandMetadata CommandMetadata { get; }
 
-        public bool IsRequired { get; }
-        public CommandOptionCollectionType CollectionType { get; }
-        public string DefaultValue { get; }
+        //public bool IsRequired { get; }
+        //public CommandOptionCollectionType CollectionType { get; }
+        //public string DefaultValue { get; }
         /// <summary>
         ///     Gets the underlying type of the option.
         /// </summary>
@@ -81,18 +84,6 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
             }
             var commandOption = new ClassBasedCommandOptionMetadata(propertyInfo, commandMetadata, converters, optionAlternateNameGenerators);
             return commandOption;
-        }
-        internal static CommandOptionCollectionType GetMultiValueIndicator(PropertyInfo propertyInfo)
-        {
-            if (propertyInfo.PropertyType.IsDictionaryType())
-            {
-                return CommandOptionCollectionType.Dictionary;
-            }
-            if (propertyInfo.PropertyType.IsCollectionType())
-            {
-                return CommandOptionCollectionType.Collection;
-            }
-            return CommandOptionCollectionType.None;
         }
     }
 }

@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\MGR.CommandLineParser.Command.Lambda\MGR.CommandLineParser.Command.Lambda.csproj" />
     <ProjectReference Include="..\..\src\MGR.CommandLineParser\MGR.CommandLineParser.csproj" />
     <ProjectReference Include="..\..\tests\MGR.CommandLineParser.Tests.Commands\MGR.CommandLineParser.Tests.Commands.csproj" />
   </ItemGroup>

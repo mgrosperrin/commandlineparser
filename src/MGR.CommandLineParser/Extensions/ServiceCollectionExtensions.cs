@@ -18,7 +18,7 @@ namespace MGR.CommandLineParser
         /// </summary>
         /// <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> to add services to.</param>
         /// <returns>The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> so that additional calls can be chained.</returns>
-        public static IServiceCollection AddCommandLineParser(this IServiceCollection services)
+        public static CommandLineParserBuilder AddCommandLineParser(this IServiceCollection services)
         {
             services.AddLogging();
 
@@ -47,7 +47,7 @@ namespace MGR.CommandLineParser
                     .AddSingleton<IConverter, TimeSpanConverter>()
                     .AddSingleton<IConverter, UriConverter>();
 
-            return services;
+            return new CommandLineParserBuilder(services);
         }
     }
 }

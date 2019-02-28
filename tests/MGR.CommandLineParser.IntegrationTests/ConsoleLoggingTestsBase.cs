@@ -11,8 +11,8 @@ namespace MGR.CommandLineParser.IntegrationTests
         {
             StringConsole.Current.Reset();
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCommandLineParser()
-                .AddTransient<IConsole>(_ => StringConsole.Current);
+            serviceCollection.AddCommandLineParser();
+            serviceCollection.AddTransient<IConsole>(_ => StringConsole.Current);
             return serviceCollection.BuildServiceProvider().CreateScope().ServiceProvider;
         }
     }

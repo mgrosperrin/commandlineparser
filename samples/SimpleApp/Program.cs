@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MGR.CommandLineParser;
+using MGR.CommandLineParser.Command.Lambda;
 using MGR.CommandLineParser.Tests.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,24 @@ namespace SimpleApp
             var defaultDeleteArguments = new[] { "delete", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "-NoPrompt", "-Source", "source1" };
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddCommandLineParser()
-                .AddLogging(builder => builder
+                .AddCommand(
+                        "test",
+                        commandBuilder =>
+                        {
+                            commandBuilder
+                                .WithDescription("Description of command")
+                                .AddOption<int>(
+                                    "longName",
+                                    "shortName",
+                                    optionBuilder => { optionBuilder.Required(); });
+                        },
+                        context =>
+                        {
+                            var year = context.GetOption<int>("year");
+                            var arg = context.Arguments;
+                            throw new NotImplementedException();
+                        });
+            serviceCollection.AddLogging(builder => builder
                     .SetMinimumLevel(LogLevel.Trace)
                     .AddSeq()
                     .AddConsole(options => options.IncludeScopes = true));
@@ -34,12 +52,12 @@ namespace SimpleApp
             var defaultDeleteCommandResult = parser.ParseWithDefaultCommand<PackCommand>(defaultDeleteArguments);
 
             //Console.ReadLine();
+            Thread.Sleep(TimeSpan.FromSeconds(10));
             if (commandResult.IsValid)
             {
                 return await commandResult.CommandObject.ExecuteAsync();
             }
-            Thread.Sleep(TimeSpan.FromSeconds(10));
-            return 0;//(int)commandResult.ReturnCode;
+            return (int)commandResult.ParsingResultCode;
         }
     }
 }
