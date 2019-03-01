@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using MGR.CommandLineParser;
@@ -28,22 +29,25 @@ namespace SimpleApp
                                 .AddOption<int>(
                                     "longName",
                                     "shortName",
-                                    optionBuilder => { optionBuilder.Required(); });
+                                    optionBuilder => { optionBuilder.Required()
+                                        .AddValidation(new RangeAttribute(5, 7)); });
                         },
                         context =>
                         {
-                            var year = context.GetOption<int>("year");
+                            var year = context.GetOption<int>("longName");
                             var arg = context.Arguments;
                             throw new NotImplementedException();
                         });
             serviceCollection.AddLogging(builder => builder
                     .SetMinimumLevel(LogLevel.Trace)
                     .AddSeq()
-                    .AddConsole(options => options.IncludeScopes = true));
+                    //.AddConsole(options => options.IncludeScopes = true)
+                );
             var serviceProvider = serviceCollection.BuildServiceProvider();
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser(serviceProvider);
             var commandResult = parser.Parse(arguments);
+            var lambdaCommand = parser.Parse(new []{"test", "--longName:3", "hello"});
 
             var defaultCommandResult = parser.ParseWithDefaultCommand<PackCommand>(arguments);
 
@@ -53,11 +57,11 @@ namespace SimpleApp
 
             //Console.ReadLine();
             Thread.Sleep(TimeSpan.FromSeconds(10));
-            if (commandResult.IsValid)
+            if (lambdaCommand.IsValid)
             {
-                return await commandResult.CommandObject.ExecuteAsync();
+                return await lambdaCommand.CommandObject.ExecuteAsync();
             }
-            return (int)commandResult.ParsingResultCode;
+            return (int)lambdaCommand.ParsingResultCode;
         }
     }
 }

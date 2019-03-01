@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -55,6 +56,13 @@ namespace MGR.CommandLineParser.Command
             {
                 helpWriter.WriteCommandListing(ParserOptions);
             }
+        }
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        public HelpCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
         }
     }
 }

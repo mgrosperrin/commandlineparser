@@ -17,7 +17,7 @@ namespace MGR.CommandLineParser.Command.Lambda
             var commandBuilder = new CommandBuilder(commandName, executeCommand);
             (buildCommand ?? (_ => {}))(commandBuilder);
 
-            builder.Services.AddSingleton<ICommandTypeProvider>(new LambdaBasedCommandTypeProvider(commandBuilder.BuildCommandType()));
+            builder.Services.AddScoped<ICommandTypeProvider>(serviceProvider => new LambdaBasedCommandTypeProvider(commandBuilder.BuildCommandType(serviceProvider)));
 
             return builder;
         }

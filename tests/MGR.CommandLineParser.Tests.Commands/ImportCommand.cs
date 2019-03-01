@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
@@ -19,5 +20,9 @@ namespace MGR.CommandLineParser.Tests.Commands
         public FileInfo OutputFile { get; set; }
 
         protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
+
+        public ImportCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MGR.CommandLineParser.Extensibility.Command
 {
@@ -41,7 +39,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
         public string DefaultValue { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>

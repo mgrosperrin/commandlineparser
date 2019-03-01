@@ -13,7 +13,6 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
     /// </summary>
     public sealed class AssemblyBrowsingClassBasedCommandTypeProvider : ICommandTypeProvider
     {
-        private readonly object _lockObject = new object();
         private readonly IAssemblyProvider _assemblyProvider;
         private readonly Lazy<Dictionary<string, ClassBasedCommandType>> _commands;
 

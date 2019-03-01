@@ -10,7 +10,7 @@ namespace MGR.CommandLineParser.Command.Lambda
         private readonly string _commandName;
         private string _description;
         private string _usage;
-        private List<string> _samples = new List<string>();
+        private readonly List<string> _samples = new List<string>();
         private bool _hideFromHelpListing;
         private readonly Func<CommandContext, Task<int>> _executeCommand;
         private readonly List<OptionBuilder> _optionsBuilders = new List<OptionBuilder>();
@@ -50,11 +50,11 @@ namespace MGR.CommandLineParser.Command.Lambda
             return this;
         }
 
-        internal LambdaBasedCommandType BuildCommandType()
+        internal LambdaBasedCommandType BuildCommandType(IServiceProvider serviceProvider)
         {
             var commandType = new LambdaBasedCommandType(
                 new LambdaBasedCommandMetadata(_commandName, _description, _usage, _samples.ToArray(), _hideFromHelpListing),
-                _optionsBuilders.Select(builder => builder.ToCommandOption()), _executeCommand);
+                _optionsBuilders.Select(builder => builder.ToCommandOption(serviceProvider)).ToList(), _executeCommand);
             return commandType;
         }
     }

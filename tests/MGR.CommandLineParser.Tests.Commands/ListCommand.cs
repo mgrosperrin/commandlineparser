@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
@@ -29,5 +30,9 @@ namespace MGR.CommandLineParser.Tests.Commands
         public object SourceProvider { get; }
 
         protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
+
+        public ListCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
     }
 }

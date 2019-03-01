@@ -34,7 +34,7 @@ namespace MGR.CommandLineParser.Extensibility
         /// <inheritdoc />
         public void WriteLine()
         {
-            WriteLineDefaultColor(_consoleOut, "");
+            WriteLineDefaultColor(_consoleOut, string.Empty);
         }
 
         /// <inheritdoc />

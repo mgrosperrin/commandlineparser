@@ -19,18 +19,8 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
         {
             PropertyOption = propertyInfo;
             CommandMetadata = commandMetadata;
-            //DisplayInfo = propertyInfo.ExtractOptionDisplayInfoMetadata(optionAlternateNameGenerators);
             Converter = propertyInfo.ExtractConverter(converters, DisplayInfo.Name, CommandMetadata.Name);
-            //IsRequired = propertyInfo.ExtractIsRequiredMetadata();
-            //DefaultValue = propertyInfo.ExtractDefaultValue();
-            //CollectionType = GetMultiValueIndicator(propertyInfo);
         }
-
-        ///// <summary>
-        /////     Gets the display information of the option.
-        ///// </summary>
-        //[NotNull]
-        //public IOptionDisplayInfo DisplayInfo { get; }
 
         /// <summary>
         ///     Gets the converter for the option.
@@ -47,9 +37,6 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
         /// </summary>
         internal ICommandMetadata CommandMetadata { get; }
 
-        //public bool IsRequired { get; }
-        //public CommandOptionCollectionType CollectionType { get; }
-        //public string DefaultValue { get; }
         /// <summary>
         ///     Gets the underlying type of the option.
         /// </summary>

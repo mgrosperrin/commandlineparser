@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser.Command.Lambda
 {
-    public class LambdaBasedCommandTypeProvider:ICommandTypeProvider
+    internal class LambdaBasedCommandTypeProvider : ICommandTypeProvider
     {
         private readonly LambdaBasedCommandType _commandType;
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="commandType"></param>
         public LambdaBasedCommandTypeProvider(LambdaBasedCommandType commandType)
         {
             _commandType = commandType;

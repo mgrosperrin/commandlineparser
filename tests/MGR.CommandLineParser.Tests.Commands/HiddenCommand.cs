@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands
@@ -8,7 +9,11 @@ namespace MGR.CommandLineParser.Tests.Commands
     {
         protected override Task<int> ExecuteCommandAsync()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
+        }
+
+        public HiddenCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
         }
     }
 }

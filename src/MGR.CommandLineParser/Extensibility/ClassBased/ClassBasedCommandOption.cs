@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Reflection;
-using MGR.CommandLineParser.Extensibility.ClassBased;
+using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.Command;
 
-namespace MGR.CommandLineParser.Command
+namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     /// <summary>
     ///     Represents an option of a commandObject.
     /// </summary>
-    internal sealed class CommandOption : ICommandOption
+    internal sealed class ClassBasedCommandOption : ICommandOption
     {
         private readonly MethodInfo _miAddMethod;
         private readonly ClassBasedCommandOptionMetadata _commandOptionMetadata;
         private readonly ICommand _command;
 
-        internal CommandOption(ClassBasedCommandOptionMetadata commandOptionMetadata, ICommand command)
+        internal ClassBasedCommandOption(ClassBasedCommandOptionMetadata commandOptionMetadata, ICommand command)
         {
             _commandOptionMetadata = commandOptionMetadata;
             _command = command;

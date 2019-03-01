@@ -61,7 +61,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
             var commandObject = new ClassBasedCommandObjectBuilder(Metadata, _commandOptions.Value, command);
 
             var commandBase = command as CommandBase;
-            commandBase?.Configure(parserOptions, serviceProvider, this);
+            commandBase?.Configure(parserOptions, this);
             return commandObject;
         }
 

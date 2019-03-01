@@ -22,8 +22,9 @@ namespace MGR.CommandLineParser.Command
         /// <summary>
         ///     Initializes a new instance of a <see cref="CommandBase" /> .
         /// </summary>
-        protected CommandBase()
+        protected CommandBase(IServiceProvider serviceProvider)
         {
+            CurrentDependencyResolverScope = serviceProvider;
             Arguments = new List<string>();
         }
 
@@ -79,13 +80,10 @@ namespace MGR.CommandLineParser.Command
         ///     Configure the command with the <see cref="IParserOptions" /> and the <see cref="IConsole" /> of the parser.
         /// </summary>
         /// <param name="parserOptions">The <see cref="IParserOptions" />.</param>
-        /// <param name="serviceProvider">The <see cref="IServiceScope" />.</param>
         /// <param name="commandType">The <see cref="CommandType" /> of the command.</param>
-        public virtual void Configure(IParserOptions parserOptions, IServiceProvider serviceProvider,
-            ICommandType commandType)
+        public virtual void Configure(IParserOptions parserOptions, ICommandType commandType)
         {
             ParserOptions = parserOptions;
-            CurrentDependencyResolverScope = serviceProvider;
             CommandType = commandType;
         }
 

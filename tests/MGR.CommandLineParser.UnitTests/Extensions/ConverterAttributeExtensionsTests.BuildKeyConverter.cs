@@ -29,9 +29,8 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void DefaultStringConverterActivation()
             {
                 // Arrange
-                var expected = typeof (StringConverter);
-                var ValueConverterType = typeof (Int32Converter);
-                var converterAttribute = new ConverterKeyValueAttribute(ValueConverterType);
+                var valueConverterType = typeof (Int32Converter);
+                var converterAttribute = new ConverterKeyValueAttribute(valueConverterType);
 
                 // Act
                 var actual = converterAttribute.BuildKeyConverter();
