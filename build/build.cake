@@ -142,7 +142,7 @@ Task("Publish-Package")
     };
     foreach(var nugetPackage in nugetPackageFiles)
     {
-        //NuGetPush(nugetPackage, nugetPushSettings);
+        NuGetPush(nugetPackage, nugetPushSettings);
     }
 });
 
