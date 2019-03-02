@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.Command;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
@@ -24,20 +23,13 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
             _command.Arguments.Add(argument);
         }
 
-        public override ICommandObject Generate() => new ClassBasedCommandObject(_command);
+        public override ICommandObject GenerateCommandObject() => new ClassBasedCommandObject(_command);
 
-        public override CommandValidationResult Validate(IServiceProvider serviceProvider)
+        protected override bool DoValidate(List<ValidationResult> validationResults, IServiceProvider serviceProvider)
         {
             var validationContext = new ValidationContext(_command, null, null);
-            var results = new List<ValidationResult>();
-
-            var isValid = Validator.TryValidateObject(_command, validationContext, results, true);
-            if (!isValid)
-            {
-                var console = serviceProvider.GetRequiredService<IConsole>();
-                WriteErrorsToConsole(console, results);
-            }
-            return new CommandValidationResult(isValid, results);
+            var isValid = Validator.TryValidateObject(_command, validationContext, validationResults, true);
+            return isValid;
         }
 
     }

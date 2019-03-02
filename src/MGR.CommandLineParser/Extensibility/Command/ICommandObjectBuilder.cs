@@ -27,15 +27,16 @@ namespace MGR.CommandLineParser.Extensibility.Command
         ICommandOption FindOptionByShortName(string optionShortName);
 
         /// <summary>
-        ///
+        /// Generate the command object representing the command being parsed.
         /// </summary>
-        /// <returns></returns>
-        ICommandObject Generate();
+        /// <returns>An object representing the parsed command.</returns>
+        ICommandObject GenerateCommandObject();
+
         /// <summary>
-        ///
+        /// Validates the command after having been parsed, and before being used.
         /// </summary>
-        /// <param name="serviceProvider"></param>
-        /// <returns></returns>
+        /// <param name="serviceProvider">The current <see cref="IServiceProvider"/>.</param>
+        /// <returns>The result of the validation of the command.</returns>
         CommandValidationResult Validate(IServiceProvider serviceProvider);
     }
 }

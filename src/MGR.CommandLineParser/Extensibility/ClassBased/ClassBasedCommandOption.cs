@@ -1,13 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
-    /// <summary>
-    ///     Represents an option of a commandObject.
-    /// </summary>
     internal sealed class ClassBasedCommandOption : ICommandOption
     {
         private readonly MethodInfo _miAddMethod;
@@ -27,27 +25,19 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
 
         public ICommandOptionMetadata Metadata => _commandOptionMetadata;
 
-        /// <summary>
-        ///     Gets the underlying type of the option.
-        /// </summary>
         private Type OptionType => _commandOptionMetadata.OptionType;
 
-        /// <summary>
-        ///     Convert a value to the expected type of the option.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
         private object ConvertValue(object value)
         {
             if (value != null && !value.GetType().IsType(OptionType))
             {
-                var conververtedDefaultValue = _commandOptionMetadata.Converter.Convert(value.ToString(), OptionType);
-                return conververtedDefaultValue;
+                var convertedDefaultValue = _commandOptionMetadata.Converter.Convert(value.ToString(), OptionType);
+                return convertedDefaultValue;
             }
             return value;
         }
 
-        public bool OptionalValue => OptionType == typeof(bool);
+        public bool ShouldProvideValue => OptionType != typeof(bool);
 
         public void AssignValue(string optionValue)
         {
@@ -95,8 +85,8 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
                 }
                 else
                 {
-                    var targetTupleValue = (Tuple<object, object>)convertedValue;
-                    _miAddMethod.Invoke(_commandOptionMetadata.PropertyOption.GetValue(_command, null), new[] { targetTupleValue.Item1, targetTupleValue.Item2 });
+                    var targetTupleValue = (KeyValuePair<object, object>)convertedValue;
+                    _miAddMethod.Invoke(_commandOptionMetadata.PropertyOption.GetValue(_command, null), new[] { targetTupleValue.Key, targetTupleValue.Value });
                 }
             }
         }

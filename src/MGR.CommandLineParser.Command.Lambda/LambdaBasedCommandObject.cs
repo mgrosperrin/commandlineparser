@@ -6,12 +6,12 @@ namespace MGR.CommandLineParser.Command.Lambda
 {
     internal class LambdaBasedCommandObject: ICommandObject
     {
-        private readonly Func<CommandContext, Task<int>> _executeCommand;
+        private readonly Func<CommandExecutionContext, Task<int>> _executeCommand;
         private readonly IEnumerable<LambdaBasedCommandOption> _commandOptions;
         private readonly List<string> _arguments;
         private readonly IServiceProvider _serviceProvider;
 
-        public LambdaBasedCommandObject(Func<CommandContext, Task<int>> executeCommand, IEnumerable<LambdaBasedCommandOption> commandOptions, List<string> arguments, IServiceProvider serviceProvider)
+        internal LambdaBasedCommandObject(Func<CommandExecutionContext, Task<int>> executeCommand, IEnumerable<LambdaBasedCommandOption> commandOptions, List<string> arguments, IServiceProvider serviceProvider)
         {
             _executeCommand = executeCommand;
             _commandOptions = commandOptions;
@@ -21,7 +21,7 @@ namespace MGR.CommandLineParser.Command.Lambda
 
         public Task<int> ExecuteAsync()
         {
-            var commandContext = new CommandContext(_commandOptions, _arguments, _serviceProvider);
+            var commandContext = new CommandExecutionContext(_commandOptions, _arguments, _serviceProvider);
             return _executeCommand(commandContext);
         }
     }

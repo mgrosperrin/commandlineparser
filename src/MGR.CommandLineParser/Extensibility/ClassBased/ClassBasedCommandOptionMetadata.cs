@@ -6,9 +6,6 @@ using MGR.CommandLineParser.Extensibility.Converters;
 
 namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
-    /// <summary>
-    ///     Represents an option of a commandObject.
-    /// </summary>
     internal sealed class ClassBasedCommandOptionMetadata : CommandOptionMetadataBase
     {
         private ClassBasedCommandOptionMetadata(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
@@ -21,25 +18,12 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
             CommandMetadata = commandMetadata;
             Converter = propertyInfo.ExtractConverter(converters, DisplayInfo.Name, CommandMetadata.Name);
         }
-
-        /// <summary>
-        ///     Gets the converter for the option.
-        /// </summary>
         internal IConverter Converter { get; }
 
-        /// <summary>
-        ///     Gets the <see cref="PropertyInfo" /> that represents the option.
-        /// </summary>
         internal PropertyInfo PropertyOption { get; }
 
-        /// <summary>
-        ///     Gets the commandObject to which the option relates.
-        /// </summary>
         internal ICommandMetadata CommandMetadata { get; }
 
-        /// <summary>
-        ///     Gets the underlying type of the option.
-        /// </summary>
         internal Type OptionType
         {
             get

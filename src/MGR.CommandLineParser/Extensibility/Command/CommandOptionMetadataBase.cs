@@ -3,17 +3,17 @@
 namespace MGR.CommandLineParser.Extensibility.Command
 {
     /// <summary>
-    ///
+    /// Represents a base container for <see cref="ICommandOptionMetadata"/>.
     /// </summary>
     public abstract class CommandOptionMetadataBase : ICommandOptionMetadata
     {
         /// <summary>
-        ///
+        /// Creates a new instance of <see cref="CommandOptionMetadataBase"/>.
         /// </summary>
-        /// <param name="isRequired"></param>
-        /// <param name="collectionType"></param>
-        /// <param name="displayInfo"></param>
-        /// <param name="defaultValue"></param>
+        /// <param name="isRequired">Indicates if the option is required.</param>
+        /// <param name="collectionType">Indicates the type of collection of the option.</param>
+        /// <param name="displayInfo">The <see cref="IOptionDisplayInfo"/> of the option.</param>
+        /// <param name="defaultValue">The default value of the option.</param>
         protected CommandOptionMetadataBase(bool isRequired, CommandOptionCollectionType collectionType, IOptionDisplayInfo displayInfo, string defaultValue)
         {
             IsRequired = isRequired;
@@ -21,28 +21,24 @@ namespace MGR.CommandLineParser.Extensibility.Command
             DisplayInfo = displayInfo;
             DefaultValue = defaultValue;
         }
-        /// <summary>
-        ///
-        /// </summary>
+
+        /// <inheritdoc />
         public bool IsRequired { get; }
-        /// <summary>
-        ///
-        /// </summary>
+
+        /// <inheritdoc />
         public CommandOptionCollectionType CollectionType { get; }
-        /// <summary>
-        ///
-        /// </summary>
+
+        /// <inheritdoc />
         public IOptionDisplayInfo DisplayInfo { get; }
-        /// <summary>
-        ///
-        /// </summary>
+
+        /// <inheritdoc />
         public string DefaultValue { get; }
 
         /// <summary>
-        ///
+        /// Compute the <see cref="CommandOptionCollectionType"/> based on the <see cref="Type"/> of the option.
         /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
+        /// <param name="type">The <see cref="Type"/> of the option.</param>
+        /// <returns>The <see cref="CommandOptionCollectionType"/>.</returns>
         protected static CommandOptionCollectionType GetMultiValueIndicator(Type type)
         {
             if (type.IsDictionaryType())

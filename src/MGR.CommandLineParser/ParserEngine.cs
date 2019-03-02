@@ -14,13 +14,13 @@ namespace MGR.CommandLineParser
         private readonly IParserOptions _parserOptions;
         private readonly ILogger<LoggerCategory.Parser> _logger;
 
-        public ParserEngine(IParserOptions parserOptions, ILoggerFactory loggerFactory)
+        internal ParserEngine(IParserOptions parserOptions, ILoggerFactory loggerFactory)
         {
             _parserOptions = parserOptions;
             _logger = loggerFactory.CreateLogger<LoggerCategory.Parser>();
         }
 
-        public ParsingResult Parse<TCommand>(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator) where TCommand : class, ICommand
+        internal ParsingResult Parse<TCommand>(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator) where TCommand : class, ICommand
         {
             using (_logger.BeginParsingForSpecificCommandType(typeof(TCommand)))
             {
@@ -41,7 +41,7 @@ namespace MGR.CommandLineParser
             }
         }
 
-        public ParsingResult ParseWithDefaultCommand<TCommand>(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
+        internal ParsingResult ParseWithDefaultCommand<TCommand>(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
             where TCommand : class, ICommand
         {
             using (_logger.BeginParsingWithDefaultCommandType(typeof(TCommand)))
@@ -70,7 +70,7 @@ namespace MGR.CommandLineParser
             }
         }
 
-        public ParsingResult Parse(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
+        internal ParsingResult Parse(IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
         {
             _logger.ParseForNotAlreadyKnownCommand();
             var commandName = argumentsEnumerator.GetNextCommandLineItem();
@@ -109,9 +109,9 @@ namespace MGR.CommandLineParser
                 _logger.ParsedCommandIsNotValid();
                 var helpWriter = serviceProvider.GetRequiredService<IHelpWriter>();
                 helpWriter.WriteHelpForCommand(_parserOptions, commandType);
-                return new ParsingResult(commandObjectBuilder.Generate(), validation.ValidationErrors, CommandParsingResultCode.CommandParametersNotValid);
+                return new ParsingResult(commandObjectBuilder.GenerateCommandObject(), validation.ValidationErrors, CommandParsingResultCode.CommandParametersNotValid);
             }
-            return new ParsingResult(commandObjectBuilder.Generate(), null, CommandParsingResultCode.Success);
+            return new ParsingResult(commandObjectBuilder.GenerateCommandObject(), null, CommandParsingResultCode.Success);
         }
         private ICommandObjectBuilder ExtractCommandLineOptions(ICommandType commandType, IServiceProvider serviceProvider, IEnumerator<string> argumentsEnumerator)
         {
@@ -159,7 +159,7 @@ namespace MGR.CommandLineParser
                     throw new CommandLineParserException(Constants.ExceptionMessages.FormatParserOptionNotFoundForCommand(commandType.Metadata.Name, optionText));
                 }
 
-                if (!option.OptionalValue)
+                if (option.ShouldProvideValue)
                 {
                     value = value ?? argumentsEnumerator.GetNextCommandLineItem();
                 }

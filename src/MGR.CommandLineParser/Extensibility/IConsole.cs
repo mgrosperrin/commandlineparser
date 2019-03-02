@@ -1,7 +1,7 @@
 ﻿namespace MGR.CommandLineParser.Extensibility
 {
     /// <summary>
-    /// Defines e console to log the parser activity.
+    /// Defines the console to log the parser activity.
     /// </summary>
     public interface IConsole
     {

@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     /// <summary>
-    /// Implementation of <see cref="IAssemblyProvider"/> for providing all files (*.dll and *.exe) in the current folder not recursivly (this is the current default implementation).
+    /// Implementation of <see cref="IAssemblyProvider"/> for providing all files (*.dll and *.exe) in the current folder NOT recursively (this is the current default implementation).
     /// </summary>
     public sealed class CurrentDirectoryAssemblyProvider : AssemblyProviderBase
     {

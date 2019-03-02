@@ -27,9 +27,9 @@ namespace MGR.CommandLineParser.Extensibility.Converters
             {
                 var propertyKey = _keyConverter.Convert(value.Substring(0, eqIndex), _keyConverter.TargetType);
                 var propertyValue = _valueConverter.Convert(value.Substring(eqIndex + 1), _valueConverter.TargetType);
-                return Tuple.Create(propertyKey, propertyValue);
+                return new KeyValuePair<object, object>(propertyKey, propertyValue);
             }
-            return Tuple.Create(_keyConverter.Convert(value, _keyConverter.TargetType), (object) null);
+            return new KeyValuePair<object, object>(_keyConverter.Convert(value, _keyConverter.TargetType), null);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace MGR.CommandLineParser.Command.Lambda
 {
     internal class LambdaBasedOptionDisplayInfo : IOptionDisplayInfo
     {
-        public LambdaBasedOptionDisplayInfo(string name, IEnumerable<string> alternateNames, string shortName, string description)
+        internal LambdaBasedOptionDisplayInfo(string name, IEnumerable<string> alternateNames, string shortName, string description)
         {
             Name = name;
             AlternateNames = alternateNames ?? Enumerable.Empty<string>();

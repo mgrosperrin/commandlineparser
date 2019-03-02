@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     /// <summary>
-    /// Implementation of <see cref="IAssemblyProvider"/> for providing all files (*.dll and *.exe) in the current folder recursivly.
+    /// Implementation of <see cref="IAssemblyProvider"/> for providing all files (*.dll and *.exe) in the current folder recursively.
     /// </summary>
     public sealed class RecursiveAssemblyProvider : AssemblyProviderBase
     {
@@ -16,6 +16,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
         [PublicAPI, NotNull]
         public static readonly IAssemblyProvider Instance = new RecursiveAssemblyProvider();
         private RecursiveAssemblyProvider() { }
+
         /// <inheritdoc />
         protected override SearchOption SearchOption => SearchOption.AllDirectories;
     }

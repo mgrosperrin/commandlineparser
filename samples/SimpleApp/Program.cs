@@ -30,11 +30,11 @@ namespace SimpleApp
                                     "longName",
                                     "shortName",
                                     optionBuilder => { optionBuilder.Required()
-                                        .AddValidation(new RangeAttribute(5, 7)); });
+                                        .AddValidation(new RangeAttribute(2, 7)); });
                         },
                         context =>
                         {
-                            var year = context.GetOption<int>("longName");
+                            var year = context.GetOptionValue<int>("longName");
                             var arg = context.Arguments;
                             throw new NotImplementedException();
                         });

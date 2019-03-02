@@ -2,10 +2,8 @@
 using System.Linq;
 using MGR.CommandLineParser;
 
-// ReSharper disable CheckNamespace
-
+// ReSharper disable once CheckNamespace
 namespace System
-// ReSharper restore CheckNamespace
 {
     internal static class TypeExtensions
     {

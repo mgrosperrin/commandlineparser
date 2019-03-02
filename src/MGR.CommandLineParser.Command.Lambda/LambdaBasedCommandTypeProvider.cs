@@ -7,7 +7,7 @@ namespace MGR.CommandLineParser.Command.Lambda
     {
         private readonly LambdaBasedCommandType _commandType;
 
-        public LambdaBasedCommandTypeProvider(LambdaBasedCommandType commandType)
+        internal LambdaBasedCommandTypeProvider(LambdaBasedCommandType commandType)
         {
             _commandType = commandType;
         }
@@ -19,12 +19,7 @@ namespace MGR.CommandLineParser.Command.Lambda
 
         public ICommandType GetCommandType(string commandName)
         {
-            if (commandName == _commandType.Metadata.Name)
-            {
-                return _commandType;
-            }
-
-            return null;
+            return commandName == _commandType.Metadata.Name ? _commandType : null;
         }
     }
 }

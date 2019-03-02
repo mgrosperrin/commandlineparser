@@ -1,5 +1,4 @@
 ﻿using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
@@ -9,7 +8,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
     public interface IClassBasedCommandObject
     {
         /// <summary>
-        /// Gets the raw <see cref="ICommand"/> instance for the <see cref="ICommandObjectBuilder"/>.
+        /// Gets the raw <see cref="ICommand"/> instance for the <see cref="ICommandObject"/>.
         /// </summary>
         ICommand Command { get; }
     }

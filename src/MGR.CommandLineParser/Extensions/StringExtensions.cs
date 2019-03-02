@@ -4,7 +4,6 @@ using System.Text;
 using MGR.CommandLineParser;
 
 // ReSharper disable once CheckNamespace
-
 namespace System
 {
     internal static class StringExtensions

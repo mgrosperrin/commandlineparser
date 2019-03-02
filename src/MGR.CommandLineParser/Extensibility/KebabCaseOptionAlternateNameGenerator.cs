@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
-using MGR.CommandLineParser.Extensibility.ClassBased;
+using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser.Extensibility
 {
@@ -10,9 +9,8 @@ namespace MGR.CommandLineParser.Extensibility
     /// </summary>
     public sealed class KebabCaseOptionAlternateNameGenerator : IOptionAlternateNameGenerator
     {
-        /// <inheritdoc cref="GenerateAlternateNames" />
-        /// >
-        public IEnumerable<string> GenerateAlternateNames(ClassBasedOptionDisplayInfo optionDisplayInfo, PropertyInfo propertyInfo)
+        /// <inheritdoc />
+        public IEnumerable<string> GenerateAlternateNames(IOptionDisplayInfo optionDisplayInfo)
         {
             var nameAsKebabCase = optionDisplayInfo.Name.AsKebabCase();
             yield return nameAsKebabCase;

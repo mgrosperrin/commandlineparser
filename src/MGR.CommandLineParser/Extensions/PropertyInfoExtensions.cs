@@ -9,14 +9,9 @@ using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Converters;
 
-// ReSharper disable CheckNamespace
-
+// ReSharper disable once CheckNamespace
 namespace System.Reflection
-// ReSharper restore CheckNamespace
 {
-    /// <summary>
-    /// Extensions methods for the type <see cref="PropertyInfo"/>.
-    /// </summary>
     internal static class PropertyInfoExtensions
     {
         internal static bool IsValidOptionProperty(this PropertyInfo source)

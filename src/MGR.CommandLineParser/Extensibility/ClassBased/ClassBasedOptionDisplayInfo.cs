@@ -8,15 +8,9 @@ using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
-    /// <summary>
-    ///     Represents the display information of an option.
-    /// </summary>
-    public sealed class ClassBasedOptionDisplayInfo : IOptionDisplayInfo
+    internal sealed class ClassBasedOptionDisplayInfo : IOptionDisplayInfo
     {
-        /// <summary>
-        ///     Creates a new <see cref="ClassBasedOptionDisplayInfo" />.
-        /// </summary>
-        public ClassBasedOptionDisplayInfo(PropertyInfo propertyInfo, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        internal ClassBasedOptionDisplayInfo(PropertyInfo propertyInfo, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Guard.NotNull(propertyInfo, nameof(propertyInfo));
             Name = propertyInfo.Name;
@@ -31,31 +25,23 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
             }
 
             AlternateNames = optionAlternateNameGenerators.SelectMany(
-                    generator => generator.GenerateAlternateNames(this, propertyInfo))
+                    generator => generator.GenerateAlternateNames(this))
                 .Distinct(StringComparer.CurrentCultureIgnoreCase)
                 .Where(alternateName => !alternateName.Equals(Name, StringComparison.CurrentCultureIgnoreCase))
                 .ToList();
         }
 
-        /// <summary>
-        ///     Gets the name of the option.
-        /// </summary>
+        /// <inheritdoc />
         public string Name { get; }
 
-        /// <summary>
-        ///     Gets the alternates names of the option.
-        /// </summary>
+        /// <inheritdoc />
         [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
         public IEnumerable<string> AlternateNames { get; }
 
-        /// <summary>
-        ///     Gets the shortname of the option.
-        /// </summary>
+        /// <inheritdoc />
         public string ShortName { get; }
 
-        /// <summary>
-        ///     Gets the description of the option.
-        /// </summary>
+        /// <inheritdoc />
         public string Description { get; }
     }
 }

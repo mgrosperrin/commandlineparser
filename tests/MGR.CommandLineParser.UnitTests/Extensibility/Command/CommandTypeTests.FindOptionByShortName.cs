@@ -28,7 +28,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                     .Returns(ClassBasedBasicCommandActivator.Instance);
                 var classBasedCommandObjectBuilder =
                     (ClassBasedCommandObjectBuilder)testCommandType.CreateCommandObjectBuilder(serviceProviderMock.Object, new ParserOptions());
-                var testCommand = (TestCommand)((IClassBasedCommandObject)classBasedCommandObjectBuilder.Generate()).Command;
+                var testCommand = (TestCommand)((IClassBasedCommandObject)classBasedCommandObjectBuilder.GenerateCommandObject()).Command;
 
                 // Act
                 var actual = classBasedCommandObjectBuilder.FindOptionByShortName(optionName);
@@ -36,7 +36,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                 // Assert
                 Assert.NotNull(actual);
                 Assert.NotNull(testCommand);
-                Assert.False(actual.OptionalValue);
+                Assert.True(actual.ShouldProvideValue);
                 actual.AssignValue("42");
                 Assert.Single(testCommand.PropertyList);
                 Assert.Equal(42, testCommand.PropertyList.First());

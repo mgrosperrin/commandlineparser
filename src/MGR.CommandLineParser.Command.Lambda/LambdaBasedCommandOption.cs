@@ -8,11 +8,10 @@ namespace MGR.CommandLineParser.Command.Lambda
 {
     internal class LambdaBasedCommandOption : ICommandOption
     {
-        internal Type OptionType { get; }
         private readonly IConverter _converter;
-        internal ILambdaBasedCommandOptionValueAssigner ValueAssigner { get; }
 
-        public LambdaBasedCommandOption(LambdaBasedComandOptionMetadata commandOptionMetadata, Type optionType, IConverter converter, IEnumerable<ValidationAttribute> validationAttributes)
+        internal LambdaBasedCommandOption(LambdaBasedCommandOptionMetadata commandOptionMetadata, Type optionType, IConverter converter,
+            IEnumerable<ValidationAttribute> validationAttributes)
         {
             OptionType = optionType;
             _converter = converter;
@@ -42,9 +41,12 @@ namespace MGR.CommandLineParser.Command.Lambda
             }
         }
 
-        public bool OptionalValue => OptionType == typeof(bool);
-        public ICommandOptionMetadata Metadata { get; }
+        internal Type OptionType { get; }
+        internal ILambdaBasedCommandOptionValueAssigner ValueAssigner { get; }
         internal IEnumerable<ValidationAttribute> ValidationAttributes { get; }
+
+        public bool ShouldProvideValue => OptionType != typeof(bool);
+        public ICommandOptionMetadata Metadata { get; }
 
         public void AssignValue(string optionValue)
         {

@@ -8,6 +8,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
     ///     Define a command provider.
     /// </summary>
     /// <remarks>
+    /// This is the starting point to implement another way to define commands.
     /// </remarks>
     public interface ICommandTypeProvider
     {
@@ -18,7 +19,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
         IEnumerable<ICommandType> GetAllCommandTypes();
 
         /// <summary>
-        ///     Retrive the <see cref="ClassBasedCommandType" /> of the command with the specified <paramref name="commandName" />.
+        ///     Retrieve the <see cref="ClassBasedCommandType" /> of the command with the specified <paramref name="commandName" />.
         /// </summary>
         /// <param name="commandName">The command name.</param>
         /// <returns>

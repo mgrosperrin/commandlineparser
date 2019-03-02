@@ -2,9 +2,9 @@
 
 namespace MGR.CommandLineParser.Command.Lambda
 {
-    public class LambdaBasedCommandMetadata : ICommandMetadata
+    internal class LambdaBasedCommandMetadata : ICommandMetadata
     {
-        public LambdaBasedCommandMetadata(string commandName, string description, string usage, string[] samples, bool hideFromHelpListing)
+        internal LambdaBasedCommandMetadata(string commandName, string description, string usage, string[] samples, bool hideFromHelpListing)
         {
             Name = commandName;
             Description = description;

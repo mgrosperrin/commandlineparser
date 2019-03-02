@@ -23,8 +23,8 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
         /// <inheritdoc />
         public ICommand ActivateCommand(Type commandType)
         {
-            var commandObject = _serviceProvider.GetService(commandType);
-            if (commandObject == null)
+            var commandInstance = _serviceProvider.GetService(commandType);
+            if (commandInstance == null)
             {
                 var constructors = commandType.GetConstructors(BindingFlags.Instance | BindingFlags.Public)
                     .OrderBy(constructor => constructor.GetParameters().Length);
@@ -33,15 +33,15 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
                     try
                     {
                         var parameterInfos = constructorInfo.GetParameters();
-                    var parameters = new object[parameterInfos.Length];
-                    for (int i = 0; i < parameterInfos.Length; i++)
-                    {
-                        var parameterInfo = parameterInfos[i];
-                        parameters[i] = _serviceProvider.GetService(parameterInfo.ParameterType);
-                    }
+                        var parameters = new object[parameterInfos.Length];
+                        for (int i = 0; i < parameterInfos.Length; i++)
+                        {
+                            var parameterInfo = parameterInfos[i];
+                            parameters[i] = _serviceProvider.GetService(parameterInfo.ParameterType);
+                        }
 
-                        commandObject = constructorInfo.Invoke(parameters);
-                        if (commandObject != null)
+                        commandInstance = constructorInfo.Invoke(parameters);
+                        if (commandInstance != null)
                         {
                             break;
                         }
@@ -52,8 +52,8 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
                     }
                 }
             }
-            var command = commandObject as ICommand;
+            var command = commandInstance as ICommand;
             return command;
         }
-}
+    }
 }

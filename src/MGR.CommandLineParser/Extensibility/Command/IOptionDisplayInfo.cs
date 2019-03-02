@@ -18,7 +18,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
         IEnumerable<string> AlternateNames { get; }
 
         /// <summary>
-        ///     Gets the shortname of the option.
+        ///     Gets the short name of the option.
         /// </summary>
         string ShortName { get; }
 

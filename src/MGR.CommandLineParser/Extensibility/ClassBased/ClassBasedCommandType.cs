@@ -10,47 +10,26 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
-    /// <summary>
-    ///     Represents a type of command.
-    /// </summary>
     internal sealed class ClassBasedCommandType : ICommandType
     {
         private readonly Lazy<ClassBasedCommandMetadata> _commandMetadata;
         private readonly Lazy<List<ClassBasedCommandOptionMetadata>> _commandOptions;
-        /// <summary>
-        /// Creates a new <see cref="ClassBasedCommandType"/>.
-        /// </summary>
-        /// <param name="commandType">The type of the command.</param>
-        /// <param name="converters">The converters.</param>
-        /// <param name="optionAlternateNameGenerators">The generators of alternate name..</param>
-        public ClassBasedCommandType(Type commandType, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+
+        internal ClassBasedCommandType(Type commandType, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Type = commandType;
             _commandMetadata = new Lazy<ClassBasedCommandMetadata>(() => new ClassBasedCommandMetadata(Type));
             _commandOptions = new Lazy<List<ClassBasedCommandOptionMetadata>>(() => new List<ClassBasedCommandOptionMetadata>(ExtractCommandOptions(Type, Metadata, converters.ToList(), optionAlternateNameGenerators.ToList())));
 
         }
-        /// <summary>
-        ///     Gets the type of the command.
-        /// </summary>
+
         [SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods")]
-        public Type Type { get; }
-        /// <summary>
-        /// Gets the name of the command.
-        /// </summary>
+        internal Type Type { get; }
+
         public ICommandMetadata Metadata => _commandMetadata.Value;
-        /// <summary>
-        /// Gets the option of the command type.
-        /// </summary>
+
         public IEnumerable<ICommandOptionMetadata> Options => _commandOptions.Value;
 
-
-        /// <summary>
-        /// Create the command from its type.
-        /// </summary>
-        /// <param name="serviceProvider">The scoped dependendy resolver.</param>
-        /// <param name="parserOptions">The options of the current parser.</param>
-        /// <returns></returns>
         public ICommandObjectBuilder CreateCommandObjectBuilder(IServiceProvider serviceProvider, IParserOptions parserOptions)
         {
             Guard.NotNull(serviceProvider, nameof(serviceProvider));

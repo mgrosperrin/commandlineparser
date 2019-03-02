@@ -21,6 +21,14 @@ namespace MGR.CommandLineParser.Command
         public const string Name = "help";
 
         /// <summary>
+        /// Creates a new instance of <see cref="HelpCommand"/>.
+        /// </summary>
+        /// <param name="serviceProvider">A <see cref="IServiceProvider"/> used to resolve services.</param>
+        public HelpCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
+
+        /// <summary>
         ///     Show detailed help for all commands.
         /// </summary>
         public bool All { get; set; }
@@ -31,8 +39,8 @@ namespace MGR.CommandLineParser.Command
         /// <returns>Return 0 is everything was right, an negative error code otherwise.</returns>
         protected override Task<int> ExecuteCommandAsync()
         {
-            var commandTypeProviders = CurrentDependencyResolverScope.GetServices<ICommandTypeProvider>().ToList();
-            var helpWriter = CurrentDependencyResolverScope.GetRequiredService<IHelpWriter>();
+            var commandTypeProviders = ServiceProvider.GetServices<ICommandTypeProvider>().ToList();
+            var helpWriter = ServiceProvider.GetRequiredService<IHelpWriter>();
             var commandType = commandTypeProviders.GetCommandType(Arguments.FirstOrDefault() ?? string.Empty);
             if (commandType == null)
             {
@@ -42,6 +50,7 @@ namespace MGR.CommandLineParser.Command
             {
                 helpWriter.WriteHelpForCommand(ParserOptions, commandType);
             }
+
             return Task.FromResult(0);
         }
 
@@ -56,13 +65,6 @@ namespace MGR.CommandLineParser.Command
             {
                 helpWriter.WriteCommandListing(ParserOptions);
             }
-        }
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="serviceProvider"></param>
-        public HelpCommand(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
         }
     }
 }

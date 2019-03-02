@@ -5,7 +5,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     internal class ClassBasedCommandObject: ICommandObject, IClassBasedCommandObject
     {
-        public ClassBasedCommandObject(ICommand command)
+        internal ClassBasedCommandObject(ICommand command)
         {
             Command = command;
         }

@@ -8,7 +8,10 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
     /// </summary>
     public sealed class ClassBasedBasicCommandActivator : IClassBasedCommandActivator
     {
-        internal static readonly IClassBasedCommandActivator Instance = new ClassBasedBasicCommandActivator();
+        /// <summary>
+        /// Gets the singleton instance of <see cref="ClassBasedBasicCommandActivator"/>.
+        /// </summary>
+        public static readonly IClassBasedCommandActivator Instance = new ClassBasedBasicCommandActivator();
 
         private ClassBasedBasicCommandActivator()
         {

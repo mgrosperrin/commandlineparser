@@ -26,7 +26,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                     .Returns(ClassBasedBasicCommandActivator.Instance);
                 var classBasedCommandObjectBuilder =
                     (ClassBasedCommandObjectBuilder)testCommandType.CreateCommandObjectBuilder(serviceProviderMock.Object, new ParserOptions());
-                var testCommand = (TestCommand)((IClassBasedCommandObject)classBasedCommandObjectBuilder.Generate()).Command;
+                var testCommand = (TestCommand)((IClassBasedCommandObject)classBasedCommandObjectBuilder.GenerateCommandObject()).Command;
                 var optionName = nameof(TestCommand.PropertyList);
                 var expected = 42;
                 var expectedLength = 1;
@@ -53,7 +53,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                     .Returns(ClassBasedBasicCommandActivator.Instance);
                 var classBasedCommandObjectBuilder =
                     (ClassBasedCommandObjectBuilder)testCommandType.CreateCommandObjectBuilder(serviceProviderMock.Object, new ParserOptions());
-                var testCommand = (TestCommand)((IClassBasedCommandObject)classBasedCommandObjectBuilder.Generate()).Command;
+                var testCommand = (TestCommand)((IClassBasedCommandObject)classBasedCommandObjectBuilder.GenerateCommandObject()).Command;
                 var optionName = nameof(TestCommand.PropertyDictionary);
                 var expectedKey = "keyTest";
                 var guid = "18591394-096C-476F-A8B7-71903E27DAB5";
@@ -84,7 +84,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
                     .Returns(ClassBasedBasicCommandActivator.Instance);
                 var classBasedCommandObjectBuilder =
                     (ClassBasedCommandObjectBuilder)testCommandType.CreateCommandObjectBuilder(serviceProviderMock.Object, new ParserOptions());
-                var testCommand = (TestCommand)((IClassBasedCommandObject)classBasedCommandObjectBuilder.Generate()).Command;
+                var testCommand = (TestCommand)((IClassBasedCommandObject)classBasedCommandObjectBuilder.GenerateCommandObject()).Command;
                 var optionName = nameof(TestCommand.PropertySimple);
                 var expected = 42;
                 var option = "42";

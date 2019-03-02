@@ -24,19 +24,19 @@ namespace MGR.CommandLineParser.Command
         /// </summary>
         protected CommandBase(IServiceProvider serviceProvider)
         {
-            CurrentDependencyResolverScope = serviceProvider;
+            ServiceProvider = serviceProvider;
             Arguments = new List<string>();
         }
 
         /// <summary>
         ///     Gets the console used by the parser (if the command needs to writes something).
         /// </summary>
-        protected IConsole Console => CurrentDependencyResolverScope.GetRequiredService<IConsole>();
+        protected IConsole Console => ServiceProvider.GetRequiredService<IConsole>();
 
         /// <summary>
-        ///     Gets the <see cref="IServiceScope" /> of the parsing operation.
+        ///     Gets the <see cref="IServiceProvider" /> of the parsing operation.
         /// </summary>
-        protected IServiceProvider CurrentDependencyResolverScope { get; private set; }
+        protected IServiceProvider ServiceProvider { get; private set; }
 
         /// <summary>
         ///     Gets the <see cref="IParserOptions" /> of the parser.
@@ -69,7 +69,7 @@ namespace MGR.CommandLineParser.Command
         {
             if (Help)
             {
-                var helpWriter = CurrentDependencyResolverScope.GetRequiredService<IHelpWriter>();
+                var helpWriter = ServiceProvider.GetRequiredService<IHelpWriter>();
                 helpWriter.WriteHelpForCommand(ParserOptions, CommandType);
                 return Task.FromResult(0);
             }
