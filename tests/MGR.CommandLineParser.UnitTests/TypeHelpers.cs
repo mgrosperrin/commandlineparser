@@ -6,11 +6,17 @@ namespace MGR.CommandLineParser.UnitTests
 {
     public static class TypeHelpers
     {
-        public static string ExtractPropertyName<T>(Expression<Func<T>> propertyExpression)
-        {
-            Guard.NotNull(propertyExpression, nameof(propertyExpression));
+        public static string ExtractPropertyName<T, U>(Expression<Func<T, U>> propertyExpression)
+            => ExtractPropertyName(propertyExpression.Body as MemberExpression);
 
-            var memberExpression = propertyExpression.Body as MemberExpression;
+        public static string ExtractPropertyName<T>(Expression<Func<T, object>> propertyExpression)
+            => ExtractPropertyName(propertyExpression.Body as MemberExpression);
+
+        public static string ExtractPropertyName<T>(Expression<Func<T>> propertyExpression)
+            => ExtractPropertyName(propertyExpression.Body as MemberExpression);
+
+        private static string ExtractPropertyName(MemberExpression memberExpression)
+        {
             if (memberExpression == null)
             {
                 throw new ArgumentException();

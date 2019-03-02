@@ -7,9 +7,9 @@ using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Converters;
 using Xunit;
 
-namespace MGR.CommandLineParser.UnitTests.Extensibility.Command
+namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
 {
-    public partial class CommandTypeTests
+    public partial class ClassBasedCommandTypeTests
     {
         public class Metadata
         {
