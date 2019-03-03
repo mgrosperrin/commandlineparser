@@ -15,13 +15,16 @@ var absoluteRootDir = MakeAbsolute(Directory("../"));
 var rootDir = Directory(absoluteRootDir.FullPath);
 var artifactsDir = rootDir + Directory("artifacts");
 var srcDir = rootDir + Directory("src");
+var testsDir = rootDir + Directory("tests");
 var toolsDir = artifactsDir + Directory("tools");
 var nugetFile = toolsDir + File("nuget.exe");
 var xunitRunnerPath = toolsDir + Directory("xunit.runner.console") + Directory("tools") + Directory("netcoreapp2.0");
 var gitVersionFile = toolsDir + Directory("GitVersion.CommandLine") + Directory("tools") + File("GitVersion.exe");
 
-var unitTestsProjectFile = rootDir + Directory("tests") + Directory("MGR.CommandLineParser.UnitTests") + File("MGR.CommandLineParser.UnitTests.csproj");
-var integrationTestsProjectFile = rootDir + Directory("tests") + Directory("MGR.CommandLineParser.IntegrationTests") + File("MGR.CommandLineParser.IntegrationTests.csproj");
+var unitTestsProjectDir = testsDir + Directory("MGR.CommandLineParser.UnitTests");
+var unitTestsProjectFile = unitTestsProjectDir + File("MGR.CommandLineParser.UnitTests.csproj");
+var integrationTestsProjectDir = testsDir + Directory("MGR.CommandLineParser.IntegrationTests");
+var integrationTestsProjectFile = integrationTestsProjectDir + File("MGR.CommandLineParser.IntegrationTests.csproj");
 
 var nugetPackagePublicationFeed = "https://www.nuget.org/api/v2/package";
 var informationalVersion = "1.0.0";
@@ -122,12 +125,43 @@ Task("Run-Unit-Tests")
 {
     var settings = new DotNetCoreTestSettings {
         Configuration = configuration,
-        NoBuild = true
+        NoBuild = true,
+        ArgumentCustomization = arguments => 
+            arguments
+                .Append("--logger")
+                .AppendQuoted("trx;LogFileName=TestsResults.trx")
+                .Append("--logger")
+                .AppendQuoted("xunit;LogFileName=TestsResults.xml")
+                .Append("/p:CollectCoverage=true")
+                .Append("/p:CoverletOutput=_BuildReports\\Coverage\\")
+                .Append("/p:CoverletOutputFormat=cobertura")
+                .Append("/p:Exclude=\"[xunit.*]*%2c[*]JetBrains.*%2c[*Tests]*\"")
     };
+    
+    settings.ResultsDirectory = unitTestsProjectDir + Directory("_BuildReports") + Directory("UnitTests");
     DotNetCoreTest(unitTestsProjectFile, settings);
+
+    settings.ResultsDirectory = integrationTestsProjectDir + Directory("_BuildReports") + Directory("UnitTests");
     DotNetCoreTest(integrationTestsProjectFile, settings);
+    GenerateCodeCoverageReport();
 });
 
+public void GenerateCodeCoverageReport()
+{
+    var reportsPath =
+        (unitTestsProjectDir + Directory("_BuildReports") + Directory("Coverage") + File("coverage.cobertura.xml")).Path.FullPath
+        + ";" +
+        (integrationTestsProjectDir + Directory("_BuildReports") + Directory("Coverage") + File("coverage.cobertura.xml")).Path.FullPath;
+    var settings = new DotNetCoreToolSettings
+    {
+        WorkingDirectory = unitTestsProjectDir,
+        ArgumentCustomization = args => 
+                args.AppendQuoted("-reports:" + reportsPath)
+                    .AppendQuoted("-targetdir:" + (artifactsDir + Directory("Coverage")).Path.FullPath)
+                    .Append("-reporttypes:HTML;HTMLSummary")
+    };
+    DotNetCoreTool("reportgenerator", settings);
+}
 
 Task("Publish-Package")
     .IsDependentOn("Run-Unit-Tests")
