@@ -38,7 +38,7 @@ namespace SimpleApp
                         {
                             var year = context.GetOptionValue<int>("longName");
                             var arg = context.Arguments;
-                            throw new NotImplementedException();
+                            return Task.FromResult(0);
                         });
             serviceCollection.AddLogging(builder => builder
                     .SetMinimumLevel(LogLevel.Trace)

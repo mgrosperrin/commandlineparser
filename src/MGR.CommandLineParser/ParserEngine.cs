@@ -144,7 +144,7 @@ namespace MGR.CommandLineParser
                 {
                     starterLength = Constants.ShortNameOptionStarter.Length;
                     var defaultCommandOptionFinder = commandOptionFinder;
-                    commandOptionFinder = (co, optionName) => co.FindOptionByShortName(optionName) ?? defaultCommandOptionFinder(co, optionName);
+                    commandOptionFinder = (co, optionName) => co.FindOptionByShortName(optionName);
                 }
                 var optionText = argument.Substring(starterLength);
                 string value = null;
