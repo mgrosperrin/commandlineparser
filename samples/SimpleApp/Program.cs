@@ -29,8 +29,10 @@ namespace SimpleApp
                                 .AddOption<int>(
                                     "longName",
                                     "shortName",
-                                    optionBuilder => { optionBuilder.Required()
-                                        .AddValidation(new RangeAttribute(2, 7)); });
+                                    optionBuilder => {
+                                        optionBuilder.Required()
+                         .AddValidation(new RangeAttribute(2, 7));
+                                    });
                         },
                         context =>
                         {
@@ -41,19 +43,19 @@ namespace SimpleApp
             serviceCollection.AddLogging(builder => builder
                     .SetMinimumLevel(LogLevel.Trace)
                     .AddSeq()
-                    //.AddConsole(options => options.IncludeScopes = true)
+                //.AddConsole(options => options.IncludeScopes = true)
                 );
             var serviceProvider = serviceCollection.BuildServiceProvider();
             var parserBuild = new ParserBuilder();
-            var parser = parserBuild.BuildParser(serviceProvider);
-            var commandResult = parser.Parse(arguments);
-            var lambdaCommand = parser.Parse(new []{"test", "--longName:3", "hello"});
+            var parser = parserBuild.BuildParser();
+            var commandResult = parser.Parse(arguments, serviceProvider);
+            var lambdaCommand = parser.Parse(new[] { "test", "--longName:3", "hello" }, serviceProvider);
 
-            var defaultCommandResult = parser.ParseWithDefaultCommand<PackCommand>(arguments);
+            var defaultCommandResult = parser.ParseWithDefaultCommand<PackCommand>(arguments, serviceProvider);
 
-            var defaultPackCommandResult = parser.ParseWithDefaultCommand<PackCommand>(defaultPackArguments);
+            var defaultPackCommandResult = parser.ParseWithDefaultCommand<PackCommand>(defaultPackArguments, serviceProvider);
 
-            var defaultDeleteCommandResult = parser.ParseWithDefaultCommand<PackCommand>(defaultDeleteArguments);
+            var defaultDeleteCommandResult = parser.ParseWithDefaultCommand<PackCommand>(defaultDeleteArguments, serviceProvider);
 
             //Console.ReadLine();
             Thread.Sleep(TimeSpan.FromSeconds(10));

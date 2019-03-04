@@ -11,43 +11,41 @@ namespace MGR.CommandLineParser
     internal sealed class Parser : IParser
     {
         private readonly IParserOptions _parserOptions;
-        private readonly IServiceProvider _serviceProvider;
 
-        internal Parser(IParserOptions parserOptions, IServiceProvider serviceProvider)
+        internal Parser(IParserOptions parserOptions)
         {
             _parserOptions = parserOptions;
-            _serviceProvider = serviceProvider;
         }
 
         public string Logo => _parserOptions.Logo;
 
         public string CommandLineName => _parserOptions.CommandLineName;
 
-        public ParsingResult Parse<TCommand>(IEnumerable<string> arguments) where TCommand : class, ICommand => ParseArguments(arguments, (parserEngine, dependencyResolverScope, argumentsEnumerator) =>
-                   parserEngine.Parse<TCommand>(dependencyResolverScope, argumentsEnumerator));
+        public ParsingResult Parse<TCommand>(IEnumerable<string> arguments, IServiceProvider serviceProvider) where TCommand : class, ICommand => ParseArguments(arguments, serviceProvider, (parserEngine, argumentsEnumerator) =>
+                   parserEngine.Parse<TCommand>(argumentsEnumerator));
 
-        public ParsingResult Parse(IEnumerable<string> arguments) => ParseArguments(arguments, (parserEngine, dependencyResolverScope, argumentsEnumerator) =>
-                parserEngine.Parse(dependencyResolverScope, argumentsEnumerator));
+        public ParsingResult Parse(IEnumerable<string> arguments, IServiceProvider serviceProvider) => ParseArguments(arguments, serviceProvider, (parserEngine, argumentsEnumerator) =>
+                parserEngine.Parse(argumentsEnumerator));
 
-        public ParsingResult ParseWithDefaultCommand<TCommand>(IEnumerable<string> arguments) where TCommand : class, ICommand => ParseArguments(arguments, (parserEngine, dependencyResolverScope, argumentsEnumerator) =>
-                    parserEngine.ParseWithDefaultCommand<TCommand>(dependencyResolverScope, argumentsEnumerator));
+        public ParsingResult ParseWithDefaultCommand<TCommand>(IEnumerable<string> arguments, IServiceProvider serviceProvider) where TCommand : class, ICommand => ParseArguments(arguments, serviceProvider, (parserEngine, argumentsEnumerator) =>
+                    parserEngine.ParseWithDefaultCommand<TCommand>(argumentsEnumerator));
 
-        private ParsingResult ParseArguments(IEnumerable<string> arguments, Func<ParserEngine, IServiceProvider, IEnumerator<string>, ParsingResult> callParse)
+        private ParsingResult ParseArguments(IEnumerable<string> arguments, IServiceProvider serviceProvider, Func<ParserEngine, IEnumerator<string>, ParsingResult> callParse)
         {
             if (arguments == null)
             {
                 return new ParsingResult(null, null, CommandParsingResultCode.NoArgumentsProvided);
             }
 
-            var loggerFactory = _serviceProvider.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
+            var loggerFactory = serviceProvider.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
             var logger = loggerFactory.CreateLogger<LoggerCategory.Parser>();
             using (logger.BeginParsingArguments(Guid.NewGuid().ToString()))
             {
                 logger.CreationOfParserEngine();
-                var parserEngine = new ParserEngine(_parserOptions, loggerFactory);
+                var parserEngine = new ParserEngine(_parserOptions, serviceProvider, loggerFactory);
                 var argumentsEnumerator = arguments.GetArgumentsEnumerator();
 
-                var result = callParse(parserEngine, _serviceProvider, argumentsEnumerator);
+                var result = callParse(parserEngine, argumentsEnumerator);
                 return result;
             }
         }

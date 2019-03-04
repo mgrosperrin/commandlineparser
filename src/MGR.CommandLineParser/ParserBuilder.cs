@@ -1,6 +1,4 @@
-﻿using System;
-using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
+﻿using JetBrains.Annotations;
 
 namespace MGR.CommandLineParser
 {
@@ -11,31 +9,15 @@ namespace MGR.CommandLineParser
     public sealed class ParserBuilder
     {
         private readonly ParserBuilderOptions _parserBuilderOptions = ParserBuilderOptions.Default;
-        private static readonly Lazy<ServiceProvider> ServiceProviderLazy = new Lazy<ServiceProvider>(
-            CreateRootServiceProvider);
-
-        private static ServiceProvider CreateRootServiceProvider()
-        {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCommandLineParser();
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-            return serviceProvider;
-        }
 
         /// <summary>
         ///     Creates a new instance of <see cref="Parser" /> with the default options.
         /// </summary>
         /// <returns>A new instance of <see cref="Parser" />.</returns>
-        public IParser BuildParser() => BuildParser(ServiceProviderLazy.Value.CreateScope().ServiceProvider);
-        /// <summary>
-        ///     Creates a new instance of <see cref="Parser" /> with the default options.
-        /// </summary>
-        /// <param name="serviceProvider">A custom <see cref="ServiceProvider"/>.</param>
-        /// <returns>A new instance of <see cref="Parser" />.</returns>
-        public IParser BuildParser(IServiceProvider serviceProvider)
+        public IParser BuildParser()
         {
             var parserOptions = _parserBuilderOptions.ToParserOptions();
-            var parser = new Parser(parserOptions, serviceProvider);
+            var parser = new Parser(parserOptions);
             return parser;
         }
 
