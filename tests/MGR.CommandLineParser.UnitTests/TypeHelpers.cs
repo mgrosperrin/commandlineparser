@@ -9,9 +9,6 @@ namespace MGR.CommandLineParser.UnitTests
         public static string ExtractPropertyName<T, U>(Expression<Func<T, U>> propertyExpression)
             => ExtractPropertyName(propertyExpression.Body as MemberExpression);
 
-        public static string ExtractPropertyName<T>(Expression<Func<T, object>> propertyExpression)
-            => ExtractPropertyName(propertyExpression.Body as MemberExpression);
-
         public static string ExtractPropertyName<T>(Expression<Func<T>> propertyExpression)
             => ExtractPropertyName(propertyExpression.Body as MemberExpression);
 
@@ -19,16 +16,16 @@ namespace MGR.CommandLineParser.UnitTests
         {
             if (memberExpression == null)
             {
-                throw new ArgumentException();
+                throw new ArgumentNullException(nameof(memberExpression));
             }
             var propertyInfo = memberExpression.Member as PropertyInfo;
             if (propertyInfo == null)
             {
-                throw new ArgumentException();
+                throw new InvalidOperationException("The provided expression should be aa property accession.");
             }
             if (propertyInfo.GetGetMethod(true).IsStatic)
             {
-                throw new ArgumentException();
+                throw new InvalidOperationException("The provided expression should be an instance property accession.");
             }
             return memberExpression.Member.Name;
         }

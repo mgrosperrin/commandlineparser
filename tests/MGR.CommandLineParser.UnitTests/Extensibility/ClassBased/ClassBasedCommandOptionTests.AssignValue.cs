@@ -25,15 +25,6 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
                     typeof(TestCommand).GetProperty(TypeHelpers.ExtractPropertyName(propertyExpression));
                 return CreateCommandOptionForProperty(propertyInfo);
             }
-
-            private static (TestCommand Command, ClassBasedCommandOption CommandOption) CreateCommandOptionForProperty(
-                Expression<Func<TestCommand, object>> propertyExpression)
-            {
-                var propertyInfo =
-                    typeof(TestCommand).GetProperty(TypeHelpers.ExtractPropertyName(propertyExpression));
-                return CreateCommandOptionForProperty(propertyInfo);
-            }
-
             private static (TestCommand Command, ClassBasedCommandOption CommandOption) CreateCommandOptionForProperty(
                     PropertyInfo propertyInfo)
                 {
