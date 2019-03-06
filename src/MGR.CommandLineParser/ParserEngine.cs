@@ -143,7 +143,6 @@ namespace MGR.CommandLineParser
                 if (!argument.StartsWith(Constants.LongNameOptionStarter))
                 {
                     starterLength = Constants.ShortNameOptionStarter.Length;
-                    var defaultCommandOptionFinder = commandOptionFinder;
                     commandOptionFinder = (co, optionName) => co.FindOptionByShortName(optionName);
                 }
                 var optionText = argument.Substring(starterLength);

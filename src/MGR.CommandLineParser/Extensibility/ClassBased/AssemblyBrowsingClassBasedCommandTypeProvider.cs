@@ -17,7 +17,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
         private readonly Lazy<Dictionary<string, ClassBasedCommandType>> _commands;
 
         private readonly IEnumerable<IConverter> _converters;
-        private readonly IEnumerable<IOptionAlternateNameGenerator> _optionAlternateNameGenerators;
+        private readonly IEnumerable<IPropertyOptionAlternateNameGenerator> _optionAlternateNameGenerators;
 
         /// <summary>
         /// Create a new <see cref="AssemblyBrowsingClassBasedCommandTypeProvider"/>.
@@ -25,7 +25,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
         /// <param name="assemblyProvider"></param>
         /// <param name="converters"></param>
         /// <param name="optionAlternateNameGenerators"></param>
-        public AssemblyBrowsingClassBasedCommandTypeProvider(IAssemblyProvider assemblyProvider, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        public AssemblyBrowsingClassBasedCommandTypeProvider(IAssemblyProvider assemblyProvider, IEnumerable<IConverter> converters, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             _assemblyProvider = assemblyProvider;
             _converters = converters;

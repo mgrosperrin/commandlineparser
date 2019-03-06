@@ -37,7 +37,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
                             propertyInfo,
                             commandMetadataMock.Object,
                             new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() },
-                            new List<IOptionAlternateNameGenerator>()
+                            new List<IPropertyOptionAlternateNameGenerator>()
                         ),
                         testCommand);
                     return (testCommand, commandOption);

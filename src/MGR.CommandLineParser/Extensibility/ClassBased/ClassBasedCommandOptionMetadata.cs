@@ -8,7 +8,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     internal sealed class ClassBasedCommandOptionMetadata : CommandOptionMetadataBase
     {
-        private ClassBasedCommandOptionMetadata(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        private ClassBasedCommandOptionMetadata(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
         :base(propertyInfo.ExtractIsRequiredMetadata(),
             GetMultiValueIndicator(propertyInfo.PropertyType),
             propertyInfo.ExtractOptionDisplayInfoMetadata(optionAlternateNameGenerators),
@@ -36,7 +36,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
             }
         }
 
-        internal static ClassBasedCommandOptionMetadata Create(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        internal static ClassBasedCommandOptionMetadata Create(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Guard.NotNull(propertyInfo, nameof(propertyInfo));
             Guard.NotNull(commandMetadata, nameof(commandMetadata));

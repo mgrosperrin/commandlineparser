@@ -25,7 +25,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
                         new GuidConverter(),
                         new Int32Converter(),
                         new BooleanConverter()
-                    }, new List<IOptionAlternateNameGenerator>());
+                    }, new List<IPropertyOptionAlternateNameGenerator>());
                 var serviceProviderMock = new Mock<IServiceProvider>();
                 serviceProviderMock.Setup(_ => _.GetService(typeof(IClassBasedCommandActivator)))
                     .Returns(ClassBasedBasicCommandActivator.Instance);

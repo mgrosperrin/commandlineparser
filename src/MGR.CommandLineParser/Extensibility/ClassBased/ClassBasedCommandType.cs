@@ -15,7 +15,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
         private readonly Lazy<ClassBasedCommandMetadata> _commandMetadata;
         private readonly Lazy<List<ClassBasedCommandOptionMetadata>> _commandOptions;
 
-        internal ClassBasedCommandType(Type commandType, IEnumerable<IConverter> converters, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        internal ClassBasedCommandType(Type commandType, IEnumerable<IConverter> converters, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Type = commandType;
             _commandMetadata = new Lazy<ClassBasedCommandMetadata>(() => new ClassBasedCommandMetadata(Type));
@@ -44,7 +44,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
             return commandObject;
         }
 
-        private static IEnumerable<ClassBasedCommandOptionMetadata> ExtractCommandOptions(Type commandType, ICommandMetadata commandMetadata, List<IConverter> converters, List<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        private static IEnumerable<ClassBasedCommandOptionMetadata> ExtractCommandOptions(Type commandType, ICommandMetadata commandMetadata, List<IConverter> converters, List<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             foreach (var propertyInfo in commandType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.Name != nameof(ICommand.Arguments)))
             {

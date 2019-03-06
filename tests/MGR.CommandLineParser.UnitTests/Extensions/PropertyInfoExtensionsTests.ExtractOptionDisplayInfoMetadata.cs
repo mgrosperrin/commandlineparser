@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 using Xunit;
 
 namespace MGR.CommandLineParser.UnitTests.Extensions
@@ -33,7 +34,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var propertyInfo = GetType().GetProperty(expected);
 
                 // Act
-                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IOptionAlternateNameGenerator>());
+                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
 
                 // Assert
                 Assert.Equal(expected, actual.Name);
@@ -51,7 +52,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameProperty));
 
                 // Act
-                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IOptionAlternateNameGenerator>());
+                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
 
                 // Assert
                 Assert.Equal(expectedName, actual.Name);
@@ -68,7 +69,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var propertyInfo = GetType().GetProperty(expectedName);
 
                 // Act
-                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IOptionAlternateNameGenerator>());
+                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
 
                 // Assert
                 Assert.Equal(expectedName, actual.Name);
@@ -86,7 +87,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameAndShortNameProperty));
 
                 // Act
-                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IOptionAlternateNameGenerator>());
+                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
 
                 // Assert
                 Assert.Equal(expectedName, actual.Name);
@@ -106,7 +107,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                         .GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameAndShortNameDescriptionProperty));
 
                 // Act
-                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IOptionAlternateNameGenerator>());
+                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
 
                 // Assert
                 Assert.Equal(expectedName, actual.Name);
@@ -124,7 +125,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Act
                 var actualException =
                     // ReSharper disable once ExpressionIsAlwaysNull
-                    Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IOptionAlternateNameGenerator>()));
+                    Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>()));
 
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.ParamName);

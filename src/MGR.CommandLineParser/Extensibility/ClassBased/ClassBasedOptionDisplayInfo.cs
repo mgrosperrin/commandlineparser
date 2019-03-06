@@ -10,7 +10,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
     internal sealed class ClassBasedOptionDisplayInfo : IOptionDisplayInfo
     {
-        internal ClassBasedOptionDisplayInfo(PropertyInfo propertyInfo, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        internal ClassBasedOptionDisplayInfo(PropertyInfo propertyInfo, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Guard.NotNull(propertyInfo, nameof(propertyInfo));
             Name = propertyInfo.Name;
@@ -25,7 +25,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
             }
 
             AlternateNames = optionAlternateNameGenerators.SelectMany(
-                    generator => generator.GenerateAlternateNames(this))
+                    generator => generator.GenerateAlternateNames(propertyInfo))
                 .Distinct(StringComparer.CurrentCultureIgnoreCase)
                 .Where(alternateName => !alternateName.Equals(Name, StringComparison.CurrentCultureIgnoreCase))
                 .ToList();

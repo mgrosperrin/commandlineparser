@@ -19,7 +19,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
                 // Arrange
                 var testCommandType =
                     new ClassBasedCommandType(typeof (TestCommand),
-                        new List<IConverter>(), new List<IOptionAlternateNameGenerator>());
+                        new List<IConverter>(), new List<IPropertyOptionAlternateNameGenerator>());
                 var expectedName = "Test";
                 var expectedDescription = "My great description";
                 var expectedUsage = "test arg [option]";

@@ -5,7 +5,6 @@ using System.Linq;
 using JetBrains.Annotations;
 using MGR.CommandLineParser;
 using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Converters;
 
@@ -142,7 +141,7 @@ namespace System.Reflection
         }
 
         [NotNull]
-        internal static ClassBasedOptionDisplayInfo ExtractOptionDisplayInfoMetadata(this PropertyInfo source, IEnumerable<IOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        internal static ClassBasedOptionDisplayInfo ExtractOptionDisplayInfoMetadata(this PropertyInfo source, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Guard.NotNull(source, nameof(source));
             var optionDisplayInfo = new ClassBasedOptionDisplayInfo(source, optionAlternateNameGenerators);
