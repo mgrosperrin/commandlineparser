@@ -63,7 +63,7 @@ namespace MGR.CommandLineParser.Command
             }
             else
             {
-                helpWriter.WriteCommandListing(ParserOptions);
+                helpWriter.WriteCommandListing();
             }
         }
     }

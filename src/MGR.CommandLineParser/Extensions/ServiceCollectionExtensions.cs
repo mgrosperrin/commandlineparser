@@ -26,6 +26,7 @@ namespace MGR.CommandLineParser
             services.TryAddSingleton<IAssemblyProvider, CurrentDirectoryAssemblyProvider>();
             services.TryAddScoped<ICommandTypeProvider, AssemblyBrowsingClassBasedCommandTypeProvider>();
             services.TryAddScoped<IClassBasedCommandActivator, ClassBasedDependencyResolverCommandActivator>();
+            services.AddScoped<IParserOptionsAccessor, ParserOptionsAccessor>();
             services.TryAddScoped<IHelpWriter, DefaultHelpWriter>();
             services.TryAddSingleton<IPropertyOptionAlternateNameGenerator, KebabCasePropertyOptionAlternateNameGenerator>();
 

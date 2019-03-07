@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Diagnostics;
+using MGR.CommandLineParser.Extensibility;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -37,6 +38,8 @@ namespace MGR.CommandLineParser
                 return new ParsingResult(null, null, CommandParsingResultCode.NoArgumentsProvided);
             }
 
+            var parserOptionsAccessor = serviceProvider.GetService<IParserOptionsAccessor>();
+            parserOptionsAccessor.Current = _parserOptions;
             var loggerFactory = serviceProvider.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
             var logger = loggerFactory.CreateLogger<LoggerCategory.Parser>();
             using (logger.BeginParsingArguments(Guid.NewGuid().ToString()))

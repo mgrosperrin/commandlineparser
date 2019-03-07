@@ -20,24 +20,25 @@ namespace MGR.CommandLineParser.Extensibility
 
         private readonly IConsole _console;
         private readonly IEnumerable<ICommandTypeProvider> _commandTypeProviders;
+        private readonly IParserOptionsAccessor _parserOptionsAccessor;
 
         /// <summary>
         /// Create a new <see cref="DefaultHelpWriter"/>.
         /// </summary>
         /// <param name="console"></param>
         /// <param name="commandTypeProviders"></param>
-        public DefaultHelpWriter(IConsole console, IEnumerable<ICommandTypeProvider> commandTypeProviders)
+        /// <param name="parserOptionsAccessor"></param>
+        public DefaultHelpWriter(IConsole console, IEnumerable<ICommandTypeProvider> commandTypeProviders, IParserOptionsAccessor parserOptionsAccessor)
         {
             _console = console;
             _commandTypeProviders = commandTypeProviders;
+            _parserOptionsAccessor = parserOptionsAccessor;
         }
 
         /// <inheritdoc />
-        public void WriteCommandListing(IParserOptions parserOptions)
+        public void WriteCommandListing()
         {
-            Guard.NotNull(parserOptions, nameof(parserOptions));
-
-            WriteGeneralInformation(parserOptions);
+            WriteGeneralInformation(_parserOptionsAccessor.Current);
 
             _console.WriteLine(Strings.DefaultHelpWriter_GlobalHelp_AvailableCommands);
             var commandTypes = _commandTypeProviders.GetAllVisibleCommandsTypes().ToList();

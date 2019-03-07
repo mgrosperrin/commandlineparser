@@ -11,8 +11,7 @@ namespace MGR.CommandLineParser.Extensibility
         /// <summary>
         ///     Write command listing.
         /// </summary>
-        /// <param name="parserOptions">The options of the parser.</param>
-        void WriteCommandListing(IParserOptions parserOptions);
+        void WriteCommandListing();
 
         /// <summary>
         ///     Write the help for a command.

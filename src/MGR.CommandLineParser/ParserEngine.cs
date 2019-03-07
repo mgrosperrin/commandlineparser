@@ -80,7 +80,7 @@ namespace MGR.CommandLineParser
             {
                 _logger.NoCommandNameForNotAlreadyKnownCommand();
                 var helpWriter = _serviceProvider.GetRequiredService<IHelpWriter>();
-                helpWriter.WriteCommandListing(_parserOptions);
+                helpWriter.WriteCommandListing();
                 return new ParsingResult(null, null, CommandParsingResultCode.NoCommandNameProvided);
             }
 
@@ -92,7 +92,7 @@ namespace MGR.CommandLineParser
                 {
                     _logger.NoCommandTypeFoundForNotAlreadyKnownCommand(commandName);
                     var helpWriter = _serviceProvider.GetRequiredService<IHelpWriter>();
-                    helpWriter.WriteCommandListing(_parserOptions);
+                    helpWriter.WriteCommandListing();
                     return new ParsingResult(null, null, CommandParsingResultCode.NoCommandFound);
                 }
 

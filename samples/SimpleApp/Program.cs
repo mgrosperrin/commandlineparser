@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Threading;
 using System.Threading.Tasks;
 using MGR.CommandLineParser;
+using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Command.Lambda;
 using MGR.CommandLineParser.Tests.Commands;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,12 +13,13 @@ namespace SimpleApp
 {
     internal class Program
     {
-        private static async Task<int> Main(string[] args)
+        private static async Task Main(string[] args)
         {
             //Console.ReadLine();
-            var arguments = new[] { "pack", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "-Properties", "Configuration=Release", "-Build", "-Symbols", "-MSBuildVersion", "14" };
-            var defaultPackArguments = new[] { @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "-Properties", "Configuration=Release", "-Build", "-Symbols", "-MSBuildVersion", "14" };
-            var defaultDeleteArguments = new[] { "delete", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "-NoPrompt", "-Source", "source1" };
+            var arguments = new[] { "pack", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--Properties", "Configuration=Release", "--Build", "--Symbols", "--MSBuildVersion", "14" };
+            var defaultPackArguments = new[] { @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--Properties", "Configuration=Release", "--Build", "--Symbols", "--MSBuildVersion", "14" };
+            var defaultDeleteArguments = new[] { "delete", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--NoPrompt", "--Source", "source1" };
+            var helpArguments = new[] { "help" };
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddCommandLineParser()
                 .AddCommand(
@@ -48,22 +50,44 @@ namespace SimpleApp
             var serviceProvider = serviceCollection.BuildServiceProvider();
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
-            var commandResult = parser.Parse(arguments, serviceProvider);
-            var lambdaCommand = parser.Parse(new[] { "test", "--longName:3", "hello" }, serviceProvider);
+            await ParseAndExecute(parser, serviceProvider, helpArguments);
 
-            var defaultCommandResult = parser.ParseWithDefaultCommand<PackCommand>(arguments, serviceProvider);
+            await ParseAndExecute(parser, serviceProvider, helpArguments);
+            
+            await ParseAndExecute(parser, serviceProvider, new[] { "test", "--longName:3", "hello" });
 
-            var defaultPackCommandResult = parser.ParseWithDefaultCommand<PackCommand>(defaultPackArguments, serviceProvider);
+            await ParseWithDefaultAndExecute<PackCommand>(parser, serviceProvider, arguments);
+            await ParseWithDefaultAndExecute<PackCommand>(parser, serviceProvider, defaultPackArguments);
+            await ParseWithDefaultAndExecute<PackCommand>(parser, serviceProvider, defaultDeleteArguments);
 
-            var defaultDeleteCommandResult = parser.ParseWithDefaultCommand<PackCommand>(defaultDeleteArguments, serviceProvider);
+            await Task.Delay(TimeSpan.FromSeconds(10));
+        }
 
-            //Console.ReadLine();
-            Thread.Sleep(TimeSpan.FromSeconds(10));
-            if (lambdaCommand.IsValid)
+        static async Task ParseWithDefaultAndExecute<TCommand>(IParser parser, ServiceProvider serviceProvider, string[] arguments)
+            where TCommand : class, ICommand
+        {
+            await ParseFuncAndExecute(parser, serviceProvider, arguments,
+                (p, args, scope) => p.ParseWithDefaultCommand<TCommand>(args, scope));
+        }
+        static async Task ParseAndExecute(IParser parser, ServiceProvider serviceProvider, string[] arguments)
+        {
+            await ParseFuncAndExecute(parser, serviceProvider, arguments,
+                (p, args, scope) => p.Parse(args, scope));
+        }
+        static async Task ParseFuncAndExecute(IParser parser, ServiceProvider serviceProvider, string[] arguments, Func<IParser, IEnumerable<string>, IServiceProvider, ParsingResult> parseFunc)
+        {
+            Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
+            var scopedServiceProvider = serviceProvider.CreateScope().ServiceProvider;
+            var commandResult = parseFunc(parser, arguments, scopedServiceProvider);
+            if (commandResult.IsValid)
             {
-                return await lambdaCommand.CommandObject.ExecuteAsync();
+                var executionResult= await commandResult.CommandObject.ExecuteAsync();
+                Console.WriteLine("Execution result: {0}", executionResult);
             }
-            return (int)lambdaCommand.ParsingResultCode;
+            else
+            {
+                Console.WriteLine("Invalid parsing");
+            }
         }
     }
 }
