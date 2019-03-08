@@ -1,11 +1,13 @@
-﻿namespace MGR.CommandLineParser.Command.Lambda
+﻿using System.Diagnostics;
+
+namespace MGR.CommandLineParser.Command.Lambda
 {
+    [DebuggerDisplay("Simple value assigner (current value:{Value})")]
     internal class LambdaBasedCommandOptionSimpleValueAssigner : ILambdaBasedCommandOptionValueAssigner
     {
-        private object _value;
+        internal object Value { get; private set; }
+        public object GetValue() => Value;
 
-        public object GetValue() => _value;
-
-        public void AssignValue(object value) => _value = value;
+        public void AssignValue(object value) => Value = value;
     }
 }

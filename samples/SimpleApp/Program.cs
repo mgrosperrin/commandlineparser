@@ -60,7 +60,7 @@ namespace SimpleApp
             await ParseWithDefaultAndExecute<PackCommand>(parser, serviceProvider, defaultPackArguments);
             await ParseWithDefaultAndExecute<PackCommand>(parser, serviceProvider, defaultDeleteArguments);
 
-            await Task.Delay(TimeSpan.FromSeconds(10));
+            await Task.Delay(TimeSpan.FromSeconds(1));
         }
 
         static async Task ParseWithDefaultAndExecute<TCommand>(IParser parser, ServiceProvider serviceProvider, string[] arguments)

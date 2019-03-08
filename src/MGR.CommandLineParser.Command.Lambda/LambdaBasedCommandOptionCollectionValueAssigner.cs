@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace MGR.CommandLineParser.Command.Lambda
 {
+    [DebuggerDisplay("Collection value assigner (currently {Values.Count} values)")]
     internal class LambdaBasedCommandOptionCollectionValueAssigner : ILambdaBasedCommandOptionValueAssigner
     {
-        private readonly List<object> _values = new List<object>();
-        public object GetValue() => _values.AsEnumerable();
+        internal List<object> Values { get; } = new List<object>();
+        public object GetValue() => Values.AsEnumerable();
 
-        public void AssignValue(object value) => _values.Add(value);
+        public void AssignValue(object value) => Values.Add(value);
     }
 }

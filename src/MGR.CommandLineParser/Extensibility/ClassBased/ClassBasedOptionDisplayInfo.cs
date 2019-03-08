@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -8,6 +9,7 @@ using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
+    [DebuggerDisplay("ClassBased:Name={Name};ShortName={ShortName}")]
     internal sealed class ClassBasedOptionDisplayInfo : IOptionDisplayInfo
     {
         internal ClassBasedOptionDisplayInfo(PropertyInfo propertyInfo, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)

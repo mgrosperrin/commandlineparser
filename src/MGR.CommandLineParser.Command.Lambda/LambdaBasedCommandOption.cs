@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 
 namespace MGR.CommandLineParser.Command.Lambda
 {
+    [DebuggerDisplay("LambdaOption:{Metadata.DisplayInfo.Name}")]
     internal class LambdaBasedCommandOption : ICommandOption
     {
         private readonly IConverter _converter;
@@ -27,7 +29,7 @@ namespace MGR.CommandLineParser.Command.Lambda
                     ValueAssigner = new LambdaBasedCommandOptionCollectionValueAssigner();
                     break;
                 case CommandOptionCollectionType.Dictionary:
-                    ValueAssigner = new LambdaBasedCommandOptionDictionnaryValueAssigner();
+                    ValueAssigner = new LambdaBasedCommandOptionDictionaryValueAssigner();
                     break;
                 default:
 #pragma warning disable S3928 // Parameter names used into ArgumentException constructors should match an existing one

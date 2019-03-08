@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace MGR.CommandLineParser.Extensibility.Command
 {
     /// <summary>
     /// Represents a base container for <see cref="ICommandOptionMetadata"/>.
     /// </summary>
+
+    [DebuggerDisplay("Option {DisplayInfo.Name}, default value: {DefaultValue}")]
     public abstract class CommandOptionMetadataBase : ICommandOptionMetadata
     {
         /// <summary>
