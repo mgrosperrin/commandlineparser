@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.Command;
 using Moq;

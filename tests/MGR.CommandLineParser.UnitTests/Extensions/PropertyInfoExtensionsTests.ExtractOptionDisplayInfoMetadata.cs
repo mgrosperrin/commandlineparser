@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using Xunit;
 

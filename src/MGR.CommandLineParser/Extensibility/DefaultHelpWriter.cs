@@ -38,7 +38,7 @@ namespace MGR.CommandLineParser.Extensibility
         /// <inheritdoc />
         public void WriteCommandListing()
         {
-            WriteGeneralInformation(_parserOptionsAccessor.Current);
+            WriteGeneralInformation();
 
             _console.WriteLine(Strings.DefaultHelpWriter_GlobalHelp_AvailableCommands);
             var commandTypes = _commandTypeProviders.GetAllVisibleCommandsTypes().ToList();
@@ -75,13 +75,12 @@ namespace MGR.CommandLineParser.Extensibility
         }
 
         /// <inheritdoc />
-        public void WriteHelpForCommand(IParserOptions parserOptions, params ICommandType[] commandTypes)
+        public void WriteHelpForCommand(params ICommandType[] commandTypes)
         {
-            Guard.NotNull(parserOptions, nameof(parserOptions));
             Guard.NotNull(commandTypes, nameof(commandTypes));
 
-            WriteGeneralInformation(parserOptions);
-
+            WriteGeneralInformation();
+            var parserOptions = _parserOptionsAccessor.Current;
             foreach (var commandType in commandTypes)
             {
                 var metadata = commandType.Metadata;
@@ -127,10 +126,9 @@ namespace MGR.CommandLineParser.Extensibility
             }
         }
 
-        private void WriteGeneralInformation(IParserOptions parserOptions)
+        private void WriteGeneralInformation()
         {
-            Guard.NotNull(parserOptions, nameof(parserOptions));
-
+            var parserOptions = _parserOptionsAccessor.Current;
             _console.WriteLine(parserOptions.Logo);
             _console.WriteLine(Strings.DefaultHelpWriter_GlobalUsageFormat, string.Format(CultureInfo.CurrentUICulture, Strings.DefaultHelpWriter_GlobalCommandLineCommandFormat, parserOptions.CommandLineName).Trim());
             _console.WriteLine(Strings.DefaultHelpWriter_GlobalHelpCommandUsageFormat, string.Format(CultureInfo.CurrentUICulture, "{0} {1}", parserOptions.CommandLineName, HelpCommand.Name).Trim());

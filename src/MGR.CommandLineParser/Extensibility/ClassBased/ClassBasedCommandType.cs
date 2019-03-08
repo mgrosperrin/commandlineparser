@@ -30,17 +30,16 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
 
         public IEnumerable<ICommandOptionMetadata> Options => _commandOptions.Value;
 
-        public ICommandObjectBuilder CreateCommandObjectBuilder(IServiceProvider serviceProvider, IParserOptions parserOptions)
+        public ICommandObjectBuilder CreateCommandObjectBuilder(IServiceProvider serviceProvider)
         {
             Guard.NotNull(serviceProvider, nameof(serviceProvider));
-            Guard.NotNull(parserOptions, nameof(parserOptions));
 
             var commandActivator = serviceProvider.GetRequiredService<IClassBasedCommandActivator>();
             var command = commandActivator.ActivateCommand(Type);
             var commandObject = new ClassBasedCommandObjectBuilder(Metadata, _commandOptions.Value, command);
 
             var commandBase = command as CommandBase;
-            commandBase?.Configure(parserOptions, this);
+            commandBase?.Configure(this);
             return commandObject;
         }
 

@@ -39,11 +39,6 @@ namespace MGR.CommandLineParser.Command
         protected IServiceProvider ServiceProvider { get; private set; }
 
         /// <summary>
-        ///     Gets the <see cref="IParserOptions" /> of the parser.
-        /// </summary>
-        protected IParserOptions ParserOptions { get; private set; }
-
-        /// <summary>
         ///     Gets the <see cref="CommandType" /> of the command.
         /// </summary>
         protected ICommandType CommandType { get; private set; }
@@ -70,20 +65,18 @@ namespace MGR.CommandLineParser.Command
             if (Help)
             {
                 var helpWriter = ServiceProvider.GetRequiredService<IHelpWriter>();
-                helpWriter.WriteHelpForCommand(ParserOptions, CommandType);
+                helpWriter.WriteHelpForCommand(CommandType);
                 return Task.FromResult(0);
             }
             return ExecuteCommandAsync();
         }
 
         /// <summary>
-        ///     Configure the command with the <see cref="IParserOptions" /> and the <see cref="IConsole" /> of the parser.
+        ///     Configure the command with the <see cref="ICommandType" /> representing the command.
         /// </summary>
-        /// <param name="parserOptions">The <see cref="IParserOptions" />.</param>
         /// <param name="commandType">The <see cref="CommandType" /> of the command.</param>
-        public virtual void Configure(IParserOptions parserOptions, ICommandType commandType)
+        public virtual void Configure(ICommandType commandType)
         {
-            ParserOptions = parserOptions;
             CommandType = commandType;
         }
 

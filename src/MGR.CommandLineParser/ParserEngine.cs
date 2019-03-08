@@ -11,13 +11,11 @@ namespace MGR.CommandLineParser
 {
     internal class ParserEngine
     {
-        private readonly IParserOptions _parserOptions;
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<LoggerCategory.Parser> _logger;
 
-        internal ParserEngine(IParserOptions parserOptions, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
+        internal ParserEngine(IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
         {
-            _parserOptions = parserOptions;
             _serviceProvider = serviceProvider;
             _logger = loggerFactory.CreateLogger<LoggerCategory.Parser>();
         }
@@ -110,14 +108,14 @@ namespace MGR.CommandLineParser
             {
                 _logger.ParsedCommandIsNotValid();
                 var helpWriter = _serviceProvider.GetRequiredService<IHelpWriter>();
-                helpWriter.WriteHelpForCommand(_parserOptions, commandType);
+                helpWriter.WriteHelpForCommand(commandType);
                 return new ParsingResult(commandObjectBuilder.GenerateCommandObject(), validation.ValidationErrors, CommandParsingResultCode.CommandParametersNotValid);
             }
             return new ParsingResult(commandObjectBuilder.GenerateCommandObject(), null, CommandParsingResultCode.Success);
         }
         private ICommandObjectBuilder ExtractCommandLineOptions(ICommandType commandType, IEnumerator<string> argumentsEnumerator)
         {
-            var commandObjectBuilder = commandType.CreateCommandObjectBuilder(_serviceProvider, _parserOptions);
+            var commandObjectBuilder = commandType.CreateCommandObjectBuilder(_serviceProvider);
             var alwaysPutInArgumentList = false;
             while (true)
             {

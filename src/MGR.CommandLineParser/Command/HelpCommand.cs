@@ -48,7 +48,7 @@ namespace MGR.CommandLineParser.Command
             }
             else
             {
-                helpWriter.WriteHelpForCommand(ParserOptions, commandType);
+                helpWriter.WriteHelpForCommand(commandType);
             }
 
             return Task.FromResult(0);
@@ -59,7 +59,7 @@ namespace MGR.CommandLineParser.Command
             if (All)
             {
                 var commands = commandTypeProviders.GetAllVisibleCommandsTypes();
-                helpWriter.WriteHelpForCommand(ParserOptions, commands.ToArray());
+                helpWriter.WriteHelpForCommand(commands.ToArray());
             }
             else
             {

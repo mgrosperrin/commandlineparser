@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;

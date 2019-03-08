@@ -45,7 +45,7 @@ namespace MGR.CommandLineParser
             using (logger.BeginParsingArguments(Guid.NewGuid().ToString()))
             {
                 logger.CreationOfParserEngine();
-                var parserEngine = new ParserEngine(_parserOptions, serviceProvider, loggerFactory);
+                var parserEngine = new ParserEngine(serviceProvider, loggerFactory);
                 var argumentsEnumerator = arguments.GetArgumentsEnumerator();
 
                 var result = callParse(parserEngine, argumentsEnumerator);

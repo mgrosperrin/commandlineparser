@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Converters;
 using Moq;
@@ -37,7 +36,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
                 // Act
                 var actualException =
                     Assert.Throws<CommandLineParserException>(
-                        () => testCommandType.CreateCommandObjectBuilder(serviceProviderMock.Object, new ParserOptions()));
+                        () => testCommandType.CreateCommandObjectBuilder(serviceProviderMock.Object));
 
                 // Assert
                 Assert.Equal(expectedMessageException, actualException.Message);

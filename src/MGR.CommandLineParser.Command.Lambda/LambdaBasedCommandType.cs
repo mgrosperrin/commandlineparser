@@ -22,6 +22,6 @@ namespace MGR.CommandLineParser.Command.Lambda
 
         public IEnumerable<ICommandOptionMetadata> Options => _options.Select(option => option.Metadata);
 
-        public ICommandObjectBuilder CreateCommandObjectBuilder(IServiceProvider serviceProvider, IParserOptions parserOptions) => new LambdaBasedCommandObjectBuilder(Metadata, _options, serviceProvider, _executeCommand);
+        public ICommandObjectBuilder CreateCommandObjectBuilder(IServiceProvider serviceProvider) => new LambdaBasedCommandObjectBuilder(Metadata, _options, serviceProvider, _executeCommand);
     }
 }

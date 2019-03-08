@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Converters;
 using Moq;
@@ -27,7 +26,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
                 serviceProviderMock.Setup(_ => _.GetService(typeof(IClassBasedCommandActivator)))
                     .Returns(ClassBasedBasicCommandActivator.Instance);
                 var classBasedCommandObjectBuilder =
-                    (ClassBasedCommandObjectBuilder)testCommandType.CreateCommandObjectBuilder(serviceProviderMock.Object, new ParserOptions());
+                    (ClassBasedCommandObjectBuilder)testCommandType.CreateCommandObjectBuilder(serviceProviderMock.Object);
                 var testCommand = (TestCommand)((IClassBasedCommandObject)classBasedCommandObjectBuilder.GenerateCommandObject()).Command;
 
                 // Act
