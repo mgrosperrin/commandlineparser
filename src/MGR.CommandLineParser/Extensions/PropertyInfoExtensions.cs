@@ -26,7 +26,7 @@ namespace System.Reflection
             Guard.NotNullOrEmpty(optionName, nameof(optionName));
             Guard.NotNullOrEmpty(commandName, nameof(commandName));
 
-            var converter = GetConverterFromAttribute(source, optionName, commandName)
+            var converter = GetConverterFromAttribute(source, commandName)
                                 ?? GetKeyValueConverterFromAttribute(source, optionName, commandName)
                                 ?? FindConverter(source, converters, optionName, commandName);
             if (converter == null)
@@ -68,7 +68,7 @@ namespace System.Reflection
             return keyConverter;
         }
 
-        private static IConverter GetConverterFromAttribute(PropertyInfo propertyInfo, string optionName, string commandName)
+        private static IConverter GetConverterFromAttribute(PropertyInfo propertyInfo, string commandName)
         {
             var converterAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterAttribute), true).FirstOrDefault() as ConverterAttribute;
             if (converterAttribute != null)
@@ -77,7 +77,7 @@ namespace System.Reflection
 
                 if (!converter.CanConvertTo(propertyInfo.PropertyType))
                 {
-                    throw new CommandLineParserException(Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(optionName, commandName, propertyInfo.PropertyType, converter.TargetType));
+                    throw new CommandLineParserException(Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(propertyInfo.Name, commandName, propertyInfo.PropertyType, converter.TargetType));
                 }
                 return converter;
             }

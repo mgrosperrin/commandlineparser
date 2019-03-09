@@ -29,15 +29,16 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void OriginalTest()
             {
                 // Arrange
-                var expected = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
-                var propertyInfo = GetType().GetProperty(expected);
+                var propertyName = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
+                var expected = "original-property";
+                var propertyInfo = GetType().GetProperty(propertyName);
 
                 // Act
                 var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
 
                 // Assert
                 Assert.Equal(expected, actual.Name);
-                Assert.Equal(expected, actual.ShortName);
+                Assert.Equal(string.Empty, actual.ShortName);
                 Assert.True(string.IsNullOrEmpty(actual.Description));
             }
 
@@ -63,9 +64,10 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void CustomShortNameTest()
             {
                 // Arrange
-                var expectedName = TypeHelpers.ExtractPropertyName(() => CustomShortNameProperty);
+                var propertyName = TypeHelpers.ExtractPropertyName(() => CustomShortNameProperty);
+                var expectedName = "custom-short-name-property";
                 var expectedShortName = "csnp";
-                var propertyInfo = GetType().GetProperty(expectedName);
+                var propertyInfo = GetType().GetProperty(propertyName);
 
                 // Act
                 var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());

@@ -20,7 +20,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             {
                 "install",
                 "--version:12.34",
-                "--excludeVersion"
+                "--exclude-version"
             });
 
             // Act

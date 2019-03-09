@@ -16,9 +16,9 @@ namespace SimpleApp
         private static async Task Main(string[] args)
         {
             //Console.ReadLine();
-            var arguments = new[] { "pack", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--Properties", "Configuration=Release", "--Build", "--Symbols", "--MSBuildVersion", "14" };
-            var defaultPackArguments = new[] { @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--Properties", "Configuration=Release", "--Build", "--Symbols", "--MSBuildVersion", "14" };
-            var defaultDeleteArguments = new[] { "delete", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--NoPrompt", "--Source", "source1" };
+            var arguments = new[] { "pack", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--properties", "Configuration=Release", "--build", "--symbols", "--msbuild-version", "14" };
+            var defaultPackArguments = new[] { @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--properties", "Configuration=Release", "--build", "--symbols", "--msbuild-version", "14" };
+            var defaultDeleteArguments = new[] { "delete", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--no-prompt", "--source", "source1" };
             var helpArguments = new[] { "help" };
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddCommandLineParser()

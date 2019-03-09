@@ -15,7 +15,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[]
-                {"IntTest", "--Strvalue:custom value", "-i", "42", "-il", "42", "Custom argument value", "-b"};
+                {"IntTest", "--str-value:custom value", "-i", "42", "-il", "42", "Custom argument value", "-b"};
             var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedStrValue = "custom value";
             var expectedNbOfArguments = 1;

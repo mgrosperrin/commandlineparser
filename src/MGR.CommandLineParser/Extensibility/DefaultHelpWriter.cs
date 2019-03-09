@@ -105,7 +105,7 @@ namespace MGR.CommandLineParser.Extensibility
                         }
                         var optionName = string.Concat(commandOptionMetadata.DisplayInfo.Name, prefixAlternateNames, alternateNames, GetMultiValueIndicator(commandOptionMetadata));
                         var optionShortName = FormatShortName(commandOptionMetadata.DisplayInfo.ShortName);
-                        _console.Write(" -{0, -" + maxOptionWidth + "}", optionName);
+                        _console.Write(" {0}{1, -" + maxOptionWidth + "}", Constants.LongNameOptionStarter, optionName);
                         _console.Write("{0, -" + (maxAltOptionWidth + 4) + "}", optionShortName);
 
                         _console.Write(commandOptionMetadata.DisplayInfo.Description);

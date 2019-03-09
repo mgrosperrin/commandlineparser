@@ -103,6 +103,10 @@ namespace MGR.CommandLineParser
         private ParsingResult ParseImpl(IEnumerator<string> argumentsEnumerator, ICommandType commandType)
         {
             var commandObjectBuilder = ExtractCommandLineOptions(commandType, argumentsEnumerator);
+            if (commandObjectBuilder == null)
+            {
+                return new ParsingResult(null, null, CommandParsingResultCode.CommandParametersNotValid);
+            }
             var validation = commandObjectBuilder.Validate(_serviceProvider);
             if (!validation.IsValid)
             {
@@ -155,7 +159,10 @@ namespace MGR.CommandLineParser
                 var option = commandOptionFinder(commandObjectBuilder, optionText);
                 if (option == null)
                 {
-                    throw new CommandLineParserException(Constants.ExceptionMessages.FormatParserOptionNotFoundForCommand(commandType.Metadata.Name, optionText));
+                    var console = _serviceProvider.GetRequiredService<IConsole>();
+                    console.WriteError(Constants.ExceptionMessages.FormatParserOptionNotFoundForCommand(commandType.Metadata.Name, optionText));
+                    console.WriteLine();
+                    return null;
                 }
 
                 if (option.ShouldProvideValue)

@@ -28,8 +28,7 @@ namespace MGR.CommandLineParser
             services.TryAddScoped<IClassBasedCommandActivator, ClassBasedDependencyResolverCommandActivator>();
             services.AddScoped<IParserOptionsAccessor, ParserOptionsAccessor>();
             services.TryAddScoped<IHelpWriter, DefaultHelpWriter>();
-            services.TryAddSingleton<IPropertyOptionAlternateNameGenerator, KebabCasePropertyOptionAlternateNameGenerator>();
-
+            
             services
                     .AddSingleton<IConverter, BooleanConverter>()
                     .AddSingleton<IConverter, ByteConverter>()

@@ -15,16 +15,10 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
         internal ClassBasedOptionDisplayInfo(PropertyInfo propertyInfo, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
         {
             Guard.NotNull(propertyInfo, nameof(propertyInfo));
-            Name = propertyInfo.Name;
-            ShortName = propertyInfo.Name;
-            Description = string.Empty;
             var displayAttribute = propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
-            if (displayAttribute != null)
-            {
-                Name = displayAttribute.GetName() ?? propertyInfo.Name;
-                ShortName = displayAttribute.GetShortName();
-                Description = displayAttribute.GetDescription();
-            }
+            Name = displayAttribute?.GetName() ?? propertyInfo.Name.AsKebabCase();
+            ShortName = displayAttribute?.GetShortName() ?? string.Empty;
+            Description = displayAttribute?.GetDescription() ?? string.Empty;
 
             AlternateNames = optionAlternateNameGenerators.SelectMany(
                     generator => generator.GenerateAlternateNames(propertyInfo))

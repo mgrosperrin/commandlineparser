@@ -41,19 +41,19 @@ namespace MGR.CommandLineParser.Extensibility.Command
         /// <inheritdoc />
         public virtual ICommandOption FindOption(string optionName)
         {
-            var commandOption = CommandOptions.FirstOrDefault(option => option.Metadata.DisplayInfo.Name.Equals(optionName, StringComparison.OrdinalIgnoreCase));
+            var commandOption = CommandOptions.FirstOrDefault(option => option.Metadata.DisplayInfo.Name.Equals(optionName, StringComparison.Ordinal));
             if (commandOption != null)
             {
                 return commandOption;
             }
-            var alternateOption = CommandOptions.FirstOrDefault(option => option.Metadata.DisplayInfo.AlternateNames.Any(alternateName => alternateName.Equals(optionName, StringComparison.OrdinalIgnoreCase)));
+            var alternateOption = CommandOptions.FirstOrDefault(option => option.Metadata.DisplayInfo.AlternateNames.Any(alternateName => alternateName.Equals(optionName, StringComparison.Ordinal)));
             return alternateOption;
         }
 
         /// <inheritdoc />
         public virtual ICommandOption FindOptionByShortName(string optionShortName)
         {
-            var shortOption = CommandOptions.FirstOrDefault(option => (option.Metadata.DisplayInfo.ShortName ?? string.Empty).Equals(optionShortName, StringComparison.OrdinalIgnoreCase));
+            var shortOption = CommandOptions.FirstOrDefault(option => (option.Metadata.DisplayInfo.ShortName ?? string.Empty).Equals(optionShortName, StringComparison.Ordinal));
             if (shortOption != null)
             {
                 return shortOption;
@@ -110,7 +110,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
             var options = new List<ICommandOption>();
             while (!string.IsNullOrEmpty(shortName))
             {
-                var shortOption = CommandOptions.FirstOrDefault(option => !string.IsNullOrEmpty(option.Metadata.DisplayInfo.ShortName) && shortName.StartsWith(option.Metadata.DisplayInfo.ShortName, StringComparison.OrdinalIgnoreCase));
+                var shortOption = CommandOptions.FirstOrDefault(option => !string.IsNullOrEmpty(option.Metadata.DisplayInfo.ShortName) && shortName.StartsWith(option.Metadata.DisplayInfo.ShortName, StringComparison.Ordinal));
                 if (shortOption != null)
                 {
                     options.Add(shortOption);

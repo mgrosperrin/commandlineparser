@@ -10,6 +10,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
     public class HelpCommandTests : ConsoleLoggingTestsBase
     {
         [Fact]
+
         public async Task ShowGenericHelpForAllCommand()
         {
             // Arrange

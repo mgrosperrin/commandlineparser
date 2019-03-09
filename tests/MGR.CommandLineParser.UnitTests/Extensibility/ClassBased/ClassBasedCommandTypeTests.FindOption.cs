@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.ClassBased;
@@ -17,13 +18,24 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
         {
             [Theory]
             [InlineData("property-list")]
-            [InlineData("PropertyList")]
+            [InlineData("OtherName")]
             public void FoundWithLongOrAlternateName(string optionName)
             {
                 // Arrange
+                var propertyOptionAlternateNameGeneratorMock = new Mock<IPropertyOptionAlternateNameGenerator>();
+                propertyOptionAlternateNameGeneratorMock.Setup(_ => _.GenerateAlternateNames(It.IsAny<PropertyInfo>()))
+                    .Returns<PropertyInfo>(p =>
+                    {
+                        if (p.Name == "PropertyList")
+                        {
+                            return new List<string> {"OtherName"};
+                        }
+
+                        return Enumerable.Empty<string>();
+                    });
                 var testCommandType = new ClassBasedCommandType(typeof(TestCommand),
                     new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() },
-                    new List<IPropertyOptionAlternateNameGenerator> {new KebabCasePropertyOptionAlternateNameGenerator()});
+                    new List<IPropertyOptionAlternateNameGenerator>{ propertyOptionAlternateNameGeneratorMock .Object});
                 var serviceProviderMock = new Mock<IServiceProvider>();
                 serviceProviderMock.Setup(_ => _.GetService(typeof(IClassBasedCommandActivator)))
                     .Returns(ClassBasedBasicCommandActivator.Instance);

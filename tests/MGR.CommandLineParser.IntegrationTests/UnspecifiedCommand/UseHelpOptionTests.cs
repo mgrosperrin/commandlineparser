@@ -28,11 +28,11 @@ Usage: myListTest.exe List ListCommandUsageDescription
 ListCommandDescription
 
 Options:
- -Source+                        ListCommandSourceDescription
- -Verbose                        ListCommandVerboseListDescription
- -AllVersions|all-versions       ListCommandAllVersionsDescription
- -Prerelease                     ListCommandPrerelease
- -Help                      (?)  Help
+ --source+            ListCommandSourceDescription
+ --verbose            ListCommandVerboseListDescription
+ --all-versions       ListCommandAllVersionsDescription
+ --prerelease         ListCommandPrerelease
+ --help          (?)  Help
 
 Samples:
 List sample 1
@@ -74,19 +74,19 @@ Usage: myPackTest.exe Pack PackageCommandUsageSummary
 PackageCommandDescription
 
 Options:
- -OutputDirectory|output-directory            PackageCommandOutputDirDescription
- -BasePath|base-path                          PackageCommandBasePathDescription
- -Verbose                                (v)  PackageCommandVerboseDescription
- -Version                                     PackageCommandVersionDescription
- -Exclude+                                    PackageCommandExcludeDescription
- -Symbols                                     PackageCommandSymbolsDescription
- -Tool                                   (t)  PackageCommandToolDescription
- -Build                                  (b)  PackageCommandBuildDescription
- -MSBuildVersion|msbuild-version              CommandMSBuildVersion
- -NoDefaultExcludes|no-default-excludes       PackageCommandNoDefaultExcludes
- -NoPackageAnalysis|no-package-analysis       PackageCommandNoRunAnalysis
- -Properties#                                 PackageCommandPropertiesDescription
- -Help                                   (?)  Help
+ --output-directory          PackageCommandOutputDirDescription
+ --base-path                 PackageCommandBasePathDescription
+ --verbose              (v)  PackageCommandVerboseDescription
+ --version                   PackageCommandVersionDescription
+ --exclude+                  PackageCommandExcludeDescription
+ --symbols                   PackageCommandSymbolsDescription
+ --tool                 (t)  PackageCommandToolDescription
+ --build                (b)  PackageCommandBuildDescription
+ --msbuild-version           CommandMSBuildVersion
+ --no-default-excludes       PackageCommandNoDefaultExcludes
+ --no-package-analysis       PackageCommandNoRunAnalysis
+ --properties#               PackageCommandPropertiesDescription
+ --help                 (?)  Help
 ";
 
             // Act
