@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.UnitTests;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.InvalidArguments
@@ -12,17 +14,22 @@ namespace MGR.CommandLineParser.IntegrationTests.InvalidArguments
             // Arrange
             var parserBuild = new ParserBuilder();
             var parser = parserBuild.BuildParser();
-            IEnumerable<string> args = new[] {"delete", "--source:custom value", "-pn", "ApiKey", "MyApiKey", "Custom argument value", "b"};
-            var expectedMessage = @"There is no option 'pn' for the command 'Delete'.";
+            IEnumerable<string> args = new[] { "delete", "--source:custom value", "-pn", "ApiKey", "MyApiKey", "Custom argument value", "b" };
+            var expected = @"There is no option 'pn' for the command 'Delete'.
+";
+            var serviceProvider = CreateServiceProvider();
+            var console = (FakeConsole)serviceProvider.GetRequiredService<IConsole>();
 
             // Act
-            var parsingResult = parser.Parse(args, CreateServiceProvider());
+            var parsingResult = parser.Parse(args, serviceProvider);
 
             // Assert
             Assert.NotNull(parsingResult);
             Assert.Equal(CommandParsingResultCode.CommandParametersNotValid, parsingResult.ParsingResultCode);
-            var actualHelp = StringConsole.Current.ErrorAsString();
-            Assert.Equal(expectedMessage, actualHelp);
+            var messages = console.Messages;
+            Assert.Single(messages);
+            Assert.IsType<FakeConsole.ErrorMessage>(messages[0]);
+            Assert.Equal(expected, messages[0].ToString());
         }
     }
 }

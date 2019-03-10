@@ -160,8 +160,7 @@ namespace MGR.CommandLineParser
                 if (option == null)
                 {
                     var console = _serviceProvider.GetRequiredService<IConsole>();
-                    console.WriteError(Constants.ExceptionMessages.FormatParserOptionNotFoundForCommand(commandType.Metadata.Name, optionText));
-                    console.WriteLine();
+                    console.WriteLineError(Constants.ExceptionMessages.FormatParserOptionNotFoundForCommand(commandType.Metadata.Name, optionText));
                     return null;
                 }
 
