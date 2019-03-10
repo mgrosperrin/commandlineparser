@@ -24,31 +24,31 @@ namespace MGR.CommandLineParser
 
         public string CommandLineName => _parserOptions.CommandLineName;
 
-        public async Task<ParsingResult> Parse<TCommand>(IEnumerable<string> arguments) where TCommand : class, ICommand => await ParseArguments(arguments, (parserEngine, argumentsEnumerator) =>
-                   parserEngine.Parse<TCommand>(argumentsEnumerator));
+        public async Task<ParsingResult> Parse<TCommand>(IEnumerable<string> args) where TCommand : class, ICommand => await ParseArguments(args, (parserEngine, arguments) =>
+                   parserEngine.Parse<TCommand>(arguments));
 
-        public async Task<ParsingResult> Parse(IEnumerable<string> arguments) => await ParseArguments(arguments, (parserEngine, argumentsEnumerator) =>
-                parserEngine.Parse(argumentsEnumerator));
+        public async Task<ParsingResult> Parse(IEnumerable<string> args) => await ParseArguments(args, (parserEngine, arguments) =>
+                parserEngine.Parse(arguments));
 
-        public async Task<ParsingResult> ParseWithDefaultCommand<TCommand>(IEnumerable<string> arguments) where TCommand : class, ICommand => await ParseArguments(arguments, (parserEngine, argumentsEnumerator) =>
-                    parserEngine.ParseWithDefaultCommand<TCommand>(argumentsEnumerator));
+        public async Task<ParsingResult> ParseWithDefaultCommand<TCommand>(IEnumerable<string> args) where TCommand : class, ICommand => await ParseArguments(args, (parserEngine, arguments) =>
+                    parserEngine.ParseWithDefaultCommand<TCommand>(arguments));
 
-        private async Task<ParsingResult> ParseArguments(IEnumerable<string> arguments, Func<ParserEngine, IEnumerator<string>, Task<ParsingResult>> callParse)
+        private async Task<ParsingResult> ParseArguments(IEnumerable<string> args, Func<ParserEngine, Arguments, Task<ParsingResult>> callParse)
         {
-            if (arguments == null)
+            if (args == null)
             {
                 return new ParsingResult(null, null, CommandParsingResultCode.NoArgumentsProvided);
             }
 
+            var arguments = new Arguments(args);
             var loggerFactory = _serviceProvider.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
             var logger = loggerFactory.CreateLogger<LoggerCategory.Parser>();
             using (logger.BeginParsingArguments(Guid.NewGuid().ToString()))
             {
                 logger.CreationOfParserEngine();
                 var parserEngine = new ParserEngine(_serviceProvider, loggerFactory);
-                var argumentsEnumerator = arguments.GetArgumentsEnumerator();
 
-                var result = await callParse(parserEngine, argumentsEnumerator);
+                var result = await callParse(parserEngine, arguments);
                 return result;
             }
         }
