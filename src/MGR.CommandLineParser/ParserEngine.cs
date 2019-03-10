@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Diagnostics;
 using MGR.CommandLineParser.Extensibility;
@@ -20,13 +19,13 @@ namespace MGR.CommandLineParser
             _logger = loggerFactory.CreateLogger<LoggerCategory.Parser>();
         }
 
-        internal ParsingResult Parse<TCommand>(IEnumerator<string> argumentsEnumerator) where TCommand : class, ICommand
+        internal ParsingResult Parse<TCommand>(Arguments arguments) where TCommand : class, ICommand
         {
             using (_logger.BeginParsingForSpecificCommandType(typeof(TCommand)))
             {
                 var commandTypeProviders = _serviceProvider.GetServices<ICommandTypeProvider>();
                 var commandType = commandTypeProviders.GetCommandType<TCommand>();
-                var parsingResult = ParseImpl(argumentsEnumerator, commandType);
+                var parsingResult = ParseImpl(arguments, commandType);
                 if (parsingResult.ParsingResultCode == CommandParsingResultCode.NoCommandFound)
                 {
                     _logger.NoCommandFoundAfterSpecificParsing();
@@ -41,46 +40,47 @@ namespace MGR.CommandLineParser
             }
         }
 
-        internal ParsingResult ParseWithDefaultCommand<TCommand>(IEnumerator<string> argumentsEnumerator)
+        internal ParsingResult ParseWithDefaultCommand<TCommand>(Arguments arguments)
             where TCommand : class, ICommand
         {
             using (_logger.BeginParsingWithDefaultCommandType(typeof(TCommand)))
             {
-                var commandName = argumentsEnumerator.GetNextCommandLineItem();
-                if (commandName != null)
+                if (arguments.Advance())
                 {
+                    var commandName = arguments.GetCurrent();
                     _logger.ArgumentProvidedWithDefaultCommandType(commandName);
                     var commandTypeProviders = _serviceProvider.GetServices<ICommandTypeProvider>();
                     var commandType = commandTypeProviders.GetCommandType(commandName);
                     if (commandType != null)
                     {
                         _logger.CommandTypeFoundWithDefaultCommandType(commandName);
-                        return ParseImpl(argumentsEnumerator, commandType);
+                        return ParseImpl(arguments, commandType);
                     }
 
                     _logger.NoCommandTypeFoundWithDefaultCommandType(commandName, typeof(TCommand));
-                    var withArgumentsCommandResult = Parse<TCommand>(argumentsEnumerator.PrefixWith(commandName));
+                    arguments.Revert();
+                    var withArgumentsCommandResult = Parse<TCommand>(arguments);
                     return withArgumentsCommandResult;
 
                 }
 
                 _logger.NoArgumentProvidedWithDefaultCommandType(typeof(TCommand));
-                var noArgumentsCommandResult = Parse<TCommand>(argumentsEnumerator);
+                var noArgumentsCommandResult = Parse<TCommand>(arguments);
                 return noArgumentsCommandResult;
             }
         }
 
-        internal ParsingResult Parse(IEnumerator<string> argumentsEnumerator)
+        internal ParsingResult Parse(Arguments arguments)
         {
             _logger.ParseForNotAlreadyKnownCommand();
-            var commandName = argumentsEnumerator.GetNextCommandLineItem();
-            if (commandName == null)
+            if (!arguments.Advance())
             {
                 _logger.NoCommandNameForNotAlreadyKnownCommand();
                 var helpWriter = _serviceProvider.GetRequiredService<IHelpWriter>();
                 helpWriter.WriteCommandListing();
                 return new ParsingResult(null, null, CommandParsingResultCode.NoCommandNameProvided);
             }
+            var commandName = arguments.GetCurrent();
 
             using (_logger.BeginParsingUsingCommandName(commandName))
             {
@@ -95,14 +95,14 @@ namespace MGR.CommandLineParser
                 }
 
                 _logger.CommandTypeFoundForNotAlreadyKnownCommand(commandName);
-                return ParseImpl(argumentsEnumerator, commandType);
+                return ParseImpl(arguments, commandType);
             }
 
         }
 
-        private ParsingResult ParseImpl(IEnumerator<string> argumentsEnumerator, ICommandType commandType)
+        private ParsingResult ParseImpl(Arguments arguments, ICommandType commandType)
         {
-            var commandObjectBuilder = ExtractCommandLineOptions(commandType, argumentsEnumerator);
+            var commandObjectBuilder = ExtractCommandLineOptions(commandType, arguments);
             if (commandObjectBuilder == null)
             {
                 return new ParsingResult(null, null, CommandParsingResultCode.CommandParametersNotValid);
@@ -117,17 +117,14 @@ namespace MGR.CommandLineParser
             }
             return new ParsingResult(commandObjectBuilder.GenerateCommandObject(), null, CommandParsingResultCode.Success);
         }
-        private ICommandObjectBuilder ExtractCommandLineOptions(ICommandType commandType, IEnumerator<string> argumentsEnumerator)
+
+        private ICommandObjectBuilder ExtractCommandLineOptions(ICommandType commandType, Arguments arguments)
         {
             var commandObjectBuilder = commandType.CreateCommandObjectBuilder(_serviceProvider);
             var alwaysPutInArgumentList = false;
-            while (true)
+            while (arguments.Advance())
             {
-                var argument = argumentsEnumerator.GetNextCommandLineItem();
-                if (argument == null)
-                {
-                    break;
-                }
+                var argument = arguments.GetCurrent();
                 if (argument.Equals(Constants.EndOfOptions))
                 {
                     alwaysPutInArgumentList = true;
@@ -166,7 +163,17 @@ namespace MGR.CommandLineParser
 
                 if (option.ShouldProvideValue)
                 {
-                    value = value ?? argumentsEnumerator.GetNextCommandLineItem();
+                    if (value == null)
+                    {
+                        if (!arguments.Advance())
+                        {
+                            var console = _serviceProvider.GetRequiredService<IConsole>();
+                            console.WriteLineError(Constants.ExceptionMessages.FormatParserOptionValueNotFoundForCommand(commandType.Metadata.Name, optionText));
+                            return null;
+                        }
+
+                        value = arguments.GetCurrent();
+                    }
                 }
 
                 option.AssignValue(value);
