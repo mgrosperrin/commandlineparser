@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
@@ -39,5 +40,9 @@ namespace MGR.CommandLineParser.Tests.Commands
         public bool Prerelease { get; set; }
 
         protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
+
+        public UpdateCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using MGR.CommandLineParser.UnitTests;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
@@ -15,11 +18,13 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var parserBuild = new ParserBuilder()
                 .Logo("Display help for list command")
                 .CommandLineName("myListTest.exe");
-            var parser = parserBuild.BuildParser(CreateServiceProvider());
-            IEnumerable<string> args = new[] {"list", "--help"};
-            var expectedReturnCode = CommandResultCode.Ok;
+            var parser = parserBuild.BuildParser();
+            IEnumerable<string> args = new[] { "list", "--help" };
+            var serviceProvider = CreateServiceProvider();
+            var console = (FakeConsole)serviceProvider.GetRequiredService<IConsole>();
+            var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedResult = 0;
-            var expectedHelp = @"Display help for list command
+            var expected = @"Display help for list command
 Usage: myListTest.exe <command> [options] [args]
 Type 'myListTest.exe help <command>' for help on a specific command.
 
@@ -27,11 +32,11 @@ Usage: myListTest.exe List ListCommandUsageDescription
 ListCommandDescription
 
 Options:
- -Source+                        ListCommandSourceDescription
- -Verbose                        ListCommandVerboseListDescription
- -AllVersions|all-versions       ListCommandAllVersionsDescription
- -Prerelease                     ListCommandPrerelease
- -Help                      (?)  Help
+ --source+            ListCommandSourceDescription
+ --verbose            ListCommandVerboseListDescription
+ --all-versions       ListCommandAllVersionsDescription
+ --prerelease         ListCommandPrerelease
+ --help          (?)  Help
 
 Samples:
 List sample 1
@@ -41,15 +46,17 @@ List sample number 2
             // Act
             using (new LangageSwitcher("en-us"))
             {
-                var actual = parser.Parse(args);
+                var actual = parser.Parse(args, serviceProvider);
                 var actualResult = await actual.ExecuteAsync();
 
                 // Assert
                 Assert.True(actual.IsValid);
-                Assert.Equal(expectedReturnCode, actual.ReturnCode);
-                Assert.IsType<ListCommand>(actual.Command);
-                var actualHelp = StringConsole.Current.OutAsString();
-                Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences: true);
+                Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
+                Assert.IsType<ListCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+                var messages = console.Messages;
+                Assert.Single(messages);
+                Assert.IsType<FakeConsole.InformationMessage>(messages[0]);
+                Assert.Equal(expected, messages[0].ToString(), ignoreLineEndingDifferences: true);
                 Assert.Equal(expectedResult, actualResult);
             }
         }
@@ -61,11 +68,13 @@ List sample number 2
             var parserBuild = new ParserBuilder()
                 .Logo("Display help for pack command")
                 .CommandLineName("myPackTest.exe");
-            var parser = parserBuild.BuildParser(CreateServiceProvider());
+            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] { "pack", "--help" };
-            var expectedReturnCode = CommandResultCode.Ok;
+            var serviceProvider = CreateServiceProvider();
+            var console = (FakeConsole)serviceProvider.GetRequiredService<IConsole>();
+            var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedResult = 0;
-            var expectedHelp = @"Display help for pack command
+            var expected = @"Display help for pack command
 Usage: myPackTest.exe <command> [options] [args]
 Type 'myPackTest.exe help <command>' for help on a specific command.
 
@@ -73,33 +82,36 @@ Usage: myPackTest.exe Pack PackageCommandUsageSummary
 PackageCommandDescription
 
 Options:
- -OutputDirectory|output-directory            PackageCommandOutputDirDescription
- -BasePath|base-path                          PackageCommandBasePathDescription
- -Verbose                                (v)  PackageCommandVerboseDescription
- -Version                                     PackageCommandVersionDescription
- -Exclude+                                    PackageCommandExcludeDescription
- -Symbols                                     PackageCommandSymbolsDescription
- -Tool                                   (t)  PackageCommandToolDescription
- -Build                                  (b)  PackageCommandBuildDescription
- -MSBuildVersion|msbuild-version              CommandMSBuildVersion
- -NoDefaultExcludes|no-default-excludes       PackageCommandNoDefaultExcludes
- -NoPackageAnalysis|no-package-analysis       PackageCommandNoRunAnalysis
- -Properties#                                 PackageCommandPropertiesDescription
- -Help                                   (?)  Help
+ --output-directory          PackageCommandOutputDirDescription
+ --base-path                 PackageCommandBasePathDescription
+ --verbose              (v)  PackageCommandVerboseDescription
+ --version                   PackageCommandVersionDescription
+ --exclude+                  PackageCommandExcludeDescription
+ --symbols                   PackageCommandSymbolsDescription
+ --tool                 (t)  PackageCommandToolDescription
+ --build                (b)  PackageCommandBuildDescription
+ --msbuild-version           CommandMSBuildVersion
+ --no-default-excludes       PackageCommandNoDefaultExcludes
+ --no-package-analysis       PackageCommandNoRunAnalysis
+ --properties#               PackageCommandPropertiesDescription
+ --help                 (?)  Help
 ";
 
             // Act
             using (new LangageSwitcher("en-us"))
             {
-                var actual = parser.Parse(args);
+                var actual = parser.Parse(args, serviceProvider);
                 var actualResult = await actual.ExecuteAsync();
 
                 // Assert
                 Assert.True(actual.IsValid);
-                Assert.Equal(expectedReturnCode, actual.ReturnCode);
-                Assert.IsType<PackCommand>(actual.Command);
-                var actualHelp = StringConsole.Current.OutAsString();
-                Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences: true);
+                Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
+                Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
+                Assert.IsType<PackCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+                var messages = console.Messages;
+                Assert.Single(messages);
+                Assert.IsType<FakeConsole.InformationMessage>(messages[0]);
+                Assert.Equal(expected, messages[0].ToString(), ignoreLineEndingDifferences: true);
                 Assert.Equal(expectedResult, actualResult);
             }
         }

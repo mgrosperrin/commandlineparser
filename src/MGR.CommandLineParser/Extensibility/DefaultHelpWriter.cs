@@ -19,28 +19,29 @@ namespace MGR.CommandLineParser.Extensibility
         internal const string MultiOptionNameSeparator = "|";
 
         private readonly IConsole _console;
-        private readonly ICommandTypeProvider _commandTypeProvider;
+        private readonly IEnumerable<ICommandTypeProvider> _commandTypeProviders;
+        private readonly IParserOptionsAccessor _parserOptionsAccessor;
 
         /// <summary>
         /// Create a new <see cref="DefaultHelpWriter"/>.
         /// </summary>
         /// <param name="console"></param>
-        /// <param name="commandTypeProvider"></param>
-        public DefaultHelpWriter(IConsole console, ICommandTypeProvider commandTypeProvider)
+        /// <param name="commandTypeProviders"></param>
+        /// <param name="parserOptionsAccessor"></param>
+        public DefaultHelpWriter(IConsole console, IEnumerable<ICommandTypeProvider> commandTypeProviders, IParserOptionsAccessor parserOptionsAccessor)
         {
             _console = console;
-            _commandTypeProvider = commandTypeProvider;
+            _commandTypeProviders = commandTypeProviders;
+            _parserOptionsAccessor = parserOptionsAccessor;
         }
 
         /// <inheritdoc />
-        public void WriteCommandListing(IParserOptions parserOptions)
+        public void WriteCommandListing()
         {
-            Guard.NotNull(parserOptions, nameof(parserOptions));
-
-            WriteGeneralInformation(parserOptions);
+            WriteGeneralInformation();
 
             _console.WriteLine(Strings.DefaultHelpWriter_GlobalHelp_AvailableCommands);
-            var commandTypes = _commandTypeProvider.GetAllVisibleCommandsTypes().ToList();
+            var commandTypes = _commandTypeProviders.GetAllVisibleCommandsTypes().ToList();
             WriteDescriptionForSomeCommands(commandTypes);
         }
 
@@ -74,13 +75,12 @@ namespace MGR.CommandLineParser.Extensibility
         }
 
         /// <inheritdoc />
-        public void WriteHelpForCommand(IParserOptions parserOptions, params ICommandType[] commandTypes)
+        public void WriteHelpForCommand(params ICommandType[] commandTypes)
         {
-            Guard.NotNull(parserOptions, nameof(parserOptions));
             Guard.NotNull(commandTypes, nameof(commandTypes));
 
-            WriteGeneralInformation(parserOptions);
-
+            WriteGeneralInformation();
+            var parserOptions = _parserOptionsAccessor.Current;
             foreach (var commandType in commandTypes)
             {
                 var metadata = commandType.Metadata;
@@ -88,13 +88,14 @@ namespace MGR.CommandLineParser.Extensibility
                 _console.WriteLine(metadata.Description);
                 _console.WriteLine();
 
-                if (commandType.Options.Any())
+                var options = commandType.Options.ToList();
+                if (options.Count > 0)
                 {
                     _console.WriteLine(Strings.DefaultHelpWriter_OptionsListTitle);
                     var maxOptionWidth = commandType.Options.Max(o => o.DisplayInfo.Name.Length + o.DisplayInfo.AlternateNames.Sum(
                         alternateName => alternateName.Length + 1)) + 2;
                     var maxAltOptionWidth = commandType.Options.Max(o => (o.DisplayInfo.ShortName ?? string.Empty).Length);
-                    foreach (var commandOptionMetadata in commandType.Options)
+                    foreach (var commandOptionMetadata in options)
                     {
                         var alternateNames = string.Join(MultiOptionNameSeparator, commandOptionMetadata.DisplayInfo.AlternateNames);
                         var prefixAlternateNames = MultiOptionNameSeparator;
@@ -104,7 +105,7 @@ namespace MGR.CommandLineParser.Extensibility
                         }
                         var optionName = string.Concat(commandOptionMetadata.DisplayInfo.Name, prefixAlternateNames, alternateNames, GetMultiValueIndicator(commandOptionMetadata));
                         var optionShortName = FormatShortName(commandOptionMetadata.DisplayInfo.ShortName);
-                        _console.Write(" -{0, -" + maxOptionWidth + "}", optionName);
+                        _console.Write(" {0}{1, -" + maxOptionWidth + "}", Constants.LongNameOptionStarter, optionName);
                         _console.Write("{0, -" + (maxAltOptionWidth + 4) + "}", optionShortName);
 
                         _console.Write(commandOptionMetadata.DisplayInfo.Description);
@@ -125,10 +126,9 @@ namespace MGR.CommandLineParser.Extensibility
             }
         }
 
-        private void WriteGeneralInformation(IParserOptions parserOptions)
+        private void WriteGeneralInformation()
         {
-            Guard.NotNull(parserOptions, nameof(parserOptions));
-
+            var parserOptions = _parserOptionsAccessor.Current;
             _console.WriteLine(parserOptions.Logo);
             _console.WriteLine(Strings.DefaultHelpWriter_GlobalUsageFormat, string.Format(CultureInfo.CurrentUICulture, Strings.DefaultHelpWriter_GlobalCommandLineCommandFormat, parserOptions.CommandLineName).Trim());
             _console.WriteLine(Strings.DefaultHelpWriter_GlobalHelpCommandUsageFormat, string.Format(CultureInfo.CurrentUICulture, "{0} {1}", parserOptions.CommandLineName, HelpCommand.Name).Trim());

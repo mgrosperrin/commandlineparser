@@ -10,14 +10,12 @@ namespace MGR.CommandLineParser.Extensibility
         /// <summary>
         ///     Write command listing.
         /// </summary>
-        /// <param name="parserOptions">The options of the parser.</param>
-        void WriteCommandListing(IParserOptions parserOptions);
+        void WriteCommandListing();
 
         /// <summary>
-        ///     Write the help for a commant.
+        ///     Write the help for some commands.
         /// </summary>
-        /// <param name="parserOptions">The options of the parser.</param>
-        /// <param name="commandTypes">The <see cref="CommandType" /> of the commands to display help.</param>
-        void WriteHelpForCommand(IParserOptions parserOptions, params ICommandType[] commandTypes);
+        /// <param name="commandTypes">The <see cref="ICommandType"/> of the commands to display help.</param>
+        void WriteHelpForCommand(params ICommandType[] commandTypes);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
@@ -19,7 +20,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             {
                 "install",
                 "--version:12.34",
-                "--excludeVersion"
+                "--exclude-version"
             });
 
             // Act
@@ -28,8 +29,9 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             // Assert
             Assert.True(actual.IsValid);
             Assert.Empty(actual.ValidationResults);
-            Assert.IsType<InstallCommand>(actual.Command);
-            var installCommand = (InstallCommand)actual.Command;
+            Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
+            Assert.IsType<InstallCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+            var installCommand = (InstallCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
             Assert.Empty(installCommand.Source);
             Assert.True(string.IsNullOrEmpty(installCommand.OutputDirectory));
             Assert.Equal("12.34", installCommand.Version);

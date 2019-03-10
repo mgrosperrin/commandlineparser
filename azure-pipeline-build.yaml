@@ -1,0 +1,63 @@
+name: MGR.CommandLineParser - $(GitVersion.SemVer)$(rev:.r)
+
+variables:
+- name: DOTNET_SKIP_FIRST_TIME_EXPERIENCE
+  value: 1
+- name: System.Configuration
+  value: Release
+- name: GitVersion.SemVer
+  value: 1.0.0
+
+jobs:
+- job: Main
+  pool:
+    vmImage: vs2017-win2016
+  steps:
+  - task: gittools.gitversion.gitversion-task.GitVersion@4
+    displayName: 'Get version from Git'
+    inputs:
+      preferBundledVersion: false
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/dev'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release-')))
+
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet build'
+    inputs:
+      arguments: '-c $(System.Configuration) -p:Version=$(GitVersion.SemVer)'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet test'
+    inputs:
+      command: test
+      projects: 'tests/**/*Tests.csproj'
+      arguments: '-c $(System.Configuration) --no-build --logger "trx;LogFileName=TestsResults.trx" --logger "xunit;LogFileName=TestsResults.xml" /p:CollectCoverage=true /p:CoverletOutput=_BuildReports\Coverage\ /p:CoverletOutputFormat=cobertura /p:Exclude="[xunit.*]*%2c[*]JetBrains.*%2c[*Tests*]*"'
+    continueOnError: true
+
+  - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@1
+    displayName: ReportGenerator
+    inputs:
+      reports: '**/_BuildReports/Coverage/coverage.cobertura.xml'
+      targetdir: '$(Build.ArtifactStagingDirectory)/Coverage'
+    condition: succeededOrFailed()
+
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Publish code coverage from **/_BuildReports/Coverage/coverage.cobertura.xml'
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: '**/_BuildReports/Coverage/coverage.cobertura.xml'
+      reportDirectory: '$(Build.ArtifactStagingDirectory)/Coverage'
+    condition: succeededOrFailed()
+
+  - task: CopyFiles@2
+    displayName: 'Copy Files to artifacts folder'
+    inputs:
+      SourceFolder: src/
+      Contents: '**/MGR.CommandLineParser.*.nupkg'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/nuget'
+      flattenFolders: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: packages'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/nuget'
+      ArtifactName: packages
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/dev'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release-')))

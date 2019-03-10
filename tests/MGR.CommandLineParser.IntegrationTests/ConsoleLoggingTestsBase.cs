@@ -9,10 +9,9 @@ namespace MGR.CommandLineParser.IntegrationTests
     {
         protected static IServiceProvider CreateServiceProvider()
         {
-            StringConsole.Current.Reset();
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCommandLineParser()
-                .AddTransient<IConsole>(_ => StringConsole.Current);
+            serviceCollection.AddScoped<IConsole, FakeConsole>();
+            serviceCollection.AddCommandLineParser();
             return serviceCollection.BuildServiceProvider().CreateScope().ServiceProvider;
         }
     }

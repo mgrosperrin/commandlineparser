@@ -1,4 +1,5 @@
 ﻿using MGR.CommandLineParser.Extensibility;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,17 +18,17 @@ namespace MGR.CommandLineParser
         /// </summary>
         /// <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> to add services to.</param>
         /// <returns>The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> so that additional calls can be chained.</returns>
-        public static IServiceCollection AddCommandLineParser(this IServiceCollection services)
+        public static CommandLineParserBuilder AddCommandLineParser(this IServiceCollection services)
         {
             services.AddLogging();
 
             services.TryAddSingleton<IConsole, DefaultConsole>();
             services.TryAddSingleton<IAssemblyProvider, CurrentDirectoryAssemblyProvider>();
-            services.TryAddScoped<ICommandTypeProvider, AssemblyBrowsingCommandTypeProvider>();
-            services.TryAddScoped<ICommandActivator, DependencyResolverCommandActivator>();
+            services.TryAddScoped<ICommandTypeProvider, AssemblyBrowsingClassBasedCommandTypeProvider>();
+            services.TryAddScoped<IClassBasedCommandActivator, ClassBasedDependencyResolverCommandActivator>();
+            services.AddScoped<IParserOptionsAccessor, ParserOptionsAccessor>();
             services.TryAddScoped<IHelpWriter, DefaultHelpWriter>();
-            services.TryAddSingleton<IOptionAlternateNameGenerator, KebabCaseOptionAlternateNameGenerator>();
-
+            
             services
                     .AddSingleton<IConverter, BooleanConverter>()
                     .AddSingleton<IConverter, ByteConverter>()
@@ -46,7 +47,7 @@ namespace MGR.CommandLineParser
                     .AddSingleton<IConverter, TimeSpanConverter>()
                     .AddSingleton<IConverter, UriConverter>();
 
-            return services;
+            return new CommandLineParserBuilder(services);
         }
     }
 }

@@ -26,8 +26,8 @@ namespace System.Collections.Generic
                         return responseFileContent.AsEnumerable().GetEnumerator();
                     }
                 }
-                var firstArgumentWithoutArobase = firstArgument.Remove(0, 1);
-                return new[] { firstArgumentWithoutArobase }.Concat(enumerable.Skip(1)).GetEnumerator();
+                var firstArgumentWithoutAt = firstArgument.Remove(0, 1);
+                return new[] { firstArgumentWithoutAt }.Concat(enumerable.Skip(1)).GetEnumerator();
             }
             return enumerable.GetEnumerator();
         }

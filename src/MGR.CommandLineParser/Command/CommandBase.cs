@@ -22,25 +22,21 @@ namespace MGR.CommandLineParser.Command
         /// <summary>
         ///     Initializes a new instance of a <see cref="CommandBase" /> .
         /// </summary>
-        protected CommandBase()
+        protected CommandBase(IServiceProvider serviceProvider)
         {
+            ServiceProvider = serviceProvider;
             Arguments = new List<string>();
         }
 
         /// <summary>
         ///     Gets the console used by the parser (if the command needs to writes something).
         /// </summary>
-        protected IConsole Console => CurrentDependencyResolverScope.GetRequiredService<IConsole>();
+        protected IConsole Console => ServiceProvider.GetRequiredService<IConsole>();
 
         /// <summary>
-        ///     Gets the <see cref="IServiceScope" /> of the parsing operation.
+        ///     Gets the <see cref="IServiceProvider" /> of the parsing operation.
         /// </summary>
-        protected IServiceProvider CurrentDependencyResolverScope { get; private set; }
-
-        /// <summary>
-        ///     Gets the <see cref="IParserOptions" /> of the parser.
-        /// </summary>
-        protected IParserOptions ParserOptions { get; private set; }
+        protected IServiceProvider ServiceProvider { get; private set; }
 
         /// <summary>
         ///     Gets the <see cref="CommandType" /> of the command.
@@ -68,24 +64,19 @@ namespace MGR.CommandLineParser.Command
         {
             if (Help)
             {
-                var helpWriter = CurrentDependencyResolverScope.GetRequiredService<IHelpWriter>();
-                helpWriter.WriteHelpForCommand(ParserOptions, CommandType);
+                var helpWriter = ServiceProvider.GetRequiredService<IHelpWriter>();
+                helpWriter.WriteHelpForCommand(CommandType);
                 return Task.FromResult(0);
             }
             return ExecuteCommandAsync();
         }
 
         /// <summary>
-        ///     Configure the command with the <see cref="IParserOptions" /> and the <see cref="IConsole" /> of the parser.
+        ///     Configure the command with the <see cref="ICommandType" /> representing the command.
         /// </summary>
-        /// <param name="parserOptions">The <see cref="IParserOptions" />.</param>
-        /// <param name="serviceProvider">The <see cref="IServiceScope" />.</param>
         /// <param name="commandType">The <see cref="CommandType" /> of the command.</param>
-        public virtual void Configure(IParserOptions parserOptions, IServiceProvider serviceProvider,
-            ICommandType commandType)
+        public virtual void Configure(ICommandType commandType)
         {
-            ParserOptions = parserOptions;
-            CurrentDependencyResolverScope = serviceProvider;
             CommandType = commandType;
         }
 

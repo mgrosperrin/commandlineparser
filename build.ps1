@@ -5,11 +5,12 @@ Param(
     [string]$Configuration = "Release",
     [ValidateSet("Quiet", "Minimal", "Normal", "Verbose", "Diagnostic")]
     [string]$Verbosity = "Minimal",
-	[string]$MyGetFeed,
-	[string]$BuildNumber,
+    [string]$MyGetFeed,
+    [string]$BuildNumber,
     [switch]$Experimental,
     [switch]$WhatIf
 )
+$env:DOTNET_CLI_TELEMETRY_OPTOUT = "1"
 
 $BUILD_DIR = Join-Path $PSScriptRoot "build"
 $ARTIFACTS_DIR = Join-Path $PSScriptRoot "artifacts"
@@ -18,8 +19,8 @@ $NUGET_EXE = Join-Path $TOOLS_DIR "nuget.exe"
 $CAKE_EXE = Join-Path $TOOLS_DIR "Cake/Cake.exe"
 
 if(!(Test-Path $TOOLS_DIR)){
-	Write-Host "Create tools directory"
-	New-Item -ItemType Directory $TOOLS_DIR
+    Write-Host "Create tools directory"
+    New-Item -ItemType Directory $TOOLS_DIR
 }
 
 # Should we use experimental build of Roslyn?
@@ -36,7 +37,7 @@ if($WhatIf.IsPresent) {
 
 # Try download NuGet.exe if do not exist.
 if (!(Test-Path $NUGET_EXE)) {
-	Write-Host "Download Nuget.exe"
+    Write-Host "Download Nuget.exe"
     Invoke-WebRequest -Uri https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile $NUGET_EXE
 }
 

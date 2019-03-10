@@ -23,6 +23,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             }
 
             [Fact]
+            // ReSharper disable once InconsistentNaming
             public void ICollectionIntTest()
             {
                 // Arrange
@@ -65,6 +66,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             }
 
             [Fact]
+            // ReSharper disable once InconsistentNaming
             public void IDictionaryStringInt()
             {
                 // Arrange
@@ -86,6 +88,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var expectedExceptionMessage = SourceParameterName;
 
                 // Act
+                // ReSharper disable once ExpressionIsAlwaysNull
                 var actualException = Assert.Throws<ArgumentNullException>(() => testedType.IsDictionaryType());
 
                 // Assert

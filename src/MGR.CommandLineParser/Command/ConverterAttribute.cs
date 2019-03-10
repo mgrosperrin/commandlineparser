@@ -13,7 +13,6 @@ namespace MGR.CommandLineParser.Command
         /// Initializes a new instance of a <see cref="ConverterAttribute"/> with the converter type.
         /// </summary>
         /// <param name="converterType"></param>
-        //[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = nameof(IConverter)), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = nameof(CommandLineParser))]
         public ConverterAttribute(Type converterType)
         {
             Guard.NotNull(converterType, nameof(converterType));

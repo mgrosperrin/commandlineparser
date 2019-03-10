@@ -8,7 +8,6 @@ namespace Microsoft.Extensions.Logging
 {
     internal static partial class LoggerParserExtensions
     {
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IDisposable BeginParsingArguments(this ILogger<LoggerCategory.Parser> logger, string correlationId) => logger.BeginScope(new Dictionary<string, object>{{"ParsingId", correlationId}});
 

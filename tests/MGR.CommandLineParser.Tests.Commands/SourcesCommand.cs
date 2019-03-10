@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 
@@ -20,5 +21,9 @@ namespace MGR.CommandLineParser.Tests.Commands
         public string Password { get; set; }
 
         protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
+
+        public SourcesCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
     }
 }

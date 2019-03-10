@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 
@@ -23,5 +24,9 @@ namespace MGR.CommandLineParser.Tests.Commands
         public object Settings { get; }
 
         protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
+
+        public DeleteCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
     }
 }

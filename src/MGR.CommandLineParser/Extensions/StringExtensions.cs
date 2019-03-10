@@ -4,7 +4,6 @@ using System.Text;
 using MGR.CommandLineParser;
 
 // ReSharper disable once CheckNamespace
-
 namespace System
 {
     internal static class StringExtensions
@@ -30,7 +29,7 @@ namespace System
             {
                 return source;
             }
-            
+
             var builder = new StringBuilder();
             builder.Append(char.ToLower(source.First(), CultureInfo.CurrentUICulture));
             var introduceDash = false;

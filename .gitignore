@@ -187,3 +187,4 @@ FakesAssemblies/
 .vs/
 artifacts/
 src/CommonFiles/VersionAssemblyInfo.cs
+_BuildReports/
