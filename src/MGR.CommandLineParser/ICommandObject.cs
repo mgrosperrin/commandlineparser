@@ -3,13 +3,14 @@
 namespace MGR.CommandLineParser
 {
     /// <summary>
-    ///
+    /// Represents the instance of the command.
     /// </summary>
     public interface ICommandObject
-    {        /// <summary>
-        ///
+    {
+        /// <summary>
+        /// Executes the command.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The result of the command execution.</returns>
         Task<int> ExecuteAsync();
     }
 }
