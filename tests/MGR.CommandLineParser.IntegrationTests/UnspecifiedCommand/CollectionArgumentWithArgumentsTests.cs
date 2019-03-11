@@ -12,8 +12,6 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
         public void ParseWithValidListArgs()
         {
             // Arrange
-            var parserBuild = new ParserBuilder();
-            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[]
                 {"IntTest", "--str-value:custom value", "-i", "42", "-il", "42", "Custom argument value", "-b"};
             var expectedReturnCode = CommandParsingResultCode.Success;
@@ -23,7 +21,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var expectedIntValue = 42;
 
             // Act
-            var actual = parser.Parse(args);
+            var actual = CallParse(args);
 
             // Assert
             Assert.True(actual.IsValid);

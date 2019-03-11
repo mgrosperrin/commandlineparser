@@ -28,22 +28,21 @@ jobs:
     displayName: 'dotnet test'
     inputs:
       command: test
-      projects: 'tests/**/*Tests.csproj'
-      arguments: '-c $(System.Configuration) --no-build --logger "trx;LogFileName=TestsResults.trx" --logger "xunit;LogFileName=TestsResults.xml" /p:CollectCoverage=true /p:CoverletOutput=_BuildReports\Coverage\ /p:CoverletOutputFormat=cobertura /p:Exclude="[xunit.*]*%2c[*]JetBrains.*%2c[*Tests*]*"'
-    continueOnError: true
+      projects: 'tests/**Tests/*.csproj'
+      arguments: '-c $(System.Configuration) --no-build  /p:CollectCoverage=true /p:CoverletOutput=_BuildReports\Coverage\ /p:CoverletOutputFormat=cobertura /p:Exclude="[xunit.*]*%2c[*]JetBrains.*%2c[*Tests*]*"'
 
   - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@1
-    displayName: ReportGenerator
+    displayName: 'Generate code coverage report'
     inputs:
-      reports: '**/_BuildReports/Coverage/coverage.cobertura.xml'
+      reports: '**/*.IntegrationTests/_BuildReports/Coverage/coverage.cobertura.xml;**/*.UnitTests/_BuildReports/Coverage/coverage.cobertura.xml'
       targetdir: '$(Build.ArtifactStagingDirectory)/Coverage'
     condition: succeededOrFailed()
 
   - task: PublishCodeCoverageResults@1
-    displayName: 'Publish code coverage from **/_BuildReports/Coverage/coverage.cobertura.xml'
+    displayName: 'Publish code coverage from $(Build.ArtifactStagingDirectory)/Coverage/Cobertura.xml'
     inputs:
       codeCoverageTool: Cobertura
-      summaryFileLocation: '**/_BuildReports/Coverage/coverage.cobertura.xml'
+      summaryFileLocation: '$(Build.ArtifactStagingDirectory)/Coverage/Cobertura.xml'
       reportDirectory: '$(Build.ArtifactStagingDirectory)/Coverage'
     condition: succeededOrFailed()
 

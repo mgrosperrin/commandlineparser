@@ -12,8 +12,6 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
         public void ParseWithCommandNameAndInvalidArgs()
         {
             // Arrange
-            var parserBuild = new ParserBuilder();
-            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] {"IntTest", "-i", "42", "Custom argument value", "-b"};
             var expectedReturnCode = CommandParsingResultCode.CommandParametersNotValid;
             var expectedNbOfArguments = 1;
@@ -21,7 +19,7 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
             var expectedIntValue = 42;
 
             // Act
-            var actual = parser.Parse(args);
+            var actual = CallParse(args);
 
             // Assert
             Assert.False(actual.IsValid);
@@ -40,8 +38,6 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
         public void ParseWithSpecifiedCommandAndInvalidArgs()
         {
             // Arrange
-            var parserBuild = new ParserBuilder();
-            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] { "-i", "42", "Custom argument value", "-b" };
             var expectedReturnCode = CommandParsingResultCode.CommandParametersNotValid;
             var expectedNbOfArguments = 1;
@@ -49,7 +45,7 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
             var expectedIntValue = 42;
 
             // Act
-            var actual = parser.Parse<IntTestCommand>(args);
+            var actual = CallParse<IntTestCommand>(args);
 
             // Assert
             Assert.False(actual.IsValid);

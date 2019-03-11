@@ -12,8 +12,6 @@ namespace MGR.CommandLineParser.IntegrationTests.SpecificCommand
         public void ParseWithValidArgs()
         {
             // Arrange
-            var parserBuild = new ParserBuilder();
-            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] {"--str-value:custom value", "-i", "42", "Custom argument value", "-b"};
             var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedStrValue = "custom value";
@@ -22,7 +20,7 @@ namespace MGR.CommandLineParser.IntegrationTests.SpecificCommand
             var expectedIntValue = 42;
 
             // Act
-            var actual = parser.Parse<IntTestCommand>(args);
+            var actual = CallParse<IntTestCommand>(args);
 
             // Assert
             Assert.True(actual.IsValid);

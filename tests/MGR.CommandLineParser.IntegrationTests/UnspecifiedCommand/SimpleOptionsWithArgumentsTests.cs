@@ -12,8 +12,6 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
         public void ParseWithValidArgs()
         {
             // Arrange
-            var parserBuild = new ParserBuilder();
-            var parser = parserBuild.BuildParser();
             var fileArgument = @"C:\temp\file.txt";
             var expectedOutputDirectory = @"C:\Temp";
             var expectedOutputFile = @"C:\Temp\otherfile.txt";
@@ -24,7 +22,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var expectedArgumentsValue = new List<string> {fileArgument};
 
             // Act
-            var actual = parser.Parse(args);
+            var actual = CallParse(args);
 
             // Assert
             Assert.True(actual.IsValid);
@@ -45,8 +43,6 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
         public void ParseWithValidArgs2()
         {
             // Arrange
-            var parserBuild = new ParserBuilder();
-            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[]
                 {"IntTest", "--str-value:custom value", "-i", "42", "Custom argument value", "-b"};
             var expectedReturnCode = CommandParsingResultCode.Success;
@@ -56,7 +52,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var expectedIntValue = 42;
 
             // Act
-            var actual = parser.Parse(args);
+            var actual = CallParse(args);
 
             // Assert
             Assert.True(actual.IsValid);

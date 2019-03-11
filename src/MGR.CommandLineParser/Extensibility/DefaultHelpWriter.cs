@@ -41,7 +41,7 @@ namespace MGR.CommandLineParser.Extensibility
             WriteGeneralInformation();
 
             _console.WriteLine(Strings.DefaultHelpWriter_GlobalHelp_AvailableCommands);
-            var commandTypes = _commandTypeProviders.GetAllVisibleCommandsTypes().ToList();
+            var commandTypes = _commandTypeProviders.GetAllVisibleCommandsTypes().OrderBy(commandType => commandType.Metadata.Name).ToList();
             WriteDescriptionForSomeCommands(commandTypes);
         }
 
@@ -81,7 +81,7 @@ namespace MGR.CommandLineParser.Extensibility
 
             WriteGeneralInformation();
             var parserOptions = _parserOptionsAccessor.Current;
-            foreach (var commandType in commandTypes)
+            foreach (var commandType in commandTypes.OrderBy(ct => ct.Metadata.Name))
             {
                 var metadata = commandType.Metadata;
                 _console.WriteLine(Strings.DefaultHelpWriter_CommandUsageFormat, parserOptions.CommandLineName, metadata.Name, metadata.Usage);

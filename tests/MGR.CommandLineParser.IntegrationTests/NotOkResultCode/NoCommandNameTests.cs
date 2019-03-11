@@ -9,13 +9,11 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
         public void ParseWithEmptyParameter()
         {
             // Arrange
-            var parserBuild = new ParserBuilder();
-            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new List<string>();
             var expectedReturnCode = CommandParsingResultCode.NoCommandNameProvided;
 
             // Act
-            var actual = parser.Parse(args);
+            var actual = CallParse(args);
 
             // Assert
             Assert.False(actual.IsValid);

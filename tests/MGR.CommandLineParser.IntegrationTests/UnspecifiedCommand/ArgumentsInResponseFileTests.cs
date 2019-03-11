@@ -11,7 +11,6 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
         public void ParseWithAResponseFile()
         {
             // Arrange
-            var parser = new ParserBuilder().BuildParser();
             var tempFile = Path.GetRandomFileName();
             var tempResponseFileName = Path.ChangeExtension(tempFile, ".rsp");
             var tempFolder = Path.GetTempPath();
@@ -24,7 +23,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             });
 
             // Act
-            var actual = parser.Parse(new[] { "@" + tempResponseFile });
+            var actual = CallParse(new[] { "@" + tempResponseFile });
 
             // Assert
             Assert.True(actual.IsValid);

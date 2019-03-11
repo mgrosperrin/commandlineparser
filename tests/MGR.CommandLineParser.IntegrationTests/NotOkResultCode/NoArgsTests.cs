@@ -8,12 +8,10 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
         public void ParseWithoutParameter()
         {
             // Arrange
-            var parserBuild = new ParserBuilder();
-            var parser = parserBuild.BuildParser();
             var expectedReturnCode = CommandParsingResultCode.NoArgumentsProvided;
 
             // Act
-            var actual = parser.Parse(null);
+            var actual = CallParse(null);
 
             // Assert
             Assert.False(actual.IsValid);
