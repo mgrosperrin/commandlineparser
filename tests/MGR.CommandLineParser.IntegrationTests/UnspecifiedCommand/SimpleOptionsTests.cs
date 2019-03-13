@@ -11,8 +11,6 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
         public void ParseWithValidArgs()
         {
             // Arrange
-            var parserBuild = new ParserBuilder();
-            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] {"delete", "--source:custom value", "-np", "--api-key", "MyApiKey", "Custom argument value", "b"};
             var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedSource = "custom value";
@@ -21,7 +19,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var expectedArgumentsValue = new List<string> {"Custom argument value", "b"};
 
             // Act
-            var actual = parser.Parse(args);
+            var actual = CallParse(args);
 
             // Assert
             Assert.True(actual.IsValid);

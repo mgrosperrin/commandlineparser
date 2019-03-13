@@ -11,8 +11,6 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
         public void ParseWithValidArgsAndDefaultValue()
         {
             // Arrange
-            var parserBuild = new ParserBuilder();
-            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[]
                 {"SetApiKey"};
             var expectedReturnCode = CommandParsingResultCode.Success;
@@ -20,7 +18,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var expectedNbOfArguments = 0;
 
             // Act
-            var actual = parser.Parse(args);
+            var actual = CallParse(args);
 
             // Assert
             Assert.True(actual.IsValid);

@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
-using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.ClassBased;
+using MGR.CommandLineParser.Tests.Commands;
 using MGR.CommandLineParser.UnitTests;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
@@ -19,10 +18,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var parserBuild = new ParserBuilder()
                 .Logo("Display generic help")
                 .CommandLineName("myHelpTest.exe");
-            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] { "help" };
-            var serviceProvider = CreateServiceProvider();
-            var console = (FakeConsole)serviceProvider.GetRequiredService<IConsole>();
             var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedResult = 0;
             var expected = @"Display generic help
@@ -30,9 +26,8 @@ Usage: myHelpTest.exe <command> [options] [args]
 Type 'myHelpTest.exe help <command>' for help on a specific command.
 
 Available commands:
- Help        
- I           
  Delete      DeleteCommandDescription
+ Help        
  Import      
  Install     InstallCommandDescription
  IntTest     
@@ -49,7 +44,7 @@ Available commands:
             // Act
             using (new LangageSwitcher("en-us"))
             {
-                var actual = parser.Parse(args, serviceProvider);
+                var actual = CallParse(parserBuild, args);
                 var actualResult = await actual.ExecuteAsync();
 
                 // Assert
@@ -57,10 +52,8 @@ Available commands:
                 Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
                 Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
                 Assert.IsType<HelpCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-                var messages = console.Messages;
-                Assert.Single(messages);
-                Assert.IsType<FakeConsole.InformationMessage>(messages[0]);
-                Assert.Equal(expected, messages[0].ToString(), ignoreLineEndingDifferences: true);
+                Assert.IsNotType<ImportCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+                AssertOneMessageLoggedToConsole<FakeConsole.InformationMessage>(expected);
                 Assert.Equal(expectedResult, actualResult);
             }
         }
