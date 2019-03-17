@@ -18,7 +18,7 @@ namespace MGR.CommandLineParser
         private static ServiceProvider CreateRootServiceProvider()
         {
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddCommandLineParser();
+            serviceCollection.AddCommandLineParser().AddClassBasedCommands();
             var serviceProvider = serviceCollection.BuildServiceProvider();
             return serviceProvider;
         }

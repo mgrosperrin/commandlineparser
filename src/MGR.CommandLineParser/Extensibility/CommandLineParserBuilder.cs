@@ -1,6 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace MGR.CommandLineParser.Extensibility
+﻿// ReSharper disable once CheckNamespace
+namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
     /// A class to add configuration to the command line parser.

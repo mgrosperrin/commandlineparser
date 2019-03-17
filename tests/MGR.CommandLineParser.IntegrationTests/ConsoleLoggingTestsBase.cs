@@ -16,7 +16,7 @@ namespace MGR.CommandLineParser.IntegrationTests
         {
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddScoped<IConsole, FakeConsole>();
-            serviceCollection.AddCommandLineParser();
+            serviceCollection.AddCommandLineParser().AddClassBasedCommands();
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 #pragma warning restore S3963 // "static" fields should be initialized inline
