@@ -120,6 +120,10 @@ namespace MGR.CommandLineParser
         private ICommandObjectBuilder ExtractCommandLineOptions(ICommandType commandType, IEnumerator<string> argumentsEnumerator)
         {
             var commandObjectBuilder = commandType.CreateCommandObjectBuilder(_serviceProvider);
+            if (commandObjectBuilder == null)
+            {
+                return null;
+            }
             var alwaysPutInArgumentList = false;
             while (true)
             {

@@ -36,6 +36,10 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
 
             var commandActivator = serviceProvider.GetRequiredService<IClassBasedCommandActivator>();
             var command = commandActivator.ActivateCommand(Type);
+            if (command == null)
+            {
+                return null;
+            }
             var commandObject = new ClassBasedCommandObjectBuilder(Metadata, _commandOptions.Value, command);
 
             var commandBase = command as CommandBase;

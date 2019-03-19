@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace MGR.CommandLineParser
 {
@@ -8,7 +9,7 @@ namespace MGR.CommandLineParser
     [PublicAPI]
     public sealed class ParserBuilder
     {
-        private readonly ParserBuilderOptions _parserBuilderOptions = ParserBuilderOptions.Default;
+        private readonly ParserOptionsBuilder _parserOptionsBuilder = ParserOptionsBuilder.Default;
 
         /// <summary>
         ///     Creates a new instance of <see cref="Parser" /> with the default options.
@@ -16,7 +17,7 @@ namespace MGR.CommandLineParser
         /// <returns>A new instance of <see cref="Parser" />.</returns>
         public IParser BuildParser()
         {
-            var parserOptions = _parserBuilderOptions.ToParserOptions();
+            var parserOptions = _parserOptionsBuilder.ToParserOptions();
             var parser = new Parser(parserOptions);
             return parser;
         }
@@ -26,10 +27,10 @@ namespace MGR.CommandLineParser
         /// </summary>
         /// <param name="logo">The custom logo</param>
         /// <returns>This instance of <see cref="ParserBuilder" />.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1719:ParameterNamesShouldNotMatchMemberNames", MessageId = "0#")]
+        [SuppressMessage("Microsoft.Naming", "CA1719:ParameterNamesShouldNotMatchMemberNames", MessageId = "0#")]
         public ParserBuilder Logo(string logo)
         {
-            _parserBuilderOptions.Logo = logo;
+            _parserOptionsBuilder.Logo = logo;
             return this;
         }
 
@@ -38,10 +39,10 @@ namespace MGR.CommandLineParser
         /// </summary>
         /// <param name="commandLineName">The custom command line name</param>
         /// <returns>This instance of <see cref="ParserBuilder" />.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1719:ParameterNamesShouldNotMatchMemberNames", MessageId = "0#")]
+        [SuppressMessage("Microsoft.Naming", "CA1719:ParameterNamesShouldNotMatchMemberNames", MessageId = "0#")]
         public ParserBuilder CommandLineName(string commandLineName)
         {
-            _parserBuilderOptions.CommandLineName = commandLineName;
+            _parserOptionsBuilder.CommandLineName = commandLineName;
             return this;
         }
     }

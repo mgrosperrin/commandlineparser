@@ -26,7 +26,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
             var commandInstance = _serviceProvider.GetService(commandType);
             if (commandInstance == null)
             {
-                var constructors = commandType.GetConstructors(BindingFlags.Instance | BindingFlags.Public)
+                var constructors = commandType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                     .OrderBy(constructor => constructor.GetParameters().Length);
                 foreach (var constructorInfo in constructors)
                 {
@@ -37,7 +37,11 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
                         for (int i = 0; i < parameterInfos.Length; i++)
                         {
                             var parameterInfo = parameterInfos[i];
-                            parameters[i] = _serviceProvider.GetService(parameterInfo.ParameterType);
+                            var parameterValue = _serviceProvider.GetService(parameterInfo.ParameterType);
+                            if (parameterValue != null || parameterInfo.TryGetDefaultValue(out parameterValue))
+                            {
+                                parameters[i] = parameterValue;
+                            }
                         }
 
                         commandInstance = constructorInfo.Invoke(parameters);
