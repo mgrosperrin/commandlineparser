@@ -23,12 +23,8 @@ namespace MGR.CommandLineParser.Hosting.Extensions
             var parserContext = host.Services.GetRequiredService<ParserContext>();
             parserContext.Arguments = args;
             await host.RunAsync(cancellationToken);
-            var parsingResult = parserContext.ParsingResult;
-            if (parsingResult.IsValid)
-            {
-                return await parsingResult.ExecuteAsync();
-            }
-            return (int)parserContext.ParsingResult.ParsingResultCode;
+            var parsingAndExecutionResult = parserContext.ParsingAndExecutionResult;
+            return parsingAndExecutionResult;
         }
     }
 }
