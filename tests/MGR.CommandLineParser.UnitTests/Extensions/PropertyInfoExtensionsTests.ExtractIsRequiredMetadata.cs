@@ -51,6 +51,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
 
                 // Act
                 var actualException =
+                    // ReSharper disable once ExpressionIsAlwaysNull
                     Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractIsRequiredMetadata());
 
                 // Assert

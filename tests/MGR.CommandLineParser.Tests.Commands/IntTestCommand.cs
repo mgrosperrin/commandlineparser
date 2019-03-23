@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands
@@ -18,9 +19,13 @@ namespace MGR.CommandLineParser.Tests.Commands
         public List<int> IntListValue { get; set; }
 
 
-        protected override int ExecuteCommand()
+        protected override Task<int> ExecuteCommandAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public IntTestCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
         }
     }
 }

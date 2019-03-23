@@ -15,10 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.Integ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleApp", "samples\SimpleApp\SimpleApp.csproj", "{F192F36D-7EDD-4E1E-82A4-95CA11665D2B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonFiles", "CommonFiles", "{B5BDC6B3-1206-4DF3-A76C-22FE55064082}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedFiles", "SharedFiles", "{B5BDC6B3-1206-4DF3-A76C-22FE55064082}"
 	ProjectSection(SolutionItems) = preProject
-		src\CommonFiles\CommonAssemblyInfo.cs = src\CommonFiles\CommonAssemblyInfo.cs
-		src\CommonFiles\VersionAssemblyInfo.cs = src\CommonFiles\VersionAssemblyInfo.cs
+		src\SharedFiles\CommonAssemblyInfo.cs = src\SharedFiles\CommonAssemblyInfo.cs
+		src\SharedFiles\VersionAssemblyInfo.cs = src\SharedFiles\VersionAssemblyInfo.cs
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EF849FD3-293F-4CC8-B227-9680CF929A66}"
@@ -26,6 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
 		LICENSE = LICENSE
 		MGR.CommandLineParser.ruleset = MGR.CommandLineParser.ruleset
 		MGR.CommandLineParser.runsettings = MGR.CommandLineParser.runsettings
@@ -35,8 +36,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{07E4D8F7-2EDA-460D-B8E0-58B1BA42CD46}"
 	ProjectSection(SolutionItems) = preProject
+		azure-pipeline-build.yaml = azure-pipeline-build.yaml
 		build\build.cake = build\build.cake
 		build.ps1 = build.ps1
+		GitVersionConfig.yaml = GitVersionConfig.yaml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.Tests.Commands", "tests\MGR.CommandLineParser.Tests.Commands\MGR.CommandLineParser.Tests.Commands.csproj", "{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}"
@@ -45,10 +48,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{172E24C2-B
 	ProjectSection(SolutionItems) = preProject
 		docs\call-command-options.md = docs\call-command-options.md
 		docs\customize-command-display.md = docs\customize-command-display.md
+		docs\customize-internal-of-parser.md = docs\customize-internal-of-parser.md
 		docs\index.md = docs\index.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FB795A12-C939-492F-9377-4C468D01EF3C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.Command.Lambda", "src\MGR.CommandLineParser.Command.Lambda\MGR.CommandLineParser.Command.Lambda.csproj", "{9F5A0142-E0A1-45A2-961E-55611B4440AD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.Hosting", "src\MGR.CommandLineParser.Hosting\MGR.CommandLineParser.Hosting.csproj", "{40EAA8E2-7AFE-4ED1-A961-35BD7E424985}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,6 +84,14 @@ Global
 		{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F5A0142-E0A1-45A2-961E-55611B4440AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F5A0142-E0A1-45A2-961E-55611B4440AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F5A0142-E0A1-45A2-961E-55611B4440AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F5A0142-E0A1-45A2-961E-55611B4440AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40EAA8E2-7AFE-4ED1-A961-35BD7E424985}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40EAA8E2-7AFE-4ED1-A961-35BD7E424985}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40EAA8E2-7AFE-4ED1-A961-35BD7E424985}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40EAA8E2-7AFE-4ED1-A961-35BD7E424985}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,7 +101,10 @@ Global
 		{22F60D05-F6DB-4410-80AD-E558EF1BDF6F} = {569ED12A-DA23-4457-B304-6B00C0CB335E}
 		{7FD4CEB3-040B-4581-9B7C-EF8CB99B0951} = {569ED12A-DA23-4457-B304-6B00C0CB335E}
 		{F192F36D-7EDD-4E1E-82A4-95CA11665D2B} = {0B84161D-C735-43F0-A525-4ED42CC4B17C}
+		{B5BDC6B3-1206-4DF3-A76C-22FE55064082} = {FB795A12-C939-492F-9377-4C468D01EF3C}
 		{A422BACE-2758-4ABD-9DAA-ADF289FCCE65} = {569ED12A-DA23-4457-B304-6B00C0CB335E}
+		{9F5A0142-E0A1-45A2-961E-55611B4440AD} = {FB795A12-C939-492F-9377-4C468D01EF3C}
+		{40EAA8E2-7AFE-4ED1-A961-35BD7E424985} = {FB795A12-C939-492F-9377-4C468D01EF3C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {827031C5-AE76-4B4C-9503-E13F15B497E9}

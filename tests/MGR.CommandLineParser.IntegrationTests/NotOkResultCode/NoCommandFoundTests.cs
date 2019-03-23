@@ -9,18 +9,16 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
         public void ParseWithBadCommandName()
         {
             // Arrange
-            var parserBuild = new ParserBuilder();
-            var parser = parserBuild.BuildParser();
             IEnumerable<string> args = new[] {"NotValid", "-option:true"};
-            var expectedReturnCode = CommandResultCode.NoCommandFound;
+            var expectedReturnCode = CommandParsingResultCode.NoCommandFound;
 
             // Act
-            var actual = parser.Parse(args);
+            var actual = CallParse(args);
 
             // Assert
             Assert.False(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ReturnCode);
-            Assert.Null(actual.Command);
+            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
+            Assert.Null(actual.CommandObject);
         }
     }
 }

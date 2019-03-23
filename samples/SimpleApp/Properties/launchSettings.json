@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SimpleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "run --opt 4"
+    }
+  }
+}

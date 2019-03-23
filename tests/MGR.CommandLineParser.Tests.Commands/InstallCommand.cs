@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands
@@ -42,6 +44,10 @@ namespace MGR.CommandLineParser.Tests.Commands
         [IgnoreOptionProperty]
         private bool AllowMultipleVersions => !ExcludeVersion;
 
-        protected override int ExecuteCommand() => 0;
+        protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
+
+        public InstallCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
     }
 }

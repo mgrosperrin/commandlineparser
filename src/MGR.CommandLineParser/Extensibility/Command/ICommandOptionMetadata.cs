@@ -18,7 +18,7 @@
         /// <summary>
         ///     Gets the display information of the option.
         /// </summary>
-        OptionDisplayInfo DisplayInfo { get; }
+        IOptionDisplayInfo DisplayInfo { get; }
 
         /// <summary>
         ///     Gets the default value of the option, if explicitly defined.

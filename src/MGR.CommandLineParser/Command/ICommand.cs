@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MGR.CommandLineParser.Command
 {
@@ -11,7 +12,7 @@ namespace MGR.CommandLineParser.Command
         /// Executes the command.
         /// </summary>
         /// <returns>Return 0 is everything was right, an negative error code otherwise.</returns>
-        int Execute();
+        Task<int> ExecuteAsync();
         /// <summary>
         /// The list of arguments of the command.
         /// </summary>

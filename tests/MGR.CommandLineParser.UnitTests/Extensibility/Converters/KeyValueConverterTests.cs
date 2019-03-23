@@ -35,9 +35,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Converters
 
             // Assert
             Assert.NotNull(actualValue);
-            var actualTuple = Assert.IsAssignableFrom<Tuple<object, object>>(actualValue);
-            Assert.Equal(expectedKeyValue, (string) actualTuple.Item1);
-            Assert.Equal(expectedValueValue, (int) actualTuple.Item2);
+            var actualTuple = Assert.IsAssignableFrom<KeyValuePair<object, object>>(actualValue);
+            Assert.Equal(expectedKeyValue, (string) actualTuple.Key);
+            Assert.Equal(expectedValueValue, (int) actualTuple.Value);
         }
 
         [Fact]
@@ -53,9 +53,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Converters
 
             // Assert
             Assert.NotNull(actualValue);
-            var actualTuple = Assert.IsAssignableFrom<Tuple<object, object>>(actualValue);
-            Assert.Equal(expectedKeyValue, (string) actualTuple.Item1);
-            Assert.Null(actualTuple.Item2);
+            var actualTuple = Assert.IsAssignableFrom<KeyValuePair<object, object>>(actualValue);
+            Assert.Equal(expectedKeyValue, (string) actualTuple.Key);
+            Assert.Null(actualTuple.Value);
         }
 
         [Fact]

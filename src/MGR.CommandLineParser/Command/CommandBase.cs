@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.Command;
-using MGR.CommandLineParser.Extensibility.DependencyInjection;
 using MGR.CommandLineParser.Properties;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MGR.CommandLineParser.Command
 {
@@ -20,25 +22,21 @@ namespace MGR.CommandLineParser.Command
         /// <summary>
         ///     Initializes a new instance of a <see cref="CommandBase" /> .
         /// </summary>
-        protected CommandBase()
+        protected CommandBase(IServiceProvider serviceProvider)
         {
+            ServiceProvider = serviceProvider;
             Arguments = new List<string>();
         }
 
         /// <summary>
         ///     Gets the console used by the parser (if the command needs to writes something).
         /// </summary>
-        protected IConsole Console => CurrentDependencyResolverScope.ResolveDependency<IConsole>();
+        protected IConsole Console => ServiceProvider.GetRequiredService<IConsole>();
 
         /// <summary>
-        ///     Gets the <see cref="IDependencyResolverScope" /> of the parsing operation.
+        ///     Gets the <see cref="IServiceProvider" /> of the parsing operation.
         /// </summary>
-        protected IDependencyResolverScope CurrentDependencyResolverScope { get; private set; }
-
-        /// <summary>
-        ///     Gets the <see cref="IParserOptions" /> of the parser.
-        /// </summary>
-        protected IParserOptions ParserOptions { get; private set; }
+        protected IServiceProvider ServiceProvider { get; private set; }
 
         /// <summary>
         ///     Gets the <see cref="CommandType" /> of the command.
@@ -62,28 +60,23 @@ namespace MGR.CommandLineParser.Command
         ///     Executes the command.
         /// </summary>
         /// <returns> Return 0 is everything was right, an negative error code otherwise. </returns>
-        public virtual int Execute()
+        public virtual Task<int> ExecuteAsync()
         {
             if (Help)
             {
-                var helpWriter = CurrentDependencyResolverScope.ResolveDependency<IHelpWriter>();
-                helpWriter.WriteHelpForCommand(ParserOptions, CommandType);
-                return 0;
+                var helpWriter = ServiceProvider.GetRequiredService<IHelpWriter>();
+                helpWriter.WriteHelpForCommand(CommandType);
+                return Task.FromResult(0);
             }
-            return ExecuteCommand();
+            return ExecuteCommandAsync();
         }
 
         /// <summary>
-        ///     Configure the command with the <see cref="IParserOptions" /> and the <see cref="IConsole" /> of the parser.
+        ///     Configure the command with the <see cref="ICommandType" /> representing the command.
         /// </summary>
-        /// <param name="parserOptions">The <see cref="IParserOptions" />.</param>
-        /// <param name="dependencyResolverScope">The <see cref="IDependencyResolverScope" />.</param>
         /// <param name="commandType">The <see cref="CommandType" /> of the command.</param>
-        public virtual void Configure(IParserOptions parserOptions, IDependencyResolverScope dependencyResolverScope,
-            ICommandType commandType)
+        public virtual void Configure(ICommandType commandType)
         {
-            ParserOptions = parserOptions;
-            CurrentDependencyResolverScope = dependencyResolverScope;
             CommandType = commandType;
         }
 
@@ -91,6 +84,6 @@ namespace MGR.CommandLineParser.Command
         ///     Executes the command.
         /// </summary>
         /// <returns> Return 0 is everything was right, an negative error code otherwise. </returns>
-        protected abstract int ExecuteCommand();
+        protected abstract Task<int> ExecuteCommandAsync();
     }
 }

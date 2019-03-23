@@ -2,10 +2,8 @@
 using System.Linq;
 using MGR.CommandLineParser;
 
-// ReSharper disable CheckNamespace
-
+// ReSharper disable once CheckNamespace
 namespace System
-// ReSharper restore CheckNamespace
 {
     internal static class TypeExtensions
     {
@@ -93,7 +91,7 @@ namespace System
         internal static bool IsType<T>(this Type source)
         {
             Guard.NotNull(source, nameof(source));
-            return source.IsType(typeof (T));
+            return source.IsType(typeof (T)) && source.IsClass;
         }
         internal static bool IsType(this Type source, Type baseType)
         {

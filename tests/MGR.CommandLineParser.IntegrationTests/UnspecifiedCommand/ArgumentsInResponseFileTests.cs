@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
@@ -10,7 +11,6 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
         public void ParseWithAResponseFile()
         {
             // Arrange
-            var parser = new ParserBuilder().BuildParser();
             var tempFile = Path.GetRandomFileName();
             var tempResponseFileName = Path.ChangeExtension(tempFile, ".rsp");
             var tempFolder = Path.GetTempPath();
@@ -19,17 +19,18 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             {
                 "install",
                 "--version:12.34",
-                "--excludeVersion"
+                "--exclude-version"
             });
 
             // Act
-            var actual = parser.Parse(new[] { "@" + tempResponseFile });
+            var actual = CallParse(new[] { "@" + tempResponseFile });
 
             // Assert
             Assert.True(actual.IsValid);
             Assert.Empty(actual.ValidationResults);
-            Assert.IsType<InstallCommand>(actual.Command);
-            var installCommand = (InstallCommand)actual.Command;
+            Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
+            Assert.IsType<InstallCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+            var installCommand = (InstallCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
             Assert.Empty(installCommand.Source);
             Assert.True(string.IsNullOrEmpty(installCommand.OutputDirectory));
             Assert.Equal("12.34", installCommand.Version);

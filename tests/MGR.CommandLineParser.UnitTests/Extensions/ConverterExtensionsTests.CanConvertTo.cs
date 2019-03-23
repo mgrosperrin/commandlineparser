@@ -100,6 +100,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
 
                 // Act
                 var actualException =
+                    // ReSharper disable once ExpressionIsAlwaysNull
                     Assert.Throws<ArgumentNullException>(() => testedConverter.CanConvertTo(expectedExceptionType));
 
                 // Assert
@@ -117,6 +118,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
 
                 // Act
                 var actualException =
+                    // ReSharper disable once ExpressionIsAlwaysNull
                     Assert.Throws<ArgumentNullException>(() => converterMoq.Object.CanConvertTo(targetType));
 
                 // Assert

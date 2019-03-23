@@ -4,7 +4,7 @@ namespace System.Collections.Generic
 {
     internal static class EnumeratorExtensions
     {
-        public static string GetNextCommandLineItem(this IEnumerator<string> argsEnumerator)
+        internal static string GetNextCommandLineItem(this IEnumerator<string> argsEnumerator)
         {
             if (argsEnumerator == null || !argsEnumerator.MoveNext())
             {
@@ -13,7 +13,7 @@ namespace System.Collections.Generic
             return argsEnumerator.Current;
         }
 
-        public static IEnumerator<string> PrefixWith(this IEnumerator<string> argsEnumerator, string prefix)
+        internal static IEnumerator<string> PrefixWith(this IEnumerator<string> argsEnumerator, string prefix)
         {
             var list = new List<string> {prefix};
             while (argsEnumerator != null && argsEnumerator.MoveNext())

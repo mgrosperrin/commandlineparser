@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
+using MGR.CommandLineParser.Extensibility.ClassBased;
+using MGR.CommandLineParser.Tests.Commands;
 using MGR.CommandLineParser.UnitTests;
 using Xunit;
 
@@ -8,24 +11,23 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
     public class HelpCommandTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ShowGenericHelpForAllCommand()
+
+        public async Task ShowGenericHelpForAllCommand()
         {
             // Arrange
             var parserBuild = new ParserBuilder()
                 .Logo("Display generic help")
                 .CommandLineName("myHelpTest.exe");
-            var parser = parserBuild.BuildParser();
-            IEnumerable<string> args = new[] {"help"};
-            var expectedReturnCode = CommandResultCode.Ok;
+            IEnumerable<string> args = new[] { "help" };
+            var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedResult = 0;
-            var expectedHelp = @"Display generic help
+            var expected = @"Display generic help
 Usage: myHelpTest.exe <command> [options] [args]
 Type 'myHelpTest.exe help <command>' for help on a specific command.
 
 Available commands:
- Help        
- I           
  Delete      DeleteCommandDescription
+ Help        
  Import      
  Install     InstallCommandDescription
  IntTest     
@@ -42,15 +44,16 @@ Available commands:
             // Act
             using (new LangageSwitcher("en-us"))
             {
-                var actual = parser.Parse(args);
-                var actualResult = actual.Execute();
+                var actual = CallParse(parserBuild, args);
+                var actualResult = await actual.ExecuteAsync();
 
                 // Assert
                 Assert.True(actual.IsValid);
-                Assert.Equal(expectedReturnCode, actual.ReturnCode);
-                Assert.IsType<HelpCommand>(actual.Command);
-                var actualHelp = StringConsole.Current.OutAsString();
-                Assert.Equal(expectedHelp, actualHelp, ignoreLineEndingDifferences: true);
+                Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
+                Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
+                Assert.IsType<HelpCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+                Assert.IsNotType<ImportCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+                AssertOneMessageLoggedToConsole<FakeConsole.InformationMessage>(expected);
                 Assert.Equal(expectedResult, actualResult);
             }
         }
