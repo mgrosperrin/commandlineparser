@@ -19,12 +19,21 @@ namespace MGR.CommandLineParser.Hosting
             _parserContext = parserContext;
             _applicationLifetime = applicationLifetime;
         }
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
+        {
+            var parsingAndExecutionResult = await ParseAndExecuteAsync();
+            _parserContext.ParsingAndExecutionResult = parsingAndExecutionResult;
+            _applicationLifetime.StopApplication();
+        }
+
+        private async Task<int> ParseAndExecuteAsync()
         {
             var parsingResult = _parser.Parse(_parserContext.Arguments, _serviceProvider);
-            _parserContext.ParsingResult = parsingResult;
-            _applicationLifetime.StopApplication();
-            return Task.CompletedTask;
+            if (parsingResult.IsValid)
+            {
+                return await parsingResult.ExecuteAsync();
+            }
+            return (int)parsingResult.ParsingResultCode;
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
