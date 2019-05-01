@@ -22,22 +22,22 @@ namespace MGR.CommandLineParser
 
         public string CommandLineName => _parserOptions.CommandLineName;
 
-        public ParsingResult Parse<TCommand>(IEnumerable<string> arguments, IServiceProvider serviceProvider) where TCommand : class, ICommand => ParseArguments(arguments, serviceProvider, (parserEngine, argumentsEnumerator) =>
-                   parserEngine.Parse<TCommand>(argumentsEnumerator));
+        public ParsingResult Parse<TCommand>(IEnumerable<string> args, IServiceProvider serviceProvider) where TCommand : class, ICommand => ParseArguments(args, serviceProvider, (parserEngine, arguments) =>
+                   parserEngine.Parse<TCommand>(arguments));
 
-        public ParsingResult Parse(IEnumerable<string> arguments, IServiceProvider serviceProvider) => ParseArguments(arguments, serviceProvider, (parserEngine, argumentsEnumerator) =>
-                parserEngine.Parse(argumentsEnumerator));
+        public ParsingResult Parse(IEnumerable<string> args, IServiceProvider serviceProvider) => ParseArguments(args, serviceProvider, (parserEngine, arguments) =>
+                parserEngine.Parse(arguments));
 
-        public ParsingResult ParseWithDefaultCommand<TCommand>(IEnumerable<string> arguments, IServiceProvider serviceProvider) where TCommand : class, ICommand => ParseArguments(arguments, serviceProvider, (parserEngine, argumentsEnumerator) =>
-                    parserEngine.ParseWithDefaultCommand<TCommand>(argumentsEnumerator));
+        public ParsingResult ParseWithDefaultCommand<TCommand>(IEnumerable<string> args, IServiceProvider serviceProvider) where TCommand : class, ICommand => ParseArguments(args, serviceProvider, (parserEngine, arguments) =>
+                    parserEngine.ParseWithDefaultCommand<TCommand>(arguments));
 
-        private ParsingResult ParseArguments(IEnumerable<string> arguments, IServiceProvider serviceProvider, Func<ParserEngine, IEnumerator<string>, ParsingResult> callParse)
+        private ParsingResult ParseArguments(IEnumerable<string> args, IServiceProvider serviceProvider, Func<ParserEngine, Arguments, ParsingResult> callParse)
         {
-            if (arguments == null)
+            if (args == null)
             {
                 return new ParsingResult(null, null, CommandParsingResultCode.NoArgumentsProvided);
             }
-
+            var arguments = new Arguments(args);
             var parserOptionsAccessor = serviceProvider.GetService<IParserOptionsAccessor>();
             parserOptionsAccessor.Current = _parserOptions;
             var loggerFactory = serviceProvider.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
@@ -46,9 +46,8 @@ namespace MGR.CommandLineParser
             {
                 logger.CreationOfParserEngine();
                 var parserEngine = new ParserEngine(serviceProvider, loggerFactory);
-                var argumentsEnumerator = arguments.GetArgumentsEnumerator();
 
-                var result = callParse(parserEngine, argumentsEnumerator);
+                var result = callParse(parserEngine, arguments);
                 return result;
             }
         }
