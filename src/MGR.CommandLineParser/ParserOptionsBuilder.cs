@@ -5,7 +5,7 @@ using MGR.CommandLineParser.Properties;
 namespace MGR.CommandLineParser
 {
     /// <summary>
-    /// Represents a builder for the <see cref="IParserOptions"/>.
+    /// Represents a builder for the <see cref="ParserOptions"/>.
     /// </summary>
     public class ParserOptionsBuilder
     {

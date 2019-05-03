@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.Command;
+using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
@@ -18,8 +19,8 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility
                     Logo = "Logo Unit Test",
                     CommandLineName = "tool.exe"
                 };
-                var parserOptionsAccessorMock = new Mock<IParserOptionsAccessor>();
-                parserOptionsAccessorMock.SetupGet(_ => _.Current).Returns(parserOptions);
+                var parserOptionsAccessorMock = new Mock<IOptions<ParserOptions>>();
+                parserOptionsAccessorMock.SetupGet(_ => _.Value).Returns(parserOptions);
                 var commandTypeProviderMock = new Mock<ICommandTypeProvider>();
                 commandTypeProviderMock.Setup(_ => _.GetAllCommandTypes()).Returns(Enumerable.Empty<ICommandType>);
                 var helpWriter = new DefaultHelpWriter(console, new[] { commandTypeProviderMock.Object }, parserOptionsAccessorMock.Object);
@@ -51,8 +52,8 @@ No commands found.
                 Logo = "Logo Unit Test",
                 CommandLineName = "tool.exe"
             };
-            var parserOptionsAccessorMock = new Mock<IParserOptionsAccessor>();
-            parserOptionsAccessorMock.SetupGet(_ => _.Current).Returns(parserOptions);
+            var parserOptionsAccessorMock = new Mock<IOptions<ParserOptions>>();
+            parserOptionsAccessorMock.SetupGet(_ => _.Value).Returns(parserOptions);
             var commandTypeProviderMock = new Mock<ICommandTypeProvider>();
             var commandMetadataMock = new Mock<ICommandMetadata>();
             commandMetadataMock.SetupGet(_ => _.HideFromHelpListing).Returns(false);
@@ -79,7 +80,6 @@ Available commands:
             Assert.Single(messages);
             Assert.IsType<FakeConsole.InformationMessage>(messages[0]);
             Assert.Equal(expected, messages[0].ToString(), ignoreLineEndingDifferences: true);
-            
         }
 
         [Fact]
@@ -90,8 +90,8 @@ Available commands:
                 Logo = "Logo Unit Test",
                 CommandLineName = "tool.exe"
             };
-            var parserOptionsAccessorMock = new Mock<IParserOptionsAccessor>();
-            parserOptionsAccessorMock.SetupGet(_ => _.Current).Returns(parserOptions);
+            var parserOptionsAccessorMock = new Mock<IOptions<ParserOptions>>();
+            parserOptionsAccessorMock.SetupGet(_ => _.Value).Returns(parserOptions);
             var commandTypeProviderMock = new Mock<ICommandTypeProvider>();
             var commandMetadata1Mock = new Mock<ICommandMetadata>();
             commandMetadata1Mock.SetupGet(_ => _.HideFromHelpListing).Returns(false);

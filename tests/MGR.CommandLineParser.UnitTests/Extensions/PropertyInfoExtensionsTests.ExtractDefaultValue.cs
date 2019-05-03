@@ -35,6 +35,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                     GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => OriginalProperty));
 
                 // Act
+                // ReSharper disable once AssignNullToNotNullAttribute
                 var actual = propertyInfo.ExtractDefaultValue(_ => _);
 
                 // Assert
@@ -50,6 +51,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var expected = 42;
 
                 // Act
+                // ReSharper disable once AssignNullToNotNullAttribute
                 var actual = propertyInfo.ExtractDefaultValue(_ => _);
 
                 // Assert
@@ -66,6 +68,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var expected = "Test";
 
                 // Act
+                // ReSharper disable once AssignNullToNotNullAttribute
                 var actual = propertyInfo.ExtractDefaultValue(_ => _);
 
                 // Assert
@@ -82,6 +85,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var expected = new Guid(GuidValue);
 
                 // Act
+                // ReSharper disable once AssignNullToNotNullAttribute
                 var actual = propertyInfo.ExtractDefaultValue(value => Guid.Parse(value.ToString()));
 
                 // Assert
@@ -97,6 +101,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 var propertyInfo = GetType().GetProperty(expectedName);
 
                 // Act
+                // ReSharper disable once AssignNullToNotNullAttribute
                 var actual = propertyInfo.ExtractDefaultValue(_ => _);
 
                 // Assert

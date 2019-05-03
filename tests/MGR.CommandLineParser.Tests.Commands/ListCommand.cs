@@ -24,9 +24,11 @@ namespace MGR.CommandLineParser.Tests.Commands
         public bool Prerelease { get; set; }
 
         [IgnoreOptionProperty]
+        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public object RepositoryFactory { get; }
 
         [IgnoreOptionProperty]
+        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public object SourceProvider { get; }
 
         protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
