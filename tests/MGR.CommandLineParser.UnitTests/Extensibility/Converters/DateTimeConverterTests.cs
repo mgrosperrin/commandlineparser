@@ -67,8 +67,6 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Converters
             IConverter converter = new DateTimeConverter();
             var value = "Hello";
             var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(DateTime));
-            var expectedInnerExceptionMessage =
-                "The string was not recognized as a valid DateTime. There is an unknown word starting at index 0.";
 
             // Act
             using (new LangageSwitcher("en-us"))
@@ -79,8 +77,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Converters
                 // Assert
                 Assert.Equal(expectedExceptionMessage, actualException.Message);
                 Assert.NotNull(actualException.InnerException);
-                var actualInnerExecption = Assert.IsAssignableFrom<FormatException>(actualException.InnerException);
-                Assert.Equal(expectedInnerExceptionMessage, actualInnerExecption.Message);
+                Assert.IsAssignableFrom<FormatException>(actualException.InnerException);
             }
         }
     }

@@ -29,39 +29,23 @@ namespace MGR.CommandLineParser
         /// Adds the default services for the command line parsing. No <see cref="ICommandTypeProvider"/> are registered. Add one or more <see cref="ICommandTypeProvider"/> via the returned <see cref="CommandLineParserBuilder"/>.
         /// </summary>
         /// <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> to add the parser's services to.</param>
-        /// <param name="configureParser">Configure the display options for the parser.</param>
+        /// <param name="configureParserOptions">An <see cref="Action{ParserOptions}"/> to configure the provided
+        /// <see cref="ParserOptions"/>.</param>
         /// <returns>The <see cref="CommandLineParserBuilder" /> so that <see cref="ICommandTypeProvider" /> can be registered.</returns>
-        public static CommandLineParserBuilder AddCommandLineParser(this IServiceCollection services, Action<ParserOptionsBuilder> configureParser)
-        {
-            var builder = services.AddCommandLineParserCore();
-            builder.Services.TryAddScoped<IParserFactory, DefaultParserFactory>();
-            services.AddScoped(serviceProvider =>
-            {
-                var factory = serviceProvider.GetRequiredService<IParserFactory>();
-                return factory.CreateParser();
-            });
-            services.AddSingleton<IParserOptions>(serviceProvider =>
-            {
-                var optionsBuilder = new ParserOptionsBuilder();
-                configureParser(optionsBuilder);
-                return optionsBuilder.ToParserOptions();
-            });
-            return builder;
-        }
-
-        /// <summary>
-        /// Add the core services for the parser. Calling this method don't allow the <see cref="IParser"/> to be retrieved via the DI mechanism. You'll have to use the <see cref="ParserBuilder"/> instead.
-        /// </summary>
-        /// <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> to add the parser's services to.</param>
-        /// <returns>The <see cref="CommandLineParserBuilder" /> so that <see cref="ICommandTypeProvider" /> can be registered.</returns>
-        public static CommandLineParserBuilder AddCommandLineParserCore(this IServiceCollection services)
+        public static CommandLineParserBuilder AddCommandLineParser(this IServiceCollection services, Action<ParserOptions> configureParserOptions)
         {
             services.AddLogging();
             services.AddOptions();
 
+            services.Configure(configureParserOptions);
             services.TryAddSingleton<IConsole, DefaultConsole>();
-            services.AddScoped<IParserOptionsAccessor, ParserOptionsAccessor>();
             services.TryAddScoped<IHelpWriter, DefaultHelpWriter>();
+            services.TryAddScoped<IParserFactory, DefaultParserFactory>();
+            services.TryAddScoped(serviceProvider =>
+            {
+                var factory = serviceProvider.GetRequiredService<IParserFactory>();
+                return factory.CreateParser();
+            });
 
             services
                 .AddSingleton<IConverter, BooleanConverter>()

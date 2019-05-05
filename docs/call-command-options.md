@@ -1,7 +1,7 @@
 # Call command's options
 
 To call an option of a command, you can use the following syntaxes:
-1. --LongOptionName
+1. --long-option-name
 2. -l
 
 when your option have defined as:

@@ -9,14 +9,16 @@ namespace MGR.CommandLineParser.Tests.Commands
     [Command(Description = "PackageCommandDescription", Usage = "PackageCommandUsageSummary")]
     public class PackCommand : CommandBase
     {
-        // Target file paths to exclude when building the lib package for symbol server scenario
+        // ReSharper disable once UnusedMember.Local
+        // ReSharper disable once InconsistentNaming
         private static readonly string[] _libPackageExcludes = new[]
                                                                    {
                                                                        @"**\*.pdb",
                                                                        @"src\**\*"
                                                                    };
 
-        // Target file paths to exclude when building the symbols package for symbol server scenario
+        // ReSharper disable once InconsistentNaming
+        // ReSharper disable once UnusedMember.Local
         private static readonly string[] _symbolPackageExcludes = new[]
                                                                       {
                                                                           @"content\**\*",
@@ -50,6 +52,8 @@ namespace MGR.CommandLineParser.Tests.Commands
         [Display(Description = "PackageCommandBuildDescription", ShortName = "b")]
         public bool Build { get; set; }
         [Display(Description = "CommandMSBuildVersion")]
+        // ReSharper disable once UnusedMember.Global
+        // ReSharper disable once InconsistentNaming
         public string MSBuildVersion { get; set; }
         [Display(Description = "PackageCommandNoDefaultExcludes")]
         public bool NoDefaultExcludes { get; set; }

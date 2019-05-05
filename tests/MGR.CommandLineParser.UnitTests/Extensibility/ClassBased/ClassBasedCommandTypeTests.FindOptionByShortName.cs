@@ -45,8 +45,12 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
             private class TestCommand : ICommand
             {
                 [Display(ShortName = "pl")]
+                // ReSharper disable once CollectionNeverUpdated.Local
+                // ReSharper disable once UnusedAutoPropertyAccessor.Local
                 public List<int> PropertyList { get; set; }
+                // ReSharper disable once UnusedMember.Local
                 public Dictionary<string, Guid> PropertyDictionary { get; set; }
+                // ReSharper disable once UnusedMember.Local
                 public int PropertySimple { get; set; }
 
                 #region ICommand Members

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.DependencyModel;
 
 namespace MGR.CommandLineParser.Extensibility.ClassBased
 {
@@ -30,16 +32,21 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
         }
 
         /// <inheritdoc />
-        [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods",
-            MessageId = "System.Reflection.Assembly.LoadFrom")]
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public IEnumerable<Assembly> GetAssembliesToBrowse()
         {
+            var alreadyLoadablesLivraries = DependencyContext.Default.RuntimeLibraries;
             foreach (var assemblyFile in GetFilesToLoad())
             {
+                var assemblyNameFromFile = Path.GetFileNameWithoutExtension(assemblyFile);
+                if (alreadyLoadablesLivraries.Any(runtimeLibrary => runtimeLibrary.Name.Equals(assemblyNameFromFile, StringComparison.OrdinalIgnoreCase)))
+                {
+                    continue;
+                }
+
                 try
                 {
-                    Assembly.Load(assemblyFile);
+                    Assembly.LoadFile(assemblyFile);
                 }
 
                 // ReSharper disable once EmptyGeneralCatchClause

@@ -30,9 +30,11 @@ namespace MGR.CommandLineParser.Tests.Commands
         public bool NoCache { get; set; }
 
         [IgnoreOptionProperty]
+        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public object RepositoryFactory { get; }
 
         [IgnoreOptionProperty]
+        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public object SourceProvider { get; }
 
         /// <remarks>
@@ -42,6 +44,7 @@ namespace MGR.CommandLineParser.Tests.Commands
         protected object CacheRepository => null;
 
         [IgnoreOptionProperty]
+        // ReSharper disable once UnusedMember.Local
         private bool AllowMultipleVersions => !ExcludeVersion;
 
         protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
