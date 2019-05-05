@@ -43,7 +43,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
         private Dictionary<string, ClassBasedCommandType> SearchAllCommandTypes()
         {
             var assemblies = _assemblyProviders.SelectMany(assemblyProvider => assemblyProvider.GetAssembliesToBrowse()).ToList();
-            var types = assemblies.GetTypes(type => TypeExtensions.IsType<ICommand>(type)).ToList();
+            var types = assemblies.GetTypes(type => type.IsType<ICommand>()).ToList();
 
             var commandTypes = types.Select(commandType => new ClassBasedCommandType(commandType, _converters, _optionAlternateNameGenerators)).ToList();
             var commandTypesByName = commandTypes.ToDictionary(commandType => commandType.Metadata.Name, _ => _, StringComparer.OrdinalIgnoreCase);

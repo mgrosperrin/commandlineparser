@@ -6,6 +6,7 @@ using System.Linq;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Properties;
+using Microsoft.Extensions.Options;
 
 namespace MGR.CommandLineParser.Extensibility
 {
@@ -20,7 +21,7 @@ namespace MGR.CommandLineParser.Extensibility
 
         private readonly IConsole _console;
         private readonly IEnumerable<ICommandTypeProvider> _commandTypeProviders;
-        private readonly IParserOptionsAccessor _parserOptionsAccessor;
+        private readonly IOptions<ParserOptions> _parserOptionsAccessor;
 
         /// <summary>
         /// Create a new <see cref="DefaultHelpWriter"/>.
@@ -28,7 +29,7 @@ namespace MGR.CommandLineParser.Extensibility
         /// <param name="console"></param>
         /// <param name="commandTypeProviders"></param>
         /// <param name="parserOptionsAccessor"></param>
-        public DefaultHelpWriter(IConsole console, IEnumerable<ICommandTypeProvider> commandTypeProviders, IParserOptionsAccessor parserOptionsAccessor)
+        public DefaultHelpWriter(IConsole console, IEnumerable<ICommandTypeProvider> commandTypeProviders, IOptions<ParserOptions> parserOptionsAccessor)
         {
             _console = console;
             _commandTypeProviders = commandTypeProviders;
@@ -80,7 +81,7 @@ namespace MGR.CommandLineParser.Extensibility
             Guard.NotNull(commandTypes, nameof(commandTypes));
 
             WriteGeneralInformation();
-            var parserOptions = _parserOptionsAccessor.Current;
+            var parserOptions = _parserOptionsAccessor.Value;
             foreach (var commandType in commandTypes.OrderBy(ct => ct.Metadata.Name))
             {
                 var metadata = commandType.Metadata;
@@ -128,7 +129,7 @@ namespace MGR.CommandLineParser.Extensibility
 
         private void WriteGeneralInformation()
         {
-            var parserOptions = _parserOptionsAccessor.Current;
+            var parserOptions = _parserOptionsAccessor.Value;
             _console.WriteLine(parserOptions.Logo);
             _console.WriteLine(Strings.DefaultHelpWriter_GlobalUsageFormat, string.Format(CultureInfo.CurrentUICulture, Strings.DefaultHelpWriter_GlobalCommandLineCommandFormat, parserOptions.CommandLineName).Trim());
             _console.WriteLine(Strings.DefaultHelpWriter_GlobalHelpCommandUsageFormat, string.Format(CultureInfo.CurrentUICulture, "{0} {1}", parserOptions.CommandLineName, HelpCommand.Name).Trim());

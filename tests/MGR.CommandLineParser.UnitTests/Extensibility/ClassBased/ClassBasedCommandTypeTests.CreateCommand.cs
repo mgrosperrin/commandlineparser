@@ -44,6 +44,8 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
             private class TestBadConverterCommand : ICommand
             {
                 [Converter(typeof(BooleanConverter))]
+                // ReSharper disable once UnusedMember.Local
+                // ReSharper disable once UnusedAutoPropertyAccessor.Local
                 public int PropertySimpleWithBadConverter { get; set; }
 
                 #region ICommand Members

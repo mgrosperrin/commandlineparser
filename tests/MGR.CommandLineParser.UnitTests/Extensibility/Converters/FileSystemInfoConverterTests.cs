@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using MGR.CommandLineParser.Extensibility.Converters;
 using Xunit;
 
@@ -51,53 +50,6 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Converters
             Assert.NotNull(actual);
             Assert.IsType<DirectoryInfo>(actual);
             Assert.Equal(value, ((DirectoryInfo)actual).FullName);
-        }
-
-        [Fact]
-        [Trait(nameof(Exception), nameof(CommandLineParserException))]
-        public void FileInfo_WithInValidPath_Conversion()
-        {
-            // Arrange
-            IConverter converter = new FileSystemInfoConverter();
-            var value = "Hello:world";
-            var expectedType = typeof (FileInfo);
-            var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, expectedType);
-            var expectedInnerExceptionMessage = "The given path's format is not supported.";
-
-            // Act
-            using (new LangageSwitcher("en-us"))
-            {
-                var actualException = Assert.Throws<CommandLineParserException>(() => converter.Convert(value, expectedType));
-
-                // Assert
-                Assert.Equal(expectedExceptionMessage, actualException.Message);
-                Assert.NotNull(actualException.InnerException);
-                var actualInnerExecption = Assert.IsAssignableFrom<NotSupportedException>(actualException.InnerException);
-                Assert.Equal(expectedInnerExceptionMessage, actualInnerExecption.Message);
-            }
-        }
-        [Fact]
-        [Trait(nameof(Exception), nameof(CommandLineParserException))]
-        public void DirectoryInfo_WithInValidPath_Conversion()
-        {
-            // Arrange
-            IConverter converter = new FileSystemInfoConverter();
-            var value = "Hello\\the:World";
-            var expectedType = typeof(DirectoryInfo);
-            var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, expectedType);
-            var expectedInnerExceptionMessage = "The given path's format is not supported.";
-
-            // Act
-            using (new LangageSwitcher("en-us"))
-            {
-                var actualException = Assert.Throws<CommandLineParserException>(() => converter.Convert(value, expectedType));
-
-                // Assert
-                Assert.Equal(expectedExceptionMessage, actualException.Message);
-                Assert.NotNull(actualException.InnerException);
-                var actualInnerExecption = Assert.IsAssignableFrom<NotSupportedException>(actualException.InnerException);
-                Assert.Equal(expectedInnerExceptionMessage, actualInnerExecption.Message);
-            }
         }
     }
 }

@@ -27,9 +27,9 @@ namespace MGR.CommandLineParser.Hosting.Extensions
         /// </summary>
         /// <param name="hostBuilder">The <see cref="IHostBuilder"/> to configure.</param>
         /// <param name="configureParser">An action to configure the <see cref="IParser"/>.</param>
-        /// <param name="configureParserOptions">An action to configure the <see cref="IParserOptions"/> of the parser.</param>
+        /// <param name="configureParserOptions">An action to configure the <see cref="ParserOptions"/> of the parser.</param>
         /// <returns>The configured <see cref="IHostBuilder"/>.</returns>
-        public static IHostBuilder ConfigureParser(this IHostBuilder hostBuilder, Action<CommandLineParserBuilder> configureParser, Action<ParserOptionsBuilder> configureParserOptions)
+        public static IHostBuilder ConfigureParser(this IHostBuilder hostBuilder, Action<CommandLineParserBuilder> configureParser, Action<ParserOptions> configureParserOptions)
         {
             hostBuilder.ConfigureServices(
                 (context, services) =>

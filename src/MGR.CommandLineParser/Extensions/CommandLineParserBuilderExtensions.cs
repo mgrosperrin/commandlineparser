@@ -15,10 +15,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a <see cref="ICommandTypeProvider"/> based on browsing all types in all loaded assemblies after having loaded all assemblies present on the current folder.
         /// </summary>
         /// <param name="builder">The <see cref="CommandLineParserBuilder"/> to configure.</param>
+        /// <remarks>If you are running on .NET Core, do not use this method.</remarks>
         /// <returns>The <see cref="CommandLineParserBuilder" /> so that additional calls can be chained.</returns>
         public static CommandLineParserBuilder AddClassBasedCommands(this CommandLineParserBuilder builder)
         {
-            builder.Services.TryAddSingleton<IAssemblyProvider, CurrentDirectoryAssemblyProvider>();
+            builder.Services.AddSingleton<IAssemblyProvider, CurrentDirectoryAssemblyProvider>();
             builder.Services.TryAddScoped<ICommandTypeProvider, AssemblyBrowsingClassBasedCommandTypeProvider>();
             builder.Services.TryAddScoped<IClassBasedCommandActivator, ClassBasedDependencyResolverCommandActivator>();
 
@@ -34,7 +35,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static CommandLineParserBuilder AddCommands<TCommand>(this CommandLineParserBuilder builder)
             where TCommand : class, ICommand
         {
-            builder.Services.TryAddSingleton<IAssemblyProvider>(new DefaultAssemblyProvider(typeof(TCommand).Assembly));
+            builder.Services.AddSingleton<IAssemblyProvider>(new DefaultAssemblyProvider(typeof(TCommand).Assembly));
             builder.Services.TryAddScoped<ICommandTypeProvider, AssemblyBrowsingClassBasedCommandTypeProvider>();
             builder.Services.TryAddScoped<IClassBasedCommandActivator, ClassBasedDependencyResolverCommandActivator>();
 
