@@ -226,7 +226,6 @@ stages:
              git add .
              git commit -m "Generate documentation for version $(Version.FullSemVer)"
              git push https://%gta%@github.com/$(GitHub.RepositoryName).git
-
             workingDirectory: '$(Path.GitHub.Clone.Temp)'
             displayName: 'Configure Git, commit & push'
             env:

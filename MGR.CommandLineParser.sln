@@ -38,6 +38,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{07E4D8F7
 		build\azure-pipelines.yaml = build\azure-pipelines.yaml
 		build\coverlet.runsettings = build\coverlet.runsettings
 		Directory.Build.props = Directory.Build.props
+		azure-pipeline-build.yaml = azure-pipeline-build.yaml
 		build\generate_docs.ps1 = build\generate_docs.ps1
 		GitVersionConfig.yaml = GitVersionConfig.yaml
 		global.json = global.json
