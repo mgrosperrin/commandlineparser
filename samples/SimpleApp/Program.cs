@@ -28,9 +28,9 @@ namespace SimpleApp
 
             await HostBuilderCalls.CreateAndCallDefaultParserBuilderAsync();
             WriteSeparator();
-            
+
             //await Tester.RunSampleTests();
-            
+
             var hostBuilder = new HostBuilder();
             hostBuilder.ConfigureParser(builder =>
             {
