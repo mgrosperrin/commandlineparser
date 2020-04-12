@@ -8,19 +8,19 @@ namespace MGR.CommandLineParser.Hosting
     {
         private readonly IParser _parser;
         private readonly ParserContext _parserContext;
-        private readonly IApplicationLifetime _applicationLifetime;
+        private readonly IHostApplicationLifetime _hostApplicationLifetime;
 
-        public ParserHostedService(IParser parser, ParserContext parserContext, IApplicationLifetime applicationLifetime)
+        public ParserHostedService(IParser parser, ParserContext parserContext, IHostApplicationLifetime hostApplicationLifetime)
         {
             _parser = parser;
             _parserContext = parserContext;
-            _applicationLifetime = applicationLifetime;
+            _hostApplicationLifetime = hostApplicationLifetime;
         }
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             var parsingAndExecutionResult = await ParseAndExecuteAsync();
             _parserContext.ParsingAndExecutionResult = parsingAndExecutionResult;
-            _applicationLifetime.StopApplication();
+            _hostApplicationLifetime.StopApplication();
         }
 
         private async Task<int> ParseAndExecuteAsync()

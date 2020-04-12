@@ -45,7 +45,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Converters
             IConverter converter = new TimeSpanConverter();
             var value = "Hello";
             var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(TimeSpan));
+#if NET471
             var expectedInnerExceptionMessage = "String was not recognized as a valid TimeSpan.";
+#else
+            var expectedInnerExceptionMessage = "String 'Hello' was not recognized as a valid TimeSpan.";
+#endif
 
             // Act
             using (new LangageSwitcher("en-us"))
