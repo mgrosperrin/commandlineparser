@@ -3,7 +3,7 @@ MGR.Commandlineparser
 
 _**Build status**_
 
-| dev        | [![Build status][build-status-dev_img]][build-status_dev_url] |
+| dev        | [![Build status][build-status_dev_img]][build-status_dev_url] |
 |------------|---------------------------------------------------------|
 | **master** | [![Build status][build-status_master_img]][build-status_master_url] |
 
