@@ -34,7 +34,7 @@ jobs:
   - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@1
     displayName: 'Generate code coverage report'
     inputs:
-      reports: '**/*.IntegrationTests/_BuildReports/Coverage/coverage.cobertura.xml;**/*.UnitTests/_BuildReports/Coverage/coverage.cobertura.xml'
+      reports: '**/*.IntegrationTests/_BuildReports/Coverage/coverage.netcoreapp3.1.cobertura.xml;**/*.UnitTests/_BuildReports/Coverage/coverage.netcoreapp3.1.cobertura.xml'
       targetdir: '$(Build.ArtifactStagingDirectory)/Coverage'
     condition: succeededOrFailed()
 
