@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MGR.CommandLineParser.Command;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -54,6 +55,36 @@ namespace MGR.CommandLineParser.Hosting.Extensions
         {
             var host = hostBuilder.Build();
             var executionResult = await host.ParseCommandLineAndExecuteAsync(args, cancellationToken);
+            return executionResult;
+        }
+        /// <summary>
+        /// Parse the command line for a specific command and execute the command if it is valid. The name of the command should not be in the arguments list.
+        /// </summary>
+        /// <param name="hostBuilder">The configured <see cref="IHostBuilder"/>.</param>
+        /// <param name="args">The arguments to parse.</param>
+        /// <param name="cancellationToken">The token to trigger shutdown.</param>
+        /// <typeparam name="TCommand">The type of the command.</typeparam>
+        /// <remarks>This method can only be used with class-based command.</remarks>
+        /// <returns>A code that represents the result of the parsing and the execution of the command.</returns>
+        public static async Task<int> ParseCommandLineAndExecuteAsync<TCommand>(this IHostBuilder hostBuilder, string[] args, CancellationToken cancellationToken = default) where TCommand : class, ICommand
+        {
+                var host = hostBuilder.Build();
+                var executionResult = await host.ParseCommandLineAndExecuteAsync<TCommand>(args, cancellationToken);
+                return executionResult;
+        }
+        /// <summary>
+        /// Parse the command line and execute the command if it is valid. If the name of the command is not the first argument, fallback to the specified command.
+        /// </summary>
+        /// <typeparam name="TCommand">The type of the default command.</typeparam>
+        /// <param name="hostBuilder">The configured <see cref="IHostBuilder"/>.</param>
+        /// <param name="args">The arguments to parse.</param>
+        /// <param name="cancellationToken">The token to trigger shutdown.</param>
+        /// <remarks>This method can only be used with class-based command.</remarks>
+        /// <returns>A code that represents the result of the parsing and the execution of the command.</returns>
+        public static async Task<int> ParseCommandLineWithDefaultCommandAndExecuteAsync<TCommand>(this IHostBuilder hostBuilder, string[] args, CancellationToken cancellationToken = default) where TCommand : class, ICommand
+        {
+            var host = hostBuilder.Build();
+            var executionResult = await host.ParseCommandLineWithDefaultCommandAndExecuteAsync<TCommand>(args, cancellationToken);
             return executionResult;
         }
     }

@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyModel;
 
 namespace MGR.CommandLineParser.Extensibility.ClassBased
@@ -17,7 +18,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
         /// Gets the recursively options for browsing the current folder.
         /// </summary>
         protected abstract SearchOption SearchOption { get; }
-
+        [ItemNotNull]
         private IEnumerable<string> GetFilesToLoad()
         {
             var thisDirectory = Environment.CurrentDirectory;
@@ -35,11 +36,11 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public IEnumerable<Assembly> GetAssembliesToBrowse()
         {
-            var alreadyLoadablesLivraries = DependencyContext.Default.RuntimeLibraries;
+            var alreadyLoadedLibraries = DependencyContext.Default.RuntimeLibraries;
             foreach (var assemblyFile in GetFilesToLoad())
             {
                 var assemblyNameFromFile = Path.GetFileNameWithoutExtension(assemblyFile);
-                if (alreadyLoadablesLivraries.Any(runtimeLibrary => runtimeLibrary.Name.Equals(assemblyNameFromFile, StringComparison.OrdinalIgnoreCase)))
+                if (alreadyLoadedLibraries.Any(runtimeLibrary => runtimeLibrary.Name.Equals(assemblyNameFromFile, StringComparison.OrdinalIgnoreCase)))
                 {
                     continue;
                 }

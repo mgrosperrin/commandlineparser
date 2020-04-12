@@ -126,7 +126,7 @@ Task("Run-Unit-Tests")
     var settings = new DotNetCoreTestSettings {
         Configuration = configuration,
         NoBuild = true,
-        ArgumentCustomization = arguments => 
+        ArgumentCustomization = arguments =>
             arguments
                 .Append("--logger")
                 .AppendQuoted("trx;LogFileName=TestsResults.trx")
@@ -137,7 +137,7 @@ Task("Run-Unit-Tests")
                 .Append("/p:CoverletOutputFormat=cobertura")
                 .Append("/p:Exclude=\"[xunit.*]*%2c[*]JetBrains.*%2c[*Tests]*\"")
     };
-    
+
     settings.ResultsDirectory = unitTestsProjectDir + Directory("_BuildReports") + Directory("UnitTests");
     DotNetCoreTest(unitTestsProjectFile, settings);
 
@@ -155,7 +155,7 @@ public void GenerateCodeCoverageReport()
     var settings = new DotNetCoreToolSettings
     {
         WorkingDirectory = unitTestsProjectDir,
-        ArgumentCustomization = args => 
+        ArgumentCustomization = args =>
                 args.AppendQuoted("-reports:" + reportsPath)
                     .AppendQuoted("-targetdir:" + (artifactsDir + Directory("Coverage")).Path.FullPath)
                     .Append("-reporttypes:HTML;HTMLSummary")
