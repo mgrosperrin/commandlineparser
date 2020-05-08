@@ -14,8 +14,8 @@
 x64/
 x86/
 build/*
-!build/*.cs
-!build/*.cake
+!build/*.ps1
+!build/*.yaml
 bld/
 [Bb]in/
 [Oo]bj/

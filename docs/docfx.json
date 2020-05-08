@@ -15,9 +15,7 @@
           "src": "../src"
         }
       ],
-      "dest": "../artifacts/docs/obj/api",
-      "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "dest": "../artifacts/docs/obj/api"
     }
   ],
   "build": {
