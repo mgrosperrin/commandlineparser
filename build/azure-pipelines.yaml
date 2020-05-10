@@ -121,7 +121,7 @@ stages:
     pool:
       name: Azure Pipelines
       vmImage: windows-2019
-    dependsOn: BuildLibraries
+    dependsOn: BuildLibrairies
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/dev')
     environment: MyGet
     strategy:
@@ -145,14 +145,14 @@ stages:
     pool:
       name: Azure Pipelines
       vmImage: windows-2019
-    dependsOn: BuildLibraries
+    dependsOn: BuildLibrairies
     condition: |
       and(
         or(
           eq(variables['Build.SourceBranch'], 'refs/heads/master'),
           startsWith(variables['Build.SourceBranch'], 'refs/heads/release-')
         ),
-        eq(dependencies.BuildLibraries.outputs['Version.BuildMetadata'], '')
+        eq(dependencies.BuildLibrairies.outputs['Version.BuildMetadata'], '')
       )
     environment: NuGet
     strategy:
