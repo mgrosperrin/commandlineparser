@@ -170,7 +170,7 @@ stages:
               command: 'push'
               packagesToPush: '$(Pipeline.Workspace)/$(Artifact.Packages.Name)/*.nupkg'
               nuGetFeedType: 'external'
-              publishFeedCredentials: 'NuGet - MGR.PortableObject'
+              publishFeedCredentials: 'NuGet - MGR.CommandLineParser'
   - deployment: PublishDocumentation
     displayName: Deploy the documentation to GitHub Pages
     dependsOn: BuildDocumentation
@@ -179,7 +179,7 @@ stages:
     - name: Version.FullSemVer
       value: $[ dependencies.BuildDocumentation.outputs['Version.FullSemVer'] ]
     - name: GitHub.RepositoryName
-      value: mgrosperrin/portable-object
+      value: mgrosperrin/commandlineparser
     - name: GitHub.GH-Pages.BranchName
       value: gh-pages
     - name: Path.GitHub.Clone.Temp
