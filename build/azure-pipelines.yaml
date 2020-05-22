@@ -51,7 +51,7 @@ stages:
       displayName: 'Install the .NET Core SDK'
       inputs:
         packageType: 'sdk'
-        useGlobalJson: true
+        version: '3.1.x'
     - task: DotNetCoreCLI@2
       displayName: 'Build & Pack the libraries'
       inputs:
