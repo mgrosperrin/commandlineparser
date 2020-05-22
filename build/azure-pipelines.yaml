@@ -106,6 +106,7 @@ stages:
   displayName: Publish the prerelease packages
   dependsOn: Build
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/dev')
+  jobs:
   - deployment: PublishMyGet
     displayName: Deploy the packages to MyGet
     pool:
@@ -139,6 +140,7 @@ stages:
         ),
         eq(dependencies.Build.ComputeVersion.outputs['Version.BuildMetadata'], '')
       )
+  jobs:
   - deployment: PublishNuGet
     displayName: Deploy the packages to NuGet.org
     pool:
