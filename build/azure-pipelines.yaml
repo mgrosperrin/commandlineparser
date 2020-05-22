@@ -15,8 +15,8 @@ variables:
   value: documentation_site.zip
 
 stages:
-- stage: BuildAndPublish
-  displayName: 'Build & publish the libraries & documentation'
+- stage: Build
+  displayName: 'Build the libraries & documentation'
   jobs:
   - job: ComputeVersion
     displayName: Compute the version
@@ -74,13 +74,6 @@ stages:
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)/nuget'
         ArtifactName: $(Artifact.Packages.Name)
-    - task: CmdLine@2
-      name: Version
-      displayName: Sets the build variables to make them available to others jobs
-      inputs:
-        script: |
-          echo "##vso[task.setvariable variable=FullSemVer;isOutput=true]$(Version.FullSemVer)
-          echo "##vso[task.setvariable variable=BuildMetadata;isOutput=true]$(Version.BuildMetadata)
   - job: BuildDocumentation
     displayName: Build the documentation
     dependsOn: ComputeVersion
@@ -109,20 +102,15 @@ stages:
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Artifact.Documentation.FilePath)'
         ArtifactName: $(Artifact.Documentation.Name)
-    - task: CmdLine@2
-      name: Version
-      displayName: Sets the build variables to make them available to others jobs
-      inputs:
-        script: |
-          echo "##vso[task.setvariable variable=FullSemVer;isOutput=true]$(Version.FullSemVer)
-          echo "##vso[task.setvariable variable=BuildMetadata;isOutput=true]$(Version.BuildMetadata)
+- stage: PublishPrerelease
+  displayName: Publish the prerelease packages
+  dependsOn: Build
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/dev')
   - deployment: PublishMyGet
     displayName: Deploy the packages to MyGet
     pool:
       name: Azure Pipelines
       vmImage: windows-2019
-    dependsOn: BuildLibrairies
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/dev')
     environment: MyGet
     strategy:
       runOnce:
@@ -140,20 +128,22 @@ stages:
               packagesToPush: '$(Pipeline.Workspace)/$(Artifact.Packages.Name)/*.nupkg'
               nuGetFeedType: 'external'
               publishFeedCredentials: 'MyGet - mgrosperrin'
-  - deployment: PublishNuGet
-    displayName: Deploy the packages to NuGet.org
-    pool:
-      name: Azure Pipelines
-      vmImage: windows-2019
-    dependsOn: BuildLibrairies
-    condition: |
+- stage: PublishRelease
+  displayName: 'Publish the release packages'
+  dependsOn: Build
+  condition: |
       and(
         or(
           eq(variables['Build.SourceBranch'], 'refs/heads/master'),
           startsWith(variables['Build.SourceBranch'], 'refs/heads/release-')
         ),
-        eq(dependencies.BuildLibrairies.outputs['Version.BuildMetadata'], '')
+        eq(dependencies.Build.ComputeVersion.outputs['Version.BuildMetadata'], '')
       )
+  - deployment: PublishNuGet
+    displayName: Deploy the packages to NuGet.org
+    pool:
+      name: Azure Pipelines
+      vmImage: windows-2019
     environment: NuGet
     strategy:
       runOnce:
@@ -171,13 +161,17 @@ stages:
               packagesToPush: '$(Pipeline.Workspace)/$(Artifact.Packages.Name)/*.nupkg'
               nuGetFeedType: 'external'
               publishFeedCredentials: 'NuGet - MGR.CommandLineParser'
-  - deployment: PublishDocumentation
+  - deployment: Documentation
     displayName: Deploy the documentation to GitHub Pages
-    dependsOn: BuildDocumentation
+    condition: |
+      and(
+        eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+        eq(dependencies.Build.ComputeVersion.outputs['Version.BuildMetadata'], '')
+      )
     variables:
     - group: GitHub_Access_Token
     - name: Version.FullSemVer
-      value: $[ dependencies.BuildDocumentation.outputs['Version.FullSemVer'] ]
+      value: $[ dependencies.Build.ComputeVersion.outputs['Version.FullSemVer'] ]
     - name: GitHub.RepositoryName
       value: mgrosperrin/commandlineparser
     - name: GitHub.GH-Pages.BranchName
@@ -188,11 +182,6 @@ stages:
       value: $(Pipeline.Workspace)/$(Artifact.Documentation.Name)/$(Artifact.Documentation.FilePath)
     - name: Path.Documentation.Expansion.FullPath
       value: $(Pipeline.Workspace)\temp_expansion_folder
-    condition: |
-      and(
-        eq(variables['Build.SourceBranch'], 'refs/heads/master'),
-        eq(dependencies.BuildDocumentation.outputs['Version.BuildMetadata'], '')
-      )
     pool:
       name: Azure Pipelines
       vmImage: windows-2019
