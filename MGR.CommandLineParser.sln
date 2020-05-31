@@ -37,8 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{07E4D8F7-2EDA-460D-B8E0-58B1BA42CD46}"
 	ProjectSection(SolutionItems) = preProject
-		azure-pipeline-build.yaml = azure-pipeline-build.yaml
 		build\azure-pipelines.yaml = build\azure-pipelines.yaml
+		build\coverlet.runsettings = build\coverlet.runsettings
 		build\generate_docs.ps1 = build\generate_docs.ps1
 		GitVersionConfig.yaml = GitVersionConfig.yaml
 	EndProjectSection
@@ -53,7 +53,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.Comma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.Hosting", "src\MGR.CommandLineParser.Hosting\MGR.CommandLineParser.Hosting.csproj", "{40EAA8E2-7AFE-4ED1-A961-35BD7E424985}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "docs", "docs\docs.csproj", "{405858FA-1E78-48C7-9915-B558D0F15CAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "docs", "docs\docs.csproj", "{405858FA-1E78-48C7-9915-B558D0F15CAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
