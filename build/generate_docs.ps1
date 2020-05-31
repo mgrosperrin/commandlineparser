@@ -1,7 +1,8 @@
 Param(
     [switch]$Serve
 )
-$ARTIFACTS_DIR = Join-Path $PSScriptRoot "artifacts"
+$REPO_DIR = Join-Path $PSScriptRoot ".."
+$ARTIFACTS_DIR = Join-Path $REPO_DIR "artifacts"
 $TOOLS_DIR = Join-Path $ARTIFACTS_DIR "tools"
 $docfxRoot = Join-Path $TOOLS_DIR "docfx.console"
 $docfx = Join-Path (Join-Path $docfxRoot "tools") "docfx.exe"
@@ -16,4 +17,5 @@ if (-not (Test-Path $docfx)) {
 if ($Serve) {
     $arguments += '--serve'
 }
-& $docfx docs/docfx.json @arguments
+$DocFxJsonPath = Join-Path $REPO_DIR "docs" "docfx.json"
+& $docfx $DocFxJsonPath @arguments
