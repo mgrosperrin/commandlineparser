@@ -35,7 +35,7 @@ stages:
         script: |
           echo "##vso[task.setvariable variable=FullSemVer;isOutput=true]$(GitVersion.FullSemVer)
           echo "##vso[task.setvariable variable=BuildMetadata;isOutput=true]$(GitVersion.BuildMetadata)
-  - job: BuildLibrairies
+  - job: BuildLibraries
     displayName: Build the libraries
     dependsOn: ComputeVersion
     pool:
