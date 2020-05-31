@@ -17,5 +17,5 @@ if (-not (Test-Path $docfx)) {
 if ($Serve) {
     $arguments += '--serve'
 }
-$DocFxJsonPath = Join-Path $REPO_DIR "docs" "docfx.json"
+$DocFxJsonPath = Join-Path (Join-Path $REPO_DIR "docs") "docfx.json"
 & $docfx $DocFxJsonPath @arguments
