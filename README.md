@@ -130,10 +130,10 @@ Depending on the value of `args`, the result will be (when not providing the typ
 |`HelloWorld --name Matthias` or `HelloWorld -n Matthias`|return code is `CommandResultCode.Ok` (0) and `Hello world Matthias !` is printed to the console|
 
 
-   [build-status_dev_img]: https://mgrosperrin.visualstudio.com/github/_apis/build/status/MGR.CommandLineParser?branchName=dev
-   [build-status_dev_url]: https://mgrosperrin.visualstudio.com/github/_build?definitionId=8
-   [build-status_master_img]: https://mgrosperrin.visualstudio.com/github/_apis/build/status/MGR.CommandLineParser?branchName=master
-   [build-status_master_url]: https://mgrosperrin.visualstudio.com/github/_build?definitionId=8
+   [build-status_dev_img]: https://dev.azure.com/mgrosperrin/github/_apis/build/status/MGR.CommandLineParser?branchName=dev
+   [build-status_dev_url]: https://dev.azure.com/mgrosperrin/github/_build?definitionId=14&_a=summary&repositoryFilter=4&branchFilter=22
+   [build-status_master_img]: https://dev.azure.com/mgrosperrin/github/_apis/build/status/MGR.CommandLineParser?branchName=master
+   [build-status_master_url]: https://dev.azure.com/mgrosperrin/github/_build?definitionId=14&_a=summary&repositoryFilter=4&branchFilter=39
    [myget_commandlineparser_img]: https://img.shields.io/myget/mgrosperrin/vpre/MGR.CommandLineParser.svg
    [myget_commandlineparser_url]: https://www.myget.org/feed/mgrosperrin/package/nuget/MGR.CommandLineParser/
    [myget-download_commandlineparser_img]: https://img.shields.io/myget/mgrosperrin/dt/MGR.CommandLineParser.svg
