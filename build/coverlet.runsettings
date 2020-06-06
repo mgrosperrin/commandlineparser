@@ -7,7 +7,7 @@
                     <Format>cobertura</Format>
                     <Exclude>[xunit.*]*,[*]JetBrains.*,[*Tests*]*</Exclude>
                     <SingleHit>false</SingleHit>
-                    <UseSourceLink>true</UseSourceLink>
+                    <UseSourceLink>false</UseSourceLink>
                     <IncludeTestAssembly>false</IncludeTestAssembly>
                 </Configuration>
             </DataCollector>
