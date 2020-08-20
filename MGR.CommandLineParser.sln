@@ -26,8 +26,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		Directory.Build.props = Directory.Build.props
-		global.json = global.json
 		LICENSE = LICENSE
 		MGR.CommandLineParser.ruleset = MGR.CommandLineParser.ruleset
 		MGR.CommandLineParser.runsettings = MGR.CommandLineParser.runsettings
@@ -37,27 +35,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{07E4D8F7-2EDA-460D-B8E0-58B1BA42CD46}"
 	ProjectSection(SolutionItems) = preProject
-		azure-pipeline-build.yaml = azure-pipeline-build.yaml
-		build\build.cake = build\build.cake
-		build.ps1 = build.ps1
+		build\azure-pipelines.yaml = build\azure-pipelines.yaml
+		build\coverlet.runsettings = build\coverlet.runsettings
+		Directory.Build.props = Directory.Build.props
+		build\generate_docs.ps1 = build\generate_docs.ps1
 		GitVersionConfig.yaml = GitVersionConfig.yaml
+		global.json = global.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.Tests.Commands", "tests\MGR.CommandLineParser.Tests.Commands\MGR.CommandLineParser.Tests.Commands.csproj", "{A422BACE-2758-4ABD-9DAA-ADF289FCCE65}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{172E24C2-BF99-4DA9-A7DF-8C0BB44C138D}"
-	ProjectSection(SolutionItems) = preProject
-		docs\call-command-options.md = docs\call-command-options.md
-		docs\customize-command-display.md = docs\customize-command-display.md
-		docs\customize-internal-of-parser.md = docs\customize-internal-of-parser.md
-		docs\index.md = docs\index.md
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FB795A12-C939-492F-9377-4C468D01EF3C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.Command.Lambda", "src\MGR.CommandLineParser.Command.Lambda\MGR.CommandLineParser.Command.Lambda.csproj", "{9F5A0142-E0A1-45A2-961E-55611B4440AD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.Hosting", "src\MGR.CommandLineParser.Hosting\MGR.CommandLineParser.Hosting.csproj", "{40EAA8E2-7AFE-4ED1-A961-35BD7E424985}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "docs", "docs\docs.csproj", "{405858FA-1E78-48C7-9915-B558D0F15CAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +89,10 @@ Global
 		{40EAA8E2-7AFE-4ED1-A961-35BD7E424985}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40EAA8E2-7AFE-4ED1-A961-35BD7E424985}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40EAA8E2-7AFE-4ED1-A961-35BD7E424985}.Release|Any CPU.Build.0 = Release|Any CPU
+		{405858FA-1E78-48C7-9915-B558D0F15CAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{405858FA-1E78-48C7-9915-B558D0F15CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{405858FA-1E78-48C7-9915-B558D0F15CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{405858FA-1E78-48C7-9915-B558D0F15CAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,6 +106,7 @@ Global
 		{A422BACE-2758-4ABD-9DAA-ADF289FCCE65} = {569ED12A-DA23-4457-B304-6B00C0CB335E}
 		{9F5A0142-E0A1-45A2-961E-55611B4440AD} = {FB795A12-C939-492F-9377-4C468D01EF3C}
 		{40EAA8E2-7AFE-4ED1-A961-35BD7E424985} = {FB795A12-C939-492F-9377-4C468D01EF3C}
+		{405858FA-1E78-48C7-9915-B558D0F15CAE} = {172E24C2-BF99-4DA9-A7DF-8C0BB44C138D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {827031C5-AE76-4B4C-9503-E13F15B497E9}
