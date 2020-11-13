@@ -61,7 +61,7 @@ public class HelloWorldCommand : ICommand
         Console.WriteLine("Hello world {0} !", Name);
         if(Arguments.Count > 0)
         {
-            Console.WriteLine("Arguments : {0}", string.Join("," Arguments));
+            Console.WriteLine("Arguments : {0}", string.Join(",", Arguments));
         }
         return Task.FromResult(0);
     }
@@ -81,7 +81,7 @@ public class HelloWorldCommand : CommandBase
         Console.WriteLine("Hello world {0} !", Name);
         if(Arguments.Count > 0)
         {
-            Console.WriteLine("Arguments : {0}", string.Join("," Arguments));
+            Console.WriteLine("Arguments : {0}", string.Join(",", Arguments));
         }
         return Task.FromResult(0);
     }
