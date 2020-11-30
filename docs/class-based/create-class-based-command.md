@@ -2,7 +2,7 @@
 
 ## Implement `ICommand`
 
-To create a class-based command, you have to create a class that implements the interface `MGR.CommandLineParser.Command.ICommand` (or [inherit `CommandBase`](#Inherit-from-CommandBase)).
+To create a class-based command, you have to create a class that implements the interface `MGR.CommandLineParser.Command.ICommand` (or [inherit `CommandBase`](#inherit-from-commandbase)).
 The interface provides two members:
 
 1. a property `Arguments` (of type `IList<string>`) that will receive all arguments not mapped to an option,
