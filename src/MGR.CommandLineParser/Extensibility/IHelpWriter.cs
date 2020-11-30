@@ -1,4 +1,5 @@
-﻿using MGR.CommandLineParser.Extensibility.Command;
+﻿using System.Threading.Tasks;
+using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser.Extensibility
 {
@@ -10,7 +11,7 @@ namespace MGR.CommandLineParser.Extensibility
         /// <summary>
         ///     Write command listing.
         /// </summary>
-        void WriteCommandListing();
+        Task WriteCommandListing();
 
         /// <summary>
         ///     Write the help for some commands.

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Tests.Commands;
@@ -30,53 +31,53 @@ namespace MGR.CommandLineParser.IntegrationTests
             };
         }
 
-        protected ParsingResult CallParse(IEnumerable<string> args)
+        protected async Task<ParsingResult> CallParse(IEnumerable<string> args)
         {
-            var parsingResult = CallParse(CreateParserOptions(), args);
+            var parsingResult = await CallParse(CreateParserOptions(), args);
             return parsingResult;
         }
-        protected ParsingResult CallParse(ParserOptions parserOptions, IEnumerable<string> args)
+        protected async Task<ParsingResult> CallParse(ParserOptions parserOptions, IEnumerable<string> args)
         {
             var parserBuilder = new ParserBuilder(parserOptions, _serviceCollection);
             parserBuilder.AddCommands(builder => builder.AddCommands<DeleteCommand>());
             var parser = parserBuilder.BuildParser();
-            var parsingResult = parser.Parse(args);
+            var parsingResult = await parser.Parse(args);
 
             return parsingResult;
         }
-        protected ParsingResult CallParse<TCommand>(IEnumerable<string> args)
+        protected async Task<ParsingResult> CallParse<TCommand>(IEnumerable<string> args)
         where TCommand : class, ICommand
         {
-            var parsingResult = CallParse<TCommand>(CreateParserOptions(), args);
+            var parsingResult = await CallParse<TCommand>(CreateParserOptions(), args);
 
             return parsingResult;
         }
 
-        protected ParsingResult CallParse<TCommand>(ParserOptions parserOptions, IEnumerable<string> args)
+        protected async Task<ParsingResult> CallParse<TCommand>(ParserOptions parserOptions, IEnumerable<string> args)
             where TCommand : class, ICommand
         {
             var parserBuilder = new ParserBuilder(parserOptions, _serviceCollection);
             parserBuilder.AddCommands(builder => builder.AddCommands<DeleteCommand>());
             var parser = parserBuilder.BuildParser();
-            var parsingResult = parser.Parse<TCommand>(args);
+            var parsingResult = await parser.Parse<TCommand>(args);
 
             return parsingResult;
         }
-        protected ParsingResult CallParseWithDefaultCommand<TCommand>(IEnumerable<string> args)
+        protected async Task<ParsingResult> CallParseWithDefaultCommand<TCommand>(IEnumerable<string> args)
             where TCommand : class, ICommand
         {
-            var parsingResult = CallParseWithDefaultCommand<TCommand>(CreateParserOptions(), args);
+            var parsingResult = await CallParseWithDefaultCommand<TCommand>(CreateParserOptions(), args);
 
             return parsingResult;
         }
 
-        protected ParsingResult CallParseWithDefaultCommand<TCommand>(ParserOptions parserOptions, IEnumerable<string> args)
+        protected async Task<ParsingResult> CallParseWithDefaultCommand<TCommand>(ParserOptions parserOptions, IEnumerable<string> args)
             where TCommand : class, ICommand
         {
             var parserBuilder = new ParserBuilder(parserOptions, _serviceCollection);
             parserBuilder.AddCommands(builder => builder.AddCommands<DeleteCommand>());
             var parser = parserBuilder.BuildParser();
-            var parsingResult = parser.ParseWithDefaultCommand<TCommand>(args);
+            var parsingResult = await parser.ParseWithDefaultCommand<TCommand>(args);
 
             return parsingResult;
         }

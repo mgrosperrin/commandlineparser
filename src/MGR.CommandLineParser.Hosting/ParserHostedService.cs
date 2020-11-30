@@ -25,7 +25,7 @@ namespace MGR.CommandLineParser.Hosting
 
         private async Task<int> ParseAndExecuteAsync()
         {
-            var parsingResult = _parserContext.ParseArguments(_parser, _parserContext.Arguments);
+            var parsingResult = await _parserContext.ParseArguments(_parser, _parserContext.Arguments);
             if (parsingResult.IsValid)
             {
                 return await parsingResult.ExecuteAsync();

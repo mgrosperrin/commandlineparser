@@ -30,13 +30,13 @@ MGR.CommandLineParser is a multi-command line parser. It uses [System.ComponentM
 # How to use it ?
 You can find **more docs [here](docs/index.md)**
 
-**I. Install MGR.CommandLineParser**
+**1. Install MGR.CommandLineParser**
 
-MGR.CommandLineParser is available through [NuGet][nuget]:
+MGR.CommandLineParser is available through [NuGet][nuget_commandlineparser_url]:
 
     PM> Install-Package MGR.CommandLineParser
 
-**II. Declare your own commands**
+**2. Declare your own commands**
 
 After adding `MGR.CommandLineParser` to your project, you have to define your own commands:
 
@@ -45,8 +45,10 @@ After adding `MGR.CommandLineParser` to your project, you have to define your ow
 
 To personnalize your commands, you add some properties to your class, and implement `Execute` (if you directly implement `ICommand`), or override `ExecuteCommand` (if you override `CommandBase`).
 
-For example :
-via `MGR.CommandLineParser.Command.ICommand`;
+For example:
+
+via `MGR.CommandLineParser.Command.ICommand`:
+
 ``` c#
 public class HelloWorldCommand : ICommand
 {
@@ -61,14 +63,15 @@ public class HelloWorldCommand : ICommand
         Console.WriteLine("Hello world {0} !", Name);
         if(Arguments.Count > 0)
         {
-            Console.WriteLine("Arguments : {0}", string.Join(",", Arguments));
+            Console.WriteLine("Arguments: {0}", string.Join(",", Arguments));
         }
         return Task.FromResult(0);
     }
 }
 ```
 
-Via `MGR.CommandLineParser.Command.CommandBase`.
+Via `MGR.CommandLineParser.Command.CommandBase`:
+
 ```c#
 public class HelloWorldCommand : CommandBase
 {
@@ -81,37 +84,37 @@ public class HelloWorldCommand : CommandBase
         Console.WriteLine("Hello world {0} !", Name);
         if(Arguments.Count > 0)
         {
-            Console.WriteLine("Arguments : {0}", string.Join(",", Arguments));
+            Console.WriteLine("Arguments: {0}", string.Join(",", Arguments));
         }
         return Task.FromResult(0);
     }
 }
 ```
 
-**III. Parse the command line**
+**3. Parse the command line**
 
-The simplest way to parse the command line is to call the `Parse` method on a `IParser` instance :
+The simplest way to parse the command line is to call the `Parse` method on a `IParser` instance:
 ```c#
 var parserBuilder = new ParserBuilder(new ParserOptions())
                 .AddCommands(builder => builder.AddCommands<HelloWorldCommand>());
 IParser parser = parserBuilder.BuildParser();
-CommandResult<ICommand> commandResult = parser.Parse(args);
+CommandResult<ICommand> commandResult = await parser.Parse(args);
 if(commandResult.IsValid)
 {
-    return commandResult.ExecuteAsync();
+    return await commandResult.ExecuteAsync();
 }
 return commandResult.ReturnCode;
 ```
 
-Or if you have define only one command for your program :
+Or if you have define only one command for your program:
 ```c#
 var parserBuilder = new ParserBuilder(new ParserOptions())
                 .AddCommands(builder => builder.AddCommands<HelloWorldCommand>());
 IParser parser = parserBuilder.BuildParser();
-CommandResult<HelloWorldCommand> commandResult = parser.Parse<HelloWorldCommand>(args);
+CommandResult<HelloWorldCommand> commandResult = await parser.Parse<HelloWorldCommand>(args);
 if(commandResult.IsValid)
 {
-    return commandResult.ExecuteAsync();
+    return await commandResult.ExecuteAsync();
 }
 return commandResult.ReturnCode;
 ```

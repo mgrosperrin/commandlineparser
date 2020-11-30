@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
@@ -9,7 +10,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
     public class SimpleOptionsWithArgumentsTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ParseWithValidArgs()
+        public async Task ParseWithValidArgs()
         {
             // Arrange
             var fileArgument = @"C:\temp\file.txt";
@@ -22,7 +23,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var expectedArgumentsValue = new List<string> {fileArgument};
 
             // Act
-            var actual = CallParse(args);
+            var actual = await CallParse(args);
 
             // Assert
             Assert.True(actual.IsValid);
@@ -40,7 +41,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             }
         }
         [Fact]
-        public void ParseWithValidArgs2()
+        public async Task ParseWithValidArgs2()
         {
             // Arrange
             IEnumerable<string> args = new[]
@@ -52,7 +53,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var expectedIntValue = 42;
 
             // Act
-            var actual = CallParse(args);
+            var actual = await CallParse(args);
 
             // Assert
             Assert.True(actual.IsValid);

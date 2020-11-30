@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
@@ -11,7 +12,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
     internal sealed class AssemblyBrowsingClassBasedCommandTypeProvider : ICommandTypeProvider
     {
         private readonly IEnumerable<IAssemblyProvider> _assemblyProviders;
-        private readonly Lazy<Dictionary<string, ClassBasedCommandType>> _commands;
+        private readonly Lazy<Dictionary<string, ICommandType>> _commands;
 
         private readonly IEnumerable<IConverter> _converters;
         private readonly IEnumerable<IPropertyOptionAlternateNameGenerator> _optionAlternateNameGenerators;
@@ -21,31 +22,31 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
             _assemblyProviders = assemblyProviders;
             _converters = converters;
             _optionAlternateNameGenerators = optionAlternateNameGenerators;
-            _commands = new Lazy<Dictionary<string, ClassBasedCommandType>>(SearchAllCommandTypes);
+            _commands = new Lazy<Dictionary<string, ICommandType>>(SearchAllCommandTypes);
         }
 
-        public IEnumerable<ICommandType> GetAllCommandTypes()
+        public Task<IEnumerable<ICommandType>> GetAllCommandTypes()
         {
             var commandTypes = _commands.Value;
-            return commandTypes.Values;
+            return Task.FromResult<IEnumerable<ICommandType>>(commandTypes.Values);
         }
 
-        public ICommandType GetCommandType(string commandName)
+        public Task<ICommandType> GetCommandType(string commandName)
         {
             var commandTypes = _commands.Value;
             if (commandTypes.ContainsKey(commandName))
             {
-                return commandTypes[commandName];
+                return Task.FromResult(commandTypes[commandName]);
             }
-            return null;
+            return Task.FromResult<ICommandType>(null);
         }
 
-        private Dictionary<string, ClassBasedCommandType> SearchAllCommandTypes()
+        private Dictionary<string, ICommandType> SearchAllCommandTypes()
         {
             var assemblies = _assemblyProviders.SelectMany(assemblyProvider => assemblyProvider.GetAssembliesToBrowse()).ToList();
             var types = assemblies.GetTypes(type => type.IsType<ICommand>()).ToList();
 
-            var commandTypes = types.Select(commandType => new ClassBasedCommandType(commandType, _converters, _optionAlternateNameGenerators)).ToList();
+            var commandTypes = types.Select<Type, ICommandType>(commandType => new ClassBasedCommandType(commandType, _converters, _optionAlternateNameGenerators)).ToList();
             var commandTypesByName = commandTypes.ToDictionary(commandType => commandType.Metadata.Name, _ => _, StringComparer.OrdinalIgnoreCase);
             return commandTypesByName;
         }

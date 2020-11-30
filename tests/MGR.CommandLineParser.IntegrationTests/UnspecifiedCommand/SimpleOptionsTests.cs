@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
@@ -8,7 +9,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
     public class SimpleOptionsTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ParseWithValidArgs()
+        public async Task ParseWithValidArgs()
         {
             // Arrange
             IEnumerable<string> args = new[] {"delete", "--source:custom value", "-np", "--api-key", "MyApiKey", "Custom argument value", "b"};
@@ -19,7 +20,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var expectedArgumentsValue = new List<string> {"Custom argument value", "b"};
 
             // Act
-            var actual = CallParse(args);
+            var actual = await CallParse(args);
 
             // Assert
             Assert.True(actual.IsValid);

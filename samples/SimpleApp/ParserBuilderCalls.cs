@@ -20,7 +20,7 @@ namespace SimpleApp
             var parserBuild = new ParserBuilder(new ParserOptions())
                 .AddCommands(builder => builder.AddCommands<DeleteCommand>());
             var parser = parserBuild.BuildParser();
-            var commandResult = parser.Parse(arguments);
+            var commandResult = await parser.Parse(arguments);
             if (commandResult.IsValid)
             {
                 var executionResult = await commandResult.CommandObject.ExecuteAsync();
@@ -41,7 +41,7 @@ namespace SimpleApp
             var parserBuild = new ParserBuilder(new ParserOptions(), serviceCollection)
                 .AddCommands(builder => builder.AddCommands<DeleteCommand>());
             var parser = parserBuild.BuildParser();
-            var commandResult = parser.Parse(arguments);
+            var commandResult = await parser.Parse(arguments);
             if (commandResult.IsValid)
             {
                 var executionResult = await commandResult.CommandObject.ExecuteAsync();
@@ -84,7 +84,7 @@ namespace SimpleApp
             var parserBuild = new ParserBuilder(new ParserOptions(), serviceCollection)
                 .AddCommands(builder => builder.AddCommands<DeleteCommand>());
             var parser = parserBuild.BuildParser();
-            var commandResult = parser.Parse(arguments);
+            var commandResult = await parser.Parse(arguments);
             if (commandResult.IsValid)
             {
                 var executionResult = await commandResult.CommandObject.ExecuteAsync();

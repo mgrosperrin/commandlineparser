@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,16 +24,16 @@ namespace MGR.CommandLineParser
 
         public string CommandLineName => _parserOptions.CommandLineName;
 
-        public ParsingResult Parse<TCommand>(IEnumerable<string> arguments) where TCommand : class, ICommand => ParseArguments(arguments, (parserEngine, argumentsEnumerator) =>
+        public async Task<ParsingResult> Parse<TCommand>(IEnumerable<string> arguments) where TCommand : class, ICommand => await ParseArguments(arguments, (parserEngine, argumentsEnumerator) =>
                    parserEngine.Parse<TCommand>(argumentsEnumerator));
 
-        public ParsingResult Parse(IEnumerable<string> arguments) => ParseArguments(arguments, (parserEngine, argumentsEnumerator) =>
+        public async Task<ParsingResult> Parse(IEnumerable<string> arguments) => await ParseArguments(arguments, (parserEngine, argumentsEnumerator) =>
                 parserEngine.Parse(argumentsEnumerator));
 
-        public ParsingResult ParseWithDefaultCommand<TCommand>(IEnumerable<string> arguments) where TCommand : class, ICommand => ParseArguments(arguments, (parserEngine, argumentsEnumerator) =>
+        public async Task<ParsingResult> ParseWithDefaultCommand<TCommand>(IEnumerable<string> arguments) where TCommand : class, ICommand => await ParseArguments(arguments, (parserEngine, argumentsEnumerator) =>
                     parserEngine.ParseWithDefaultCommand<TCommand>(argumentsEnumerator));
 
-        private ParsingResult ParseArguments(IEnumerable<string> arguments, Func<ParserEngine, IEnumerator<string>, ParsingResult> callParse)
+        private async Task<ParsingResult> ParseArguments(IEnumerable<string> arguments, Func<ParserEngine, IEnumerator<string>, Task<ParsingResult>> callParse)
         {
             if (arguments == null)
             {
@@ -47,7 +48,7 @@ namespace MGR.CommandLineParser
                 var parserEngine = new ParserEngine(_serviceProvider, loggerFactory);
                 var argumentsEnumerator = arguments.GetArgumentsEnumerator();
 
-                var result = callParse(parserEngine, argumentsEnumerator);
+                var result = await callParse(parserEngine, argumentsEnumerator);
                 return result;
             }
         }

@@ -44,7 +44,7 @@ namespace MGR.CommandLineParser.Hosting.Extensions
         /// <returns>A code that represents the result of the parsing and the execution of the command.</returns>
         public static async Task<int> ParseCommandLineWithDefaultCommandAndExecuteAsync<TCommand>(this IHost host, string[] args, CancellationToken cancellationToken = default) where TCommand : class, ICommand => await ParseCommandLineAndExecuteAsync(host, args, (parser, arguments) => parser.ParseWithDefaultCommand<TCommand>(arguments), cancellationToken);
 
-        private static async Task<int> ParseCommandLineAndExecuteAsync(IHost host, string[] args, Func<IParser, IEnumerable<string>, ParsingResult> parseArguments, CancellationToken cancellationToken)
+        private static async Task<int> ParseCommandLineAndExecuteAsync(IHost host, string[] args, Func<IParser, IEnumerable<string>, Task<ParsingResult>> parseArguments, CancellationToken cancellationToken)
         {
             var parserContext = host.Services.GetRequiredService<ParserContext>();
             parserContext.ParseArguments = parseArguments;
