@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
@@ -6,14 +7,14 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
     public class NoCommandNameTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ParseWithEmptyParameter()
+        public async Task ParseWithEmptyParameter()
         {
             // Arrange
             IEnumerable<string> args = new List<string>();
             var expectedReturnCode = CommandParsingResultCode.NoCommandNameProvided;
 
             // Act
-            var actual = CallParse(args);
+            var actual = await CallParse(args);
 
             // Assert
             Assert.False(actual.IsValid);

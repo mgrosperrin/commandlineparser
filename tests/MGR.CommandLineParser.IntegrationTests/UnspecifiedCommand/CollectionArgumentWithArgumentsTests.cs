@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
@@ -9,7 +10,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
     public class CollectionArgumentWithArgumentsTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ParseWithValidListArgs()
+        public async Task ParseWithValidListArgs()
         {
             // Arrange
             IEnumerable<string> args = new[]
@@ -21,7 +22,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var expectedIntValue = 42;
 
             // Act
-            var actual = CallParse(args);
+            var actual = await CallParse(args);
 
             // Assert
             Assert.True(actual.IsValid);

@@ -22,7 +22,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility
                 var parserOptionsAccessorMock = new Mock<IOptions<ParserOptions>>();
                 parserOptionsAccessorMock.SetupGet(_ => _.Value).Returns(parserOptions);
                 var commandTypeProviderMock = new Mock<ICommandTypeProvider>();
-                commandTypeProviderMock.Setup(_ => _.GetAllCommandTypes()).Returns(Enumerable.Empty<ICommandType>);
+                commandTypeProviderMock.Setup(_ => _.GetAllCommandTypes()).ReturnsAsync(Enumerable.Empty<ICommandType>);
                 var helpWriter = new DefaultHelpWriter(console, new[] { commandTypeProviderMock.Object }, parserOptionsAccessorMock.Object);
                 var expected = @"Logo Unit Test
 Usage: tool.exe <command> [options] [args]
@@ -61,7 +61,7 @@ No commands found.
             commandMetadataMock.SetupGet(_ => _.Description).Returns("test command");
             var commandTypeMock = new Mock<ICommandType>();
             commandTypeMock.SetupGet(_ => _.Metadata).Returns(commandMetadataMock.Object);
-            commandTypeProviderMock.Setup(_ => _.GetAllCommandTypes()).Returns(new[] { commandTypeMock.Object });
+            commandTypeProviderMock.Setup(_ => _.GetAllCommandTypes()).ReturnsAsync(new[] { commandTypeMock.Object });
             var helpWriter = new DefaultHelpWriter(console, new[] { commandTypeProviderMock.Object }, parserOptionsAccessorMock.Object);
             var expected = @"Logo Unit Test
 Usage: tool.exe <command> [options] [args]
@@ -105,7 +105,7 @@ Available commands:
             commandMetadata2Mock.SetupGet(_ => _.Description).Returns("description for test command");
             var commandType2Mock = new Mock<ICommandType>();
             commandType2Mock.SetupGet(_ => _.Metadata).Returns(commandMetadata2Mock.Object);
-            commandTypeProviderMock.Setup(_ => _.GetAllCommandTypes()).Returns(new[] { commandType1Mock.Object, commandType2Mock.Object });
+            commandTypeProviderMock.Setup(_ => _.GetAllCommandTypes()).ReturnsAsync(new[] { commandType1Mock.Object, commandType2Mock.Object });
             var helpWriter = new DefaultHelpWriter(console, new[] { commandTypeProviderMock.Object }, parserOptionsAccessorMock.Object);
             var expected = @"Logo Unit Test
 Usage: tool.exe <command> [options] [args]

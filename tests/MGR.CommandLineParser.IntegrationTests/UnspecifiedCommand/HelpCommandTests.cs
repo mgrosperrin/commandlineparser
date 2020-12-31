@@ -45,7 +45,7 @@ Available commands:
             // Act
             using (new LangageSwitcher("en-us"))
             {
-                var actual = CallParse(parserOptions, args);
+                var actual = await CallParse(parserOptions, args);
                 var actualResult = await actual.ExecuteAsync();
 
                 // Assert

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
@@ -8,7 +9,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
     public class CombinedShortSimpleOptionsTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ParseWithValidArgs()
+        public async Task ParseWithValidArgs()
         {
             // Arrange
             IEnumerable<string> args = new[] { "pack", "--version:abc", "-vt" };
@@ -16,7 +17,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var expectedVersion = "abc";
 
             // Act
-            var actual = CallParse(args);
+            var actual = await CallParse(args);
 
             // Assert
             Assert.True(actual.IsValid);
@@ -30,7 +31,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             Assert.Equal(expectedVersion, rawCommand.Version);
         }
         [Fact]
-        public void ParseWithValidArgsWithFalse()
+        public async Task ParseWithValidArgsWithFalse()
         {
             // Arrange
             IEnumerable<string> args = new[] { "pack", "--version:abc", "-vt:-", "-b" };
@@ -38,7 +39,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var expectedVersion = "abc";
 
             // Act
-            var actual = CallParse(args);
+            var actual = await CallParse(args);
 
             // Assert
             Assert.True(actual.IsValid);

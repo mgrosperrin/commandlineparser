@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Properties;
@@ -37,12 +38,12 @@ namespace MGR.CommandLineParser.Extensibility
         }
 
         /// <inheritdoc />
-        public void WriteCommandListing()
+        public async Task WriteCommandListing()
         {
             WriteGeneralInformation();
 
             _console.WriteLine(Strings.DefaultHelpWriter_GlobalHelp_AvailableCommands);
-            var commandTypes = _commandTypeProviders.GetAllVisibleCommandsTypes().OrderBy(commandType => commandType.Metadata.Name).ToList();
+            var commandTypes = (await _commandTypeProviders.GetAllVisibleCommandsTypes()).OrderBy(commandType => commandType.Metadata.Name).ToList();
             WriteDescriptionForSomeCommands(commandTypes);
         }
 

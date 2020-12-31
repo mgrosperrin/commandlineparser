@@ -42,7 +42,7 @@ List sample number 2
             // Act
             using (new LangageSwitcher("en-us"))
             {
-                var actual = CallParse(parserOptions, args);
+                var actual = await CallParse(parserOptions, args);
                 var actualResult = await actual.ExecuteAsync();
 
                 // Assert
@@ -91,7 +91,7 @@ Options:
             // Act
             using (new LangageSwitcher("en-us"))
             {
-                var actual = CallParse(parserOptions, args);
+                var actual = await CallParse(parserOptions, args);
                 var actualResult = await actual.ExecuteAsync();
 
                 // Assert

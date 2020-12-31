@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
@@ -8,7 +9,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
     public class OptionsHasDefaultValueTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ParseWithValidArgsAndDefaultValue()
+        public async Task ParseWithValidArgsAndDefaultValue()
         {
             // Arrange
             IEnumerable<string> args = new[]
@@ -18,7 +19,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             var expectedNbOfArguments = 0;
 
             // Act
-            var actual = CallParse(args);
+            var actual = await CallParse(args);
 
             // Assert
             Assert.True(actual.IsValid);

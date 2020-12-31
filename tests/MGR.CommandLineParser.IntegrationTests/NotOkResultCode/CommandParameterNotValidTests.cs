@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
@@ -9,7 +10,7 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
     public class CommandParameterNotValidTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ParseWithCommandNameAndInvalidArgs()
+        public async Task ParseWithCommandNameAndInvalidArgs()
         {
             // Arrange
             IEnumerable<string> args = new[] {"IntTest", "-i", "42", "Custom argument value", "-b"};
@@ -19,7 +20,7 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
             var expectedIntValue = 42;
 
             // Act
-            var actual = CallParse(args);
+            var actual = await CallParse(args);
 
             // Assert
             Assert.False(actual.IsValid);
@@ -35,7 +36,7 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
         }
 
         [Fact]
-        public void ParseWithSpecifiedCommandAndInvalidArgs()
+        public async Task ParseWithSpecifiedCommandAndInvalidArgs()
         {
             // Arrange
             IEnumerable<string> args = new[] { "-i", "42", "Custom argument value", "-b" };
@@ -45,7 +46,7 @@ namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
             var expectedIntValue = 42;
 
             // Act
-            var actual = CallParse<IntTestCommand>(args);
+            var actual = await CallParse<IntTestCommand>(args);
 
             // Assert
             Assert.False(actual.IsValid);

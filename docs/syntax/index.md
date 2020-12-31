@@ -1,0 +1,1 @@
+﻿# Syntax accepted by the parser

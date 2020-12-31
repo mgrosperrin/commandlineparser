@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.UnitTests;
 using Xunit;
 
@@ -7,7 +8,7 @@ namespace MGR.CommandLineParser.IntegrationTests.InvalidArguments
     public class InvalidShortNameFormatTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ParseWithInvalidShortOption()
+        public async Task ParseWithInvalidShortOption()
         {
             // Arrange
             IEnumerable<string> args = new[] { "import", "--p:50" };
@@ -15,7 +16,7 @@ namespace MGR.CommandLineParser.IntegrationTests.InvalidArguments
 ";
 
             // Act
-            var parsingResult = CallParse(args);
+            var parsingResult = await CallParse(args);
 
             // Assert
             Assert.NotNull(parsingResult);

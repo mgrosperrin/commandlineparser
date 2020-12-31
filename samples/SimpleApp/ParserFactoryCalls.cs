@@ -34,7 +34,7 @@ namespace SimpleApp
                 Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
 
                 var parser = factory.CreateParser();
-                var commandResult = parser.Parse(arguments);
+                var commandResult = await parser.Parse(arguments);
                 if (commandResult.IsValid)
                 {
                     var executionResult = await commandResult.CommandObject.ExecuteAsync();
@@ -76,7 +76,7 @@ namespace SimpleApp
                 Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
 
                 var parser = factory.CreateParser();
-                var commandResult = parser.Parse<PackCommand>(arguments);
+                var commandResult = await parser.Parse<PackCommand>(arguments);
                 if (commandResult.IsValid)
                 {
                     var executionResult = await commandResult.CommandObject.ExecuteAsync();
@@ -118,7 +118,7 @@ namespace SimpleApp
                 Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
 
                 var parser = factory.CreateParser();
-                var commandResult = parser.ParseWithDefaultCommand<DeleteCommand>(arguments);
+                var commandResult = await parser.ParseWithDefaultCommand<DeleteCommand>(arguments);
                 if (commandResult.IsValid)
                 {
                     var executionResult = await commandResult.CommandObject.ExecuteAsync();

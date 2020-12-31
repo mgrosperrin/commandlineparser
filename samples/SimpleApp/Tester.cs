@@ -73,10 +73,10 @@ namespace SimpleApp
             await ParseFuncAndExecute(parser, arguments,
                 (p, args) => p.Parse(args));
         }
-        static async Task ParseFuncAndExecute(IParser parser, string[] arguments, Func<IParser, IEnumerable<string>, ParsingResult> parseFunc)
+        static async Task ParseFuncAndExecute(IParser parser, string[] arguments, Func<IParser, IEnumerable<string>, Task<ParsingResult>> parseFunc)
         {
             Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
-            var commandResult = parseFunc(parser, arguments);
+            var commandResult = await parseFunc(parser, arguments);
             if (commandResult.IsValid)
             {
                 var executionResult = await commandResult.CommandObject.ExecuteAsync();
