@@ -7,9 +7,14 @@ namespace MGR.CommandLineParser.Command.OracleProcedure
     {
         public DbSet<Procedure> Procedures { get; set; }
 
+        public OracleSystemContext(DbContextOptions<OracleSystemContext> options)
+            : base(options)
+        { }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new ProcedureMap())
+            modelBuilder
+                .ApplyConfiguration(new ProcedureMap())
                 .ApplyConfiguration(new ParameterMap());
             base.OnModelCreating(modelBuilder);
         }

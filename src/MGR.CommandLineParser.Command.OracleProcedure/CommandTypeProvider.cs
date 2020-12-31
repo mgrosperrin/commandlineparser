@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Extensibility.Command;
@@ -16,24 +17,35 @@ namespace MGR.CommandLineParser.Command.OracleProcedure
         }
         public async Task<IEnumerable<ICommandType>> GetAllCommandTypes()
         {
-            var procedures = _dbContext.Procedures.Include(procedure => procedure.Parameters).ToListAsync();
-            return procedures.Select(MapProcedureToCommandType);
+            var procedures = await _dbContext.Procedures.Include(procedure => procedure.Parameters).ToListAsync();
+            return procedures.Select(procedure => MapProcedureToCommandType(procedure, _dbContext.Database.GetDbConnection()));
         }
-        public ICommandType GetCommandType(string commandName)
+        public async Task<ICommandType> GetCommandType(string commandName)
         {
-            var procedure = _dbContext.Procedures.Include(procedure => procedure.Parameters).Where(procedure => procedure.Name == commandName).SingleOrDefault();
+            var procedure = await _dbContext.Procedures.Include(procedure => procedure.Parameters).Where(procedure => procedure.Name == commandName).SingleOrDefaultAsync();
             if (procedure != null)
             {
-                return MapProcedureToCommandType(procedure);
+                return MapProcedureToCommandType(procedure, _dbContext.Database.GetDbConnection());
             }
             return null;
         }
 
-        private static CommandType MapProcedureToCommandType(Procedure procedure) => new CommandType(new CommandMetadata(procedure.Name),
-                procedure.Parameters.Where(parameter => parameter.Direction.HasFlag(Direction.In)).Select(parameter => new CommandOptionMetadata(
-                    new OptionDisplayInfo(parameter.Name),
-                    !parameter.HasDefaultValue,
-                    parameter.DefaultValue)),
-                procedure.Parameters.Where(parameter => parameter.Direction.HasFlag(Direction.Out));
+        private static CommandType MapProcedureToCommandType(Procedure procedure, DbConnection dbConnection)
+        {
+            return new CommandType(
+                new CommandMetadata(procedure.Name),
+                procedure.Parameters
+                    .Where(parameter => parameter.Direction.HasFlag(Direction.In))
+                    .Select(parameter => new CommandOptionMetadata(
+                                new OptionDisplayInfo(parameter.Name),
+                                !parameter.HasDefaultValue,
+                                parameter.DefaultValue
+                                )
+                    ),
+                procedure.Parameters
+                    .Where(parameter => parameter.Direction.HasFlag(Direction.Out)),
+                dbConnection
+                );
+        }
     }
 }
