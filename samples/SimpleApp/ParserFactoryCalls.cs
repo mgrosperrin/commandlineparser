@@ -26,28 +26,31 @@ namespace SimpleApp
             var serviceCollection = new ServiceCollection();
             Configure(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
-            var scopedServiceProvider = serviceProvider.CreateScope().ServiceProvider;
-
-            async Task ActionInController(IParserFactory factory)
+            using (var serviceScope = serviceProvider.CreateScope())
             {
-                var arguments = new[] { "pack", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--properties", "Configuration=Release", "--build", "--symbols", "--msbuild-version", "14" };
-                Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
+                var scopedServiceProvider = serviceScope.ServiceProvider;
 
-                var parser = factory.CreateParser();
-                var commandResult = await parser.Parse(arguments);
-                if (commandResult.IsValid)
+                async Task ActionInController(IParserFactory factory)
                 {
-                    var executionResult = await commandResult.CommandObject.ExecuteAsync();
-                    Console.WriteLine("Execution result: {0}", executionResult);
+                    var arguments = new[] { "pack", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--properties", "Configuration=Release", "--build", "--symbols", "--msbuild-version", "14" };
+                    Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
+
+                    var parser = factory.CreateParser();
+                    var commandResult = await parser.Parse(arguments);
+                    if (commandResult.IsValid)
+                    {
+                        var executionResult = await commandResult.CommandObject.ExecuteAsync();
+                        Console.WriteLine("Execution result: {0}", executionResult);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid parsing");
+                    }
                 }
-                else
-                {
-                    Console.WriteLine("Invalid parsing");
-                }
+
+                var parserFactory = scopedServiceProvider.GetRequiredService<IParserFactory>();
+                await ActionInController(parserFactory);
             }
-
-            var parserFactory = scopedServiceProvider.GetRequiredService<IParserFactory>();
-            await ActionInController(parserFactory);
         }
 
         internal static async Task ConfigureParserAndGetParserFactoryWithSpecificCommandAsync()
@@ -68,28 +71,31 @@ namespace SimpleApp
             var serviceCollection = new ServiceCollection();
             Configure(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
-            var scopedServiceProvider = serviceProvider.CreateScope().ServiceProvider;
-
-            async Task ActionInController(IParserFactory factory)
+            using (var serviceScope = serviceProvider.CreateScope())
             {
-                var arguments = new[] { @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--properties", "Configuration=Release", "--build", "--symbols", "--msbuild-version", "14" };
-                Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
+                var scopedServiceProvider = serviceScope.ServiceProvider;
 
-                var parser = factory.CreateParser();
-                var commandResult = await parser.Parse<PackCommand>(arguments);
-                if (commandResult.IsValid)
+                async Task ActionInController(IParserFactory factory)
                 {
-                    var executionResult = await commandResult.CommandObject.ExecuteAsync();
-                    Console.WriteLine("Execution result: {0}", executionResult);
+                    var arguments = new[] { @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--properties", "Configuration=Release", "--build", "--symbols", "--msbuild-version", "14" };
+                    Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
+
+                    var parser = factory.CreateParser();
+                    var commandResult = await parser.Parse<PackCommand>(arguments);
+                    if (commandResult.IsValid)
+                    {
+                        var executionResult = await commandResult.CommandObject.ExecuteAsync();
+                        Console.WriteLine("Execution result: {0}", executionResult);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid parsing");
+                    }
                 }
-                else
-                {
-                    Console.WriteLine("Invalid parsing");
-                }
+
+                var parserFactory = scopedServiceProvider.GetRequiredService<IParserFactory>();
+                await ActionInController(parserFactory);
             }
-
-            var parserFactory = scopedServiceProvider.GetRequiredService<IParserFactory>();
-            await ActionInController(parserFactory);
         }
 
         internal static async Task ConfigureParserAndGetParserFactoryWithDefaultCommandAsync()
@@ -110,28 +116,31 @@ namespace SimpleApp
             var serviceCollection = new ServiceCollection();
             Configure(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
-            var scopedServiceProvider = serviceProvider.CreateScope().ServiceProvider;
-
-            async Task ActionInController(IParserFactory factory)
+            using (var serviceScope = serviceProvider.CreateScope())
             {
-                var arguments = new[] { "pack", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--properties", "Configuration=Release", "--build", "--symbols", "--msbuild-version", "14" };
-                Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
+                var scopedServiceProvider = serviceScope.ServiceProvider;
 
-                var parser = factory.CreateParser();
-                var commandResult = await parser.ParseWithDefaultCommand<DeleteCommand>(arguments);
-                if (commandResult.IsValid)
+                async Task ActionInController(IParserFactory factory)
                 {
-                    var executionResult = await commandResult.CommandObject.ExecuteAsync();
-                    Console.WriteLine("Execution result: {0}", executionResult);
+                    var arguments = new[] { "pack", @"MGR.CommandLineParser\MGR.CommandLineParser.csproj", "--properties", "Configuration=Release", "--build", "--symbols", "--msbuild-version", "14" };
+                    Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
+
+                    var parser = factory.CreateParser();
+                    var commandResult = await parser.ParseWithDefaultCommand<DeleteCommand>(arguments);
+                    if (commandResult.IsValid)
+                    {
+                        var executionResult = await commandResult.CommandObject.ExecuteAsync();
+                        Console.WriteLine("Execution result: {0}", executionResult);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid parsing");
+                    }
                 }
-                else
-                {
-                    Console.WriteLine("Invalid parsing");
-                }
+
+                var parserFactory = scopedServiceProvider.GetRequiredService<IParserFactory>();
+                await ActionInController(parserFactory);
             }
-
-            var parserFactory = scopedServiceProvider.GetRequiredService<IParserFactory>();
-            await ActionInController(parserFactory);
         }
     }
 }
