@@ -5,6 +5,7 @@
         <TargetFrameworks>net5.0;net48</TargetFrameworks>
         <DocumentationFile />
         <IsPackable>false</IsPackable>
+        <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
     </PropertyGroup>
 
     <ItemGroup>
