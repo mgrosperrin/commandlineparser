@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>MGR.CommandLineParser documentation | MGR.CommandLineParser documentation site </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="MGR.CommandLineParser documentation | MGR.CommandLineParser documentation site ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="mgrcommandlineparser-documentation">MGR.CommandLineParser documentation</h1>
+
+<p><code>MGR.CommandLineParser</code> is a multi-command line parser library.
+It provides an extensible mechanism to provide define commands
+(with multiple out-of-the-box providers)
+and is able to automatically generate help/usage output for all commands.
+Built-in providers lets you define command by:</p>
+<ul>
+<li><a href="class-based/create-class-based-command.html">creating a class</a> that implements <code>MGR.CommandLineParser.Command.ICommand</code> or inherits <code>MGR.CommandLineParser.Command.CommandBase</code> (provides some basic behavior for commands like support of <code>--help</code> option)</li>
+<li><a href="lambda/create-a-lambda-based-command.html">dynamically defining a command that uses a lambda</a> as execution (via the package `MGR.CommandLineParser.Command.Lambda)</li>
+</ul>
+<p>The general syntax on the command line is:
+<code>&lt;commandName&gt; &lt;options&gt; &lt;arguments&gt;</code></p>
+<p>Options can be specified by their <em>normal/long</em> form (<code>--full-option</code>)
+or with its short form (<code>-fo</code>).
+The value of the option can be separated of the name of the option
+by a space (<code></code>) or a colon (<code>:</code>).</p>
+<p>Arguments is a list of non-option string that is passed to the command.</p>
+<p>There is also some ways to customize others parts of the parser:</p>
+<ul>
+<li>how to display information to the user: the <a href="extensibility/console.html"><code>IConsole</code> interface</a></li>
+<li>how the value of the options are converted: the <a href="extensibility/converter.html"><code>IConverter</code> interface</a></li>
+</ul>
+<p>This library use <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection">dependency injection</a> to retrieve the implementation of all this service, so you just have to register your own implementation to override/augment the default behavior.</p>
+<hr>
+<h2 id="customize-command-display"><a href="customize-command-display.html">Customize command display</a></h2>
+<h2 id="call-commands-options"><a href="call-command-options.html">Call command's options</a></h2>
+<h2 id="customize-the-internal-of-the-parser"><a href="customize-internal-of-parser.html">Customize the internal of the parser</a></h2>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/mgrosperrin/commandlineparser/blob/master/docs/index.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

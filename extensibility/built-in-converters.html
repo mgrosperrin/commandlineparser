@@ -1,0 +1,210 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Built-in converters | MGR.CommandLineParser documentation site </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Built-in converters | MGR.CommandLineParser documentation site ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="built-in-converters">Built-in converters</h1>
+
+<p>The following converters are built-into the parser library (they are all in the namespace <code>MGR.CommandLineParser.Extensibility.Converters</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Converter type</th>
+<th>Target type(s)</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BooleanConverter</code></td>
+<td><code>bool</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ByteConverter</code></td>
+<td><code>byte</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>CharConverter</code></td>
+<td><code>char</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>DateTimeConverter</code></td>
+<td><code>DateTime</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>DecimalConverter</code></td>
+<td><code>decimal</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>DoubleConverter</code></td>
+<td><code>doube</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>EnumConverter</code></td>
+<td>An enum</td>
+<td></td>
+</tr>
+<tr>
+<td><code>FileSystemInfoConverter</code></td>
+<td><code>FileInfo</code> or a <code>DirectoryInfo</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>GuidConverter</code></td>
+<td><code>Guid</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>Int16Converter</code></td>
+<td><code>short</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>Int32Converter</code></td>
+<td><code>int</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>Int64Converter</code></td>
+<td><code>long</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>SingleConverter</code></td>
+<td><code>float</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>StringConverter</code></td>
+<td><code>string</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>TimeSpanConverter</code></td>
+<td><code>TimeSpan</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>UriConverter</code></td>
+<td><code>Uri</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>KeyValueConverter</code></td>
+<td><code>KeyValuePair&lt;T,V&gt;</code> (this converter is used when the type of the option is a dictionary)</td>
+<td>.</td>
+</tr>
+</tbody>
+</table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/mgrosperrin/commandlineparser/blob/master/docs/extensibility/built-in-converters.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
