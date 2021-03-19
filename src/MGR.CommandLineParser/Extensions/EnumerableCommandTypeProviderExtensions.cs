@@ -1,25 +1,68 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using JetBrains.Annotations;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 // ReSharper disable once CheckNamespace
 namespace MGR.CommandLineParser.Extensibility.Command
 {
     internal static class EnumerableCommandTypeProviderExtensions
     {
-        internal static IEnumerable<ICommandType> GetAllVisibleCommandsTypes([NotNull, ItemNotNull]this IEnumerable<ICommandTypeProvider> commandTypeProviders)
+        internal static async Task<IEnumerable<ICommandType>> GetAllVisibleCommandsTypes([NotNull, ItemNotNull]this IEnumerable<ICommandTypeProvider> commandTypeProviders)
         {
-            var commands = commandTypeProviders.SelectMany(provider => provider.GetAllCommandTypes());
-            return commands.Where(commandType => !commandType.Metadata.HideFromHelpListing);
+            var visibleCommandTypes = new List<ICommandType>();
+            foreach (var commandTypeProvider in commandTypeProviders)
+            {
+                var commandTypes = await commandTypeProvider.GetAllCommandTypes();
+                foreach (var commandType in commandTypes)
+                {
+                    if (!commandType.Metadata.HideFromHelpListing)
+                    {
+                        visibleCommandTypes.Add(commandType);
+                    }
+                }
+            }
+
+            return visibleCommandTypes;
         }
 
-        internal static ICommandType GetCommandType([NotNull, ItemNotNull]this IEnumerable<ICommandTypeProvider> commandTypeProviders, string commandName)
+        internal static async Task<ICommandType> GetCommandType([NotNull, ItemNotNull]this IEnumerable<ICommandTypeProvider> commandTypeProviders, string commandName)
         {
-            var commands = commandTypeProviders.Select(provider => provider.GetCommandType(commandName)).Where(commandType => commandType != null);
-            return commands.SingleOrDefault();
+            var commandTypes = new List<ICommandType>();
+            foreach (var commandTypeProvider in commandTypeProviders)
+            {
+                var commandType = await commandTypeProvider.GetCommandType(commandName);
+                if (commandType != null)
+                {
+                    commandTypes.Add(commandType);
+                }
+            }
+
+            return commandTypes.SingleOrDefault();
         }
 
-        internal static ICommandType GetCommandType<TCommand>([NotNull, ItemNotNull]this IEnumerable<ICommandTypeProvider> commandTypeProviders) => commandTypeProviders.OfType<AssemblyBrowsingClassBasedCommandTypeProvider>().SelectMany(provider => provider.GetAllCommandTypes()).OfType<ClassBasedCommandType>().SingleOrDefault(commandType => commandType.Type == typeof(TCommand));
+        internal static async Task<ICommandType> GetCommandType<TCommand>([NotNull, ItemNotNull]this IEnumerable<ICommandTypeProvider> commandTypeProviders)
+        {
+            var commandType = default(ICommandType);
+            foreach (var commandTypeProvider in commandTypeProviders.OfType<AssemblyBrowsingClassBasedCommandTypeProvider>())
+            {
+                var commands = await commandTypeProvider.GetAllCommandTypes();
+                foreach (var classBasedCommandType in commands.OfType<ClassBasedCommandType>())
+                {
+                    if (classBasedCommandType.Type == typeof(TCommand))
+                    {
+                        if (commandType != default(ICommandType))
+                        {
+                            throw new InvalidOperationException();
+                        }
+                        commandType = classBasedCommandType;
+                    }
+                }
+            }
+
+            return commandType ?? throw new ArgumentException();
+        }
     }
 }

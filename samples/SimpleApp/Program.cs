@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command.Lambda;
 using MGR.CommandLineParser.Hosting.Extensions;
@@ -11,8 +12,24 @@ namespace SimpleApp
     {
         private static async Task<int> Main(string[] args)
         {
+            await ParserBuilderCalls.CreateAndCallDefaultParserBuilderAsync();
+            WriteSeparator();
+            await ParserBuilderCalls.CreateAndCallCustomizedParserBuilderAsync();
+            WriteSeparator();
+            await ParserBuilderCalls.CreateAndCallCustomizedWithCommandsParserBuilderAsync();
+            WriteSeparator();
 
-            await Tester.RunSampleTests();
+            await ParserFactoryCalls.ConfigureParserAndGetParserFactoryAsync();
+            WriteSeparator();
+            await ParserFactoryCalls.ConfigureParserAndGetParserFactoryWithDefaultCommandAsync();
+            WriteSeparator();
+            await ParserFactoryCalls.ConfigureParserAndGetParserFactoryWithSpecificCommandAsync();
+            WriteSeparator();
+
+            await HostBuilderCalls.CreateAndCallDefaultParserBuilderAsync();
+            WriteSeparator();
+
+            //await Tester.RunSampleTests();
 
             var hostBuilder = new HostBuilder();
             hostBuilder.ConfigureParser(builder =>
@@ -31,6 +48,13 @@ namespace SimpleApp
             });
             var parsingResult =  await hostBuilder.ParseCommandLineAndExecuteAsync(args, CancellationToken.None);
             return parsingResult;
+        }
+
+        static void WriteSeparator()
+        {
+            Console.WriteLine();
+            Console.WriteLine("-------------");
+            Console.WriteLine();
         }
     }
 }

@@ -37,33 +37,33 @@ namespace MGR.CommandLineParser.Command
         ///     Executes the command.
         /// </summary>
         /// <returns>Return 0 is everything was right, an negative error code otherwise.</returns>
-        protected override Task<int> ExecuteCommandAsync()
+        protected override async Task<int> ExecuteCommandAsync()
         {
             var commandTypeProviders = ServiceProvider.GetServices<ICommandTypeProvider>().ToList();
             var helpWriter = ServiceProvider.GetRequiredService<IHelpWriter>();
-            var commandType = commandTypeProviders.GetCommandType(Arguments.FirstOrDefault() ?? string.Empty);
+            var commandType = await commandTypeProviders.GetCommandType(Arguments.FirstOrDefault() ?? string.Empty);
             if (commandType == null)
             {
-                WriteHelpWhenNoCommandAreSpecified(commandTypeProviders, helpWriter);
+                await WriteHelpWhenNoCommandAreSpecified(commandTypeProviders, helpWriter);
             }
             else
             {
                 helpWriter.WriteHelpForCommand(commandType);
             }
 
-            return Task.FromResult(0);
+            return 0;
         }
 
-        private void WriteHelpWhenNoCommandAreSpecified(IEnumerable<ICommandTypeProvider> commandTypeProviders, IHelpWriter helpWriter)
+        private async Task WriteHelpWhenNoCommandAreSpecified(IEnumerable<ICommandTypeProvider> commandTypeProviders, IHelpWriter helpWriter)
         {
             if (All)
             {
-                var commands = commandTypeProviders.GetAllVisibleCommandsTypes();
+                var commands = await commandTypeProviders.GetAllVisibleCommandsTypes();
                 helpWriter.WriteHelpForCommand(commands.ToArray());
             }
             else
             {
-                helpWriter.WriteCommandListing();
+                await helpWriter.WriteCommandListing();
             }
         }
     }

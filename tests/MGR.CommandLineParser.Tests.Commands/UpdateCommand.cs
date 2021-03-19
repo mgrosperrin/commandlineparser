@@ -13,9 +13,11 @@ namespace MGR.CommandLineParser.Tests.Commands
         private readonly List<string> _ids = new List<string>();
 
         [IgnoreOptionProperty]
+        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public object RepositoryFactory { get; }
 
         [IgnoreOptionProperty]
+        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public object SourceProvider { get; }
 
         [Display(Description = "UpdateCommandSourceDescription")]

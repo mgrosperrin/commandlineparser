@@ -1,17 +1,18 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
+using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
 {
     public class NoArgsTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ParseWithoutParameter()
+        public async Task ParseWithoutParameter()
         {
             // Arrange
             var expectedReturnCode = CommandParsingResultCode.NoArgumentsProvided;
 
             // Act
-            var actual = CallParse(null);
+            var actual = await CallParse(null);
 
             // Assert
             Assert.False(actual.IsValid);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -41,45 +42,41 @@ namespace SimpleApp
                         {
                             var year = context.GetOptionValue<int>("longName");
                             var arg = context.Arguments;
-                            return Task.FromResult(year);
+                            return Task.FromResult(year + arg.Count());
                         });
             serviceCollection.AddLogging(builder => builder
                     .SetMinimumLevel(LogLevel.Trace)
                     .AddSeq()
                 //.AddConsole(options => options.IncludeScopes = true)
                 );
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-            var parserBuild = new ParserBuilder();
+            var parserBuild = new ParserBuilder(new ParserOptions(), serviceCollection);
             var parser = parserBuild.BuildParser();
-            await ParseAndExecute(parser, serviceProvider, helpArguments);
+            await ParseAndExecute(parser, helpArguments);
 
-            await ParseAndExecute(parser, serviceProvider, helpArguments);
+            await ParseAndExecute(parser, new[] { "test", "--longName:3", "hello" });
 
-            await ParseAndExecute(parser, serviceProvider, new[] { "test", "--longName:3", "hello" });
-
-            await ParseWithDefaultAndExecute<PackCommand>(parser, serviceProvider, arguments);
-            await ParseWithDefaultAndExecute<PackCommand>(parser, serviceProvider, defaultPackArguments);
-            await ParseWithDefaultAndExecute<PackCommand>(parser, serviceProvider, defaultDeleteArguments);
+            await ParseWithDefaultAndExecute<PackCommand>(parser, arguments);
+            await ParseWithDefaultAndExecute<PackCommand>(parser, defaultPackArguments);
+            await ParseWithDefaultAndExecute<PackCommand>(parser, defaultDeleteArguments);
 
             await Task.Delay(TimeSpan.FromSeconds(1));
         }
 
-        static async Task ParseWithDefaultAndExecute<TCommand>(IParser parser, ServiceProvider serviceProvider, string[] arguments)
+        static async Task ParseWithDefaultAndExecute<TCommand>(IParser parser, string[] arguments)
             where TCommand : class, ICommand
         {
-            await ParseFuncAndExecute(parser, serviceProvider, arguments,
-                (p, args, scope) => p.ParseWithDefaultCommand<TCommand>(args, scope));
+            await ParseFuncAndExecute(parser, arguments,
+                (p, args) => p.ParseWithDefaultCommand<TCommand>(args));
         }
-        static async Task ParseAndExecute(IParser parser, ServiceProvider serviceProvider, string[] arguments)
+        static async Task ParseAndExecute(IParser parser, string[] arguments)
         {
-            await ParseFuncAndExecute(parser, serviceProvider, arguments,
-                (p, args, scope) => p.Parse(args, scope));
+            await ParseFuncAndExecute(parser, arguments,
+                (p, args) => p.Parse(args));
         }
-        static async Task ParseFuncAndExecute(IParser parser, ServiceProvider serviceProvider, string[] arguments, Func<IParser, IEnumerable<string>, IServiceProvider, ParsingResult> parseFunc)
+        static async Task ParseFuncAndExecute(IParser parser, string[] arguments, Func<IParser, IEnumerable<string>, Task<ParsingResult>> parseFunc)
         {
             Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
-            var scopedServiceProvider = serviceProvider.CreateScope().ServiceProvider;
-            var commandResult = parseFunc(parser, arguments, scopedServiceProvider);
+            var commandResult = await parseFunc(parser, arguments);
             if (commandResult.IsValid)
             {
                 var executionResult = await commandResult.CommandObject.ExecuteAsync();

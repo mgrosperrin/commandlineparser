@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Diagnostics;
 using MGR.CommandLineParser.Extensibility;
@@ -20,12 +21,12 @@ namespace MGR.CommandLineParser
             _logger = loggerFactory.CreateLogger<LoggerCategory.Parser>();
         }
 
-        internal ParsingResult Parse<TCommand>(IEnumerator<string> argumentsEnumerator) where TCommand : class, ICommand
+        internal async Task<ParsingResult> Parse<TCommand>(IEnumerator<string> argumentsEnumerator) where TCommand : class, ICommand
         {
             using (_logger.BeginParsingForSpecificCommandType(typeof(TCommand)))
             {
                 var commandTypeProviders = _serviceProvider.GetServices<ICommandTypeProvider>();
-                var commandType = commandTypeProviders.GetCommandType<TCommand>();
+                var commandType = await commandTypeProviders.GetCommandType<TCommand>();
                 var parsingResult = ParseImpl(argumentsEnumerator, commandType);
                 if (parsingResult.ParsingResultCode == CommandParsingResultCode.NoCommandFound)
                 {
@@ -41,7 +42,7 @@ namespace MGR.CommandLineParser
             }
         }
 
-        internal ParsingResult ParseWithDefaultCommand<TCommand>(IEnumerator<string> argumentsEnumerator)
+        internal async Task<ParsingResult> ParseWithDefaultCommand<TCommand>(IEnumerator<string> argumentsEnumerator)
             where TCommand : class, ICommand
         {
             using (_logger.BeginParsingWithDefaultCommandType(typeof(TCommand)))
@@ -51,7 +52,7 @@ namespace MGR.CommandLineParser
                 {
                     _logger.ArgumentProvidedWithDefaultCommandType(commandName);
                     var commandTypeProviders = _serviceProvider.GetServices<ICommandTypeProvider>();
-                    var commandType = commandTypeProviders.GetCommandType(commandName);
+                    var commandType = await commandTypeProviders.GetCommandType(commandName);
                     if (commandType != null)
                     {
                         _logger.CommandTypeFoundWithDefaultCommandType(commandName);
@@ -59,18 +60,18 @@ namespace MGR.CommandLineParser
                     }
 
                     _logger.NoCommandTypeFoundWithDefaultCommandType(commandName, typeof(TCommand));
-                    var withArgumentsCommandResult = Parse<TCommand>(argumentsEnumerator.PrefixWith(commandName));
+                    var withArgumentsCommandResult = await Parse<TCommand>(argumentsEnumerator.PrefixWith(commandName));
                     return withArgumentsCommandResult;
 
                 }
 
                 _logger.NoArgumentProvidedWithDefaultCommandType(typeof(TCommand));
-                var noArgumentsCommandResult = Parse<TCommand>(argumentsEnumerator);
+                var noArgumentsCommandResult = await Parse<TCommand>(argumentsEnumerator);
                 return noArgumentsCommandResult;
             }
         }
 
-        internal ParsingResult Parse(IEnumerator<string> argumentsEnumerator)
+        internal async Task<ParsingResult> Parse(IEnumerator<string> argumentsEnumerator)
         {
             _logger.ParseForNotAlreadyKnownCommand();
             var commandName = argumentsEnumerator.GetNextCommandLineItem();
@@ -78,19 +79,19 @@ namespace MGR.CommandLineParser
             {
                 _logger.NoCommandNameForNotAlreadyKnownCommand();
                 var helpWriter = _serviceProvider.GetRequiredService<IHelpWriter>();
-                helpWriter.WriteCommandListing();
+                await helpWriter.WriteCommandListing();
                 return new ParsingResult(null, null, CommandParsingResultCode.NoCommandNameProvided);
             }
 
             using (_logger.BeginParsingUsingCommandName(commandName))
             {
                 var commandTypeProviders = _serviceProvider.GetServices<ICommandTypeProvider>();
-                var commandType = commandTypeProviders.GetCommandType(commandName);
+                var commandType = await commandTypeProviders.GetCommandType(commandName);
                 if (commandType == null)
                 {
                     _logger.NoCommandTypeFoundForNotAlreadyKnownCommand(commandName);
                     var helpWriter = _serviceProvider.GetRequiredService<IHelpWriter>();
-                    helpWriter.WriteCommandListing();
+                    await helpWriter.WriteCommandListing();
                     return new ParsingResult(null, null, CommandParsingResultCode.NoCommandFound);
                 }
 

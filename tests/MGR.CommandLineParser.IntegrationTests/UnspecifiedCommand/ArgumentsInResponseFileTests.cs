@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
@@ -8,7 +9,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
     public class ArgumentsInResponseFileTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ParseWithAResponseFile()
+        public async Task ParseWithAResponseFile()
         {
             // Arrange
             var tempFile = Path.GetRandomFileName();
@@ -23,7 +24,7 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
             });
 
             // Act
-            var actual = CallParse(new[] { "@" + tempResponseFile });
+            var actual = await CallParse(new[] { "@" + tempResponseFile });
 
             // Assert
             Assert.True(actual.IsValid);

@@ -9,7 +9,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <summary>
     /// Extension methods for <see cref="CommandLineParserBuilder"/>.
     /// </summary>
-    public static class CommandLineParserBuilderExtensions
+    public static class CommandLineParserBuilderLambdaExtensions
     {
         /// <summary>
         /// Add a lambda-based command.

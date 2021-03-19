@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
@@ -8,27 +7,25 @@ namespace MGR.CommandLineParser.Hosting
     internal sealed class ParserHostedService : IHostedService
     {
         private readonly IParser _parser;
-        private readonly IServiceProvider _serviceProvider;
         private readonly ParserContext _parserContext;
-        private readonly IApplicationLifetime _applicationLifetime;
+        private readonly IHostApplicationLifetime _hostApplicationLifetime;
 
-        public ParserHostedService(IParser parser, IServiceProvider serviceProvider, ParserContext parserContext, IApplicationLifetime applicationLifetime)
+        public ParserHostedService(IParser parser, ParserContext parserContext, IHostApplicationLifetime hostApplicationLifetime)
         {
             _parser = parser;
-            _serviceProvider = serviceProvider;
             _parserContext = parserContext;
-            _applicationLifetime = applicationLifetime;
+            _hostApplicationLifetime = hostApplicationLifetime;
         }
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             var parsingAndExecutionResult = await ParseAndExecuteAsync();
             _parserContext.ParsingAndExecutionResult = parsingAndExecutionResult;
-            _applicationLifetime.StopApplication();
+            _hostApplicationLifetime.StopApplication();
         }
 
         private async Task<int> ParseAndExecuteAsync()
         {
-            var parsingResult = _parser.Parse(_parserContext.Arguments, _serviceProvider);
+            var parsingResult = await _parserContext.ParseArguments(_parser, _parserContext.Arguments);
             if (parsingResult.IsValid)
             {
                 return await parsingResult.ExecuteAsync();

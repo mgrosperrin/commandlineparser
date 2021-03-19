@@ -44,8 +44,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
 
             private class TestCommand : ICommand
             {
+                // ReSharper disable once UnusedAutoPropertyAccessor.Local
                 public List<int> PropertyList { get; set; }
+                // ReSharper disable once UnusedAutoPropertyAccessor.Local
                 public Dictionary<string, Guid> PropertyDictionary { get; set; }
+                // ReSharper disable once UnusedAutoPropertyAccessor.Local
                 public int PropertySimple { get; set; }
 
                 #region ICommand Members
@@ -102,7 +105,7 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
             public void PropertySimpleTest()
             {
                 // Arrange
-                var (testCommand, commandOption) = CreateCommandOptionForProperty<int>(_ => _.PropertySimple);
+                var (testCommand, commandOption) = CreateCommandOptionForProperty(_ => _.PropertySimple);
                 var expected = 42;
                 var option = "42";
 

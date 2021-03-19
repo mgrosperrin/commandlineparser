@@ -1,25 +1,28 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser.Command.Lambda
 {
     internal class LambdaBasedCommandTypeProvider : ICommandTypeProvider
     {
-        private readonly LambdaBasedCommandType _commandType;
+        private readonly ICommandType _commandType;
+        private readonly IEnumerable<ICommandType> _commandTypeEnumerable;
 
         internal LambdaBasedCommandTypeProvider(LambdaBasedCommandType commandType)
         {
             _commandType = commandType;
+            _commandTypeEnumerable = new[] {commandType};
         }
 
-        public IEnumerable<ICommandType> GetAllCommandTypes()
+        public Task<IEnumerable<ICommandType>> GetAllCommandTypes()
         {
-            yield return _commandType;
+            return Task.FromResult(_commandTypeEnumerable);
         }
 
-        public ICommandType GetCommandType(string commandName)
+        public Task<ICommandType> GetCommandType(string commandName)
         {
-            return commandName == _commandType.Metadata.Name ? _commandType : null;
+            return Task.FromResult(commandName == _commandType.Metadata.Name ? _commandType : null);
         }
     }
 }

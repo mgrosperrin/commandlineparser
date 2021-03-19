@@ -13,9 +13,10 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
         public async Task ShowHelpForTheListCommand()
         {
             // Arrange
-            var parserBuild = new ParserBuilder()
-                .Logo("Display help for list command")
-                .CommandLineName("myListTest.exe");
+            var parserOptions = new ParserOptions {
+                    Logo = "Display help for list command",
+                    CommandLineName = "myListTest.exe"
+            };
             IEnumerable<string> args = new[] { "list", "--help" };
             var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedResult = 0;
@@ -41,7 +42,7 @@ List sample number 2
             // Act
             using (new LangageSwitcher("en-us"))
             {
-                var actual = CallParse(parserBuild, args);
+                var actual = await CallParse(parserOptions, args);
                 var actualResult = await actual.ExecuteAsync();
 
                 // Assert
@@ -57,9 +58,10 @@ List sample number 2
         public async Task ShowHelpForThePackCommand()
         {
             // Arrange
-            var parserBuild = new ParserBuilder()
-                .Logo("Display help for pack command")
-                .CommandLineName("myPackTest.exe");
+            var parserOptions = new ParserOptions {
+                Logo = "Display help for pack command",
+                CommandLineName = "myPackTest.exe"
+            };
             IEnumerable<string> args = new[] { "pack", "--help" };
             var expectedReturnCode = CommandParsingResultCode.Success;
             var expectedResult = 0;
@@ -89,7 +91,7 @@ Options:
             // Act
             using (new LangageSwitcher("en-us"))
             {
-                var actual = CallParse(parserBuild, args);
+                var actual = await CallParse(parserOptions, args);
                 var actualResult = await actual.ExecuteAsync();
 
                 // Assert

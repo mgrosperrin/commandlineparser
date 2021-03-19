@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
@@ -8,7 +9,7 @@ namespace MGR.CommandLineParser.IntegrationTests.SpecificCommand
     public class EscapedTraillingArgumentTests : ConsoleLoggingTestsBase
     {
         [Fact]
-        public void ParseWithValidArgsAnDoubleDash()
+        public async Task ParseWithValidArgsAnDoubleDash()
         {
             // Arrange
             IEnumerable<string> args = new[] {"--str-value:custom value", "-i", "42", "Custom argument value", "-b", "--", "firstArg", "-i", "32"};
@@ -19,7 +20,7 @@ namespace MGR.CommandLineParser.IntegrationTests.SpecificCommand
             var expectedIntValue = 42;
 
             // Act
-            var actual = CallParse<IntTestCommand>(args);
+            var actual = await CallParse<IntTestCommand>(args);
 
             // Assert
             Assert.True(actual.IsValid);

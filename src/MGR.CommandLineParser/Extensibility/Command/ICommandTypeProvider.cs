@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 
 namespace MGR.CommandLineParser.Extensibility.Command
@@ -16,7 +17,7 @@ namespace MGR.CommandLineParser.Extensibility.Command
         ///     Returns all commands types.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        IEnumerable<ICommandType> GetAllCommandTypes();
+        Task<IEnumerable<ICommandType>> GetAllCommandTypes();
 
         /// <summary>
         ///     Retrieve the <see cref="ClassBasedCommandType" /> of the command with the specified <paramref name="commandName" />.
@@ -26,6 +27,6 @@ namespace MGR.CommandLineParser.Extensibility.Command
         ///     The <see cref="ClassBasedCommandType" /> of the command with the specified <paramref name="commandName" /> or null if
         ///     the command's type is not found.
         /// </returns>
-        ICommandType GetCommandType(string commandName);
+        Task<ICommandType> GetCommandType(string commandName);
     }
 }

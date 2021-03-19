@@ -140,7 +140,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Converters
             IConverter converter = new BooleanConverter();
             var value = "Hello";
             var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(bool));
+#if NET48
             var expectedInnerExceptionMessage = "String was not recognized as a valid Boolean.";
+#else
+            var expectedInnerExceptionMessage = "String 'Hello' was not recognized as a valid Boolean.";
+#endif
 
             // Act
             using (new LangageSwitcher("en-us"))

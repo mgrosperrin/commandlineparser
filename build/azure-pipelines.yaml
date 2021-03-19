@@ -1,0 +1,232 @@
+name: MGR.CommandLineParser - $(GitVersion.FullSemVer)$(rev:.r)
+
+variables:
+- name: DOTNET_SKIP_FIRST_TIME_EXPERIENCE
+  value: 1
+- name: System.Configuration
+  value: Release
+- name: GitVersion.FullSemVer
+  value: 'Computing'
+- name: Artifact.Packages.Name
+  value: packages
+- name: Artifact.Documentation.Name
+  value: documentation
+- name: Artifact.Documentation.FilePath
+  value: documentation_site.zip
+
+stages:
+- stage: Build
+  displayName: 'Build the libraries & documentation'
+  jobs:
+  - job: ComputeVersion
+    displayName: Compute the version
+    pool:
+      name: Azure Pipelines
+      vmImage: windows-2019
+    steps:
+    - task: GitVersion@5
+      displayName: 'Get version from Git'
+      inputs:
+        runtime: 'core'
+    - task: CmdLine@2
+      name: Version
+      displayName: Sets the build variables to make them available to others jobs
+      inputs:
+        script: |
+          echo "##vso[task.setvariable variable=FullSemVer;isOutput=true]$(GitVersion.FullSemVer)
+          echo "##vso[task.setvariable variable=BuildMetadata;isOutput=true]$(GitVersion.BuildMetadata)
+  - job: BuildLibraries
+    displayName: Build the libraries
+    dependsOn: ComputeVersion
+    pool:
+      name: Azure Pipelines
+      vmImage: windows-2019
+    variables:
+    - name: Version.FullSemVer
+      value: $[ dependencies.ComputeVersion.outputs['Version.FullSemVer'] ]
+    - name: Version.BuildMetadata
+      value: $[ dependencies.ComputeVersion.outputs['Version.BuildMetadata'] ]
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Install the .NET Core SDK'
+      inputs:
+        packageType: 'sdk'
+        version: '5.0.x'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build & Pack the libraries'
+      inputs:
+        arguments: '-c $(System.Configuration) -p:Version=$(Version.FullSemVer)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Test the libraries'
+      inputs:
+        command: test
+        projects: 'tests/**Tests/*.csproj'
+        arguments: '-c $(System.Configuration) --no-build --collect:"XPlat Code Coverage" --settings build/coverlet.runsettings'
+    - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
+      displayName: 'Generate code coverage report'
+      inputs:
+        reports: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+        targetdir: '$(Build.ArtifactStagingDirectory)/Coverage'
+      condition: succeededOrFailed()
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage from $(Build.ArtifactStagingDirectory)/Coverage/  Cobertura.xml'
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '$(Build.ArtifactStagingDirectory)/Coverage/Cobertura.xml'
+        reportDirectory: '$(Build.ArtifactStagingDirectory)/Coverage'
+      condition: succeededOrFailed()
+    - task: CopyFiles@2
+      displayName: 'Copy Files to artifacts folder'
+      inputs:
+        SourceFolder: src/
+        Contents: '**/MGR.CommandLineParser*.*nupkg'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/nuget'
+        flattenFolders: true
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: $(Artifact.Packages.Name)'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/nuget'
+        ArtifactName: $(Artifact.Packages.Name)
+  - job: BuildDocumentation
+    displayName: Build the documentation
+    dependsOn: ComputeVersion
+    pool:
+      name: Azure Pipelines
+      vmImage: windows-2019
+    variables:
+    - name: Version.FullSemVer
+      value: $[ dependencies.ComputeVersion.outputs['Version.FullSemVer'] ]
+    - name: Version.BuildMetadata
+      value: $[ dependencies.ComputeVersion.outputs['Version.BuildMetadata'] ]
+    steps:
+    - task: PowerShell@2
+      displayName: 'Build documentation site'
+      inputs:
+        filePath: 'build/generate_docs.ps1'
+    - task: ArchiveFiles@2
+      displayName: 'Create archive of documentation site'
+      inputs:
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Artifact.Documentation.FilePath)'
+        archiveType: zip
+        rootFolderOrFile: 'artifacts/_site'
+        includeRootFolder: false
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: documentation site'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Artifact.Documentation.FilePath)'
+        ArtifactName: $(Artifact.Documentation.Name)
+- stage: PublishPrerelease
+  displayName: Publish the prerelease packages
+  dependsOn: Build
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/dev')
+  jobs:
+  - deployment: PublishMyGet
+    displayName: Deploy the packages to MyGet
+    pool:
+      name: Azure Pipelines
+      vmImage: windows-2019
+    environment: MyGet
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: NuGetToolInstaller@1
+            displayName: Install the latest NuGet tool
+            inputs:
+              versionSpec:
+              checkLatest: true
+          - task: NuGetCommand@2
+            displayName: Publish the packages to MyGet
+            inputs:
+              command: 'push'
+              packagesToPush: '$(Pipeline.Workspace)/$(Artifact.Packages.Name)/*.nupkg'
+              nuGetFeedType: 'external'
+              publishFeedCredentials: 'MyGet - mgrosperrin'
+- stage: PublishRelease
+  displayName: 'Publish the release packages'
+  dependsOn: Build
+  condition: |
+        or(
+          eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+          startsWith(variables['Build.SourceBranch'], 'refs/heads/release-')
+        )
+  jobs:
+  - deployment: PublishNuGet
+    displayName: Deploy the packages to NuGet.org
+    condition: |
+      eq(stageDependencies.Build.ComputeVersion.outputs['Version.BuildMetadata'], '')
+    pool:
+      name: Azure Pipelines
+      vmImage: windows-2019
+    environment: NuGet
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: NuGetToolInstaller@1
+            displayName: Install the latest NuGet tool
+            inputs:
+              versionSpec:
+              checkLatest: true
+          - task: NuGetCommand@2
+            displayName: Publish the main NuGet packages
+            inputs:
+              command: 'push'
+              packagesToPush: '$(Pipeline.Workspace)/$(Artifact.Packages.Name)/*.nupkg'
+              nuGetFeedType: 'external'
+              publishFeedCredentials: 'NuGet - MGR.CommandLineParser'
+  - deployment: PublishDocumentation
+    displayName: Deploy the documentation to GitHub Pages
+    condition: |
+      and(
+        eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+        eq(stageDependencies.Build.ComputeVersion.outputs['Version.BuildMetadata'], '')
+      )
+    variables:
+    - group: GitHub_Access_Token
+    - name: Version.FullSemVer
+      value: $[ stageDependencies.Build.ComputeVersion.outputs['Version.FullSemVer'] ]
+    - name: GitHub.RepositoryName
+      value: mgrosperrin/commandlineparser
+    - name: GitHub.GH-Pages.BranchName
+      value: gh-pages
+    - name: Path.GitHub.Clone.Temp
+      value: $(Pipeline.Workspace)\temp_github_clone_folder
+    - name: Path.Documentation.Archive.FullPath
+      value: $(Pipeline.Workspace)/$(Artifact.Documentation.Name)/$(Artifact.Documentation.FilePath)
+    - name: Path.Documentation.Expansion.FullPath
+      value: $(Pipeline.Workspace)\temp_expansion_folder
+    pool:
+      name: Azure Pipelines
+      vmImage: windows-2019
+    environment: Documentation
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: 'git clone https://github.com/$(GitHub.RepositoryName).git $(Path.GitHub.Clone.Temp) --branch $(GitHub.GH-Pages.BranchName)'
+            displayName: 'Clone GitHub Pages branch'
+          - task: ExtractFiles@1
+            displayName: 'Extract documentation site'
+            inputs:
+              archiveFilePatterns: '$(Path.Documentation.Archive.FullPath)'
+              destinationFolder: '$(Path.Documentation.Expansion.FullPath)'
+          - script: 'git rm -r *'
+            workingDirectory: '$(Path.GitHub.Clone.Temp)'
+            displayName: 'Remove all files in Git'
+          - task: CopyFiles@2
+            displayName: 'Copy documentation site to Git'
+            inputs:
+              SourceFolder: '$(Path.Documentation.Expansion.FullPath)'
+              Contents: '**/*.*'
+              TargetFolder: '$(Path.GitHub.Clone.Temp)'
+          - script: |
+             git config --global user.email '$(GITHUB_EMAIL)'
+             git config --global user.name '$(GITHUB_USER)'
+             git add .
+             git commit -m "Generate documentation for version $(Version.FullSemVer)"
+             git push https://%gta%@github.com/$(GitHub.RepositoryName).git
+            workingDirectory: '$(Path.GitHub.Clone.Temp)'
+            displayName: 'Configure Git, commit & push'
+            env:
+              gta: $(GITHUB_ACCESS_TOKEN)

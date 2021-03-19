@@ -11,5 +11,4 @@ You can customize the display of the option's command by two ways:
 1. Using the `System.ComponentModel.DataAnnotations.DisplayAttribute`
  and it's `Name`, `ShortName` and `Description` properties.
 2. Registrying an implementation of
- `MGR.CommandLineParser.Extensibility.Command.IOptionAlternateNameGenerator`.
- An implementation is registred by default that compute the caml-case form of the option's name.
+ `MGR.CommandLineParser.Extensibility.Command.IPropertyOptionAlternateNameGenerator`.
