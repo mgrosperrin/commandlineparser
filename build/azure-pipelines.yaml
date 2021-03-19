@@ -154,7 +154,7 @@ stages:
   - deployment: PublishNuGet
     displayName: Deploy the packages to NuGet.org
     condition: |
-      eq(stageDependencies.Build.ComputeVersion.outputs['Version.BuildMetadata'], '')
+      eq(stageDependencies.Build.ComputeVersion.outputs['Version.BuildMetadata'], '0')
     pool:
       name: Azure Pipelines
       vmImage: windows-2019
@@ -180,7 +180,7 @@ stages:
     condition: |
       and(
         eq(variables['Build.SourceBranch'], 'refs/heads/master'),
-        eq(stageDependencies.Build.ComputeVersion.outputs['Version.BuildMetadata'], '')
+        eq(stageDependencies.Build.ComputeVersion.outputs['Version.BuildMetadata'], '0')
       )
     variables:
     - group: GitHub_Access_Token
