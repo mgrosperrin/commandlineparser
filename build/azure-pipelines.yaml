@@ -52,14 +52,14 @@ stages:
       inputs:
         packageType: 'sdk'
         version: '5.0.x'
-   - task: SonarCloudPrepare@1
-     displayName: 'Prepare SonarCloud analysis'
-     inputs:
-       SonarCloud: 'SonarCloud'
-       organization: 'mgrosperrin'
-       scannerMode: 'MSBuild'
-       projectKey: 'mgrosperrin_commandlineparser'
-       projectName: 'MGR.CommandLineParser'
+    - task: SonarCloudPrepare@1
+      displayName: 'Prepare SonarCloud analysis'
+      inputs:
+        SonarCloud: 'SonarCloud'
+        organization: 'mgrosperrin'
+        scannerMode: 'MSBuild'
+        projectKey: 'mgrosperrin_commandlineparser'
+        projectName: 'MGR.CommandLineParser'
     - task: DotNetCoreCLI@2
       displayName: 'Build & Pack the libraries'
       inputs:
