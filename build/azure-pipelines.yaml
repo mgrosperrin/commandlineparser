@@ -52,6 +52,14 @@ stages:
       inputs:
         packageType: 'sdk'
         version: '5.0.x'
+   - task: SonarCloudPrepare@1
+     displayName: 'Prepare SonarCloud analysis'
+     inputs:
+       SonarCloud: 'SonarCloud'
+       organization: 'mgrosperrin'
+       scannerMode: 'MSBuild'
+       projectKey: 'mgrosperrin_commandlineparser'
+       projectName: 'MGR.CommandLineParser'
     - task: DotNetCoreCLI@2
       displayName: 'Build & Pack the libraries'
       inputs:
@@ -62,6 +70,10 @@ stages:
         command: test
         projects: 'tests/**Tests/*.csproj'
         arguments: '-c $(System.Configuration) --no-build --collect:"XPlat Code Coverage" --settings build/coverlet.runsettings'
+    - task: SonarCloudAnalyze@1
+    - task: SonarCloudPublish@1
+      inputs:
+        pollingTimeoutSec: '300'
     - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
       displayName: 'Generate code coverage report'
       inputs:
