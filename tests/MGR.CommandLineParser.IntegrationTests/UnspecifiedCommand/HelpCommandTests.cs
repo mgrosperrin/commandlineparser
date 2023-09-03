@@ -28,6 +28,7 @@ Type 'myHelpTest.exe help <command>' for help on a specific command.
 
 Available commands:
  Delete      DeleteCommandDescription
+ Enum        
  Help        
  Import      
  Install     InstallCommandDescription

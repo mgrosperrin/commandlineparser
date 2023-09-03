@@ -69,7 +69,7 @@ stages:
         targetdir: '$(Build.ArtifactStagingDirectory)/Coverage'
       condition: succeededOrFailed()
     - task: PublishCodeCoverageResults@1
-      displayName: 'Publish code coverage from $(Build.ArtifactStagingDirectory)/Coverage/  Cobertura.xml'
+      displayName: 'Publish code coverage from $(Build.ArtifactStagingDirectory)/Coverage/Cobertura.xml'
       inputs:
         codeCoverageTool: Cobertura
         summaryFileLocation: '$(Build.ArtifactStagingDirectory)/Coverage/Cobertura.xml'
