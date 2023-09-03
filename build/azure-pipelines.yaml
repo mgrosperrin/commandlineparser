@@ -50,8 +50,7 @@ stages:
     - task: UseDotNet@2
       displayName: 'Install the .NET Core SDK'
       inputs:
-        packageType: 'sdk'
-        version: '5.0.x'
+        useGlobalJson: true
     - task: DotNetCoreCLI@2
       displayName: 'Build & Pack the libraries'
       inputs:
