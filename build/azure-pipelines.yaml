@@ -24,10 +24,11 @@ stages:
       name: Azure Pipelines
       vmImage: windows-2019
     steps:
-    - task: GitVersion@5
-      displayName: 'Get version from Git'
+    - task: gitversion/setup@0
       inputs:
-        runtime: 'core'
+        versionSpec: '5.x'
+        preferLatestVersion: true
+    - task: gitversion/execute@0
     - task: CmdLine@2
       name: Version
       displayName: Sets the build variables to make them available to others jobs
