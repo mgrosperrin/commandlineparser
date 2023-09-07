@@ -24,7 +24,7 @@ namespace System.Reflection
 
                 try
                 {
-                    exportedTypes = assembly.GetExportedTypes();
+                    exportedTypes = assembly.GetTypes();
                 }
                 catch (ReflectionTypeLoadException ex)
                 {
