@@ -47,7 +47,13 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Converters
             IConverter converter = new DecimalConverter();
             var value = "Hello";
             var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(decimal));
-            var expectedInnerExceptionMessage = "Input string was not in a correct format.";
+            var expectedInnerExceptionMessage =
+#if NETFRAMEWORK
+                "Input string was not in a correct format."
+#else
+                "The input string 'Hello' was not in a correct format."
+#endif
+                ;
 
             // Act
             using (new LangageSwitcher("en-us"))

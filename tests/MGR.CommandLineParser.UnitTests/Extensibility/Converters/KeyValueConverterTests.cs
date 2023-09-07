@@ -65,7 +65,13 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Converters
             IConverter converter = new KeyValueConverter(new StringConverter(), new Int32Converter());
             var value = "Hello=Hello";
             var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert("Hello", typeof(int));
-            var expectedInnerExceptionMessage = "Input string was not in a correct format.";
+            var expectedInnerExceptionMessage =
+#if NETFRAMEWORK
+                "Input string was not in a correct format."
+#else
+                "The input string 'Hello' was not in a correct format."
+#endif
+                ;
 
             // Act
             using (new LangageSwitcher("en-us"))
