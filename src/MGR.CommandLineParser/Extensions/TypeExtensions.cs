@@ -102,7 +102,7 @@ namespace System
                 return true;
             }
 
-            return source.IsVisible && !source.IsAbstract && baseType.IsAssignableFrom(source);
+            return !source.IsAbstract && baseType.IsAssignableFrom(source);
         }
 
         internal static string GetFullCommandName(this Type commandType)

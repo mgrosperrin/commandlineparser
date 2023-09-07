@@ -75,7 +75,7 @@ namespace MGR.CommandLineParser.IntegrationTests
             where TCommand : class, ICommand
         {
             var parserBuilder = new ParserBuilder(parserOptions, _serviceCollection);
-            parserBuilder.AddCommands(builder => builder.AddCommands<DeleteCommand>());
+            parserBuilder.AddCommands(builder => builder.AddCommands<TCommand>());
             var parser = parserBuilder.BuildParser();
             var parsingResult = await parser.ParseWithDefaultCommand<TCommand>(args);
 
