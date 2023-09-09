@@ -11,3 +11,6 @@ You can customize the behavior of the options with some annotations (the parser 
   - `Name` and `ShortName` to respectively change the long and short form of the option
   - `Description` to define a description in the auto-generated help for the option,
 - Use any of the `System.ComponentModel.DataAnnotations.ValidationAttribute` derived class to validate the value provided for the option.
+
+If the type of your option is not covered by one of the [built-in converters](../built-in-converters.md),
+you can create and register [your own](../converter.md).
