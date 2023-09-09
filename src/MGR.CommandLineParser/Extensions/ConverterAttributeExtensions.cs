@@ -6,7 +6,9 @@ namespace MGR.CommandLineParser.Command
 {
     internal static class ConverterAttributeExtensions
     {
+#pragma warning disable CS0618 // Type or member is obsolete
         internal static IConverter BuildConverter(this ConverterAttribute source)
+#pragma warning restore CS0618 // Type or member is obsolete
         {
             Guard.NotNull(source, nameof(source));
 

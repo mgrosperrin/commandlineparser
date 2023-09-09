@@ -70,10 +70,25 @@ namespace System.Reflection
 
         private static IConverter GetConverterFromAttribute(PropertyInfo propertyInfo, string commandName)
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             var converterAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterAttribute), true).FirstOrDefault() as ConverterAttribute;
+#pragma warning restore CS0618 // Type or member is obsolete
             if (converterAttribute != null)
             {
                 var converter = converterAttribute.BuildConverter();
+
+                if (!converter.CanConvertTo(propertyInfo.PropertyType))
+                {
+                    throw new CommandLineParserException(Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(propertyInfo.Name, commandName, propertyInfo.PropertyType, converter.TargetType));
+                }
+                return converter;
+            }
+
+            var genericConverterAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterAttribute<>), true).FirstOrDefault();
+            if (genericConverterAttribute != null)
+            {
+                var converterType = genericConverterAttribute.GetType().GetGenericArguments()[0];
+                var converter = Activator.CreateInstance(converterType) as IConverter;
 
                 if (!converter.CanConvertTo(propertyInfo.PropertyType))
                 {
