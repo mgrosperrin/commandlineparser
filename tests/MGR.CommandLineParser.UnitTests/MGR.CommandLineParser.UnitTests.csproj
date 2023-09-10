@@ -6,6 +6,7 @@
         <DocumentationFile />
         <IsPackable>false</IsPackable>
         <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+		<CodeAnalysisRuleSet></CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <ItemGroup>

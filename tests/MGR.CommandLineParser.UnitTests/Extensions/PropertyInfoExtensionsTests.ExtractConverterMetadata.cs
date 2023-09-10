@@ -13,15 +13,24 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
         {
             public int OriginalProperty { get; set; }
 
+#pragma warning disable CS0618 // Type or member is obsolete
             [Converter(typeof(Int32Converter))]
+#pragma warning restore CS0618 // Type or member is obsolete
             public int CustomConverterProperty { get; set; }
-
+#if NET7_0_OR_GREATER
+            [Converter<Int32Converter>]
+            public int CustomGenericConverterProperty { get; set; }
+#endif
+#pragma warning disable CS0618 // Type or member is obsolete
             [Converter(typeof(GuidConverter))]
+#pragma warning restore CS0618 // Type or member is obsolete
             public int WrongCustomConverterProperty { get; set; }
 
             public List<int> OriginalListProperty { get; set; }
 
+#pragma warning disable CS0618 // Type or member is obsolete
             [Converter(typeof(Int32Converter))]
+#pragma warning restore CS0618 // Type or member is obsolete
             public List<int> CustomListConverterProperty { get; set; }
 
             public Dictionary<int, Guid> OriginalDictionaryProperty { get; set; }
@@ -96,7 +105,24 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 Assert.NotNull(actual);
                 Assert.IsType<Int32Converter>(actual);
             }
+#if NET7_0_OR_GREATER
+            [Fact]
+            public void CustomGenericConverterTest()
+            {
+                // Arrange
+                var propertyName = TypeHelpers.ExtractPropertyName(() => CustomGenericConverterProperty);
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new StringConverter() };
 
+                // Act
+                var actual = propertyInfo.ExtractConverter(converters, propertyName, commandName);
+
+                // Assert
+                Assert.NotNull(actual);
+                Assert.IsType<Int32Converter>(actual);
+            }
+#endif
             [Fact]
             public void WrongCustomConverterTest()
             {

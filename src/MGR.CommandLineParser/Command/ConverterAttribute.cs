@@ -4,9 +4,10 @@ using MGR.CommandLineParser.Extensibility.Converters;
 namespace MGR.CommandLineParser.Command
 {
     /// <summary>
-    /// Defines the converter type for a dictionary property.
+    /// Defines the converter type for a property.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
+    [Obsolete("Use the generic version of the MGR.CommandLineParser.Command.ConverterAttribute if you use C#11+")]
     public sealed class ConverterAttribute : Attribute
     {
         /// <summary>
