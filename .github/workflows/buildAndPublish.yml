@@ -1,0 +1,61 @@
+on:
+  workflow_call: 
+    inputs:
+      feedUrl:
+        description: 'NuGet feed URL'
+        required: true
+        type: string
+      forRelease:
+        description: 'Run for release?'
+        required: true
+        type: boolean
+    secrets:
+      feedAPIKey:
+        description: 'NuGet feed API key'
+        required: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+    runs-on: windows-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Git Semantic Version
+      id: version
+      uses: PaulHatch/semantic-version@v5.4.0
+      with:
+        tag_prefix: ''
+        version_format: "${major}.${minor}.${patch}${{ !inputs.forRelease && '-preview${increment}' || '' }}"
+        search_commit_body: true
+
+    - name: Setup dotnet ${{ env.DOTNET_VERSION }}
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Build and Pack
+      run: dotnet build -c Release -p:Version=${{ steps.version.outputs.version}}
+
+    - name: Run tests
+      run: dotnet test -c Release --no-build
+
+    - name: Upload dotnet test results
+      uses: dorny/test-reporter@v1.8.0
+      if: ${{ !cancelled() }}
+      with:
+        name: .NET Tests
+        path: 'TestResults/**/*.trx'
+        reporter: dotnet-trx
+        fail-on-error: true
+          
+    - name: Push to NuGet package feed
+      env:
+        NUGET_URL: ${{ inputs.feedUrl }}
+        NUGET_API_KEY: ${{ secrets.feedAPIKey }}
+      run: dotnet nuget push '**/*.nupkg' --source "$($env:NUGET_URL)" --api-key "$($env:NUGET_API_KEY)"
+      if: github.event_name == 'push'

@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+    DOTNET_VERSION: '8.0.x'
+
+permissions:
+  checks: write
+  contents: read
+
+jobs:
+  call_buildAndPublish:
+    uses: ./.github/workflows/buildAndPublish.yml
+    with:
+      feedUrl: https://www.myget.org/F/mgrosperrin/api/v3/index.json
+      forRelease: false
+    secrets:
+      feedAPIKey: ${{ secrets.MYGET_CI_API_KEY }}

@@ -11,7 +11,6 @@
         <DebugType>portable</DebugType>
         <IsPackable>true</IsPackable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)$(Product).ruleset</CodeAnalysisRuleSet>
 
         <Authors>Matthias GROSPERRIN</Authors>
         <Company></Company>
@@ -23,6 +22,8 @@
         <NeutralLanguage>en-US</NeutralLanguage>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <VSTestLogger>trx%3bLogFileName=$(MSBuildProjectName).trx</VSTestLogger>
+        <VSTestResultsDirectory>$(MSBuildThisFileDirectory)/TestResults/$(TargetFramework)</VSTestResultsDirectory>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

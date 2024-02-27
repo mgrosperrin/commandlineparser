@@ -1,0 +1,29 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions" # See documentation for possible values
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "weekly"
+    assignees:
+      - "mgrosperrin"
+    commit-message:
+      prefix: "[GH Actions Update] "
+      include: "scope"
+    groups:
+      gh-actions:
+        patterns:
+        - "*"
+  
+  - package-ecosystem: "nuget" # See documentation for possible values
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "weekly"
+    assignees:
+      - "mgrosperrin"
+    commit-message:
+      prefix: "[.NET packages update] "
+      include: "scope"
+    groups:
+      dotnet:
+        patterns:
+        - "*"

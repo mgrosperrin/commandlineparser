@@ -1,4 +1,6 @@
 # You can learn more about editorconfig here: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
+[*.{csproj,props}]
+indent_size = 2
 [*.cs]
 
 #Core editorconfig formatting - indentation

@@ -44,7 +44,11 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.Converters
             IConverter converter = new GuidConverter();
             var value = "Hello";
             var expectedExceptionMessage = Constants.ExceptionMessages.FormatConverterUnableConvert(value, typeof(Guid));
+#if NET
+            var expectedInnerExceptionMessage = "Unrecognized Guid format.";
+#else
             var expectedInnerExceptionMessage = "Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).";
+#endif
 
             // Act
             using (new LangageSwitcher("en-us"))
