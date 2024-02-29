@@ -20,7 +20,6 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageVersion Include="Moq" Version="4.20.70" />
     <PackageVersion Include="Seq.Extensions.Logging" Version="8.0.0" />
-    <PackageVersion Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
     <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageVersion Include="xunit" Version="2.7.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.7">
