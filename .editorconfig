@@ -1,14 +1,17 @@
 # You can learn more about editorconfig here: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
-[*.{csproj,props}]
-indent_size = 2
-[*.cs]
-
-#Core editorconfig formatting - indentation
 
 #use soft tabs (spaces) for indentation
 indent_style = space
 
+[*.{csproj,props,yml}]
+indent_size = 2
+
+[*.cs]
+
+#Core editorconfig formatting - indentation
+
 #Formatting - indentation options
+indent_size = 4
 
 #indent switch case contents.
 csharp_indent_case_contents = true

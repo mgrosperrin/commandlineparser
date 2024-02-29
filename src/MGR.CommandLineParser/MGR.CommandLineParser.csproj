@@ -6,7 +6,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="System.ComponentModel.Annotations" />
-    <PackageReference Include="SourceLink.Create.CommandLine" />
   </ItemGroup>
 
 </Project>

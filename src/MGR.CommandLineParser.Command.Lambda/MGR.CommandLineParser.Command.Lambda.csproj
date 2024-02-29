@@ -1,9 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="SourceLink.Create.CommandLine" />
-    </ItemGroup>
-    <ItemGroup>
         <ProjectReference Include="..\MGR.CommandLineParser\MGR.CommandLineParser.csproj" />
     </ItemGroup>
 

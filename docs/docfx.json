@@ -15,7 +15,9 @@
           "src": "../src"
         }
       ],
-      "dest": "../artifacts/docs/obj/api"
+      "dest": "../artifacts/docs/obj/api",
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
     }
   ],
   "build": {
@@ -48,7 +50,7 @@
         "_enableSearch": true,
         "_gitContribue": {
             "repo": "https://github.com/mgrosperrin/commandlineparser",
-            "branch": "dev"
+            "branch": "main"
         },
         "_gitUrlPattern": "github"
     },
@@ -58,6 +60,12 @@
     ],
     "postProcessors": [],
     "markdownEngineName": "markdig",
-    "noLangKeyword": false
+    "noLangKeyword": false,
+    "keepFileLink": false,
+    "cleanupCacheHistory": false,
+    "disableGitFeatures": false
+  },
+  "rules":{
+    "InvalidFileLink": "error"
   }
 }

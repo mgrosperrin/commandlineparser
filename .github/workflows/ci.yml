@@ -27,3 +27,6 @@ jobs:
       forRelease: false
     secrets:
       feedAPIKey: ${{ secrets.MYGET_CI_API_KEY }}
+
+  generate_docs:
+    uses: ./.github/workflows/generateDocs.yml

@@ -1,4 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="docfx.json" />
     <None Include="toc.yml" />
