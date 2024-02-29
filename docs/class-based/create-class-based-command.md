@@ -15,7 +15,7 @@ This abstract class provides:
 - implementation of an `--help` option,
 - access to the current `IServiceProvider`,
 - access to the current [IConsole](../extensibility/console.md)
-- access to the [ICommandType](../extensibility/icommandtype.md) (which describes the current command)
+- access to the [ICommandType](/api/MGR.CommandLineParser.Extensibility.Command.ICommandType.html) (which describes the current command)
 
 
 When deriving from this class, you have to implement the `ExecuteCommandAsync` that is called when the value of the `--help` option is ```false```.

@@ -64,5 +64,8 @@
     "keepFileLink": false,
     "cleanupCacheHistory": false,
     "disableGitFeatures": false
+  },
+  "rules":{
+    "InvalidFileLink": "error"
   }
 }
