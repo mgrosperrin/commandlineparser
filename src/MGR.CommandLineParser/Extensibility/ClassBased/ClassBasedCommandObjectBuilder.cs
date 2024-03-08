@@ -27,6 +27,10 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased
 
         protected override bool DoValidate(List<ValidationResult> validationResults, IServiceProvider serviceProvider)
         {
+            if(_command is CommandBase commandBase && commandBase.Help)
+            {
+                return true;
+            }
             var validationContext = new ValidationContext(_command, null, null);
             var isValid = Validator.TryValidateObject(_command, validationContext, validationResults, true);
             return isValid;
