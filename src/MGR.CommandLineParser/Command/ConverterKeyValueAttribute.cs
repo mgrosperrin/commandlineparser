@@ -7,6 +7,7 @@ namespace MGR.CommandLineParser.Command
     /// Defines the key and the value converter types for a dictionary property.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
+    [Obsolete("Use the generic version of the MGR.CommandLineParser.Command.ConverterKeyValueAttribute if you use C#11+. This attribute will be removed in a future version.")]
     public sealed class ConverterKeyValueAttribute : Attribute
     {
         /// <summary>

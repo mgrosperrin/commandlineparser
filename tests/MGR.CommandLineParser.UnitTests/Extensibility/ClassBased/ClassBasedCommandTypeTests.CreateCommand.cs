@@ -43,7 +43,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
             }
             private class TestBadConverterCommand : ICommand
             {
+#pragma warning disable CS0618 // Type or member is obsolete
                 [Converter(typeof(BooleanConverter))]
+#pragma warning restore CS0618 // Type or member is obsolete
                 // ReSharper disable once UnusedMember.Local
                 // ReSharper disable once UnusedAutoPropertyAccessor.Local
                 public int PropertySimpleWithBadConverter { get; set; }

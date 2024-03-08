@@ -13,32 +13,57 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
         {
             public int OriginalProperty { get; set; }
 
+#pragma warning disable CS0618 // Type or member is obsolete
             [Converter(typeof(Int32Converter))]
+#pragma warning restore CS0618 // Type or member is obsolete
             public int CustomConverterProperty { get; set; }
-
+#if NET7_0_OR_GREATER
+            [Converter<Int32Converter>]
+            public int CustomGenericConverterProperty { get; set; }
+#endif
+#pragma warning disable CS0618 // Type or member is obsolete
             [Converter(typeof(GuidConverter))]
+#pragma warning restore CS0618 // Type or member is obsolete
             public int WrongCustomConverterProperty { get; set; }
 
             public List<int> OriginalListProperty { get; set; }
 
+#pragma warning disable CS0618 // Type or member is obsolete
             [Converter(typeof(Int32Converter))]
+#pragma warning restore CS0618 // Type or member is obsolete
             public List<int> CustomListConverterProperty { get; set; }
 
             public Dictionary<int, Guid> OriginalDictionaryProperty { get; set; }
 
+#pragma warning disable CS0618 // Type or member is obsolete
             [ConverterKeyValue(typeof(GuidConverter), typeof(Int32Converter))]
+#pragma warning restore CS0618 // Type or member is obsolete
             public Dictionary<int, Guid> CustomDictionaryConverterProperty { get; set; }
 
+            [ConverterKeyValue<GuidConverter, Int32Converter>]
+            public Dictionary<int, Guid> CustomDictionaryConverterGenericProperty { get; set; }
+
+#pragma warning disable CS0618 // Type or member is obsolete
             [ConverterKeyValue(typeof(GuidConverter))]
+#pragma warning restore CS0618 // Type or member is obsolete
             public Dictionary<string, Guid> CustomValueOnlyDictionaryConverterProperty { get; set; }
 
+            [ConverterKeyValue<GuidConverter>]
+            public Dictionary<string, Guid> CustomValueOnlyDictionaryConverterGenericProperty { get; set; }
+
+#pragma warning disable CS0618 // Type or member is obsolete
             [ConverterKeyValue(typeof(GuidConverter))]
+#pragma warning restore CS0618 // Type or member is obsolete
             public List<string> CustomDictionaryConverterWithListProperty { get; set; }
 
+#pragma warning disable CS0618 // Type or member is obsolete
             [ConverterKeyValue(typeof(GuidConverter), typeof(Int32Converter))]
+#pragma warning restore CS0618 // Type or member is obsolete
             public Dictionary<string, Guid> CustomDictionaryWithWrongKeyConverterProperty { get; set; }
 
+#pragma warning disable CS0618 // Type or member is obsolete
             [ConverterKeyValue(typeof(GuidConverter), typeof(Int32Converter))]
+#pragma warning restore CS0618 // Type or member is obsolete
             public Dictionary<int, string> CustomDictionaryWithWrongValueConverterProperty { get; set; }
 
             public Dictionary<string, Guid> OriginalDictionaryWithWrongKeyConverterProperty { get; set; }
@@ -96,6 +121,58 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 Assert.NotNull(actual);
                 Assert.IsType<Int32Converter>(actual);
             }
+#if NET7_0_OR_GREATER
+            [Fact]
+            public void CustomGenericConverterTest()
+            {
+                // Arrange
+                var propertyName = TypeHelpers.ExtractPropertyName(() => CustomGenericConverterProperty);
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new StringConverter() };
+
+                // Act
+                var actual = propertyInfo.ExtractConverter(converters, propertyName, commandName);
+
+                // Assert
+                Assert.NotNull(actual);
+                Assert.IsType<Int32Converter>(actual);
+            }
+
+            [Fact]
+            public void CustomDictionaryGenericConverterTest()
+            {
+                // Arrange
+                var propertyName = TypeHelpers.ExtractPropertyName(() => CustomDictionaryConverterGenericProperty);
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new StringConverter(), new GuidConverter() };
+
+                // Act
+                var actual = propertyInfo.ExtractConverter(converters, propertyName, commandName);
+
+                // Assert
+                Assert.NotNull(actual);
+                Assert.IsType<KeyValueConverter>(actual);
+            }
+
+            [Fact]
+            public void CustomValueOnlyDictionaryGenericConverterTest()
+            {
+                // Arrange
+                var propertyName = TypeHelpers.ExtractPropertyName(() => CustomValueOnlyDictionaryConverterGenericProperty);
+                var propertyInfo = GetType().GetProperty(propertyName);
+                var commandName = "MyCommand";
+                var converters = new List<IConverter> { new StringConverter(), new Int32Converter() };
+
+                // Act
+                var actual = propertyInfo.ExtractConverter(converters, propertyName, commandName);
+
+                // Assert
+                Assert.NotNull(actual);
+                Assert.IsType<KeyValueConverter>(actual);
+            }
+#endif
 
             [Fact]
             public void WrongCustomConverterTest()

@@ -70,7 +70,21 @@ namespace System.Reflection
 
         private static IConverter GetConverterFromAttribute(PropertyInfo propertyInfo, string commandName)
         {
+            var genericConverterAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterAttribute<>), true).FirstOrDefault();
+            if (genericConverterAttribute != null)
+            {
+                var converterType = genericConverterAttribute.GetType().GetGenericArguments()[0];
+                var converter = Activator.CreateInstance(converterType) as IConverter;
+
+                if (!converter.CanConvertTo(propertyInfo.PropertyType))
+                {
+                    throw new CommandLineParserException(Constants.ExceptionMessages.ParserSpecifiedConverterNotValid(propertyInfo.Name, commandName, propertyInfo.PropertyType, converter.TargetType));
+                }
+                return converter;
+            }
+#pragma warning disable CS0618 // Type or member is obsolete
             var converterAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterAttribute), true).FirstOrDefault() as ConverterAttribute;
+#pragma warning restore CS0618 // Type or member is obsolete
             if (converterAttribute != null)
             {
                 var converter = converterAttribute.BuildConverter();
@@ -86,7 +100,24 @@ namespace System.Reflection
 
         private static IConverter GetKeyValueConverterFromAttribute(PropertyInfo propertyInfo, string optionName, string commandName)
         {
+            var genericConverterKeyValuePairAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterKeyValueAttribute<,>), true).FirstOrDefault();
+            if (genericConverterKeyValuePairAttribute != null)
+            {
+                if (!propertyInfo.PropertyType.IsDictionaryType())
+                {
+                    throw new CommandLineParserException(Constants.ExceptionMessages.ParserExtractConverterKeyValueConverterIsForIDictionaryProperty(optionName, commandName));
+                }
+                var genericArguments = genericConverterKeyValuePairAttribute.GetType().GetGenericArguments();
+                var keyConverterType = genericArguments[0];
+                var keyConverter = Activator.CreateInstance(keyConverterType) as IConverter;
+                var valueConverterType = genericArguments.Length == 1 ? typeof(MGR.CommandLineParser.Extensibility.Converters.StringConverter) : genericConverterKeyValuePairAttribute.GetType().GetGenericArguments()[1];
+                var valueConverter = Activator.CreateInstance(valueConverterType) as IConverter;
+
+                return new KeyValueConverter(keyConverter, valueConverter);
+            }
+#pragma warning disable CS0618 // Type or member is obsolete
             var converterKeyValuePairAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterKeyValueAttribute), true).FirstOrDefault() as ConverterKeyValueAttribute;
+#pragma warning restore CS0618 // Type or member is obsolete
             if (converterKeyValuePairAttribute != null)
             {
                 if (!propertyInfo.PropertyType.IsDictionaryType())
@@ -101,7 +132,9 @@ namespace System.Reflection
             return null;
         }
 
+#pragma warning disable CS0618 // Type or member is obsolete
         private static IConverter GetValueConverter(PropertyInfo propertyInfo, string optionName, string commandName, ConverterKeyValueAttribute converterKeyValuePairAttribute)
+#pragma warning restore CS0618 // Type or member is obsolete
         {
             var valueType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(false);
             var valueConverter = converterKeyValuePairAttribute.BuildValueConverter();
@@ -112,7 +145,9 @@ namespace System.Reflection
             return valueConverter;
         }
 
+#pragma warning disable CS0618 // Type or member is obsolete
         private static IConverter GetKeyConverter(PropertyInfo propertyInfo, string optionName, string commandName, ConverterKeyValueAttribute converterKeyValuePairAttribute)
+#pragma warning restore CS0618 // Type or member is obsolete
         {
             var keyType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(true);
             var keyConverter = converterKeyValuePairAttribute.BuildKeyConverter();

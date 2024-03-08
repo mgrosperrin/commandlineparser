@@ -15,7 +15,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
                 // Arrange
                 var expected = typeof (Int32Converter);
                 var valueConverterType = typeof (GuidConverter);
+#pragma warning disable CS0618 // Type or member is obsolete
                 var converterAttribute = new ConverterKeyValueAttribute(valueConverterType, expected);
+#pragma warning restore CS0618 // Type or member is obsolete
 
                 // Act
                 var actual = converterAttribute.BuildKeyConverter();
@@ -30,7 +32,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             {
                 // Arrange
                 var valueConverterType = typeof (Int32Converter);
+#pragma warning disable CS0618 // Type or member is obsolete
                 var converterAttribute = new ConverterKeyValueAttribute(valueConverterType);
+#pragma warning restore CS0618 // Type or member is obsolete
 
                 // Act
                 var actual = converterAttribute.BuildKeyConverter();
@@ -44,7 +48,9 @@ namespace MGR.CommandLineParser.UnitTests.Extensions
             public void NullConverterAttributeException()
             {
                 // Arrange
+#pragma warning disable CS0618 // Type or member is obsolete
                 ConverterKeyValueAttribute converterAttribute = null;
+#pragma warning restore CS0618 // Type or member is obsolete
                 var expectedExceptionMessage = SourceParameterName;
 
                 // Act
