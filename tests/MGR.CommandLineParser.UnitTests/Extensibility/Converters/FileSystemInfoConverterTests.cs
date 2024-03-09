@@ -1,55 +1,53 @@
-﻿using System.IO;
-using MGR.CommandLineParser.Extensibility.Converters;
+﻿using MGR.CommandLineParser.Extensibility.Converters;
 using Xunit;
 
-namespace MGR.CommandLineParser.UnitTests.Extensibility.Converters
+namespace MGR.CommandLineParser.UnitTests.Extensibility.Converters;
+
+public class FileSystemInfoConverterTests
 {
-    public class FileSystemInfoConverterTests
+    [Fact]
+    public void TargetType()
     {
-        [Fact]
-        public void TargetType()
-        {
-            // Arrange
-            IConverter converter = new FileSystemInfoConverter();
-            var expectedType = typeof(FileSystemInfo);
+        // Arrange
+        IConverter converter = new FileSystemInfoConverter();
+        var expectedType = typeof(FileSystemInfo);
 
-            // Act
-            var actual = converter.TargetType;
+        // Act
+        var actual = converter.TargetType;
 
-            // Assert
-            Assert.Equal(expectedType, actual);
-        }
+        // Assert
+        Assert.Equal(expectedType, actual);
+    }
 
-        [Fact]
-        public void FileInfo_WithValidPath_Conversion()
-        {
-            // Arrange
-            IConverter converter = new FileSystemInfoConverter();
-            var value = @"C:\temp\file.txt";
+    [Fact]
+    public void FileInfo_WithValidPath_Conversion()
+    {
+        // Arrange
+        IConverter converter = new FileSystemInfoConverter();
+        var value = @"C:\temp\file.txt";
 
-            // Act
-            var actual = converter.Convert(value, typeof(FileInfo));
+        // Act
+        var actual = converter.Convert(value, typeof(FileInfo));
 
-            // Assert
-            Assert.NotNull(actual);
-            Assert.IsType<FileInfo>(actual);
-            Assert.Equal(value, ((FileInfo)actual).FullName);
-        }
+        // Assert
+        Assert.NotNull(actual);
+        Assert.IsType<FileInfo>(actual);
+        Assert.Equal(value, ((FileInfo)actual).FullName);
+    }
 
-        [Fact]
-        public void DirectoryInfo_WithValidPath_Conversion()
-        {
-            // Arrange
-            IConverter converter = new FileSystemInfoConverter();
-            var value = @"C:\temp\file.txt";
+    [Fact]
+    public void DirectoryInfo_WithValidPath_Conversion()
+    {
+        // Arrange
+        IConverter converter = new FileSystemInfoConverter();
+        var value = @"C:\temp\file.txt";
 
-            // Act
-            var actual = converter.Convert(value, typeof(DirectoryInfo));
+        // Act
+        var actual = converter.Convert(value, typeof(DirectoryInfo));
 
-            // Assert
-            Assert.NotNull(actual);
-            Assert.IsType<DirectoryInfo>(actual);
-            Assert.Equal(value, ((DirectoryInfo)actual).FullName);
-        }
+        // Assert
+        Assert.NotNull(actual);
+        Assert.IsType<DirectoryInfo>(actual);
+        Assert.Equal(value, ((DirectoryInfo)actual).FullName);
     }
 }

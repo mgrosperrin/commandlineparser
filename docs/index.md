@@ -6,7 +6,7 @@ It provides an extensible mechanism to provide define commands
 and is able to automatically generate help/usage output for all commands.
 Built-in providers lets you define command by:
 
-- [creating a class](class-based/create-class-based-command.md) that implements `MGR.CommandLineParser.Command.ICommand` or inherits `MGR.CommandLineParser.Command.CommandBase` (provides some basic behavior for commands like support of `--help` option)
+- [creating classes](class-based/create-class-based-command.md) that implements `MGR.CommandLineParser.Command.ICommandHandler` for the logic of your command and `MGR.CommandLineParser.Command.CommandData` for the data associated to the command, or inherits `MGR.CommandLineParser.Command.CommandBase` (provides some basic behavior for commands like support of `--help` option)
 - [dynamically defining a command that uses a lambda](lambda/create-a-lambda-based-command.md) as execution (via the package `MGR.CommandLineParser.Command.Lambda)
 
 The general syntax on the command line is:
@@ -18,7 +18,6 @@ The value of the option can be separated of the name of the option
 by a space (` `) or a colon (`:`).
 
 Arguments is a list of non-option string that is passed to the command.
-
 
 There is also some ways to customize others parts of the parser:
 

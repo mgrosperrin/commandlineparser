@@ -1,14 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
-using MGR.CommandLineParser.Command;
+﻿using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands;
-public class EnumCommand : CommandBase
+public class EnumCommand : CommandBase<EnumCommand.EnumCommandData>
 {
-    public AttributeTargets Target { get; set; }
+    public class EnumCommandData : HelpedCommandData
+    {
+        public AttributeTargets Target { get; set; }
+    }
     public EnumCommand(IServiceProvider serviceProvider) : base(serviceProvider)
     {
     }
 
-    protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
+    protected override Task<int> ExecuteCommandAsync(EnumCommandData commandData, CancellationToken cancellationToken) => Task.FromResult(0);
 }

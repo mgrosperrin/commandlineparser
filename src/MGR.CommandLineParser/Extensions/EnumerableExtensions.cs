@@ -1,35 +1,29 @@
-﻿using System.IO;
-using System.Linq;
-using JetBrains.Annotations;
+﻿namespace System.Collections.Generic;
 
-// ReSharper disable once CheckNamespace
-namespace System.Collections.Generic
+internal static class EnumerableExtensions
 {
-    internal static class EnumerableExtensions
+    internal static IEnumerator<string> GetArgumentsEnumerator(this IEnumerable<string> arguments)
     {
-        internal static IEnumerator<string> GetArgumentsEnumerator([NotNull]this IEnumerable<string> arguments)
+        var enumerable = arguments as IList<string> ?? arguments.ToList();
+        var firstArgument = enumerable.FirstOrDefault();
+        if (string.IsNullOrEmpty(firstArgument))
         {
-            var enumerable = arguments as IList<string> ?? arguments.ToList();
-            var firstArgument = enumerable.FirstOrDefault();
-            if (string.IsNullOrEmpty(firstArgument))
-            {
-                return enumerable.GetEnumerator();
-            }
-            if (firstArgument.StartsWith("@", StringComparison.CurrentCulture))
-            {
-                if (!firstArgument.StartsWith("@@", StringComparison.CurrentCulture))
-                {
-                    var responseFileName = firstArgument.Remove(0, 1);
-                    if (Path.GetExtension(responseFileName) == ".rsp" && File.Exists(responseFileName))
-                    {
-                        var responseFileContent = File.ReadAllLines(responseFileName);
-                        return responseFileContent.AsEnumerable().GetEnumerator();
-                    }
-                }
-                var firstArgumentWithoutAt = firstArgument.Remove(0, 1);
-                return new[] { firstArgumentWithoutAt }.Concat(enumerable.Skip(1)).GetEnumerator();
-            }
             return enumerable.GetEnumerator();
         }
+        if (firstArgument.StartsWith("@", StringComparison.CurrentCulture))
+        {
+            if (!firstArgument.StartsWith("@@", StringComparison.CurrentCulture))
+            {
+                var responseFileName = firstArgument.Remove(0, 1);
+                if (Path.GetExtension(responseFileName) == ".rsp" && File.Exists(responseFileName))
+                {
+                    var responseFileContent = File.ReadAllLines(responseFileName);
+                    return responseFileContent.AsEnumerable().GetEnumerator();
+                }
+            }
+            var firstArgumentWithoutAt = firstArgument.Remove(0, 1);
+            return new[] { firstArgumentWithoutAt }.Concat(enumerable.Skip(1)).GetEnumerator();
+        }
+        return enumerable.GetEnumerator();
     }
 }

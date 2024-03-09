@@ -1,99 +1,93 @@
-﻿using System;
-using System.Collections.Generic;
-using Xunit;
+﻿using Xunit;
 
-namespace MGR.CommandLineParser.UnitTests.Extensions
+namespace MGR.CommandLineParser.UnitTests.Extensions;
+
+public partial class TypeExtensionsTests
 {
-    public partial class TypeExtensionsTests
+    public class GetDictionaryType
     {
-        public class GetDictionaryType
+        [Fact]
+        public void ListIntTest()
         {
-            [Fact]
-            public void ListIntTest()
-            {
-                // Arrange
-                var testedType = typeof (List<int>);
-                Type expected = null;
+            // Arrange
+            var testedType = typeof(List<int>);
+            Type expected = null;
 
-                // Act
-                var actual = testedType.GetDictionaryType();
+            // Act
+            var actual = testedType.GetDictionaryType();
 
-                // Assert
-                Assert.Equal(expected, actual);
-            }
+            // Assert
+            Assert.Equal(expected, actual);
+        }
 
-            [Fact]
-            // ReSharper disable once InconsistentNaming
-            public void ICollectionIntTest()
-            {
-                // Arrange
-                var testedType = typeof (ICollection<int>);
-                Type expected = null;
+        [Fact]
+        public void ICollectionIntTest()
+        {
+            // Arrange
+            var testedType = typeof(ICollection<int>);
+            Type expected = null;
 
-                // Act
-                var actual = testedType.GetDictionaryType();
+            // Act
+            var actual = testedType.GetDictionaryType();
 
-                // Assert
-                Assert.Equal(expected, actual);
-            }
+            // Assert
+            Assert.Equal(expected, actual);
+        }
 
-            [Fact]
-            public void TupleInt()
-            {
-                // Arrange
-                var testedType = typeof (Tuple<int>);
-                Type expected = null;
+        [Fact]
+        public void TupleInt()
+        {
+            // Arrange
+            var testedType = typeof(Tuple<int>);
+            Type expected = null;
 
-                // Act
-                var actual = testedType.GetDictionaryType();
+            // Act
+            var actual = testedType.GetDictionaryType();
 
-                // Assert
-                Assert.Equal(expected, actual);
-            }
+            // Assert
+            Assert.Equal(expected, actual);
+        }
 
-            [Fact]
-            public void DictionaryStringInt()
-            {
-                // Arrange
-                var testedType = typeof (Dictionary<string, int>);
-                var expected = typeof (IDictionary<string, int>);
+        [Fact]
+        public void DictionaryStringInt()
+        {
+            // Arrange
+            var testedType = typeof(Dictionary<string, int>);
+            var expected = typeof(IDictionary<string, int>);
 
-                // Act
-                var actual = testedType.GetDictionaryType();
+            // Act
+            var actual = testedType.GetDictionaryType();
 
-                // Assert
-                Assert.Equal(expected, actual);
-            }
+            // Assert
+            Assert.Equal(expected, actual);
+        }
 
-            [Fact]
-            // ReSharper disable once InconsistentNaming
-            public void IDictionaryStringInt()
-            {
-                // Arrange
-                var testedType = typeof (IDictionary<string, int>);
-                var expected = typeof (IDictionary<string, int>);
+        [Fact]
+        public void IDictionaryStringInt()
+        {
+            // Arrange
+            var testedType = typeof(IDictionary<string, int>);
+            var expected = typeof(IDictionary<string, int>);
 
-                // Act
-                var actual = testedType.GetDictionaryType();
+            // Act
+            var actual = testedType.GetDictionaryType();
 
-                // Assert
-                Assert.Equal(expected, actual);
-            }
+            // Assert
+            Assert.Equal(expected, actual);
+        }
 
-            [Fact]
-            public void NullTypeException()
-            {
-                // Arrange
-                Type testedType = null;
-                var expectedExceptionMessage = SourceParameterName;
+        [Fact]
+        public void NullTypeException()
+        {
+            // Arrange
+            Type testedType = null;
+            var expectedExceptionMessage = SourceParameterName;
 
-                // Act
-                // ReSharper disable once ExpressionIsAlwaysNull
-                var actualException = Assert.Throws<ArgumentNullException>(() => testedType.GetDictionaryType());
+            // Act
+            var actualException = Assert.Throws<ArgumentNullException>(() => testedType.GetDictionaryType());
 
-                // Assert
-                Assert.Equal(expectedExceptionMessage, actualException.ParamName);
-            }
+            // Assert
+            Assert.Equal(expectedExceptionMessage, actualException.ParamName);
         }
     }
 }

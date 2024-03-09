@@ -1,6 +1,5 @@
-﻿namespace MGR.CommandLineParser.UnitTests.Extensibility
+﻿namespace MGR.CommandLineParser.UnitTests.Extensibility;
+
+public partial class DefaultHelpWriterTests
 {
-    public partial class DefaultHelpWriterTests
-    {
-    }
 }

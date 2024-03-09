@@ -1,72 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Converters;
-using Moq;
 using Xunit;
 
-namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
+namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased;
+
+public partial class ClassBasedCommandTypeTests
 {
-    public partial class ClassBasedCommandTypeTests
+    public class FindOptionByShortName
     {
-        public class FindOptionByShortName
+        [Theory]
+        [InlineData("pl")]
+        public void FoundWithLongOrAlternateName(string optionName)
         {
-            [Theory]
-            [InlineData("pl")]
-            public void FoundWithLongOrAlternateName(string optionName)
-            {
-                // Arrange
-                var testCommandType = new ClassBasedCommandType(typeof(TestCommand),
-                    new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() }, new List<IPropertyOptionAlternateNameGenerator>());
-                var serviceProviderMock = new Mock<IServiceProvider>();
-                serviceProviderMock.Setup(_ => _.GetService(typeof(IClassBasedCommandActivator)))
-                    .Returns(ClassBasedBasicCommandActivator.Instance);
-                var classBasedCommandObjectBuilder =
-                    (ClassBasedCommandObjectBuilder)testCommandType.CreateCommandObjectBuilder(serviceProviderMock.Object);
-                var testCommand = (TestCommand)((IClassBasedCommandObject)classBasedCommandObjectBuilder.GenerateCommandObject()).Command;
+            // Arrange
+            var testCommandType = new ClassBasedCommandType(typeof(TestCommand),
+                new List<IConverter> { new StringConverter(), new GuidConverter(), new Int32Converter() }, new List<IPropertyOptionAlternateNameGenerator>());
+            var serviceProviderSubstitute = Substitute.For<IServiceProvider>();
+            serviceProviderSubstitute.GetService(default).ReturnsForAnyArgs(ClassBasedBasicCommandActivator.Instance);
+            var classBasedCommandObjectBuilder = testCommandType.CreateCommandObjectBuilder(serviceProviderSubstitute);
+            var testCommand = ((IClassBasedCommandObject<TestCommand, TestCommand>)classBasedCommandObjectBuilder.GenerateCommandObject()).Command;
+            var testCommandData = ((IClassBasedCommandObject<TestCommand, TestCommand>)classBasedCommandObjectBuilder.GenerateCommandObject()).CommandData;
 
-                // Act
-                var actual = classBasedCommandObjectBuilder.FindOptionByShortName(optionName);
+            // Act
+            var actual = classBasedCommandObjectBuilder.FindOptionByShortName(optionName);
 
-                // Assert
-                Assert.NotNull(actual);
-                Assert.NotNull(testCommand);
-                Assert.True(actual.ShouldProvideValue);
-                actual.AssignValue("42");
-                Assert.Single(testCommand.PropertyList);
-                Assert.Equal(42, testCommand.PropertyList.First());
+            // Assert
+            Assert.NotNull(actual);
+            Assert.NotNull(testCommand);
+            Assert.True(actual.ShouldProvideValue);
+            actual.AssignValue("42");
+            Assert.Single(testCommandData.PropertyList);
+            Assert.Equal(42, testCommandData.PropertyList.First());
 
-            }
+        }
 
-            private class TestCommand : ICommand
-            {
-                [Display(ShortName = "pl")]
-                // ReSharper disable once CollectionNeverUpdated.Local
-                // ReSharper disable once UnusedAutoPropertyAccessor.Local
-                public List<int> PropertyList { get; set; }
-                // ReSharper disable once UnusedMember.Local
-                public Dictionary<string, Guid> PropertyDictionary { get; set; }
-                // ReSharper disable once UnusedMember.Local
-                public int PropertySimple { get; set; }
+        private class TestCommand : CommandData, ICommandHandler<TestCommand>
+        {
+            [Display(ShortName = "pl")]
+            public List<int> PropertyList { get; set; }
 
-                #region ICommand Members
+            public Dictionary<string, Guid> PropertyDictionary { get; set; }
 
-                public Task<int> ExecuteAsync()
-                {
-                    throw new NotImplementedException();
-                }
+            public int PropertySimple { get; set; }
 
-                public IList<string> Arguments
-                {
-                    get { throw new NotImplementedException(); }
-                }
-
-                #endregion
-            }
+            public Task<int> ExecuteAsync(TestCommand commandData, CancellationToken cancellationToken) => throw new NotImplementedException();
         }
     }
 }

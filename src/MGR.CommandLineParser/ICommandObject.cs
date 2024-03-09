@@ -1,16 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿namespace MGR.CommandLineParser;
 
-namespace MGR.CommandLineParser
+/// <summary>
+/// Represents the instance of the command.
+/// </summary>
+public interface ICommandObject
 {
     /// <summary>
-    /// Represents the instance of the command.
+    /// Executes the command.
     /// </summary>
-    public interface ICommandObject
-    {
-        /// <summary>
-        /// Executes the command.
-        /// </summary>
-        /// <returns>The result of the command execution.</returns>
-        Task<int> ExecuteAsync();
-    }
+    /// <param name="cancellationToken">A cancellation token to stop processing the command.</param>
+    /// <returns>The result of the command execution.</returns>
+    Task<int> ExecuteAsync(CancellationToken cancellationToken);
 }

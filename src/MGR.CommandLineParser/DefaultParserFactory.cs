@@ -1,24 +1,22 @@
-﻿using System;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 
-namespace MGR.CommandLineParser
+namespace MGR.CommandLineParser;
+
+internal sealed class DefaultParserFactory : IParserFactory
 {
-    internal sealed class DefaultParserFactory : IParserFactory
+    private readonly IOptions<ParserOptions> _optionsMonitor;
+    private readonly IServiceProvider _serviceProvider;
+
+    public DefaultParserFactory(IOptions<ParserOptions> optionsMonitor, IServiceProvider serviceProvider)
     {
-        private readonly IOptions<ParserOptions> _optionsMonitor;
-        private readonly IServiceProvider _serviceProvider;
+        _optionsMonitor = optionsMonitor;
+        _serviceProvider = serviceProvider;
+    }
 
-        public DefaultParserFactory(IOptions<ParserOptions> optionsMonitor, IServiceProvider serviceProvider)
-        {
-            _optionsMonitor = optionsMonitor;
-            _serviceProvider = serviceProvider;
-        }
-
-        public IParser CreateParser()
-        {
-            var options = _optionsMonitor.Value;
-            var parser = new Parser(options, _serviceProvider);
-            return parser;
-        }
+    public IParser CreateParser()
+    {
+        var options = _optionsMonitor.Value;
+        var parser = new Parser(options, _serviceProvider);
+        return parser;
     }
 }

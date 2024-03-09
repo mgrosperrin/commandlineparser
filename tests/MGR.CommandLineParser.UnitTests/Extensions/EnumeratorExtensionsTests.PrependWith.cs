@@ -1,37 +1,35 @@
-﻿using System.Collections.Generic;
-using Xunit;
+﻿using Xunit;
 
-namespace MGR.CommandLineParser.UnitTests.Extensions
+namespace MGR.CommandLineParser.UnitTests.Extensions;
+
+public partial class EnumeratorExtensionsTests
 {
-    public partial class EnumeratorExtensionsTests
+    public class PrependWith
     {
-        public class PrependWith
+        [Fact]
+        public void Prepend_Correctly_Add_Before_Items()
         {
-            [Fact]
-            public void Prepend_Correctly_Add_Before_Items()
+            // Arrange
+            var initialList = new List<string> { "Should", "Be", "Prefixed" };
+            var prefix = "This";
+            var expected = new List<string> { "This", "Should", "Be", "Prefixed" }.GetEnumerator();
+
+            // Act
+            var actual = initialList.GetEnumerator().PrefixWith(prefix);
+
+            // Assert
+            while (true)
             {
-                // Arrange
-                var initialList = new List<string> {"Should", "Be", "Prefixed"};
-                var prefix = "This";
-                var expected = new List<string> {"This", "Should", "Be", "Prefixed"}.GetEnumerator();
-
-                // Act
-                var actual = initialList.GetEnumerator().PrefixWith(prefix);
-
-                // Assert
-                while (true)
+                var shouldHaveNext = expected.MoveNext();
+                Assert.Equal(shouldHaveNext, actual.MoveNext());
+                Assert.Equal(expected.Current, actual.Current);
+                if (!shouldHaveNext)
                 {
-                    var shouldHaveNext = expected.MoveNext();
-                    Assert.Equal(shouldHaveNext, actual.MoveNext());
-                    Assert.Equal(expected.Current, actual.Current);
-                    if (!shouldHaveNext)
-                    {
-                        break;
-                    }
+                    break;
                 }
-                expected.Dispose();
-                actual.Dispose();
             }
+            expected.Dispose();
+            actual.Dispose();
         }
     }
 }

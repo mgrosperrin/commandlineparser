@@ -1,24 +1,36 @@
 ﻿# Create a class-based command
 
-## Implement `ICommand`
+To create a class-based command, you have to create two classes:
+1. one that defines the data associated with the command,
+2. one that implements the logic of the command.
 
-To create a class-based command, you have to create a class that implements the interface `MGR.CommandLineParser.Command.ICommand` (or [inherit `CommandBase`](#inherit-from-commandbase)).
-The interface provides two members:
+Depending on what basic features you need for your command, you can choose to implement the logic of the command by inheriting from the abstract class `CommandBase<THelpedCommandData>` or by implementing the interface `ICommandHandler<TCommandData>`.
 
-1. a property `Arguments` (of type `IList<string>`) that will receive all arguments not mapped to an option,
-2. a method `ExecuteAsync` (that take no parameters and return a `Task<int>`) that is called to execute the command. The returned value is the status code that should be returned as exit code.
+## Inherit from `CommandBase<THelpedCommandData>`
+The abstract class `CommandBase<THelpedCommandData>` provides implementation for :
 
-## Inherit from `CommandBase`
-You can inherit from `MGR.CommandLineParser.Command.CommandBase`.
-This abstract class provides:
+- an `--help` option,
+- access to the current `IServiceProvider` via the property `ServiceProvider`,
+- access to the current [IConsole](../extensibility/console.md) via the property `Console`.
 
-- implementation of an `--help` option,
-- access to the current `IServiceProvider`,
-- access to the current [IConsole](../extensibility/console.md)
-- access to the [ICommandType](/api/MGR.CommandLineParser.Extensibility.Command.ICommandType.html) (which describes the current command)
+When deriving from this class, you have to implement the `ExecuteCommandAsync` that is called when the value of the `--help` option is `false`.
 
+You also have to make your command data class inherit from `MGR.CommandLineParser.Command.HelpedCommandData` to have the help option implemented.
+It will also give you access to the [ICommandType](/api/MGR.CommandLineParser.Extensibility.Command.ICommandType.html) which describes the current command.
 
-When deriving from this class, you have to implement the `ExecuteCommandAsync` that is called when the value of the `--help` option is ```false```.
+## Implement `ICommandHandler` and `CommandData`
+
+If you don't need these features, you can implement the interface `ICommandHandler<TCommandData>`.
+
+The interface defines a method `ExecuteAsync` to implement which is called to execute the command.
+It takes two parameters:
+1. The data of the command, of type of the generic type argument `TCommandData`,
+2. A `CancellationToken` used to stop the execution of the command.
+
+The method returns a `Task<int>` that represent the status code of the execution of the command (usually the exit code of the program).
+
+The "data" class must inherit `CommandData`, that provides a property `Arguments` (of type `IList<string>`) that will receive all arguments not mapped to an option.
+To define your own opptions, you have to add properties to this class.
 
 ## Customize your command
 
@@ -26,7 +38,7 @@ When deriving from this class, you have to implement the `ExecuteCommandAsync` t
 
 ## Add options to you command
 
-You can add options to your command by simply adding properties to your class.
+You can add options to your command by simply adding properties to your "command data" class.
 The properties can have any type, you just have to be sure there is a [converter](../extensibility/converter.md) for this type (see the [list of built-in converters](../extensibility/built-in-converters.md)).
 
 You can customize the behavior of the options with some annotations (the parser supports the annotations from [System.ComponentModel.DataAnnotations](https://docs.microsoft.com/dotnet/api/system.componentmodel.dataannotations)):

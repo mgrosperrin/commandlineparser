@@ -1,62 +1,59 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Xunit;
 
-namespace MGR.CommandLineParser.UnitTests.Extensions
+namespace MGR.CommandLineParser.UnitTests.Extensions;
+
+public partial class PropertyInfoExtensionsTests
 {
-    public partial class PropertyInfoExtensionsTests
+    public class ExtractIsRequiredMetadata
     {
-        public class ExtractIsRequiredMetadata
+        public int WritableProperty { get; set; }
+
+        [Required]
+        public int WritableIgnoredProperty { get; set; }
+
+        [Fact]
+        public void WritableTest()
         {
-            public int WritableProperty { get; set; }
+            // Arrange
+            var propertyInfo =
+                GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => WritableProperty));
 
-            [Required]
-            public int WritableIgnoredProperty { get; set; }
+            // Act
+            var actual = propertyInfo.ExtractIsRequiredMetadata();
 
-            [Fact]
-            public void WritableTest()
-            {
-                // Arrange
-                var propertyInfo =
-                    GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => WritableProperty));
+            // Assert
+            Assert.False(actual);
+        }
 
-                // Act
-                var actual = propertyInfo.ExtractIsRequiredMetadata();
+        [Fact]
+        public void NonWritableTest()
+        {
+            // Arrange
+            var propertyInfo =
+                GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => WritableIgnoredProperty));
 
-                // Assert
-                Assert.False(actual);
-            }
+            // Act
+            var actual = propertyInfo.ExtractIsRequiredMetadata();
 
-            [Fact]
-            public void NonWritableTest()
-            {
-                // Arrange
-                var propertyInfo =
-                    GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => WritableIgnoredProperty));
+            // Assert
+            Assert.True(actual);
+        }
 
-                // Act
-                var actual = propertyInfo.ExtractIsRequiredMetadata();
+        [Fact]
+        public void NullPropertyInfoException()
+        {
+            // Arrange
+            PropertyInfo propertyInfo = null;
+            var expectedExceptionMessage = SourceParameterName;
 
-                // Assert
-                Assert.True(actual);
-            }
+            // Act
+            var actualException =
+                Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractIsRequiredMetadata());
 
-            [Fact]
-            public void NullPropertyInfoException()
-            {
-                // Arrange
-                PropertyInfo propertyInfo = null;
-                var expectedExceptionMessage = SourceParameterName;
-
-                // Act
-                var actualException =
-                    // ReSharper disable once ExpressionIsAlwaysNull
-                    Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractIsRequiredMetadata());
-
-                // Assert
-                Assert.Equal(expectedExceptionMessage, actualException.ParamName);
-            }
+            // Assert
+            Assert.Equal(expectedExceptionMessage, actualException.ParamName);
         }
     }
 }

@@ -1,42 +1,39 @@
-﻿using System;
-using JetBrains.Annotations;
-using MGR.CommandLineParser.Extensibility.Converters;
+﻿using MGR.CommandLineParser.Extensibility.Converters;
 
-namespace MGR.CommandLineParser
+namespace MGR.CommandLineParser;
+
+internal static class Guard
 {
-    internal static class Guard
+    internal static void NotNull(object? item, string name)
     {
-        internal static void NotNull(object item, [InvokerParameterName] string name)
+        if (item == null)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException(name);
-            }
+            throw new ArgumentNullException(name);
         }
-        internal static void NotNullOrEmpty(string item, [InvokerParameterName] string name)
+    }
+    internal static void NotNullOrEmpty(string? item, string name)
+    {
+        if (string.IsNullOrEmpty(item))
         {
-            if (string.IsNullOrEmpty(item))
-            {
-                throw new ArgumentNullException(name);
-            }
+            throw new ArgumentNullException(name);
         }
+    }
 
-        internal static void IsIConverter([NotNull] Type type, string message)
+    internal static void IsIConverter(Type type, string message)
+    {
+        if (!typeof(IConverter).IsAssignableFrom(type))
         {
-            if (!typeof (IConverter).IsAssignableFrom(type))
-            {
-                throw new CommandLineParserException(message);
-            }
+            throw new CommandLineParserException(message);
         }
+    }
 
-        internal static void OfType<T>(Type type, [InvokerParameterName]  string name)
+    internal static void OfType<T>(Type type, string name)
+    {
+        NotNull(type, name);
+
+        if (!typeof(T).IsAssignableFrom(type))
         {
-            NotNull(type, name);
-
-            if (!typeof (T).IsAssignableFrom(type))
-            {
-                throw new ArgumentOutOfRangeException(name);
-            }
+            throw new ArgumentOutOfRangeException(name);
         }
     }
 }

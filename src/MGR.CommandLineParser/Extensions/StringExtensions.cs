@@ -1,57 +1,54 @@
 ﻿using System.Globalization;
-using System.Linq;
 using System.Text;
 using MGR.CommandLineParser;
 
-// ReSharper disable once CheckNamespace
-namespace System
+namespace System;
+
+internal static class StringExtensions
 {
-    internal static class StringExtensions
+    public static bool StartsWith(this string source, StringComparison comparisonType, params string[] values)
     {
-        public static bool StartsWith(this string source, StringComparison comparisonType, params string[] values)
-        {
-            Guard.NotNull(source, nameof(source));
+        Guard.NotNull(source, nameof(source));
 
-            return values.Any(value => source.StartsWith(value, comparisonType));
+        return values.Any(value => source.StartsWith(value, comparisonType));
+    }
+    public static int IndexOf(this string source, params char[] values)
+    {
+        Guard.NotNull(source, nameof(source));
+
+        var firstIndex = values.Select(c => source.IndexOf(c))
+            .FirstOrDefault(index => index >= 0);
+        return firstIndex;
+    }
+
+    public static string AsKebabCase(this string source)
+    {
+        if (string.IsNullOrEmpty(source))
+        {
+            return source;
         }
-        public static int IndexOf(this string source, params char[] values)
-        {
-            Guard.NotNull(source, nameof(source));
 
-            var firstIndex = values.Select(c => source.IndexOf(c))
-                .FirstOrDefault(index => index >= 0);
-            return firstIndex;
-        }
-
-        public static string AsKebabCase(this string source)
+        var builder = new StringBuilder();
+        builder.Append(char.ToLower(source.First(), CultureInfo.CurrentUICulture));
+        var introduceDash = false;
+        foreach (var c in source.Skip(1))
         {
-            if (string.IsNullOrEmpty(source))
+            if (char.IsUpper(c))
             {
-                return source;
+                if (introduceDash)
+                {
+                    builder.Append('-');
+                    introduceDash = false;
+                }
+                builder.Append(char.ToLower(c, CultureInfo.CurrentUICulture));
             }
-
-            var builder = new StringBuilder();
-            builder.Append(char.ToLower(source.First(), CultureInfo.CurrentUICulture));
-            var introduceDash = false;
-            foreach (var c in source.Skip(1))
+            else
             {
-                if (char.IsUpper(c))
-                {
-                    if (introduceDash)
-                    {
-                        builder.Append('-');
-                        introduceDash = false;
-                    }
-                    builder.Append(char.ToLower(c, CultureInfo.CurrentUICulture));
-                }
-                else
-                {
-                    introduceDash = true;
-                    builder.Append(c);
-                }
+                introduceDash = true;
+                builder.Append(c);
             }
-
-            return builder.ToString();
         }
+
+        return builder.ToString();
     }
 }

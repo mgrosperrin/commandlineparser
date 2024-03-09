@@ -1,60 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 
-namespace MGR.CommandLineParser.Extensibility.ClassBased
+namespace MGR.CommandLineParser.Extensibility.ClassBased;
+
+internal sealed class ClassBasedCommandOptionMetadata : CommandOptionMetadataBase
 {
-    internal sealed class ClassBasedCommandOptionMetadata : CommandOptionMetadataBase
+    private ClassBasedCommandOptionMetadata(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
+    : base(propertyInfo.ExtractIsRequiredMetadata(),
+        GetMultiValueIndicator(propertyInfo.PropertyType),
+        propertyInfo.ExtractOptionDisplayInfoMetadata(optionAlternateNameGenerators),
+        propertyInfo.ExtractDefaultValue())
     {
-        private ClassBasedCommandOptionMetadata(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
-        :base(propertyInfo.ExtractIsRequiredMetadata(),
-            GetMultiValueIndicator(propertyInfo.PropertyType),
-            propertyInfo.ExtractOptionDisplayInfoMetadata(optionAlternateNameGenerators),
-            propertyInfo.ExtractDefaultValue())
+        PropertyOption = propertyInfo;
+        CommandMetadata = commandMetadata;
+        Converter = propertyInfo.ExtractConverter(converters, DisplayInfo.Name, CommandMetadata.Name);
+    }
+    internal IConverter Converter { get; }
+
+    internal PropertyInfo PropertyOption { get; }
+
+    internal ICommandMetadata CommandMetadata { get; }
+
+    internal Type OptionType
+    {
+        get
         {
-            PropertyOption = propertyInfo;
-            CommandMetadata = commandMetadata;
-            Converter = propertyInfo.ExtractConverter(converters, DisplayInfo.Name, CommandMetadata.Name);
+            if (PropertyOption.PropertyType.IsMultiValuedType())
+            {
+                return PropertyOption.PropertyType.GetUnderlyingCollectionType() ?? throw new InvalidOperationException($"The property type ('{PropertyOption.PropertyType}') is multi-valued but is not collection-based.");
+            }
+            return PropertyOption.PropertyType;
         }
-        internal IConverter Converter { get; }
+    }
 
-        internal PropertyInfo PropertyOption { get; }
+    internal static ClassBasedCommandOptionMetadata? Create(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
+    {
+        Guard.NotNull(propertyInfo, nameof(propertyInfo));
+        Guard.NotNull(commandMetadata, nameof(commandMetadata));
+        Guard.NotNull(converters, nameof(converters));
+        Guard.NotNull(optionAlternateNameGenerators, nameof(optionAlternateNameGenerators));
 
-        internal ICommandMetadata CommandMetadata { get; }
-
-        internal Type OptionType
+        if (propertyInfo.ShouldBeIgnored())
         {
-            get
-            {
-                if (PropertyOption.PropertyType.IsMultiValuedType())
-                {
-                    return PropertyOption.PropertyType.GetUnderlyingCollectionType();
-                }
-                return PropertyOption.PropertyType;
-            }
+            return null;
         }
-
-        internal static ClassBasedCommandOptionMetadata Create(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
+        if (!propertyInfo.IsValidOptionProperty())
         {
-            Guard.NotNull(propertyInfo, nameof(propertyInfo));
-            Guard.NotNull(commandMetadata, nameof(commandMetadata));
-            Guard.NotNull(converters, nameof(converters));
-            Guard.NotNull(optionAlternateNameGenerators, nameof(optionAlternateNameGenerators));
-
-            if (propertyInfo.ShouldBeIgnored())
-            {
-                return null;
-            }
-            if (!propertyInfo.IsValidOptionProperty())
-            {
-                throw new CommandLineParserException(
-                    Constants.ExceptionMessages.ParserExtractMetadataPropertyShouldBeWritableOrICollection(
-                        propertyInfo.Name, commandMetadata.Name));
-            }
-            var commandOption = new ClassBasedCommandOptionMetadata(propertyInfo, commandMetadata, converters, optionAlternateNameGenerators);
-            return commandOption;
+            throw new CommandLineParserException(
+                Constants.ExceptionMessages.ParserExtractMetadataPropertyShouldBeWritableOrICollection(
+                    propertyInfo.Name, commandMetadata.Name));
         }
+        var commandOption = new ClassBasedCommandOptionMetadata(propertyInfo, commandMetadata, converters, optionAlternateNameGenerators);
+        return commandOption;
     }
 }

@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Tests.Commands
+namespace MGR.CommandLineParser.Tests.Commands;
+
+[Command(Description = "UpdateCommandDescription", Usage = "<packages.config|solution>")]
+public class UpdateCommand : CommandBase<UpdateCommand.UpdateCommandOptions>
 {
-    [Command(Description = "UpdateCommandDescription", Usage = "<packages.config|solution>")]
-    public class UpdateCommand : CommandBase
+    public class UpdateCommandOptions : HelpedCommandData
     {
         private readonly List<string> _sources = new List<string>();
         private readonly List<string> _ids = new List<string>();
 
         [IgnoreOptionProperty]
-        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public object RepositoryFactory { get; }
 
         [IgnoreOptionProperty]
-        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public object SourceProvider { get; }
 
         [Display(Description = "UpdateCommandSourceDescription")]
@@ -40,11 +37,11 @@ namespace MGR.CommandLineParser.Tests.Commands
 
         [Display(Description = "UpdateCommandPrerelease")]
         public bool Prerelease { get; set; }
+    }
 
-        protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
+    protected override Task<int> ExecuteCommandAsync(UpdateCommandOptions commandData, CancellationToken cancellationToken) => Task.FromResult(0);
 
-        public UpdateCommand(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
-        }
+    public UpdateCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+    {
     }
 }

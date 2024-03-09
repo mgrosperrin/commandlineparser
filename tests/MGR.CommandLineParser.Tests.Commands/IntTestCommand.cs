@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Tests.Commands
+namespace MGR.CommandLineParser.Tests.Commands;
+
+public class IntTestCommand : CommandBase<IntTestCommand.IntTestCommandData>
 {
-    public class IntTestCommand : CommandBase
+    public class IntTestCommandData : HelpedCommandData
     {
         [Display(ShortName = "s", Description = "A simple string value")]
         [Required]
@@ -17,15 +16,14 @@ namespace MGR.CommandLineParser.Tests.Commands
         public bool BoolValue { get; set; }
         [Display(ShortName = "il", Description = "A list of integer value")]
         public List<int> IntListValue { get; set; }
+    }
 
+    protected override Task<int> ExecuteCommandAsync(IntTestCommandData commandData, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 
-        protected override Task<int> ExecuteCommandAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IntTestCommand(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
-        }
+    public IntTestCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+    {
     }
 }

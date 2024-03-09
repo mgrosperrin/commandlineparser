@@ -1,5 +1,4 @@
-﻿using System;
-using MGR.CommandLineParser.Extensibility.Converters;
+﻿using MGR.CommandLineParser.Extensibility.Converters;
 
 namespace MGR.CommandLineParser.Command;
 

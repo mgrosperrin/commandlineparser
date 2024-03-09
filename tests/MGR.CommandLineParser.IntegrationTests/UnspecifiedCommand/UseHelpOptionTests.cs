@@ -1,26 +1,24 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using MGR.CommandLineParser.Extensibility.ClassBased;
+﻿using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using MGR.CommandLineParser.UnitTests;
 using Xunit;
 
-namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
+namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand;
+
+public class UseHelpOptionTests : ConsoleLoggingTestsBase
 {
-    public class UseHelpOptionTests : ConsoleLoggingTestsBase
+    [Fact]
+    public async Task ShowHelpForTheListCommand()
     {
-        [Fact]
-        public async Task ShowHelpForTheListCommand()
-        {
-            // Arrange
-            var parserOptions = new ParserOptions {
-                    Logo = "Display help for list command",
-                    CommandLineName = "myListTest.exe"
-            };
-            IEnumerable<string> args = new[] { "list", "--help" };
-            var expectedReturnCode = CommandParsingResultCode.Success;
-            var expectedResult = 0;
-            var expected = @"Display help for list command
+        // Arrange
+        var parserOptions = new ParserOptions {
+            Logo = "Display help for list command",
+            CommandLineName = "myListTest.exe"
+        };
+        IEnumerable<string> args = ["list", "--help"];
+        var expectedReturnCode = CommandParsingResultCode.Success;
+        var expectedResult = 0;
+        var expected = @"Display help for list command
 Usage: myListTest.exe <command> [options] [args]
 Type 'myListTest.exe help <command>' for help on a specific command.
 
@@ -39,33 +37,33 @@ List sample 1
 List sample number 2
 ";
 
-            // Act
-            using (new LangageSwitcher("en-us"))
-            {
-                var actual = await CallParse(parserOptions, args);
-                var actualResult = await actual.ExecuteAsync();
-
-                // Assert
-                Assert.True(actual.IsValid);
-                Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-                Assert.IsType<ListCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-                Assert.Equal(expectedResult, actualResult);
-                AssertOneMessageLoggedToConsole<FakeConsole.InformationMessage>(expected);
-            }
-        }
-
-        [Fact]
-        public async Task ShowHelpForThePackCommand()
+        // Act
+        using (new LangageSwitcher("en-us"))
         {
-            // Arrange
-            var parserOptions = new ParserOptions {
-                Logo = "Display help for pack command",
-                CommandLineName = "myPackTest.exe"
-            };
-            IEnumerable<string> args = new[] { "pack", "--help" };
-            var expectedReturnCode = CommandParsingResultCode.Success;
-            var expectedResult = 0;
-            var expected = @"Display help for pack command
+            var actual = await CallParse(parserOptions, args);
+            var actualResult = await actual.ExecuteAsync(TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.True(actual.IsValid);
+            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
+            var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<ListCommand, ListCommand.ListCommandData>>(actual.CommandObject);
+            Assert.Equal(expectedResult, actualResult);
+            AssertOneMessageLoggedToConsole<FakeConsole.InformationMessage>(expected);
+        }
+    }
+
+    [Fact]
+    public async Task ShowHelpForThePackCommand()
+    {
+        // Arrange
+        var parserOptions = new ParserOptions {
+            Logo = "Display help for pack command",
+            CommandLineName = "myPackTest.exe"
+        };
+        IEnumerable<string> args = ["pack", "--help"];
+        var expectedReturnCode = CommandParsingResultCode.Success;
+        var expectedResult = 0;
+        var expected = @"Display help for pack command
 Usage: myPackTest.exe <command> [options] [args]
 Type 'myPackTest.exe help <command>' for help on a specific command.
 
@@ -88,20 +86,18 @@ Options:
  --help                 (?)  Help
 ";
 
-            // Act
-            using (new LangageSwitcher("en-us"))
-            {
-                var actual = await CallParse(parserOptions, args);
-                var actualResult = await actual.ExecuteAsync();
+        // Act
+        using (new LangageSwitcher("en-us"))
+        {
+            var actual = await CallParse(parserOptions, args);
+            var actualResult = await actual.ExecuteAsync(TestContext.Current.CancellationToken);
 
-                // Assert
-                Assert.True(actual.IsValid);
-                Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-                Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-                Assert.IsType<PackCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-                Assert.Equal(expectedResult, actualResult);
-                AssertOneMessageLoggedToConsole<FakeConsole.InformationMessage>(expected);
-            }
+            // Assert
+            Assert.True(actual.IsValid);
+            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
+            var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<PackCommand, PackCommand.PackCommandData>>(actual.CommandObject);
+            Assert.Equal(expectedResult, actualResult);
+            AssertOneMessageLoggedToConsole<FakeConsole.InformationMessage>(expected);
         }
     }
 }

@@ -1,64 +1,58 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MGR.CommandLineParser.Extensibility.ClassBased;
+﻿using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
-namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
+namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode;
+
+public class CommandParameterNotValidTests : ConsoleLoggingTestsBase
 {
-    public class CommandParameterNotValidTests : ConsoleLoggingTestsBase
+    [Fact]
+    public async Task ParseWithCommandNameAndInvalidArgs()
     {
-        [Fact]
-        public async Task ParseWithCommandNameAndInvalidArgs()
-        {
-            // Arrange
-            IEnumerable<string> args = new[] {"IntTest", "-i", "42", "Custom argument value", "-b"};
-            var expectedReturnCode = CommandParsingResultCode.CommandParametersNotValid;
-            var expectedNbOfArguments = 1;
-            var expectedArgumentsValue = "Custom argument value";
-            var expectedIntValue = 42;
+        // Arrange
+        IEnumerable<string> args = ["IntTest", "-i", "42", "Custom argument value", "-b"];
+        var expectedReturnCode = CommandParsingResultCode.CommandParametersNotValid;
+        var expectedNbOfArguments = 1;
+        var expectedArgumentsValue = "Custom argument value";
+        var expectedIntValue = 42;
 
-            // Act
-            var actual = await CallParse(args);
+        // Act
+        var actual = await CallParse(args);
 
-            // Assert
-            Assert.False(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-            Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-            Assert.IsType<IntTestCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-            var rawCommand = (IntTestCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
-            Assert.Equal(expectedIntValue, rawCommand.IntValue);
-            Assert.Null(rawCommand.IntListValue);
-            Assert.Equal(expectedNbOfArguments, rawCommand.Arguments.Count);
-            Assert.Equal(expectedArgumentsValue, rawCommand.Arguments.Single());
-            Assert.True(rawCommand.BoolValue);
-        }
+        // Assert
+        Assert.False(actual.IsValid);
+        Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<IntTestCommand, IntTestCommand.IntTestCommandData>>(actual.CommandObject);
+        var rawCommandData = classBasedCommandObject.CommandData;
+        Assert.Equal(expectedIntValue, rawCommandData.IntValue);
+        Assert.Null(rawCommandData.IntListValue);
+        Assert.Equal(expectedNbOfArguments, rawCommandData.Arguments.Count);
+        Assert.Equal(expectedArgumentsValue, rawCommandData.Arguments.Single());
+        Assert.True(rawCommandData.BoolValue);
+    }
 
-        [Fact]
-        public async Task ParseWithSpecifiedCommandAndInvalidArgs()
-        {
-            // Arrange
-            IEnumerable<string> args = new[] { "-i", "42", "Custom argument value", "-b" };
-            var expectedReturnCode = CommandParsingResultCode.CommandParametersNotValid;
-            var expectedNbOfArguments = 1;
-            var expectedArgumentsValue = "Custom argument value";
-            var expectedIntValue = 42;
+    [Fact]
+    public async Task ParseWithSpecifiedCommandAndInvalidArgs()
+    {
+        // Arrange
+        IEnumerable<string> args = ["-i", "42", "Custom argument value", "-b"];
+        var expectedReturnCode = CommandParsingResultCode.CommandParametersNotValid;
+        var expectedNbOfArguments = 1;
+        var expectedArgumentsValue = "Custom argument value";
+        var expectedIntValue = 42;
 
-            // Act
-            var actual = await CallParse<IntTestCommand>(args);
+        // Act
+        var actual = await CallParse<IntTestCommand, IntTestCommand.IntTestCommandData>(args);
 
-            // Assert
-            Assert.False(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-            Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-            Assert.IsType<IntTestCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-            var rawCommand = (IntTestCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
-            Assert.Equal(expectedIntValue, rawCommand.IntValue);
-            Assert.Null(rawCommand.IntListValue);
-            Assert.Equal(expectedNbOfArguments, rawCommand.Arguments.Count);
-            Assert.Equal(expectedArgumentsValue, rawCommand.Arguments.Single());
-            Assert.True(rawCommand.BoolValue);
-        }
+        // Assert
+        Assert.False(actual.IsValid);
+        Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<IntTestCommand, IntTestCommand.IntTestCommandData>>(actual.CommandObject);
+        var rawCommandData = classBasedCommandObject.CommandData;
+        Assert.Equal(expectedIntValue, rawCommandData.IntValue);
+        Assert.Null(rawCommandData.IntListValue);
+        Assert.Equal(expectedNbOfArguments, rawCommandData.Arguments.Count);
+        Assert.Equal(expectedArgumentsValue, rawCommandData.Arguments.Single());
+        Assert.True(rawCommandData.BoolValue);
     }
 }

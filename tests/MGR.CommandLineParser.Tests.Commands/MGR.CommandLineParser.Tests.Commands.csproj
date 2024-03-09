@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
-        <DocumentationFile />
-        <IsPackable>false</IsPackable>
-    </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFrameworks />
+		<OutputType>Library</OutputType>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\src\MGR.CommandLineParser\MGR.CommandLineParser.csproj" />
-    </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\MGR.CommandLineParser\MGR.CommandLineParser.csproj" />
+	</ItemGroup>
 
 </Project>
