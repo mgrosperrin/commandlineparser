@@ -1,7 +1,6 @@
-﻿namespace MGR.CommandLineParser.UnitTests.Extensions
+﻿namespace MGR.CommandLineParser.UnitTests.Extensions;
+
+public partial class ConverterExtensionsTests
 {
-    public partial class ConverterExtensionsTests
-    {
-        private static readonly string SourceParameterName = "source";
-    }
+    private static readonly string SourceParameterName = "source";
 }

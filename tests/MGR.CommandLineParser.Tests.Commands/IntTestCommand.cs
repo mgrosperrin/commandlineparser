@@ -4,28 +4,27 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Tests.Commands
+namespace MGR.CommandLineParser.Tests.Commands;
+
+public class IntTestCommand : CommandBase
 {
-    public class IntTestCommand : CommandBase
+    [Display(ShortName = "s", Description = "A simple string value")]
+    [Required]
+    public string StrValue { get; set; }
+    [Display(ShortName = "i", Description = "A simple integer value")]
+    public int IntValue { get; set; }
+    [Display(ShortName = "b", Description = "A boolean value")]
+    public bool BoolValue { get; set; }
+    [Display(ShortName = "il", Description = "A list of integer value")]
+    public List<int> IntListValue { get; set; }
+
+
+    protected override Task<int> ExecuteCommandAsync()
     {
-        [Display(ShortName = "s", Description = "A simple string value")]
-        [Required]
-        public string StrValue { get; set; }
-        [Display(ShortName = "i", Description = "A simple integer value")]
-        public int IntValue { get; set; }
-        [Display(ShortName = "b", Description = "A boolean value")]
-        public bool BoolValue { get; set; }
-        [Display(ShortName = "il", Description = "A list of integer value")]
-        public List<int> IntListValue { get; set; }
+        throw new NotImplementedException();
+    }
 
-
-        protected override Task<int> ExecuteCommandAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IntTestCommand(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
-        }
+    public IntTestCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+    {
     }
 }

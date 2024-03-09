@@ -1,7 +1,6 @@
-﻿namespace MGR.CommandLineParser.UnitTests.Extensions
+﻿namespace MGR.CommandLineParser.UnitTests.Extensions;
+
+public partial class PropertyInfoExtensionsTests
 {
-    public partial class PropertyInfoExtensionsTests
-    {
-        private static readonly string SourceParameterName = "source";
-    }
+    private static readonly string SourceParameterName = "source";
 }

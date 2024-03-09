@@ -1,6 +1,5 @@
-﻿namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased
+﻿namespace MGR.CommandLineParser.UnitTests.Extensibility.ClassBased;
+
+public partial class ClassBasedCommandOptionTests
 {
-    public partial class ClassBasedCommandOptionTests
-    {
-    }
 }
