@@ -1,32 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using MGR.CommandLineParser.Extensibility;
-using MGR.CommandLineParser.Extensibility.Command;
-using MGR.CommandLineParser.Properties;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MGR.CommandLineParser.Command;
 
 /// <summary>
-///     Defines an base abstraction for the commands. It adds the implementation of the <seealso cref="Arguments" />
+///     Defines an base abstraction for the commands. It adds the implementation of the <seealso cref="CommandData.Arguments" />
 ///     property, and a
 ///     <seealso
-///         cref="Help" />
+///         cref="HelpedCommandData.Help" />
 ///     option.
 /// </summary>
 public abstract class CommandBase<TCommandData> : ICommandHandler<TCommandData>
-    where TCommandData : HelpedCommandData
+    where TCommandData : HelpedCommandData, new()
 {
     /// <summary>
-    ///     Initializes a new instance of a <see cref="CommandBase" /> .
+    ///     Initializes a new instance of a <see cref="CommandBase{TCommandData}" /> .
     /// </summary>
     protected CommandBase(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
-        Arguments = new List<string>();
     }
 
     /// <summary>
@@ -39,10 +33,10 @@ public abstract class CommandBase<TCommandData> : ICommandHandler<TCommandData>
     /// </summary>
     protected IServiceProvider ServiceProvider { get; private set; }
 
-    /// <summary>
-    ///     Gets the <see cref="CommandType" /> of the command.
-    /// </summary>
-    protected ICommandType CommandType { get; private set; }
+    ///// <summary>
+    /////     Gets the <see cref="CommandType" /> of the command.
+    ///// </summary>
+    //protected ICommandType CommandType { get; private set; }
 
 
     /// <summary>
@@ -54,20 +48,20 @@ public abstract class CommandBase<TCommandData> : ICommandHandler<TCommandData>
         if (commandData.Help)
         {
             var helpWriter = ServiceProvider.GetRequiredService<IHelpWriter>();
-            helpWriter.WriteHelpForCommand(CommandType);
+            helpWriter.WriteHelpForCommand(commandData.CommandType);
             return Task.FromResult(0);
         }
         return ExecuteCommandAsync(commandData);
     }
 
-    /// <summary>
-    ///     Configure the command with the <see cref="ICommandType" /> representing the command.
-    /// </summary>
-    /// <param name="commandType">The <see cref="CommandType" /> of the command.</param>
-    public virtual void Configure(ICommandType commandType)
-    {
-        CommandType = commandType;
-    }
+    ///// <summary>
+    /////     Configure the command with the <see cref="ICommandType" /> representing the command.
+    ///// </summary>
+    ///// <param name="commandType">The <see cref="CommandType" /> of the command.</param>
+    //public virtual void Configure(ICommandType commandType)
+    //{
+    //    CommandType = commandType;
+    //}
 
     /// <summary>
     ///     Executes the command.

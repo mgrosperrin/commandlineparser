@@ -7,21 +7,24 @@ using MGR.CommandLineParser.Command;
 namespace MGR.CommandLineParser.Tests.Commands;
 
 [Command(Description = "SetApiKeyCommandDescription", Usage = "SetApiKeyCommandUsageDescription")]
-public class SetApiKeyCommand : CommandBase
+public class SetApiKeyCommand : CommandBase<SetApiKeyCommand.SetApiKeyCommandData>
 {
-    [Display(Description = "SetApiKeyCommandSourceDescription", ShortName = "src")]
-    [DefaultValue("DefaultSource")]
-    public string Source { get; set; }
+    public class SetApiKeyCommandData : HelpedCommandData
+    {
+        [Display(Description = "SetApiKeyCommandSourceDescription", ShortName = "src")]
+        [DefaultValue("DefaultSource")]
+        public string Source { get; set; }
 
-    [IgnoreOptionProperty]
-    // ReSharper disable once UnassignedGetOnlyAutoProperty
-    public object SourceProvider { get; }
+        [IgnoreOptionProperty]
+        // ReSharper disable once UnassignedGetOnlyAutoProperty
+        public object SourceProvider { get; }
 
-    [IgnoreOptionProperty]
-    // ReSharper disable once UnassignedGetOnlyAutoProperty
-    public object Settings { get; }
+        [IgnoreOptionProperty]
+        // ReSharper disable once UnassignedGetOnlyAutoProperty
+        public object Settings { get; }
+    }
 
-    protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
+    protected override Task<int> ExecuteCommandAsync(SetApiKeyCommandData commandData) => Task.FromResult(0);
 
     public SetApiKeyCommand(IServiceProvider serviceProvider) : base(serviceProvider)
     {

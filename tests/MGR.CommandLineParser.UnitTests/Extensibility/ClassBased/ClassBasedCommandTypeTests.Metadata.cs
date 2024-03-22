@@ -33,17 +33,9 @@ public partial class ClassBasedCommandTypeTests
         }
 
         [Command(Description = "My great description", Usage = "test arg [option]")]
-        private class TestCommand : ICommandHandler
+        private class TestCommand : CommandData, ICommandHandler<TestCommand>
         {
-            public Task<int> ExecuteAsync()
-            {
-                throw new NotImplementedException();
-            }
-
-            public IList<string> Arguments
-            {
-                get { throw new NotImplementedException(); }
-            }
+            public Task<int> ExecuteAsync(TestCommand commandData) => throw new NotImplementedException();
         }
     }
 }

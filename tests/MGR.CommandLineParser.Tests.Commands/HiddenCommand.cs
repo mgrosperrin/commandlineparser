@@ -5,9 +5,10 @@ using MGR.CommandLineParser.Command;
 namespace MGR.CommandLineParser.Tests.Commands;
 
 [Command(Description = "HiddenCommandDescription", Usage = "HiddenCommandUsage", HideFromHelpListing = true)]
-public class HiddenCommand : CommandBase
+public class HiddenCommand : CommandBase<HiddenCommand.HiddenCommandData>
 {
-    protected override Task<int> ExecuteCommandAsync()
+    public class HiddenCommandData : HelpedCommandData { }
+    protected override Task<int> ExecuteCommandAsync(HiddenCommandData commandData)
     {
         throw new NotImplementedException();
     }

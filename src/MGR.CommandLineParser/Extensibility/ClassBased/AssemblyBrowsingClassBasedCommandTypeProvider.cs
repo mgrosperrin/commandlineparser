@@ -44,7 +44,7 @@ internal sealed class AssemblyBrowsingClassBasedCommandTypeProvider : ICommandTy
     private Dictionary<string, ICommandType> SearchAllCommandTypes()
     {
         var assemblies = _assemblyProviders.SelectMany(assemblyProvider => assemblyProvider.GetAssembliesToBrowse()).ToList();
-        var types = assemblies.GetTypes(type => type.IsType<ICommandHandler>()).ToList();
+        var types = assemblies.GetTypes(type => type.IsType(typeof(ICommandHandler<>)) && !type.IsAbstract).ToList();
 
         var commandTypes = types.Select<Type, ICommandType>(commandType => new ClassBasedCommandType(commandType, _converters, _optionAlternateNameGenerators)).ToList();
         var commandTypesByName = commandTypes.ToDictionary(commandType => commandType.Metadata.Name, _ => _, StringComparer.OrdinalIgnoreCase);

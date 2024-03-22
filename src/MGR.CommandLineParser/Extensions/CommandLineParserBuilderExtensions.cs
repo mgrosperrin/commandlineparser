@@ -35,7 +35,7 @@ public static class CommandLineParserBuilderExtensions
     /// <returns>The <see cref="CommandLineParserBuilder" /> so that additional calls can be chained.</returns>
     public static CommandLineParserBuilder AddCommands<TCommandHandler, TCommandData>(this CommandLineParserBuilder builder)
         where TCommandHandler : class, ICommandHandler<TCommandData>
-        where TCommandData : CommandData
+        where TCommandData : CommandData, new()
     {
         builder.Services.AddSingleton<IAssemblyProvider>(new DefaultAssemblyProvider(typeof(TCommandHandler).Assembly));
         builder.Services.TryAddScoped<ICommandTypeProvider, AssemblyBrowsingClassBasedCommandTypeProvider>();

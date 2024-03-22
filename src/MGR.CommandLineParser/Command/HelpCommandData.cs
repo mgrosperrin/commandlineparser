@@ -2,7 +2,7 @@
 /// <summary>
 /// 
 /// </summary>
-public class HelpCommandData:CommandData
+public class HelpCommandData : HelpedCommandData
 {
     /// <summary>
     ///     Show detailed help for all commands.

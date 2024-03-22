@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace MGR.CommandLineParser.Command;
 
 /// <summary>
 /// Defines a command.
 /// </summary>
-public interface ICommandHandler<TCommandData>
-    where TCommandData : CommandData
+public interface ICommandHandler<in TCommandData>
+    where TCommandData : CommandData, new()
 {
     /// <summary>
     /// Executes the command.

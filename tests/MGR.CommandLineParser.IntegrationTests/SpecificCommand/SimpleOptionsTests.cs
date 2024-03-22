@@ -21,19 +21,18 @@ public class SimpleOptionsTests : ConsoleLoggingTestsBase
         var expectedIntValue = 42;
 
         // Act
-        var actual = await CallParse<IntTestCommand>(args);
+        var actual = await CallParse<IntTestCommand, IntTestCommand.IntTestCommandData>(args);
 
         // Assert
         Assert.True(actual.IsValid);
         Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-        Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-        Assert.IsType<IntTestCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-        var rawCommand = (IntTestCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
-        Assert.Equal(expectedStrValue, rawCommand.StrValue);
-        Assert.Equal(expectedIntValue, rawCommand.IntValue);
-        Assert.Null(rawCommand.IntListValue);
-        Assert.Equal(expectedNbOfArguments, rawCommand.Arguments.Count);
-        Assert.Equal(expectedArgumentsValue, rawCommand.Arguments.Single());
-        Assert.True(rawCommand.BoolValue);
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<IntTestCommand, IntTestCommand.IntTestCommandData>>(actual.CommandObject);
+        var rawCommandData = classBasedCommandObject.CommandData;
+        Assert.Equal(expectedStrValue, rawCommandData.StrValue);
+        Assert.Equal(expectedIntValue, rawCommandData.IntValue);
+        Assert.Null(rawCommandData.IntListValue);
+        Assert.Equal(expectedNbOfArguments, rawCommandData.Arguments.Count);
+        Assert.Equal(expectedArgumentsValue, rawCommandData.Arguments.Single());
+        Assert.True(rawCommandData.BoolValue);
     }
 }

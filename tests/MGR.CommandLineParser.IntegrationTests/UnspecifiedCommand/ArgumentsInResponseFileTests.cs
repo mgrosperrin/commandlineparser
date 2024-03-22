@@ -29,15 +29,14 @@ public class ArgumentsInResponseFileTests : ConsoleLoggingTestsBase
         // Assert
         Assert.True(actual.IsValid);
         Assert.Empty(actual.ValidationResults);
-        Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-        Assert.IsType<InstallCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-        var installCommand = (InstallCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
-        Assert.Empty(installCommand.Source);
-        Assert.True(string.IsNullOrEmpty(installCommand.OutputDirectory));
-        Assert.Equal("12.34", installCommand.Version);
-        Assert.True(installCommand.ExcludeVersion);
-        Assert.False(installCommand.Prerelease);
-        Assert.False(installCommand.NoCache);
-        Assert.Empty(installCommand.Arguments);
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<InstallCommand, InstallCommand.InstallCommandData>>(actual.CommandObject);
+        var installCommandData = classBasedCommandObject.CommandData;
+        Assert.Empty(installCommandData.Source);
+        Assert.True(string.IsNullOrEmpty(installCommandData.OutputDirectory));
+        Assert.Equal("12.34", installCommandData.Version);
+        Assert.True(installCommandData.ExcludeVersion);
+        Assert.False(installCommandData.Prerelease);
+        Assert.False(installCommandData.NoCache);
+        Assert.Empty(installCommandData.Arguments);
     }
 }

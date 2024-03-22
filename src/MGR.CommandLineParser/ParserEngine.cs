@@ -22,7 +22,7 @@ internal class ParserEngine
     }
 
     internal async Task<ParsingResult> Parse<TCommandHandler, TCommandData>(IEnumerator<string> argumentsEnumerator) where TCommandHandler : class, ICommandHandler<TCommandData>
-        where TCommandData : CommandData
+        where TCommandData : CommandData, new()
     {
         using (_logger.BeginParsingForSpecificCommandType(typeof(TCommandHandler)))
         {
@@ -45,7 +45,7 @@ internal class ParserEngine
 
     internal async Task<ParsingResult> ParseWithDefaultCommand<TCommandHandler, TCommandData>(IEnumerator<string> argumentsEnumerator)
         where TCommandHandler : class, ICommandHandler<TCommandData>
-        where TCommandData : CommandData
+        where TCommandData : CommandData, new()
     {
         using (_logger.BeginParsingWithDefaultCommandType(typeof(TCommandHandler)))
         {

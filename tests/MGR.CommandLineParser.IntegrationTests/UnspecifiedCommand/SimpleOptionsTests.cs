@@ -25,18 +25,17 @@ public class SimpleOptionsTests : ConsoleLoggingTestsBase
         // Assert
         Assert.True(actual.IsValid);
         Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-        Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-        Assert.IsType<DeleteCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-        var rawCommand = (DeleteCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
-        Assert.Equal(expectedSource, rawCommand.Source);
-        Assert.Equal(expectedApiKey, rawCommand.ApiKey);
-        Assert.True(rawCommand.NoPrompt);
-        Assert.Null(rawCommand.SourceProvider);
-        Assert.Null(rawCommand.Settings);
-        Assert.Equal(expectedNbOfArguments, rawCommand.Arguments.Count);
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<DeleteCommand, DeleteCommand.DeleteCommandData>>(actual.CommandObject);
+        var rawCommandData = classBasedCommandObject.CommandData;
+        Assert.Equal(expectedSource, rawCommandData.Source);
+        Assert.Equal(expectedApiKey, rawCommandData.ApiKey);
+        Assert.True(rawCommandData.NoPrompt);
+        Assert.Null(rawCommandData.SourceProvider);
+        Assert.Null(rawCommandData.Settings);
+        Assert.Equal(expectedNbOfArguments, rawCommandData.Arguments.Count);
         for (var i = 0; i < expectedNbOfArguments; i++)
         {
-            Assert.Equal(expectedArgumentsValue[i], ((IClassBasedCommandObject)actual.CommandObject).Command.Arguments[i]);
+            Assert.Equal(expectedArgumentsValue[i], rawCommandData.Arguments[i]);
         }
     }
 }

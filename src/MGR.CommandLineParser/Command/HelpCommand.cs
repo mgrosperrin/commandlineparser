@@ -13,32 +13,30 @@ namespace MGR.CommandLineParser.Command;
 ///     Defines the default implementation of the <see cref="HelpCommand" />.
 /// </summary>
 [PublicAPI]
-public sealed class HelpCommand : ICommandHandler<HelpCommandData>
+public sealed class HelpCommand : CommandBase<HelpCommandData>
 {
     /// <summary>
     ///     Name of the help command.
     /// </summary>
     public const string Name = "help";
-    private readonly IServiceProvider _serviceProvider;
 
     /// <summary>
     /// Creates a new instance of <see cref="HelpCommand"/>.
     /// </summary>
     /// <param name="serviceProvider">A <see cref="IServiceProvider"/> used to resolve services.</param>
     public HelpCommand(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
+        : base(serviceProvider)
+    {    }
 
 
     /// <summary>
     ///     Executes the command.
     /// </summary>
     /// <returns>Return 0 is everything was right, an negative error code otherwise.</returns>
-    public async Task<int> ExecuteAsync(HelpCommandData commandData)
+    protected override async Task<int> ExecuteCommandAsync(HelpCommandData commandData)
     {
-        var commandTypeProviders = _serviceProvider.GetServices<ICommandTypeProvider>().ToList();
-        var helpWriter = _serviceProvider.GetRequiredService<IHelpWriter>();
+        var commandTypeProviders = ServiceProvider.GetServices<ICommandTypeProvider>().ToList();
+        var helpWriter = ServiceProvider.GetRequiredService<IHelpWriter>();
         var commandType = await commandTypeProviders.GetCommandType(commandData.Arguments.FirstOrDefault() ?? string.Empty);
         if (commandType == null)
         {

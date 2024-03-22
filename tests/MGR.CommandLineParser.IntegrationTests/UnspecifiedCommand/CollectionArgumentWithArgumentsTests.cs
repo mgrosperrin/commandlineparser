@@ -27,16 +27,15 @@ public class CollectionArgumentWithArgumentsTests : ConsoleLoggingTestsBase
         // Assert
         Assert.True(actual.IsValid);
         Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-        Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-        Assert.IsType<IntTestCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-        var rawCommand = (IntTestCommand) ((IClassBasedCommandObject) actual.CommandObject).Command;
-        Assert.Equal(expectedStrValue, rawCommand.StrValue);
-        Assert.Equal(expectedIntValue, rawCommand.IntValue);
-        Assert.NotNull(rawCommand.IntListValue);
-        Assert.Equal(expectedNbOfArguments, rawCommand.Arguments.Count);
-        Assert.Equal(expectedArgumentsValue, rawCommand.Arguments.Single());
-        Assert.Equal(expectedNbOfArguments, rawCommand.IntListValue.Count);
-        Assert.Equal(expectedIntValue, rawCommand.IntListValue.Single());
-        Assert.True(rawCommand.BoolValue);
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<IntTestCommand, IntTestCommand.IntTestCommandData>>(actual.CommandObject);
+        var rawCommandData = classBasedCommandObject.CommandData;
+        Assert.Equal(expectedStrValue, rawCommandData.StrValue);
+        Assert.Equal(expectedIntValue, rawCommandData.IntValue);
+        Assert.NotNull(rawCommandData.IntListValue);
+        Assert.Equal(expectedNbOfArguments, rawCommandData.Arguments.Count);
+        Assert.Equal(expectedArgumentsValue, rawCommandData.Arguments.Single());
+        Assert.Equal(expectedNbOfArguments, rawCommandData.IntListValue.Count);
+        Assert.Equal(expectedIntValue, rawCommandData.IntListValue.Single());
+        Assert.True(rawCommandData.BoolValue);
     }
 }

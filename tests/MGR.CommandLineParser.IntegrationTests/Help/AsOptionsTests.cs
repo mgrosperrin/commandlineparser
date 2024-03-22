@@ -34,16 +34,15 @@ Options:
         //var expectedIntValue = 42;
 
         // Act
-        var actual = await CallParseWithDefaultCommand<IntTestCommand>(args);
+        var actual = await CallParseWithDefaultCommand<IntTestCommand, IntTestCommand.IntTestCommandData>(args);
 
         // Assert
         Assert.True(actual.IsValid);
         Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-        Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-        Assert.IsType<IntTestCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-        var rawCommand = (IntTestCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<IntTestCommand, IntTestCommand.IntTestCommandData>>(actual.CommandObject);
+        var rawCommand = classBasedCommandObject.Command;
 
-        Assert.Equal(0, await rawCommand.ExecuteAsync());
+        Assert.Equal(0, await rawCommand.ExecuteAsync(classBasedCommandObject.CommandData));
         var message = Assert.Single(Console.Messages);
 
         Assert.IsType< FakeConsole.InformationMessage>(message);

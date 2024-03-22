@@ -21,8 +21,11 @@ public sealed class ClassBasedDependencyResolverCommandActivator : IClassBasedCo
     }
 
     /// <inheritdoc />
-    public ICommandHandler ActivateCommand(Type commandType)
+    public TCommandHandler ActivateCommand<TCommandHandler, TCommandData>()
+        where TCommandHandler : class, ICommandHandler<TCommandData>
+        where TCommandData : CommandData, new()
     {
+        var commandType = typeof(TCommandHandler);
         var commandInstance = _serviceProvider.GetService(commandType);
         if (commandInstance == null)
         {
@@ -56,7 +59,7 @@ public sealed class ClassBasedDependencyResolverCommandActivator : IClassBasedCo
                 }
             }
         }
-        var command = commandInstance as ICommandHandler;
+        var command = commandInstance as TCommandHandler;
         return command;
     }
 }

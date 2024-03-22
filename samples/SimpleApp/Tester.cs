@@ -55,18 +55,19 @@ internal static class Tester
 
         await ParseAndExecute(parser, new[] { "test", "--longName:3", "hello" });
 
-        await ParseWithDefaultAndExecute<PackCommand>(parser, arguments);
-        await ParseWithDefaultAndExecute<PackCommand>(parser, defaultPackArguments);
-        await ParseWithDefaultAndExecute<PackCommand>(parser, defaultDeleteArguments);
+        await ParseWithDefaultAndExecute<PackCommand, PackCommand.PackCommandData>(parser, arguments);
+        await ParseWithDefaultAndExecute<PackCommand, PackCommand.PackCommandData>(parser, defaultPackArguments);
+        await ParseWithDefaultAndExecute<PackCommand, PackCommand.PackCommandData>(parser, defaultDeleteArguments);
 
         await Task.Delay(TimeSpan.FromSeconds(1));
     }
 
-    static async Task ParseWithDefaultAndExecute<TCommand>(IParser parser, string[] arguments)
-        where TCommand : class, ICommandHandler
+    static async Task ParseWithDefaultAndExecute<TCommandHandler, TCommandData>(IParser parser, string[] arguments)
+        where TCommandHandler : class, ICommandHandler<TCommandData>
+        where TCommandData : CommandData, new()
     {
         await ParseFuncAndExecute(parser, arguments,
-            (p, args) => p.ParseWithDefaultCommand<TCommand>(args));
+            (p, args) => p.ParseWithDefaultCommand<TCommandHandler, TCommandData>(args));
     }
     static async Task ParseAndExecute(IParser parser, string[] arguments)
     {

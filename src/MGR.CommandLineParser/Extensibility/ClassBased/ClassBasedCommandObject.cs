@@ -3,13 +3,17 @@ using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Extensibility.ClassBased;
 
-internal class ClassBasedCommandObject: ICommandObject, IClassBasedCommandObject
+internal class ClassBasedCommandObject<TCommandHandler, TCommandData> : ICommandObject, IClassBasedCommandObject<TCommandHandler, TCommandData>
+    where TCommandHandler : class, ICommandHandler<TCommandData>
+    where TCommandData : CommandData, new()
 {
-    internal ClassBasedCommandObject(ICommandHandler command)
+    internal ClassBasedCommandObject(TCommandHandler commandHandler, TCommandData commandData)
     {
-        Command = command;
+        Command = commandHandler;
+        CommandData = commandData;
     }
-    public Task<int> ExecuteAsync() => Command.ExecuteAsync();
+    public Task<int> ExecuteAsync() => Command.ExecuteAsync(CommandData);
 
-    public ICommandHandler Command { get; }
+    public TCommandHandler Command { get; }
+    public TCommandData CommandData { get; }
 }

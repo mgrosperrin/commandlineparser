@@ -18,7 +18,7 @@ internal static class ParserBuilderCalls
         Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
 
         var parserBuild = new ParserBuilder(new ParserOptions())
-            .AddCommands(builder => builder.AddCommands<DeleteCommand>());
+            .AddCommands(builder => builder.AddCommands<DeleteCommand, DeleteCommand.DeleteCommandData>());
         var parser = parserBuild.BuildParser();
         var commandResult = await parser.Parse(arguments);
         if (commandResult.IsValid)
@@ -39,7 +39,7 @@ internal static class ParserBuilderCalls
 
         var serviceCollection = new ServiceCollection();
         var parserBuild = new ParserBuilder(new ParserOptions(), serviceCollection)
-            .AddCommands(builder => builder.AddCommands<DeleteCommand>());
+            .AddCommands(builder => builder.AddCommands<DeleteCommand, DeleteCommand.DeleteCommandData>());
         var parser = parserBuild.BuildParser();
         var commandResult = await parser.Parse(arguments);
         if (commandResult.IsValid)
@@ -82,7 +82,7 @@ internal static class ParserBuilderCalls
                 });
 
         var parserBuild = new ParserBuilder(new ParserOptions(), serviceCollection)
-            .AddCommands(builder => builder.AddCommands<DeleteCommand>());
+            .AddCommands(builder => builder.AddCommands<DeleteCommand, DeleteCommand.DeleteCommandData>());
         var parser = parserBuild.BuildParser();
         var commandResult = await parser.Parse(arguments);
         if (commandResult.IsValid)

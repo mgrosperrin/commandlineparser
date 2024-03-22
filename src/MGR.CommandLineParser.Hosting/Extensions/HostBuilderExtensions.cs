@@ -68,7 +68,7 @@ public static class HostBuilderExtensions
     /// <remarks>This method can only be used with class-based command.</remarks>
     /// <returns>A code that represents the result of the parsing and the execution of the command.</returns>
     public static async Task<int> ParseCommandLineAndExecuteAsync<TCommandHandler, TCommandData>(this IHostBuilder hostBuilder, string[] args, CancellationToken cancellationToken = default) where TCommandHandler : class, ICommandHandler<TCommandData>
-        where TCommandData : CommandData
+        where TCommandData : CommandData, new()
     {
             var host = hostBuilder.Build();
             var executionResult = await host.ParseCommandLineAndExecuteAsync<TCommandHandler, TCommandData>(args, cancellationToken);
@@ -85,7 +85,7 @@ public static class HostBuilderExtensions
     /// <remarks>This method can only be used with class-based command.</remarks>
     /// <returns>A code that represents the result of the parsing and the execution of the command.</returns>
     public static async Task<int> ParseCommandLineWithDefaultCommandAndExecuteAsync<TCommandHandler, TCommandData>(this IHostBuilder hostBuilder, string[] args, CancellationToken cancellationToken = default) where TCommandHandler : class, ICommandHandler<TCommandData>
-        where TCommandData : CommandData
+        where TCommandData : CommandData, new()
     {
         var host = hostBuilder.Build();
         var executionResult = await host.ParseCommandLineWithDefaultCommandAndExecuteAsync<TCommandHandler, TCommandData>(args, cancellationToken);

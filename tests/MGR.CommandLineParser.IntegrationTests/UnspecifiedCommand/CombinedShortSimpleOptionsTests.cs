@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
@@ -22,13 +23,13 @@ public class CombinedShortSimpleOptionsTests : ConsoleLoggingTestsBase
         // Assert
         Assert.True(actual.IsValid);
         Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-        Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-        Assert.IsType<PackCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-        var rawCommand = (PackCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
-        Assert.True(rawCommand.Verbose);
-        Assert.True(rawCommand.Tool);
-        Assert.False(rawCommand.Build);
-        Assert.Equal(expectedVersion, rawCommand.Version);
+        Assert.IsAssignableFrom<IClassBasedCommandObject<PackCommand, PackCommand.PackCommandData>>(actual.CommandObject);
+        Assert.IsType<PackCommand>(((IClassBasedCommandObject<PackCommand, PackCommand.PackCommandData>)actual.CommandObject).Command);
+        var rawCommandData = ((IClassBasedCommandObject<PackCommand, PackCommand.PackCommandData>)actual.CommandObject).CommandData;
+        Assert.True(rawCommandData.Verbose);
+        Assert.True(rawCommandData.Tool);
+        Assert.False(rawCommandData.Build);
+        Assert.Equal(expectedVersion, rawCommandData.Version);
     }
     [Fact]
     public async Task ParseWithValidArgsWithFalse()
@@ -44,12 +45,11 @@ public class CombinedShortSimpleOptionsTests : ConsoleLoggingTestsBase
         // Assert
         Assert.True(actual.IsValid);
         Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-        Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-        Assert.IsType<PackCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-        var rawCommand = (PackCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
-        Assert.False(rawCommand.Verbose);
-        Assert.False(rawCommand.Tool);
-        Assert.True(rawCommand.Build);
-        Assert.Equal(expectedVersion, rawCommand.Version);
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<PackCommand, PackCommand.PackCommandData>>(actual.CommandObject);
+        var rawCommandData = classBasedCommandObject.CommandData;
+        Assert.False(rawCommandData.Verbose);
+        Assert.False(rawCommandData.Tool);
+        Assert.True(rawCommandData.Build);
+        Assert.Equal(expectedVersion, rawCommandData.Version);
     }
 }

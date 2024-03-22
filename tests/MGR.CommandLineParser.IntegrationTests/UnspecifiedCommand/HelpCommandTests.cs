@@ -11,7 +11,6 @@ namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand;
 public class HelpCommandTests : ConsoleLoggingTestsBase
 {
     [Fact]
-
     public async Task ShowGenericHelpForAllCommand()
     {
         // Arrange
@@ -52,9 +51,7 @@ Available commands:
             // Assert
             Assert.True(actual.IsValid);
             Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-            Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-            Assert.IsType<HelpCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-            Assert.IsNotType<ImportCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+            Assert.IsAssignableFrom<IClassBasedCommandObject<HelpCommand, HelpCommandData>>(actual.CommandObject);
             AssertOneMessageLoggedToConsole<FakeConsole.InformationMessage>(expected);
             Assert.Equal(expectedResult, actualResult);
         }

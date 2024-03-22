@@ -33,7 +33,7 @@ public interface IParser
     /// <remarks>This method can only be used with class-based command.</remarks>
     /// <returns>The result of the parsing of the arguments.</returns>
     Task<ParsingResult> Parse<TCommandHandler, TCommandData>([ItemNotNull] IEnumerable<string> arguments) where TCommandHandler : class, ICommandHandler<TCommandData>
-        where TCommandData:CommandData;
+        where TCommandData : CommandData, new();
 
     /// <summary>
     ///     Parse the supplied arguments.
@@ -50,6 +50,7 @@ public interface IParser
     /// <param name="arguments">The arguments.</param>
     /// <returns>The result of the parsing of the arguments.</returns>
     [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
-    Task<ParsingResult> ParseWithDefaultCommand<TCommandHandler, TCommandData>([ItemNotNull] IEnumerable<string> arguments) where TCommandHandler : class, ICommandHandler<TCommandData>
-        where TCommandData: CommandData;
+    Task<ParsingResult> ParseWithDefaultCommand<TCommandHandler, TCommandData>([ItemNotNull] IEnumerable<string> arguments)
+        where TCommandHandler : class, ICommandHandler<TCommandData>
+        where TCommandData : CommandData, new();
 }

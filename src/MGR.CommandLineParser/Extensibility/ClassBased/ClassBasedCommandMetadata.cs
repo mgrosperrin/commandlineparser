@@ -1,16 +1,18 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.Command;
 
 namespace MGR.CommandLineParser.Extensibility.ClassBased;
 
-internal sealed class ClassBasedCommandMetadata : ICommandMetadata
+internal sealed class ClassBasedCommandMetadata<TCommandHandler, TCommandData> : ICommandMetadata
+    where TCommandHandler : class, ICommandHandler<TCommandData>
+    where TCommandData : CommandData, new()
 {
-    internal ClassBasedCommandMetadata(Type commandType)
+    internal ClassBasedCommandMetadata()
     {
-        Name = commandType.GetFullCommandName();
-        var commandAttribute = commandType.GetAttribute<CommandAttribute>();
+        var commandHandlerType = typeof(TCommandHandler);
+        Name = commandHandlerType.GetFullCommandName();
+        var commandAttribute = commandHandlerType.GetAttribute<CommandAttribute>();
         if (commandAttribute != null)
         {
             Description = commandAttribute.GetLocalizedDescription();
@@ -26,8 +28,7 @@ internal sealed class ClassBasedCommandMetadata : ICommandMetadata
 
     public string Usage { get; } = string.Empty;
 
-    [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
-    public string[] Samples { get; } = new string[0];
+    public string[] Samples { get; } = [];
 
     public bool HideFromHelpListing { get; }
 }

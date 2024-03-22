@@ -42,7 +42,7 @@ public partial class ClassBasedCommandOptionTests
                 return (testCommand, commandOption);
             }
 
-        private class TestCommand : ICommandHandler
+        private class TestCommand : CommandData
         {
             // ReSharper disable once UnusedAutoPropertyAccessor.Local
             public List<int> PropertyList { get; set; }
@@ -51,13 +51,13 @@ public partial class ClassBasedCommandOptionTests
             // ReSharper disable once UnusedAutoPropertyAccessor.Local
             public int PropertySimple { get; set; }
 
-            #region ICommand Members
+            //#region ICommand Members
 
-            public Task<int> ExecuteAsync() => throw new NotImplementedException();
+            //public Task<int> ExecuteAsync() => throw new NotImplementedException();
 
-            public IList<string> Arguments => throw new NotImplementedException();
+            //public IList<string> Arguments => throw new NotImplementedException();
 
-            #endregion
+            //#endregion
         }
 
         [Fact]

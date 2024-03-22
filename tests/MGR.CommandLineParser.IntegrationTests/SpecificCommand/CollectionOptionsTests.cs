@@ -22,14 +22,13 @@ public class CollectionOptionsTests : ConsoleLoggingTestsBase
         var expectedIntValue = 42;
 
         // Act
-        var actual = await CallParse<IntTestCommand>(args);
+        var actual = await CallParse<IntTestCommand, IntTestCommand.IntTestCommandData>(args);
 
         // Assert
         Assert.True(actual.IsValid);
         Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-        Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-        Assert.IsType<IntTestCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-        var rawCommand = (IntTestCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<IntTestCommand, IntTestCommand.IntTestCommandData>>(actual.CommandObject);
+        var rawCommand = classBasedCommandObject.CommandData;
         Assert.Equal(expectedStrValue, rawCommand.StrValue);
         Assert.Equal(expectedIntValue, rawCommand.IntValue);
         Assert.NotNull(rawCommand.IntListValue);

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using MGR.CommandLineParser.Extensibility.Command;
 using MGR.CommandLineParser.Properties;
 
 namespace MGR.CommandLineParser.Command;
@@ -18,4 +16,17 @@ public abstract class HelpedCommandData : CommandData
         Description = "Command_HelpOption_DescriptionMessage", ResourceType = typeof(Strings))]
     [PublicAPI]
     public bool Help { get; set; }
+    /// <summary>
+    ///     Gets the <see cref="CommandType" /> of the command.
+    /// </summary>
+    protected internal ICommandType CommandType { get; private set; }
+
+    /// <summary>
+    ///     Configure the command with the <see cref="ICommandType" /> representing the command.
+    /// </summary>
+    /// <param name="commandType">The <see cref="CommandType" /> of the command.</param>
+    public virtual void Configure(ICommandType commandType)
+    {
+        CommandType = commandType;
+    }
 }

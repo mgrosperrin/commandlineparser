@@ -24,10 +24,9 @@ public class OptionsHasDefaultValueTests : ConsoleLoggingTestsBase
         // Assert
         Assert.True(actual.IsValid);
         Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-        Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-        Assert.IsType<SetApiKeyCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-        var rawCommand = (SetApiKeyCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
-        Assert.Equal(expectedSource, rawCommand.Source);
-        Assert.Equal(expectedNbOfArguments, rawCommand.Arguments.Count);
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<SetApiKeyCommand, SetApiKeyCommand.SetApiKeyCommandData>>(actual.CommandObject);
+        var rawCommandData = classBasedCommandObject.CommandData;
+        Assert.Equal(expectedSource, rawCommandData.Source);
+        Assert.Equal(expectedNbOfArguments, rawCommandData.Arguments.Count);
     }
 }

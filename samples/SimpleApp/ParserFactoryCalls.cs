@@ -20,7 +20,7 @@ internal static class ParserFactoryCalls
                     options.Logo = "Parser via IParserFactory";
                     options.CommandLineName = "";
                 }
-            ).AddCommands<DeleteCommand>();
+            ).AddCommands<DeleteCommand, DeleteCommand.DeleteCommandData>();
         }
 
         var serviceCollection = new ServiceCollection();
@@ -65,7 +65,7 @@ internal static class ParserFactoryCalls
                     options.Logo = "Parser via IParserFactory";
                     options.CommandLineName = "";
                 }
-            ).AddCommands<DeleteCommand>();
+            ).AddCommands<DeleteCommand, DeleteCommand.DeleteCommandData>();
         }
 
         var serviceCollection = new ServiceCollection();
@@ -81,7 +81,7 @@ internal static class ParserFactoryCalls
                 Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
 
                 var parser = factory.CreateParser();
-                var commandResult = await parser.Parse<PackCommand>(arguments);
+                var commandResult = await parser.Parse<PackCommand, PackCommand.PackCommandData>(arguments);
                 if (commandResult.IsValid)
                 {
                     var executionResult = await commandResult.CommandObject.ExecuteAsync();
@@ -110,7 +110,7 @@ internal static class ParserFactoryCalls
                     options.Logo = "Parser via IParserFactory";
                     options.CommandLineName = "";
                 }
-            ).AddCommands<DeleteCommand>();
+            ).AddCommands<DeleteCommand, DeleteCommand.DeleteCommandData>();
         }
 
         var serviceCollection = new ServiceCollection();
@@ -126,7 +126,7 @@ internal static class ParserFactoryCalls
                 Console.WriteLine("Parse: '{0}'", string.Join(" ", arguments));
 
                 var parser = factory.CreateParser();
-                var commandResult = await parser.ParseWithDefaultCommand<DeleteCommand>(arguments);
+                var commandResult = await parser.ParseWithDefaultCommand<DeleteCommand, DeleteCommand.DeleteCommandData>(arguments);
                 if (commandResult.IsValid)
                 {
                     var executionResult = await commandResult.CommandObject.ExecuteAsync();

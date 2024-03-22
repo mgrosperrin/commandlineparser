@@ -39,45 +39,49 @@ public abstract class ConsoleLoggingTestsBase
     protected async Task<ParsingResult> CallParse(ParserOptions parserOptions, IEnumerable<string> args)
     {
         var parserBuilder = new ParserBuilder(parserOptions, _serviceCollection);
-        parserBuilder.AddCommands(builder => builder.AddCommands<DeleteCommand>());
+        parserBuilder.AddCommands(builder => builder.AddCommands<DeleteCommand, DeleteCommand.DeleteCommandData>());
         var parser = parserBuilder.BuildParser();
         var parsingResult = await parser.Parse(args);
 
         return parsingResult;
     }
-    protected async Task<ParsingResult> CallParse<TCommand>(IEnumerable<string> args)
-    where TCommand : class, ICommandHandler
+    protected async Task<ParsingResult> CallParse<TCommandHandler, TCommandData>(IEnumerable<string> args)
+        where TCommandHandler : class, ICommandHandler<TCommandData>
+        where TCommandData : CommandData, new()
     {
-        var parsingResult = await CallParse<TCommand>(CreateParserOptions(), args);
+        var parsingResult = await CallParse<TCommandHandler, TCommandData>(CreateParserOptions(), args);
 
         return parsingResult;
     }
 
-    protected async Task<ParsingResult> CallParse<TCommand>(ParserOptions parserOptions, IEnumerable<string> args)
-        where TCommand : class, ICommandHandler
+    protected async Task<ParsingResult> CallParse<TCommandHandler, TCommandData>(ParserOptions parserOptions, IEnumerable<string> args)
+        where TCommandHandler : class, ICommandHandler<TCommandData>
+        where TCommandData : CommandData, new()
     {
         var parserBuilder = new ParserBuilder(parserOptions, _serviceCollection);
-        parserBuilder.AddCommands(builder => builder.AddCommands<DeleteCommand>());
+        parserBuilder.AddCommands(builder => builder.AddCommands<DeleteCommand, DeleteCommand.DeleteCommandData>());
         var parser = parserBuilder.BuildParser();
-        var parsingResult = await parser.Parse<TCommand>(args);
+        var parsingResult = await parser.Parse<TCommandHandler, TCommandData>(args);
 
         return parsingResult;
     }
-    protected async Task<ParsingResult> CallParseWithDefaultCommand<TCommand>(IEnumerable<string> args)
-        where TCommand : class, ICommandHandler
+    protected async Task<ParsingResult> CallParseWithDefaultCommand<TCommandHandler, TCommandData>(IEnumerable<string> args)
+        where TCommandHandler : class, ICommandHandler<TCommandData>
+        where TCommandData : CommandData, new()
     {
-        var parsingResult = await CallParseWithDefaultCommand<TCommand>(CreateParserOptions(), args);
+        var parsingResult = await CallParseWithDefaultCommand<TCommandHandler, TCommandData>(CreateParserOptions(), args);
 
         return parsingResult;
     }
 
-    protected async Task<ParsingResult> CallParseWithDefaultCommand<TCommand>(ParserOptions parserOptions, IEnumerable<string> args)
-        where TCommand : class, ICommandHandler
+    protected async Task<ParsingResult> CallParseWithDefaultCommand<TCommandHandler, TCommandData>(ParserOptions parserOptions, IEnumerable<string> args)
+        where TCommandHandler : class, ICommandHandler<TCommandData>
+        where TCommandData : CommandData, new()
     {
         var parserBuilder = new ParserBuilder(parserOptions, _serviceCollection);
-        parserBuilder.AddCommands(builder => builder.AddCommands<TCommand>());
+        parserBuilder.AddCommands(builder => builder.AddCommands<TCommandHandler, TCommandData>());
         var parser = parserBuilder.BuildParser();
-        var parsingResult = await parser.ParseWithDefaultCommand<TCommand>(args);
+        var parsingResult = await parser.ParseWithDefaultCommand<TCommandHandler, TCommandData>(args);
 
         return parsingResult;
     }

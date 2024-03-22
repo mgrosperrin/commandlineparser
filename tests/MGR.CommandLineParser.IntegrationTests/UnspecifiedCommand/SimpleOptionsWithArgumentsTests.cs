@@ -28,16 +28,15 @@ public class SimpleOptionsWithArgumentsTests : ConsoleLoggingTestsBase
         // Assert
         Assert.True(actual.IsValid);
         Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-        Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-        Assert.IsType<ImportCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-        var importCommand = (ImportCommand) ((IClassBasedCommandObject)actual.CommandObject).Command;
-        Assert.Equal(expectedOutputDirectory, importCommand.OutputDirectory.FullName);
-        Assert.Equal(expectedOutputFile, importCommand.OutputFile.FullName);
-        Assert.Equal(expectedMaxParallel, importCommand.MaxItemInParallel);
-        Assert.Equal(expectedNbOfArguments, importCommand.Arguments.Count);
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<ImportCommand, ImportCommand.ImportCommandData>>(actual.CommandObject);
+        var importCommandData = classBasedCommandObject.CommandData;
+        Assert.Equal(expectedOutputDirectory, importCommandData.OutputDirectory.FullName);
+        Assert.Equal(expectedOutputFile, importCommandData.OutputFile.FullName);
+        Assert.Equal(expectedMaxParallel, importCommandData.MaxItemInParallel);
+        Assert.Equal(expectedNbOfArguments, importCommandData.Arguments.Count);
         for (var i = 0; i < expectedNbOfArguments; i++)
         {
-            Assert.Equal(expectedArgumentsValue[i], importCommand.Arguments[i]);
+            Assert.Equal(expectedArgumentsValue[i], importCommandData.Arguments[i]);
         }
     }
     [Fact]
@@ -58,14 +57,13 @@ public class SimpleOptionsWithArgumentsTests : ConsoleLoggingTestsBase
         // Assert
         Assert.True(actual.IsValid);
         Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-        Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-        Assert.IsType<IntTestCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-        var rawCommand = (IntTestCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
-        Assert.Equal(expectedStrValue, rawCommand.StrValue);
-        Assert.Equal(expectedIntValue, rawCommand.IntValue);
-        Assert.Null(rawCommand.IntListValue);
-        Assert.Equal(expectedNbOfArguments, rawCommand.Arguments.Count);
-        Assert.Equal(expectedArgumentsValue, rawCommand.Arguments.Single());
-        Assert.True(rawCommand.BoolValue);
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<IntTestCommand, IntTestCommand.IntTestCommandData>>(actual.CommandObject);
+        var rawCommandData = classBasedCommandObject.CommandData;
+        Assert.Equal(expectedStrValue, rawCommandData.StrValue);
+        Assert.Equal(expectedIntValue, rawCommandData.IntValue);
+        Assert.Null(rawCommandData.IntListValue);
+        Assert.Equal(expectedNbOfArguments, rawCommandData.Arguments.Count);
+        Assert.Equal(expectedArgumentsValue, rawCommandData.Arguments.Single());
+        Assert.True(rawCommandData.BoolValue);
     }
 }

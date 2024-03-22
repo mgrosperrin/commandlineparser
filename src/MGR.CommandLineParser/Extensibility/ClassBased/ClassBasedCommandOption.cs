@@ -10,12 +10,12 @@ internal sealed class ClassBasedCommandOption : ICommandOption
 {
     private readonly MethodInfo _miAddMethod;
     private readonly ClassBasedCommandOptionMetadata _commandOptionMetadata;
-    private readonly ICommandHandler _command;
+    private readonly CommandData _commandData;
 
-    internal ClassBasedCommandOption(ClassBasedCommandOptionMetadata commandOptionMetadata, ICommandHandler command)
+    internal ClassBasedCommandOption(ClassBasedCommandOptionMetadata commandOptionMetadata, CommandData commandData)
     {
         _commandOptionMetadata = commandOptionMetadata;
-        _command = command;
+        _commandData = commandData;
         _miAddMethod = _commandOptionMetadata.PropertyOption.PropertyType.GetMethod("Add");
         if (!string.IsNullOrEmpty(Metadata.DefaultValue))
         {
@@ -58,7 +58,7 @@ internal sealed class ClassBasedCommandOption : ICommandOption
     {
         if (!_commandOptionMetadata.PropertyOption.PropertyType.IsMultiValuedType())
         {
-            _commandOptionMetadata.PropertyOption.SetValue(_command, convertedValue, null);
+            _commandOptionMetadata.PropertyOption.SetValue(_commandData, convertedValue, null);
         }
         else
         {
@@ -66,13 +66,13 @@ internal sealed class ClassBasedCommandOption : ICommandOption
             {
                 throw new InvalidOperationException();
             }
-            var optionValue = _commandOptionMetadata.PropertyOption.GetValue(_command, null);
+            var optionValue = _commandOptionMetadata.PropertyOption.GetValue(_commandData, null);
             if (optionValue == null)
             {
                 if (_commandOptionMetadata.PropertyOption.CanWrite)
                 {
                     optionValue = Activator.CreateInstance(_commandOptionMetadata.PropertyOption.PropertyType);
-                    _commandOptionMetadata.PropertyOption.SetValue(_command, optionValue, null);
+                    _commandOptionMetadata.PropertyOption.SetValue(_commandData, optionValue, null);
                 }
                 else
                 {
@@ -86,7 +86,7 @@ internal sealed class ClassBasedCommandOption : ICommandOption
             else
             {
                 var targetTupleValue = (KeyValuePair<object, object>)convertedValue;
-                _miAddMethod.Invoke(_commandOptionMetadata.PropertyOption.GetValue(_command, null), new[] { targetTupleValue.Key, targetTupleValue.Value });
+                _miAddMethod.Invoke(_commandOptionMetadata.PropertyOption.GetValue(_commandData, null), new[] { targetTupleValue.Key, targetTupleValue.Value });
             }
         }
     }

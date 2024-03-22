@@ -25,14 +25,14 @@ internal sealed class Parser : IParser
     public string CommandLineName => _parserOptions.CommandLineName;
 
     public async Task<ParsingResult> Parse<TCommandHandler, TCommandData>(IEnumerable<string> arguments) where TCommandHandler : class, ICommandHandler<TCommandData>
-        where TCommandData : CommandData => await ParseArguments(arguments, (parserEngine, argumentsEnumerator) =>
+        where TCommandData : CommandData, new() => await ParseArguments(arguments, (parserEngine, argumentsEnumerator) =>
                parserEngine.Parse<TCommandHandler, TCommandData>(argumentsEnumerator));
 
     public async Task<ParsingResult> Parse(IEnumerable<string> arguments) => await ParseArguments(arguments, (parserEngine, argumentsEnumerator) =>
             parserEngine.Parse(argumentsEnumerator));
 
     public async Task<ParsingResult> ParseWithDefaultCommand<TCommandHandler, TCommandData>(IEnumerable<string> arguments) where TCommandHandler : class, ICommandHandler<TCommandData>
-        where TCommandData : CommandData => await ParseArguments(arguments, (parserEngine, argumentsEnumerator) =>
+        where TCommandData : CommandData, new() => await ParseArguments(arguments, (parserEngine, argumentsEnumerator) =>
                 parserEngine.ParseWithDefaultCommand<TCommandHandler, TCommandData>(argumentsEnumerator));
 
     private async Task<ParsingResult> ParseArguments(IEnumerable<string> arguments, Func<ParserEngine, IEnumerator<string>, Task<ParsingResult>> callParse)

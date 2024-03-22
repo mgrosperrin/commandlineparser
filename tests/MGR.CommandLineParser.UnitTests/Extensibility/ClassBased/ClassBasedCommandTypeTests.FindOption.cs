@@ -39,9 +39,9 @@ public partial class ClassBasedCommandTypeTests
             var serviceProviderMock = new Mock<IServiceProvider>();
             serviceProviderMock.Setup(_ => _.GetService(typeof(IClassBasedCommandActivator)))
                 .Returns(ClassBasedBasicCommandActivator.Instance);
-            var classBasedCommandObjectBuilder =
-                (ClassBasedCommandObjectBuilder)testCommandType.CreateCommandObjectBuilder(serviceProviderMock.Object);
-            var testCommand = (TestCommand)((IClassBasedCommandObject)classBasedCommandObjectBuilder.GenerateCommandObject()).Command;
+            var classBasedCommandObjectBuilder = testCommandType.CreateCommandObjectBuilder(serviceProviderMock.Object);
+            var testCommand = ((IClassBasedCommandObject<TestCommand, TestCommand>)classBasedCommandObjectBuilder.GenerateCommandObject()).Command;
+            var testCommandData = ((IClassBasedCommandObject<TestCommand, TestCommand>)classBasedCommandObjectBuilder.GenerateCommandObject()).CommandData;
 
             // Act
             var actual = classBasedCommandObjectBuilder.FindOption(optionName);
@@ -51,31 +51,19 @@ public partial class ClassBasedCommandTypeTests
             Assert.NotNull(testCommand);
             Assert.True(actual.ShouldProvideValue);
             actual.AssignValue("42");
-            Assert.Single(testCommand.PropertyList);
-            Assert.Equal(42, testCommand.PropertyList.First());
+            Assert.Single(testCommandData.PropertyList);
+            Assert.Equal(42, testCommandData.PropertyList.First());
 
         }
 
-        internal class TestCommand : ICommandHandler
+        internal class TestCommand : CommandData, ICommandHandler<TestCommand>
         {
             [Display(ShortName = "pl")]
             public List<int> PropertyList { get; set; }
             public Dictionary<string, Guid> PropertyDictionary { get; set; }
             public int PropertySimple { get; set; }
 
-            #region ICommand Members
-
-            public Task<int> ExecuteAsync()
-            {
-                throw new NotImplementedException();
-            }
-
-            public IList<string> Arguments
-            {
-                get { throw new NotImplementedException(); }
-            }
-
-            #endregion
+            public Task<int> ExecuteAsync(TestCommand commandData) => throw new NotImplementedException();
         }
     }
 }

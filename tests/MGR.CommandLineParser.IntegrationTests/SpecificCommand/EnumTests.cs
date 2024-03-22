@@ -17,13 +17,13 @@ public class EnumTests : ConsoleLoggingTestsBase
         var expectedTargets = AttributeTargets.Assembly;
 
         // Act
-        var actual = await CallParse<EnumCommand>(args);
+        var actual = await CallParse<EnumCommand, EnumCommand.EnumCommandData>(args);
 
         // Assert
         Assert.True(actual.IsValid);
         Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-        var rawCommand = Assert.IsType<EnumCommand>(classBasedCommandObject.Command);
-        Assert.Equal(expectedTargets, rawCommand.Target);
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<EnumCommand, EnumCommand.EnumCommandData>>(actual.CommandObject);
+        var rawCommandData = classBasedCommandObject.CommandData;
+        Assert.Equal(expectedTargets, rawCommandData.Target);
     }
 }

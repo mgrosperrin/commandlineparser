@@ -33,7 +33,7 @@ public static class HostExtensions
     /// <remarks>This method can only be used with class-based command.</remarks>
     /// <returns>A code that represents the result of the parsing and the execution of the command.</returns>
     public static async Task<int> ParseCommandLineAndExecuteAsync<TCommandHandler, TCommandData>(this IHost host, string[] args, CancellationToken cancellationToken = default) where TCommandHandler : class, ICommandHandler<TCommandData>
-        where TCommandData : CommandData => await ParseCommandLineAndExecuteAsync(host, args, (parser, arguments) => parser.Parse<TCommandHandler, TCommandData>(arguments), cancellationToken);
+        where TCommandData : CommandData, new() => await ParseCommandLineAndExecuteAsync(host, args, (parser, arguments) => parser.Parse<TCommandHandler, TCommandData>(arguments), cancellationToken);
 
     /// <summary>
     /// Parse the command line and execute the command if it is valid. If the name of the command is not the first argument, fallback to the specified command.
@@ -46,7 +46,7 @@ public static class HostExtensions
     /// <remarks>This method can only be used with class-based command.</remarks>
     /// <returns>A code that represents the result of the parsing and the execution of the command.</returns>
     public static async Task<int> ParseCommandLineWithDefaultCommandAndExecuteAsync<TCommandHandler, TCommandData>(this IHost host, string[] args, CancellationToken cancellationToken = default) where TCommandHandler : class, ICommandHandler<TCommandData>
-        where TCommandData : CommandData => await ParseCommandLineAndExecuteAsync(host, args, (parser, arguments) => parser.ParseWithDefaultCommand<TCommandHandler, TCommandData>(arguments), cancellationToken);
+        where TCommandData : CommandData, new() => await ParseCommandLineAndExecuteAsync(host, args, (parser, arguments) => parser.ParseWithDefaultCommand<TCommandHandler, TCommandData>(arguments), cancellationToken);
 
     private static async Task<int> ParseCommandLineAndExecuteAsync(IHost host, string[] args, Func<IParser, IEnumerable<string>, Task<ParsingResult>> parseArguments, CancellationToken cancellationToken)
     {

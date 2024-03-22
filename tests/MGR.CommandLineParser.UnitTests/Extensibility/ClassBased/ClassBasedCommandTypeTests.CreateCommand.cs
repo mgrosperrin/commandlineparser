@@ -41,28 +41,14 @@ public partial class ClassBasedCommandTypeTests
             // Assert
             Assert.Equal(expectedMessageException, actualException.Message);
         }
-        private class TestBadConverterCommand : ICommandHandler
+        private class TestBadConverterCommand : CommandData, ICommandHandler<TestBadConverterCommand>
         {
 #pragma warning disable CS0618 // Type or member is obsolete
             [Converter(typeof(BooleanConverter))]
 #pragma warning restore CS0618 // Type or member is obsolete
-            // ReSharper disable once UnusedMember.Local
-            // ReSharper disable once UnusedAutoPropertyAccessor.Local
             public int PropertySimpleWithBadConverter { get; set; }
 
-            #region ICommand Members
-
-            public Task<int> ExecuteAsync()
-            {
-                throw new NotImplementedException();
-            }
-
-            public IList<string> Arguments
-            {
-                get { throw new NotImplementedException(); }
-            }
-
-            #endregion
+            public Task<int> ExecuteAsync(TestBadConverterCommand commandData) => throw new NotImplementedException();
         }
     }
 }

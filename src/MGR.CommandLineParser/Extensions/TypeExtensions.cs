@@ -102,8 +102,35 @@ internal static class TypeExtensions
             return true;
         }
 
-        return !source.IsAbstract && baseType.IsAssignableFrom(source);
+        return !source.IsAbstract && (baseType.IsAssignableFrom(source) || IsAssignableToGenericType(source, baseType));
     }
+    private static bool IsAssignableToGenericType(Type source, Type interfaceType)
+    {
+        var interfaceTypes = source.GetInterfaces();
+
+        foreach (var it in interfaceTypes)
+        {
+            if (it.IsGenericType && it.GetGenericTypeDefinition() == interfaceType)
+            {
+                return true;
+            }
+        }
+
+        if (source.IsGenericType && source.GetGenericTypeDefinition() == interfaceType)
+        {
+            return true;
+        }
+
+        Type baseType = source.BaseType;
+        if (baseType == null)
+        {
+            return false;
+        }
+
+        return IsAssignableToGenericType(baseType, interfaceType);
+    }
+
+
 
     internal static string GetFullCommandName(this Type commandType)
     {

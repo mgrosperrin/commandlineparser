@@ -33,7 +33,7 @@ public sealed class ParserBuilder
         {
             options.Logo = parserOptions.Logo;
             options.CommandLineName = parserOptions.CommandLineName;
-        }).AddCommands<HelpCommand>();
+        }).AddCommands<HelpCommand, HelpCommandData>();
     }
 
     /// <summary>

@@ -48,7 +48,7 @@ List sample number 2
             // Assert
             Assert.True(actual.IsValid);
             Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-            Assert.IsType<ListCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+            var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<ListCommand, ListCommand.ListCommandData>>(actual.CommandObject);
             Assert.Equal(expectedResult, actualResult);
             AssertOneMessageLoggedToConsole<FakeConsole.InformationMessage>(expected);
         }
@@ -97,8 +97,7 @@ Options:
             // Assert
             Assert.True(actual.IsValid);
             Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-            Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-            Assert.IsType<PackCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
+            var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<PackCommand, PackCommand.PackCommandData>>(actual.CommandObject);
             Assert.Equal(expectedResult, actualResult);
             AssertOneMessageLoggedToConsole<FakeConsole.InformationMessage>(expected);
         }
