@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using JetBrains.Annotations;
+﻿using System.IO;
 
 namespace MGR.CommandLineParser.Extensibility.ClassBased;
 
@@ -12,8 +10,6 @@ public sealed class CurrentDirectoryAssemblyProvider : AssemblyProviderBase
     /// <summary>
     /// Gets the singleton instance of <see cref="CurrentDirectoryAssemblyProvider"/>.
     /// </summary>
-    [SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
-    [PublicAPI, NotNull]
     public static readonly IAssemblyProvider Instance = new CurrentDirectoryAssemblyProvider();
     /// <summary>
     /// Create a new <see cref="CurrentDirectoryAssemblyProvider"/>.

@@ -31,14 +31,14 @@ internal sealed class AssemblyBrowsingClassBasedCommandTypeProvider : ICommandTy
         return Task.FromResult<IEnumerable<ICommandType>>(commandTypes.Values);
     }
 
-    public Task<ICommandType> GetCommandType(string commandName)
+    public Task<ICommandType?> GetCommandType(string commandName)
     {
         var commandTypes = _commands.Value;
         if (commandTypes.ContainsKey(commandName))
         {
-            return Task.FromResult(commandTypes[commandName]);
+            return Task.FromResult<ICommandType?>(commandTypes[commandName]);
         }
-        return Task.FromResult<ICommandType>(null);
+        return Task.FromResult<ICommandType?>(null);
     }
 
     private Dictionary<string, ICommandType> SearchAllCommandTypes()

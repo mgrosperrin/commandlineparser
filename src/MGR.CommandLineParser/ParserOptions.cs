@@ -5,7 +5,7 @@ using MGR.CommandLineParser.Properties;
 namespace MGR.CommandLineParser;
 
 /// <summary>
-///     Defines the options for the parser.
+/// Defines the options for the parser.
 /// </summary>
 public sealed class ParserOptions
 {
@@ -33,12 +33,12 @@ public sealed class ParserOptions
         Logo = string.Format(CultureInfo.CurrentUICulture, Strings.ParserOptions_LogoFormat, entryAssemblyName.Name, entryAssemblyName.Version);
     }
     /// <summary>
-    ///     Gets or sets the logo used in the help by the parser.
+    /// Gets or sets the logo used in the help by the parser.
     /// </summary>
-    public string Logo { get; set; }
+    public string Logo { get; set; } = "Not initialized logo";
 
     /// <summary>
-    ///     Gets or sets the name of the executable to run used in the help by the parser.
+    /// Gets or sets the name of the executable to run used in the help by the parser.
     /// </summary>
-    public string CommandLineName { get; set; }
+    public string CommandLineName { get; set; } = "Not initialized command line name";
 }

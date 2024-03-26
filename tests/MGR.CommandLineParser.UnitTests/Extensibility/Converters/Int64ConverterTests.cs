@@ -11,7 +11,7 @@ public class Int64ConverterTests
     {
         // Arrange
         IConverter converter = new Int64Converter();
-        var expectedType = typeof (Int64);
+        var expectedType = typeof (long);
 
         // Act
         var actualType = converter.TargetType;
@@ -26,15 +26,15 @@ public class Int64ConverterTests
         // Arrange
         IConverter converter = new Int64Converter();
         var value = "42";
-        Int64 expectedValue = 42;
+        long expectedValue = 42;
 
         // Act
         var actualValue = converter.Convert(value, converter.TargetType);
 
         // Assert
         Assert.NotNull(actualValue);
-        Assert.IsType<Int64>(actualValue);
-        Assert.Equal(expectedValue, (Int64) actualValue);
+        Assert.IsType<long>(actualValue);
+        Assert.Equal(expectedValue, (long) actualValue);
     }
 
     [Fact]

@@ -1,5 +1,4 @@
 ﻿using System;
-using JetBrains.Annotations;
 
 namespace MGR.CommandLineParser.Diagnostics;
 
@@ -9,9 +8,9 @@ internal abstract class LoggerCategory<T>
 
     public override string ToString() => Name;
 
-    public static implicit operator string([NotNull] LoggerCategory<T> loggerCategory) => loggerCategory.ToString();
+    public static implicit operator string(LoggerCategory<T> loggerCategory) => loggerCategory.ToString();
 
-    private static string ToName([NotNull] Type loggerCategoryType)
+    private static string ToName(Type loggerCategoryType)
     {
         const string outerClassName = "." + nameof(LoggerCategory);
 

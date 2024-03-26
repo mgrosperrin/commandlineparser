@@ -1,19 +1,18 @@
 ﻿using System;
-using JetBrains.Annotations;
 using MGR.CommandLineParser.Extensibility.Converters;
 
 namespace MGR.CommandLineParser;
 
 internal static class Guard
 {
-    internal static void NotNull(object item, [InvokerParameterName] string name)
+    internal static void NotNull(object? item, string name)
     {
         if (item == null)
         {
             throw new ArgumentNullException(name);
         }
     }
-    internal static void NotNullOrEmpty(string item, [InvokerParameterName] string name)
+    internal static void NotNullOrEmpty(string? item, string name)
     {
         if (string.IsNullOrEmpty(item))
         {
@@ -21,7 +20,7 @@ internal static class Guard
         }
     }
 
-    internal static void IsIConverter([NotNull] Type type, string message)
+    internal static void IsIConverter(Type type, string message)
     {
         if (!typeof (IConverter).IsAssignableFrom(type))
         {
@@ -29,7 +28,7 @@ internal static class Guard
         }
     }
 
-    internal static void OfType<T>(Type type, [InvokerParameterName]  string name)
+    internal static void OfType<T>(Type type,  string name)
     {
         NotNull(type, name);
 

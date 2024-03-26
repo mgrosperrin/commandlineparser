@@ -20,8 +20,6 @@ public sealed class TimeSpanConverter : IConverter
     /// <param name="concreteTargetType">Not used.</param>
     /// <returns>The <see cref="TimeSpan"/> converted from the value.</returns>
     /// <exception cref="CommandLineParserException">Thrown if the <paramref name="value"/> is not valid.</exception>
-    //[SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "TimeSpan")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.TimeSpan.Parse(System.String,System.IFormatProvider)")]
     public object Convert(string value, Type concreteTargetType)
     {
         try

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using MGR.CommandLineParser.Extensibility;
 using MGR.CommandLineParser.Extensibility.Command;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,13 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 namespace MGR.CommandLineParser.Command;
 
 /// <summary>
-///     Defines the default implementation of the <see cref="HelpCommand" />.
+/// Defines the default implementation of the <see cref="HelpCommand" />.
 /// </summary>
-[PublicAPI]
 public sealed class HelpCommand : CommandBase<HelpCommandData>
 {
     /// <summary>
-    ///     Name of the help command.
+    /// Name of the help command.
     /// </summary>
     public const string Name = "help";
 
@@ -30,8 +28,9 @@ public sealed class HelpCommand : CommandBase<HelpCommandData>
 
 
     /// <summary>
-    ///     Executes the command.
+    /// Executes the command.
     /// </summary>
+    /// <param name="commandData">The data of the command.</param>
     /// <returns>Return 0 is everything was right, an negative error code otherwise.</returns>
     protected override async Task<int> ExecuteCommandAsync(HelpCommandData commandData)
     {

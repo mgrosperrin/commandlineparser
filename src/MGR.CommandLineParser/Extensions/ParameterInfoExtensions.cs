@@ -3,7 +3,7 @@ namespace System.Reflection;
 
 internal static class ParameterInfoExtensions
 {
-    public static bool TryGetDefaultValue(this ParameterInfo parameter, out object defaultValue)
+    public static bool TryGetDefaultValue(this ParameterInfo parameter, out object? defaultValue)
     {
         var useDefaultValueFromParameterInfo = true;
         defaultValue = null;

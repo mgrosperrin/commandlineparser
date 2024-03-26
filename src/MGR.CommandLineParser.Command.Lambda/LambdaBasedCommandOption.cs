@@ -32,9 +32,7 @@ internal class LambdaBasedCommandOption : ICommandOption
                 ValueAssigner = new LambdaBasedCommandOptionDictionaryValueAssigner();
                 break;
             default:
-#pragma warning disable S3928 // Parameter names used into ArgumentException constructors should match an existing one
                 throw new ArgumentOutOfRangeException(nameof(collectionType));
-#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one
         }
 
         if (!string.IsNullOrEmpty(Metadata.DefaultValue))

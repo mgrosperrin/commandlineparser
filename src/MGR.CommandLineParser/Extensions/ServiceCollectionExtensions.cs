@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 namespace MGR.CommandLineParser;
 
 /// <summary>
-///     Extensions methods for the type <see cref="IServiceCollection" />.
+/// Extensions methods for the type <see cref="IServiceCollection" />.
 /// </summary>
 public static class ServiceCollectionExtensions
 {

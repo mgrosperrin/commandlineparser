@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using JetBrains.Annotations;
 using MGR.CommandLineParser;
 using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.ClassBased;
@@ -50,6 +49,10 @@ internal static class PropertyInfoExtensions
     private static IConverter FindValueConverter(PropertyInfo propertyInfo, IEnumerable<IConverter> converters, string optionName, string commandName)
     {
         var valueType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(false);
+        if(valueType == null)
+        {
+            throw new InvalidOperationException("Unable to find the underlying dictionary value type");
+        }
         var valueConverter = GetConverterFromType(valueType, converters);
         if (valueConverter == null)
         {
@@ -60,6 +63,10 @@ internal static class PropertyInfoExtensions
     private static IConverter FindKeyConverter(PropertyInfo propertyInfo, IEnumerable<IConverter> converters, string optionName, string commandName)
     {
         var keyType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(true);
+        if (keyType == null)
+        {
+            throw new InvalidOperationException("Unable to find the underlying dictionary key type");
+        }
         var keyConverter = GetConverterFromType(keyType, converters);
         if (keyConverter == null)
         {
@@ -68,13 +75,13 @@ internal static class PropertyInfoExtensions
         return keyConverter;
     }
 
-    private static IConverter GetConverterFromAttribute(PropertyInfo propertyInfo, string commandName)
+    private static IConverter? GetConverterFromAttribute(PropertyInfo propertyInfo, string commandName)
     {
         var genericConverterAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterAttribute<>), true).FirstOrDefault();
         if (genericConverterAttribute != null)
         {
             var converterType = genericConverterAttribute.GetType().GetGenericArguments()[0];
-            var converter = Activator.CreateInstance(converterType) as IConverter;
+            var converter = (IConverter)Activator.CreateInstance(converterType);
 
             if (!converter.CanConvertTo(propertyInfo.PropertyType))
             {
@@ -98,7 +105,7 @@ internal static class PropertyInfoExtensions
         return null;
     }
 
-    private static IConverter GetKeyValueConverterFromAttribute(PropertyInfo propertyInfo, string optionName, string commandName)
+    private static IConverter? GetKeyValueConverterFromAttribute(PropertyInfo propertyInfo, string optionName, string commandName)
     {
         var genericConverterKeyValuePairAttribute = propertyInfo.GetCustomAttributes(typeof(ConverterKeyValueAttribute<,>), true).FirstOrDefault();
         if (genericConverterKeyValuePairAttribute != null)
@@ -109,9 +116,9 @@ internal static class PropertyInfoExtensions
             }
             var genericArguments = genericConverterKeyValuePairAttribute.GetType().GetGenericArguments();
             var keyConverterType = genericArguments[0];
-            var keyConverter = Activator.CreateInstance(keyConverterType) as IConverter;
+            var keyConverter = (IConverter)Activator.CreateInstance(keyConverterType);
             var valueConverterType = genericArguments.Length == 1 ? typeof(MGR.CommandLineParser.Extensibility.Converters.StringConverter) : genericConverterKeyValuePairAttribute.GetType().GetGenericArguments()[1];
-            var valueConverter = Activator.CreateInstance(valueConverterType) as IConverter;
+            var valueConverter = (IConverter)Activator.CreateInstance(valueConverterType);
 
             return new KeyValueConverter(keyConverter, valueConverter);
         }
@@ -137,6 +144,10 @@ internal static class PropertyInfoExtensions
 #pragma warning restore CS0618 // Type or member is obsolete
     {
         var valueType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(false);
+        if (valueType == null)
+        {
+            throw new InvalidOperationException("Unable to find the underlying dictionary value type");
+        }
         var valueConverter = converterKeyValuePairAttribute.BuildValueConverter();
         if (!valueType.IsType(valueConverter.TargetType))
         {
@@ -150,6 +161,10 @@ internal static class PropertyInfoExtensions
 #pragma warning restore CS0618 // Type or member is obsolete
     {
         var keyType = propertyInfo.PropertyType.GetUnderlyingDictionaryType(true);
+        if (keyType == null)
+        {
+            throw new InvalidOperationException("Unable to find the underlying dictionary key type");
+        }
         var keyConverter = converterKeyValuePairAttribute.BuildKeyConverter();
         if (!keyType.IsType(keyConverter.TargetType))
         {
@@ -175,7 +190,6 @@ internal static class PropertyInfoExtensions
         return requiredAttribute != null;
     }
 
-    [NotNull]
     internal static ClassBasedOptionDisplayInfo ExtractOptionDisplayInfoMetadata(this PropertyInfo source, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
     {
         Guard.NotNull(source, nameof(source));
@@ -183,7 +197,7 @@ internal static class PropertyInfoExtensions
         return optionDisplayInfo;
     }
 
-    internal static object ExtractDefaultValue([NotNull] this PropertyInfo source, [NotNull] Func<object, object> valueConverter)
+    internal static object? ExtractDefaultValue(this PropertyInfo source, Func<object, object> valueConverter)
     {
         Guard.NotNull(source, nameof(source));
         Guard.NotNull(valueConverter, nameof(valueConverter));
@@ -192,12 +206,16 @@ internal static class PropertyInfoExtensions
         {
             var defaultValueAttribute = source.GetCustomAttributes(typeof(DefaultValueAttribute), true).OfType<DefaultValueAttribute>().FirstOrDefault();
             var originalDefaultValue = defaultValueAttribute?.Value;
+            if (originalDefaultValue == null)
+            {
+                return null;
+            }
             var defaultValue = valueConverter(originalDefaultValue);
             return defaultValue;
         }
         return null;
     }
-    internal static string ExtractDefaultValue([NotNull] this PropertyInfo source)
+    internal static string ExtractDefaultValue(this PropertyInfo source)
     {
         Guard.NotNull(source, nameof(source));
 
@@ -205,9 +223,9 @@ internal static class PropertyInfoExtensions
         {
             var defaultValueAttribute = source.GetCustomAttributes(typeof(DefaultValueAttribute), true).OfType<DefaultValueAttribute>().FirstOrDefault();
             var originalDefaultValue = defaultValueAttribute?.Value;
-            return originalDefaultValue?.ToString();
+            return originalDefaultValue?.ToString() ?? string.Empty;
         }
-        return null;
+        return string.Empty;
     }
 
     /// <summary>

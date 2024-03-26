@@ -9,7 +9,7 @@ namespace MGR.CommandLineParser.Extensibility.ClassBased;
 public interface IPropertyOptionAlternateNameGenerator
 {
     /// <summary>
-    ///     Gets the alternate names for an option.
+    /// Gets the alternate names for an option.
     /// </summary>
     /// <param name="propertyInfo">The <see cref="PropertyInfo" /> for the option.</param>
     /// <returns>The alternate names for the option.</returns>

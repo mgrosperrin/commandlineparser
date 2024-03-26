@@ -120,7 +120,7 @@ internal class ParserEngine
         }
         return new ParsingResult(commandObjectBuilder.GenerateCommandObject(), null, CommandParsingResultCode.Success);
     }
-    private ICommandObjectBuilder ExtractCommandLineOptions(ICommandType commandType, IEnumerator<string> argumentsEnumerator)
+    private ICommandObjectBuilder? ExtractCommandLineOptions(ICommandType commandType, IEnumerator<string> argumentsEnumerator)
     {
         var commandObjectBuilder = commandType.CreateCommandObjectBuilder(_serviceProvider);
         if (commandObjectBuilder == null)
@@ -148,14 +148,14 @@ internal class ParserEngine
             }
 
             var starterLength = 2;
-            Func<ICommandObjectBuilder, string, ICommandOption> commandOptionFinder = (co, optionName) => co.FindOption(optionName);
+            Func<ICommandObjectBuilder, string, ICommandOption?> commandOptionFinder = (co, optionName) => co.FindOption(optionName);
             if (!argument.StartsWith(Constants.LongNameOptionStarter))
             {
                 starterLength = Constants.ShortNameOptionStarter.Length;
                 commandOptionFinder = (co, optionName) => co.FindOptionByShortName(optionName);
             }
             var optionText = argument.Substring(starterLength);
-            string value = null;
+            var value = string.Empty;
             var splitIndex = optionText.IndexOf(Constants.OptionSplitter);
             if (splitIndex > 0)
             {
@@ -173,7 +173,10 @@ internal class ParserEngine
 
             if (option.ShouldProvideValue)
             {
-                value ??= argumentsEnumerator.GetNextCommandLineItem();
+                if (string.IsNullOrEmpty(value))
+                {
+                    value = argumentsEnumerator.GetNextCommandLineItem() ?? string.Empty;
+                }
             }
 
             option.AssignValue(value);

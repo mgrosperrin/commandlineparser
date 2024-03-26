@@ -20,7 +20,7 @@ internal class LambdaBasedCommandTypeProvider : ICommandTypeProvider
         return Task.FromResult(_commandTypeEnumerable);
     }
 
-    public Task<ICommandType> GetCommandType(string commandName)
+    public Task<ICommandType?> GetCommandType(string commandName)
     {
         return Task.FromResult(commandName == _commandType.Metadata.Name ? _commandType : null);
     }

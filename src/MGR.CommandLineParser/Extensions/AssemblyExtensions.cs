@@ -2,12 +2,10 @@
 using System.Linq;
 using MGR.CommandLineParser;
 
-// ReSharper disable once CheckNamespace
 namespace System.Reflection;
 
 internal static class AssemblyExtensions
 {
-    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
     internal static IEnumerable<Type> GetTypes(this IEnumerable<Assembly> source, Func<Type, bool> predicate)
     {
         Guard.NotNull(predicate, nameof(predicate));
@@ -31,9 +29,7 @@ internal static class AssemblyExtensions
                 exportedTypes = ex.Types;
             }
 
-#pragma warning disable CC0003 // Your catch maybe include some Exception
             catch
-#pragma warning restore CC0003 // Your catch maybe include some Exception
             {
                 // We deliberately ignore all other exceptions.
                 continue;

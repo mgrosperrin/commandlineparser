@@ -50,9 +50,10 @@ public static class HostExtensions
 
     private static async Task<int> ParseCommandLineAndExecuteAsync(IHost host, string[] args, Func<IParser, IEnumerable<string>, Task<ParsingResult>> parseArguments, CancellationToken cancellationToken)
     {
-        var parserContext = host.Services.GetRequiredService<ParserContext>();
-        parserContext.ParseArguments = parseArguments;
-        parserContext.Arguments = args;
+        var parserContext = new ParserContext {
+            ParseArguments = parseArguments,
+            Arguments = args
+        };
         await host.RunAsync(cancellationToken);
         var parsingAndExecutionResult = parserContext.ParsingAndExecutionResult;
         return parsingAndExecutionResult;

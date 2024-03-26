@@ -20,7 +20,6 @@ public sealed class Int32Converter : IConverter
     /// <param name="concreteTargetType">Not used.</param>
     /// <returns>The <see cref="int"/> converted from the value.</returns>
     /// <exception cref="CommandLineParserException">Thrown if the <paramref name="value"/> is not valid.</exception>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Int32.Parse(System.String,System.IFormatProvider)")]
     public object Convert(string value, Type concreteTargetType)
     {
         try

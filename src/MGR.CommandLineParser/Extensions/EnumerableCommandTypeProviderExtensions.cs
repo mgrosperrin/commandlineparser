@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Linq;
-using JetBrains.Annotations;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-// ReSharper disable once CheckNamespace
 namespace MGR.CommandLineParser.Extensibility.Command;
 
 internal static class EnumerableCommandTypeProviderExtensions
 {
-    internal static async Task<IEnumerable<ICommandType>> GetAllVisibleCommandsTypes([NotNull, ItemNotNull]this IEnumerable<ICommandTypeProvider> commandTypeProviders)
+    internal static async Task<IEnumerable<ICommandType>> GetAllVisibleCommandsTypes(this IEnumerable<ICommandTypeProvider> commandTypeProviders)
     {
         var visibleCommandTypes = new List<ICommandType>();
         foreach (var commandTypeProvider in commandTypeProviders)
@@ -28,7 +26,7 @@ internal static class EnumerableCommandTypeProviderExtensions
         return visibleCommandTypes;
     }
 
-    internal static async Task<ICommandType> GetCommandType([NotNull, ItemNotNull]this IEnumerable<ICommandTypeProvider> commandTypeProviders, string commandName)
+    internal static async Task<ICommandType> GetCommandType(this IEnumerable<ICommandTypeProvider> commandTypeProviders, string commandName)
     {
         var commandTypes = new List<ICommandType>();
         foreach (var commandTypeProvider in commandTypeProviders)
@@ -43,7 +41,7 @@ internal static class EnumerableCommandTypeProviderExtensions
         return commandTypes.SingleOrDefault();
     }
 
-    internal static async Task<ICommandType> GetCommandType<TCommand>([NotNull, ItemNotNull]this IEnumerable<ICommandTypeProvider> commandTypeProviders)
+    internal static async Task<ICommandType> GetCommandType<TCommand>(this IEnumerable<ICommandTypeProvider> commandTypeProviders)
     {
         var commandType = default(ICommandType);
         foreach (var commandTypeProvider in commandTypeProviders.OfType<AssemblyBrowsingClassBasedCommandTypeProvider>())

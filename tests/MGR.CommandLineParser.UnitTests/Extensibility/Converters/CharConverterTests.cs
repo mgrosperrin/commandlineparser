@@ -11,7 +11,7 @@ public class CharConverterTests
     {
         // Arrange
         IConverter converter = new CharConverter();
-        var expectedType = typeof (Char);
+        var expectedType = typeof (char);
 
         // Act
         var actualType = converter.TargetType;
@@ -34,7 +34,7 @@ public class CharConverterTests
         // Assert
         Assert.NotNull(actualValue);
         Assert.IsType<char>(actualValue);
-        Assert.Equal(expectedValue, (Char) actualValue);
+        Assert.Equal(expectedValue, (char) actualValue);
     }
 
     [Fact]

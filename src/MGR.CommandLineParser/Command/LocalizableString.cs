@@ -5,10 +5,10 @@ namespace MGR.CommandLineParser.Command;
 
 internal sealed class LocalizableString
 {
-    private Func<string> _cachedResult;
+    private Func<string?>? _cachedResult;
     private readonly string _propertyName;
-    private string _propertyValue;
-    private Type _resourceType;
+    private string? _propertyValue;
+    private Type? _resourceType;
 
     [TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")]
     internal LocalizableString(string propertyName)
@@ -52,14 +52,14 @@ internal sealed class LocalizableString
                 }
                 else
                 {
-                    _cachedResult = () => (string)property.GetValue(null, null);
+                    _cachedResult = () => (string)property!.GetValue(null, null);
                 }
             }
         }
-        return _cachedResult?.Invoke();
+        return _cachedResult?.Invoke() ?? string.Empty;
     }
 
-    internal Type ResourceType
+    internal Type? ResourceType
     {
         [TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")]
         get { return _resourceType; }
@@ -76,7 +76,7 @@ internal sealed class LocalizableString
     internal string Value
     {
         [TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")]
-        get { return _propertyValue; }
+        get { return _propertyValue ?? string.Empty; }
         set
         {
             if (_propertyValue != value)

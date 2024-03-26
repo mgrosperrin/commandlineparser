@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -68,7 +67,6 @@ public sealed class DefaultHelpWriter : IHelpWriter
         }
     }
 
-    [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
     private void WriteDescriptionForOneCommand(ICommandType commandType, int maxNameLength)
     {
         _console.Write($" {{0, -{maxNameLength}}}   ", commandType.Metadata.Name);
@@ -103,7 +101,7 @@ public sealed class DefaultHelpWriter : IHelpWriter
                     var prefixAlternateNames = MultiOptionNameSeparator;
                     if (string.IsNullOrEmpty(alternateNames))
                     {
-                        prefixAlternateNames = String.Empty;
+                        prefixAlternateNames = string.Empty;
                     }
                     var optionName = string.Concat(commandOptionMetadata.DisplayInfo.Name, prefixAlternateNames, alternateNames, GetMultiValueIndicator(commandOptionMetadata));
                     var optionShortName = FormatShortName(commandOptionMetadata.DisplayInfo.ShortName);
@@ -139,7 +137,6 @@ public sealed class DefaultHelpWriter : IHelpWriter
 
     internal static string GetMultiValueIndicator(ICommandOptionMetadata commandOptionMetadata)
     {
-#pragma warning disable CC0073 // Add braces to switch sections.
         switch (commandOptionMetadata.CollectionType)
         {
             case CommandOptionCollectionType.Collection:
@@ -149,7 +146,6 @@ public sealed class DefaultHelpWriter : IHelpWriter
             default:
                 return string.Empty;
         }
-#pragma warning restore CC0073 // Add braces to switch sections.
     }
 
     private static string FormatShortName(string shortName)

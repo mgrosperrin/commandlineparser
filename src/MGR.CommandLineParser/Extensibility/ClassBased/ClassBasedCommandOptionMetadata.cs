@@ -30,13 +30,13 @@ internal sealed class ClassBasedCommandOptionMetadata : CommandOptionMetadataBas
         {
             if (PropertyOption.PropertyType.IsMultiValuedType())
             {
-                return PropertyOption.PropertyType.GetUnderlyingCollectionType();
+                return PropertyOption.PropertyType.GetUnderlyingCollectionType() ?? throw new InvalidOperationException($"The property type ('{PropertyOption.PropertyType}') is multi-valued but is not collection-based.");
             }
             return PropertyOption.PropertyType;
         }
     }
 
-    internal static ClassBasedCommandOptionMetadata Create(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
+    internal static ClassBasedCommandOptionMetadata? Create(PropertyInfo propertyInfo, ICommandMetadata commandMetadata, List<IConverter> converters, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
     {
         Guard.NotNull(propertyInfo, nameof(propertyInfo));
         Guard.NotNull(commandMetadata, nameof(commandMetadata));

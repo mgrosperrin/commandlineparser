@@ -11,7 +11,7 @@ public class ByteConverterTests
     {
         // Arrange
         IConverter converter = new ByteConverter();
-        var expectedType = typeof (Byte);
+        var expectedType = typeof (byte);
 
         // Act
         var actualType = converter.TargetType;
@@ -34,7 +34,7 @@ public class ByteConverterTests
         // Assert
         Assert.NotNull(actualValue);
         Assert.IsType<byte>(actualValue);
-        Assert.Equal(expectedValue, (Byte) actualValue);
+        Assert.Equal(expectedValue, (byte) actualValue);
     }
 
     [Fact]

@@ -20,7 +20,6 @@ public sealed class Int64Converter : IConverter
     /// <param name="concreteTargetType">Not used.</param>
     /// <returns>The <see cref="long"/> converted from the value.</returns>
     /// <exception cref="CommandLineParserException">Thrown if the <paramref name="value"/> is not valid.</exception>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Int64.Parse(System.String,System.IFormatProvider)")]
     public object Convert(string value, Type concreteTargetType)
     {
         try

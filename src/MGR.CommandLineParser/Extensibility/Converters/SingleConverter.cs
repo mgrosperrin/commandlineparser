@@ -20,7 +20,6 @@ public sealed class SingleConverter : IConverter
     /// <param name="concreteTargetType">Not used.</param>
     /// <returns>The <see cref="float"/> converted from the value.</returns>
     /// <exception cref="CommandLineParserException">Thrown if the <paramref name="value"/> is not valid.</exception>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Single.Parse(System.String,System.IFormatProvider)")]
     public object Convert(string value, Type concreteTargetType)
     {
         try

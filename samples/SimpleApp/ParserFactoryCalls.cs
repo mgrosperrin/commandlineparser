@@ -39,7 +39,7 @@ internal static class ParserFactoryCalls
                 var commandResult = await parser.Parse(arguments);
                 if (commandResult.IsValid)
                 {
-                    var executionResult = await commandResult.CommandObject.ExecuteAsync();
+                    var executionResult = await commandResult.CommandObject!.ExecuteAsync();
                     Console.WriteLine("Execution result: {0}", executionResult);
                 }
                 else
@@ -84,7 +84,7 @@ internal static class ParserFactoryCalls
                 var commandResult = await parser.Parse<PackCommand, PackCommand.PackCommandData>(arguments);
                 if (commandResult.IsValid)
                 {
-                    var executionResult = await commandResult.CommandObject.ExecuteAsync();
+                    var executionResult = await commandResult.CommandObject!.ExecuteAsync();
                     Console.WriteLine("Execution result: {0}", executionResult);
                 }
                 else
@@ -129,7 +129,7 @@ internal static class ParserFactoryCalls
                 var commandResult = await parser.ParseWithDefaultCommand<DeleteCommand, DeleteCommand.DeleteCommandData>(arguments);
                 if (commandResult.IsValid)
                 {
-                    var executionResult = await commandResult.CommandObject.ExecuteAsync();
+                    var executionResult = await commandResult.CommandObject!.ExecuteAsync();
                     Console.WriteLine("Execution result: {0}", executionResult);
                 }
                 else

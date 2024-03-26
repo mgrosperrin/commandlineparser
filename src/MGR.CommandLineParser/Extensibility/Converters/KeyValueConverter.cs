@@ -29,6 +29,6 @@ internal sealed class KeyValueConverter : IConverter
             var propertyValue = _valueConverter.Convert(value.Substring(eqIndex + 1), _valueConverter.TargetType);
             return new KeyValuePair<object, object>(propertyKey, propertyValue);
         }
-        return new KeyValuePair<object, object>(_keyConverter.Convert(value, _keyConverter.TargetType), null);
+        return new KeyValuePair<object, object?>(_keyConverter.Convert(value, _keyConverter.TargetType), null);
     }
 }

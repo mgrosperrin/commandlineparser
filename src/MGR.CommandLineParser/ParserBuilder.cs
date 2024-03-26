@@ -1,14 +1,12 @@
 ﻿using System;
-using JetBrains.Annotations;
 using MGR.CommandLineParser.Command;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MGR.CommandLineParser;
 
 /// <summary>
-///     Represents the constructor of a parser.
+/// Represents the constructor of a parser.
 /// </summary>
-[PublicAPI]
 public sealed class ParserBuilder
 {
     private readonly CommandLineParserBuilder _commandLineParserBuilder;
@@ -17,17 +15,16 @@ public sealed class ParserBuilder
     /// Creates a new <see cref="ParserBuilder"/>.
     /// </summary>
     /// <param name="parserOptions">The options of the parser.</param>
-    public ParserBuilder([NotNull] ParserOptions parserOptions)
+    public ParserBuilder(ParserOptions parserOptions)
     : this(parserOptions, new ServiceCollection())
-    {
-    }
+    {  }
 
     /// <summary>
     /// Creates a new <see cref="ParserBuilder"/>.
     /// </summary>
     /// <param name="parserOptions">The options of the parser.</param>
     /// <param name="services">The services to uses.</param>
-    public ParserBuilder([NotNull] ParserOptions parserOptions, [NotNull] IServiceCollection services)
+    public ParserBuilder(ParserOptions parserOptions, IServiceCollection services)
     {
         _commandLineParserBuilder = services.AddCommandLineParser(options =>
         {
@@ -48,14 +45,14 @@ public sealed class ParserBuilder
     }
 
     /// <summary>
-    ///     Creates a new instance of <see cref="Parser" /> with the default options.
+    /// Creates a new instance of <see cref="Parser" /> with the default options.
     /// </summary>
     /// <returns>A new instance of <see cref="Parser" />.</returns>
     public IParser BuildParser()
     {
         var serviceProvider = _commandLineParserBuilder.Services.BuildServiceProvider();
         var serviceProviderScope = serviceProvider.CreateScope();
-        var parser = serviceProviderScope.ServiceProvider.GetService<IParser>();
+        var parser = serviceProviderScope.ServiceProvider.GetRequiredService<IParser>();
         return parser;
     }
 }

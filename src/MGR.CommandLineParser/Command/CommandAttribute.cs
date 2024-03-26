@@ -1,31 +1,29 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime;
 
 namespace MGR.CommandLineParser.Command;
 
 /// <summary>
-///     Defines attributes for the command.
+/// Attribute to defines metadata for the command.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class CommandAttribute : Attribute
 {
     private readonly LocalizableString _description = new LocalizableString(nameof(Description));
     private readonly LocalizableString _usage = new LocalizableString(nameof(Usage));
-    private Type _resourceType;
+    private Type? _resourceType;
 
     /// <summary>
-    ///     Gets or sets the samples for the command.
+    /// Gets or sets the samples for the command.
     /// </summary>
-    [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
-    public string[] Samples { get; set; }
+    public string[] Samples { get; set; } = [];
 
     /// <summary>
-    ///     Gets or sets the description of the command.
+    /// Gets or sets the description of the command.
     /// </summary>
     /// <remarks>
-    ///     If the property <seealso cref="ResourceType" /> is not null, this is the name of the resource used to
-    ///     determine the description.
+    /// If the property <seealso cref="ResourceType" /> is not null, this is the name of the resource used to
+    /// determine the description.
     /// </remarks>
     public string Description
     {
@@ -38,11 +36,11 @@ public sealed class CommandAttribute : Attribute
     }
 
     /// <summary>
-    ///     Gets or sets the usage of the command.
+    /// Gets or sets the usage of the command.
     /// </summary>
     /// <remarks>
-    ///     If the property <seealso cref="ResourceType" /> is not null, this is the name of the resource used to
-    ///     determine the usage.
+    /// If the property <seealso cref="ResourceType" /> is not null, this is the name of the resource used to
+    /// determine the usage.
     /// </remarks>
     public string Usage
     {
@@ -55,9 +53,9 @@ public sealed class CommandAttribute : Attribute
     }
 
     /// <summary>
-    ///     The type of the resource used to determine the values.
+    /// The type of the resource used to determine the values.
     /// </summary>
-    public Type ResourceType
+    public Type? ResourceType
     {
         [TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")]
         get { return _resourceType; }

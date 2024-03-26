@@ -11,7 +11,7 @@ public class DecimalConverterTests
     {
         // Arrange
         IConverter converter = new DecimalConverter();
-        var expectedType = typeof (Decimal);
+        var expectedType = typeof (decimal);
 
         // Act
         var actualType = converter.TargetType;
@@ -26,7 +26,7 @@ public class DecimalConverterTests
         // Arrange
         IConverter converter = new DecimalConverter();
         var value = "42,1";
-        var expectedValue = (Decimal) 42.1;
+        var expectedValue = (decimal) 42.1;
 
         // Act
         using (new LangageSwitcher("fr-fr"))
@@ -36,7 +36,7 @@ public class DecimalConverterTests
             // Assert
             Assert.NotNull(actualValue);
             Assert.IsType<decimal>(actualValue);
-            Assert.Equal(expectedValue, (Decimal) actualValue);
+            Assert.Equal(expectedValue, (decimal) actualValue);
         }
     }
 

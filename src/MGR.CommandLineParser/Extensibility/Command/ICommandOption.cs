@@ -2,7 +2,7 @@
 namespace MGR.CommandLineParser.Extensibility.Command;
 
 /// <summary>
-///     Represents a command's option.
+/// Represents a command's option.
 /// </summary>
 public interface ICommandOption
 {

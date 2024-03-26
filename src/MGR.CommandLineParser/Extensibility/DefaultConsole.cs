@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using JetBrains.Annotations;
 using MGR.CommandLineParser.Properties;
 
 namespace MGR.CommandLineParser.Extensibility;
@@ -17,7 +16,6 @@ public sealed class DefaultConsole : IConsole
     /// <summary>
     /// Create a new <see cref="DefaultConsole"/>.
     /// </summary>
-    [PublicAPI]
     public DefaultConsole() : this(Console.Out, Console.Error) { }
 
     internal DefaultConsole(TextWriter consoleOut, TextWriter consoleError)

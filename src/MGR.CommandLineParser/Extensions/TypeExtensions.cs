@@ -2,7 +2,6 @@
 using System.Linq;
 using MGR.CommandLineParser;
 
-// ReSharper disable once CheckNamespace
 namespace System;
 
 internal static class TypeExtensions
@@ -21,7 +20,7 @@ internal static class TypeExtensions
         return GetInterfaceType(source, typeof (ICollection<>));
     }
 
-    internal static Type GetUnderlyingGenericType(this Type source, int index = 0)
+    internal static Type? GetUnderlyingGenericType(this Type source, int index = 0)
     {
         Guard.NotNull(source, nameof(source));
 
@@ -32,7 +31,7 @@ internal static class TypeExtensions
         return source.GetGenericArguments()[index];
     }
 
-    internal static Type GetUnderlyingCollectionType(this Type source, int index = 0)
+    internal static Type? GetUnderlyingCollectionType(this Type source, int index = 0)
     {
         Guard.NotNull(source, nameof(source));
 
@@ -44,7 +43,7 @@ internal static class TypeExtensions
         return collectionType.GetUnderlyingGenericType(index);
     }
 
-    internal static Type GetUnderlyingDictionaryType(this Type source, bool key)
+    internal static Type? GetUnderlyingDictionaryType(this Type source, bool key)
     {
         Guard.NotNull(source, nameof(source));
 
@@ -144,7 +143,7 @@ internal static class TypeExtensions
         return fullCommandName;
     }
 
-    internal static TAttribute GetAttribute<TAttribute>(this Type source)
+    internal static TAttribute? GetAttribute<TAttribute>(this Type source)
         where TAttribute : Attribute
     {
         var attribute = source.GetCustomAttributes(typeof(TAttribute), true).FirstOrDefault() as TAttribute;

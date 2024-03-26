@@ -3,11 +3,10 @@ using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Extensibility.Command;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-// ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
-///     Extensions methods for the type <see cref="CommandLineParserBuilder" />.
+/// Extensions methods for the type <see cref="CommandLineParserBuilder" />.
 /// </summary>
 public static class CommandLineParserBuilderExtensions
 {

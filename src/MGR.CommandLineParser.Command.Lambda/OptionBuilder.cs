@@ -15,9 +15,9 @@ public class OptionBuilder
     private readonly string _optionName;
     private readonly string _shortOptionName;
     private readonly List<string> _alternateNames = new List<string>();
-    private string _description;
+    private string _description = string.Empty;
     private readonly Type _optionType;
-    private string _defaultValue;
+    private string _defaultValue = string.Empty;
     private readonly List<ValidationAttribute> _validationAttributes = new List<ValidationAttribute>();
 
     internal OptionBuilder(string optionName, string shortOptionName, Type optionType)

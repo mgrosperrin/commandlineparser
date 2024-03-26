@@ -11,12 +11,12 @@ namespace MGR.CommandLineParser.Command.Lambda;
 public class CommandBuilder
 {
     private readonly string _commandName;
-    private string _description;
-    private string _usage;
-    private readonly List<string> _samples = new List<string>();
+    private string _description = string.Empty;
+    private string _usage = string.Empty;
+    private readonly List<string> _samples = [];
     private bool _hideFromHelpListing;
     private readonly Func<CommandExecutionContext, Task<int>> _executeCommand;
-    private readonly List<OptionBuilder> _optionsBuilders = new List<OptionBuilder>();
+    private readonly List<OptionBuilder> _optionsBuilders = [];
 
     internal CommandBuilder(string commandName, Func<CommandExecutionContext, Task<int>> executeCommand)
     {

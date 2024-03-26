@@ -19,6 +19,6 @@ public sealed class ClassBasedBasicCommandActivator : IClassBasedCommandActivato
 
     /// <inheritdoc />
     public TCommandHandler ActivateCommand<TCommandHandler, TCommandData>()
-    where TCommandHandler : class, ICommandHandler<TCommandData>
-    where TCommandData : CommandData, new() => Activator.CreateInstance<TCommandHandler>();
+        where TCommandHandler : class, ICommandHandler<TCommandData>
+        where TCommandData : CommandData, new() => Activator.CreateInstance<TCommandHandler>();
 }

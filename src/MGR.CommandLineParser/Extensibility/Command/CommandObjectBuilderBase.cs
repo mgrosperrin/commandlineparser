@@ -39,7 +39,7 @@ where TCommandOption : ICommandOption
     public abstract void AddArguments(string argument);
 
     /// <inheritdoc />
-    public virtual ICommandOption FindOption(string optionName)
+    public virtual ICommandOption? FindOption(string optionName)
     {
         var commandOption = CommandOptions.FirstOrDefault(option => option.Metadata.DisplayInfo.Name.Equals(optionName, StringComparison.Ordinal));
         if (commandOption != null)
@@ -51,7 +51,7 @@ where TCommandOption : ICommandOption
     }
 
     /// <inheritdoc />
-    public virtual ICommandOption FindOptionByShortName(string optionShortName)
+    public virtual ICommandOption? FindOptionByShortName(string optionShortName)
     {
         var shortOption = CommandOptions.FirstOrDefault(option => (option.Metadata.DisplayInfo.ShortName ?? string.Empty).Equals(optionShortName, StringComparison.Ordinal));
         if (shortOption != null)
@@ -104,7 +104,7 @@ where TCommandOption : ICommandOption
         console.WriteLine();
     }
 
-    private ICommandOption FindCombinedBooleanOptionsByShortName(string optionShortName)
+    private ICommandOption? FindCombinedBooleanOptionsByShortName(string optionShortName)
     {
         var shortName = optionShortName;
         var options = new List<ICommandOption>();

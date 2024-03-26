@@ -6,14 +6,14 @@ using MGR.CommandLineParser.Command;
 namespace MGR.CommandLineParser.Extensibility.ClassBased;
 
 /// <summary>
-///     Implementation of <see cref="IClassBasedCommandActivator" /> based on <see cref="IServiceProvider" />.
+/// Implementation of <see cref="IClassBasedCommandActivator" /> based on <see cref="IServiceProvider" />.
 /// </summary>
 public sealed class ClassBasedDependencyResolverCommandActivator : IClassBasedCommandActivator
 {
     private readonly IServiceProvider _serviceProvider;
 
     /// <summary>
-    ///     Creates a new instance of <see cref="ClassBasedDependencyResolverCommandActivator" />.
+    /// Creates a new instance of <see cref="ClassBasedDependencyResolverCommandActivator" />.
     /// </summary>
     public ClassBasedDependencyResolverCommandActivator(IServiceProvider serviceProvider)
     {
@@ -36,8 +36,8 @@ public sealed class ClassBasedDependencyResolverCommandActivator : IClassBasedCo
                 try
                 {
                     var parameterInfos = constructorInfo.GetParameters();
-                    var parameters = new object[parameterInfos.Length];
-                    for (int i = 0; i < parameterInfos.Length; i++)
+                    var parameters = new object?[parameterInfos.Length];
+                    for (var i = 0; i < parameterInfos.Length; i++)
                     {
                         var parameterInfo = parameterInfos[i];
                         var parameterValue = _serviceProvider.GetService(parameterInfo.ParameterType);
@@ -59,7 +59,11 @@ public sealed class ClassBasedDependencyResolverCommandActivator : IClassBasedCo
                 }
             }
         }
-        var command = commandInstance as TCommandHandler;
+        if(commandInstance == null)
+        {
+            throw new InvalidOperationException($"No constructor found for the command {commandType.FullName}");
+        }
+        var command = (TCommandHandler)commandInstance;
         return command;
     }
 }

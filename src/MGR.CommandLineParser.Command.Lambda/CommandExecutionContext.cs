@@ -31,7 +31,7 @@ public class CommandExecutionContext
     /// <returns>The value of the option.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If no options are found.</exception>
     /// <exception cref="InvalidOperationException">If the type of the option do not match the specified type.</exception>
-    public T GetOptionValue<T>(string name)
+    public T? GetOptionValue<T>(string name)
     {
         var option = _commandOptions.FirstOrDefault(o => o.Metadata.DisplayInfo.Name == name);
         if (option == null)

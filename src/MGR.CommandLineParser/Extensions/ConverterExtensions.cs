@@ -1,22 +1,21 @@
 ﻿using System;
 
-// ReSharper disable once CheckNamespace
 namespace MGR.CommandLineParser.Extensibility.Converters;
 
 /// <summary>
-///     Extensions methods for the type <see cref="IConverter" />.
+/// Extensions methods for the type <see cref="IConverter" />.
 /// </summary>
 public static class ConverterExtensions
 {
     /// <summary>
-    ///     Indicates if the specified <see cref="IConverter" /> can convert to the specified <see cref="Type" />.
+    /// Indicates if the specified <see cref="IConverter" /> can convert to the specified <see cref="Type" />.
     /// </summary>
     /// <param name="source">The converter.</param>
     /// <param name="targetType">
-    ///     The target <see cref="Type" />.
+    /// The target <see cref="Type" />.
     /// </param>
     /// <returns>
-    ///     true if the <see cref="IConverter" /> can convert, false otherwise.
+    /// true if the <see cref="IConverter" /> can convert, false otherwise.
     /// </returns>
     public static bool CanConvertTo(this IConverter source, Type targetType)
     {
@@ -24,6 +23,6 @@ public static class ConverterExtensions
         Guard.NotNull(targetType, nameof(targetType));
 
         var type = targetType.IsMultiValuedType() ? targetType.GetUnderlyingCollectionType() : targetType;
-        return type.IsType(source.TargetType);
+        return type == null ? false : type.IsType(source.TargetType);
     }
 }

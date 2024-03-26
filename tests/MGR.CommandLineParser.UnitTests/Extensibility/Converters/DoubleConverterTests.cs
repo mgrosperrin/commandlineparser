@@ -11,7 +11,7 @@ public class DoubleConverterTests
     {
         // Arrange
         IConverter converter = new DoubleConverter();
-        var expectedType = typeof (Double);
+        var expectedType = typeof (double);
 
         // Act
         var actualType = converter.TargetType;
@@ -36,7 +36,7 @@ public class DoubleConverterTests
             // Assert
             Assert.NotNull(actualValue);
             Assert.IsType<double>(actualValue);
-            Assert.Equal(expectedValue, (Double) actualValue);
+            Assert.Equal(expectedValue, (double) actualValue);
         }
     }
 

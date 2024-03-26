@@ -80,7 +80,7 @@ internal static class Tester
         var commandResult = await parseFunc(parser, arguments);
         if (commandResult.IsValid)
         {
-            var executionResult = await commandResult.CommandObject.ExecuteAsync();
+            var executionResult = await commandResult.CommandObject!.ExecuteAsync();
             Console.WriteLine("Execution result: {0}", executionResult);
         }
         else

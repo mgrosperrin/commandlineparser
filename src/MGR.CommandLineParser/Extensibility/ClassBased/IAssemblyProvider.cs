@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using JetBrains.Annotations;
 
 namespace MGR.CommandLineParser.Extensibility.ClassBased;
 
@@ -14,7 +12,5 @@ public interface IAssemblyProvider
     /// Returns the list of the files to load.
     /// </summary>
     /// <returns>A list of path.</returns>
-    [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-    [NotNull, ItemNotNull]
     IEnumerable<Assembly> GetAssembliesToBrowse();
 }

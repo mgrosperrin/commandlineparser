@@ -11,7 +11,7 @@ public class Int16ConverterTests
     {
         // Arrange
         IConverter converter = new Int16Converter();
-        var expectedType = typeof (Int16);
+        var expectedType = typeof (short);
 
         // Act
         var actualType = converter.TargetType;
@@ -26,15 +26,15 @@ public class Int16ConverterTests
         // Arrange
         IConverter converter = new Int16Converter();
         var value = "42";
-        Int16 expectedValue = 42;
+        short expectedValue = 42;
 
         // Act
         var actualValue = converter.Convert(value, converter.TargetType);
 
         // Assert
         Assert.NotNull(actualValue);
-        Assert.IsType<Int16>(actualValue);
-        Assert.Equal(expectedValue, (Int16) actualValue);
+        Assert.IsType<short>(actualValue);
+        Assert.Equal(expectedValue, (short) actualValue);
     }
 
     [Fact]

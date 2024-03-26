@@ -18,13 +18,13 @@ public interface ICommandObjectBuilder
     /// </summary>
     /// <param name="optionName">The name (short or long form) of the option.</param>
     /// <returns>The <see cref="ICommandOption"/> representing the option of the command.</returns>
-    ICommandOption FindOption(string optionName);
+    ICommandOption? FindOption(string optionName);
     /// <summary>
     /// Find an option based on its short name.
     /// </summary>
     /// <param name="optionShortName">The short name of the option.</param>
     /// <returns>The <see cref="ICommandOption"/> representing the option of the command.</returns>
-    ICommandOption FindOptionByShortName(string optionShortName);
+    ICommandOption? FindOptionByShortName(string optionShortName);
 
     /// <summary>
     /// Generate the command object representing the command being parsed.

@@ -1,13 +1,11 @@
 ﻿using System.IO;
 using System.Linq;
-using JetBrains.Annotations;
 
-// ReSharper disable once CheckNamespace
 namespace System.Collections.Generic;
 
 internal static class EnumerableExtensions
 {
-    internal static IEnumerator<string> GetArgumentsEnumerator([NotNull]this IEnumerable<string> arguments)
+    internal static IEnumerator<string> GetArgumentsEnumerator(this IEnumerable<string> arguments)
     {
         var enumerable = arguments as IList<string> ?? arguments.ToList();
         var firstArgument = enumerable.FirstOrDefault();

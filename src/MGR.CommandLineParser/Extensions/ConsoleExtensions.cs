@@ -1,6 +1,5 @@
 ﻿using System;
 
-// ReSharper disable once CheckNamespace
 namespace MGR.CommandLineParser.Extensibility;
 
 /// <summary>
@@ -8,25 +7,19 @@ namespace MGR.CommandLineParser.Extensibility;
 /// </summary>
 public static class ConsoleExtensions
 {
-    private static readonly object[] EmptyArgs = new object[0];
+    private static readonly object[] EmptyArgs = [];
     /// <summary>
     /// Writes the current line terminator.
     /// </summary>
     /// <param name="console">The current console.</param>
-    public static void WriteLine(this IConsole console)
-    {
-        console.Write(Environment.NewLine);
-    }
+    public static void WriteLine(this IConsole console) => console.Write(Environment.NewLine);
 
     /// <summary>
     /// Writes the specified string value, followed by the current line terminator to the standard output stream .
     /// </summary>
     /// <param name="console">The current console.</param>
     /// <param name="value">The value to write. </param>
-    public static void WriteLine(this IConsole console, string value)
-    {
-        console.WriteLine(value, EmptyArgs);
-    }
+    public static void WriteLine(this IConsole console, string value) => console.WriteLine(value, EmptyArgs);
     /// <summary>
     /// Writes the value representation of the specified array of objects, followed by the current line terminator, to the standard output stream using the specified format information.
     /// </summary>

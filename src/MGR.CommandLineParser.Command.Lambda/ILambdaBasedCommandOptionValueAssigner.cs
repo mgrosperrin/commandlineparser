@@ -2,6 +2,6 @@
 
 internal interface ILambdaBasedCommandOptionValueAssigner
 {
-    object GetValue();
+    object? GetValue();
     void AssignValue(object value);
 }

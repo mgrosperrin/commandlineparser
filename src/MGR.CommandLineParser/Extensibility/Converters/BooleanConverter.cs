@@ -3,29 +3,29 @@
 namespace MGR.CommandLineParser.Extensibility.Converters;
 
 /// <summary>
-///     Converter for the type <see cref="bool" /> .
+/// Converter for the type <see cref="bool" /> .
 /// </summary>
 public sealed class BooleanConverter : IConverter
 {
     /// <summary>
-    ///     The target type of the converter ( <see cref="bool" /> )..
+    /// The target type of the converter ( <see cref="bool" /> )..
     /// </summary>
     public Type TargetType => typeof (bool);
 
 
     /// <summary>
-    ///     Convert the <paramref name="value" /> to an instance of <see cref="bool" /> .
+    /// Convert the <paramref name="value" /> to an instance of <see cref="bool" /> .
     /// </summary>
     /// <param name="value"> The original value provided by the user. </param>
     /// <param name="concreteTargetType"> Not used. </param>
     /// <returns> The <see cref="bool" /> converted from the value. </returns>
     /// <remarks>
-    ///     The value can be '-', 'False' or 'false' to specify false, '+', 'True' or 'true' to specify true.
+    /// The value can be '-', 'False' or 'false' to specify false, '+', 'True' or 'true' to specify true.
     /// </remarks>
     /// <exception cref="CommandLineParserException">
-    ///     Thrown if the
-    ///     <paramref name="value" />
-    ///     is not valid.
+    /// Thrown if the
+    /// <paramref name="value" />
+    /// is not valid.
     /// </exception>
     public object Convert(string value, Type concreteTargetType)
     {

@@ -1,10 +1,8 @@
-﻿
-// ReSharper disable once CheckNamespace
-namespace System.Collections.Generic;
+﻿namespace System.Collections.Generic;
 
 internal static class EnumeratorExtensions
 {
-    internal static string GetNextCommandLineItem(this IEnumerator<string> argsEnumerator)
+    internal static string? GetNextCommandLineItem(this IEnumerator<string> argsEnumerator)
     {
         if (argsEnumerator == null || !argsEnumerator.MoveNext())
         {

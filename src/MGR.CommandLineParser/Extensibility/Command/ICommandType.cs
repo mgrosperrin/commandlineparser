@@ -23,5 +23,5 @@ public interface ICommandType
     /// </summary>
     /// <param name="serviceProvider">The scoped dependency resolver.</param>
     /// <returns></returns>
-    ICommandObjectBuilder CreateCommandObjectBuilder(IServiceProvider serviceProvider);
+    ICommandObjectBuilder? CreateCommandObjectBuilder(IServiceProvider serviceProvider);
 }

@@ -27,7 +27,7 @@ internal sealed class ClassBasedCommandOption : ICommandOption
 
     private Type OptionType => _commandOptionMetadata.OptionType;
 
-    private object ConvertValue(object value)
+    private object? ConvertValue(object value)
     {
         if (value != null && !value.GetType().IsType(OptionType))
         {
@@ -51,7 +51,10 @@ internal sealed class ClassBasedCommandOption : ICommandOption
             optionValue = true.ToString();
         }
         var convertedValue = ConvertValue(optionValue);
-        AssignValueInternal(convertedValue);
+        if (convertedValue != null)
+        {
+            AssignValueInternal(convertedValue);
+        }
     }
 
     private void AssignValueInternal(object convertedValue)

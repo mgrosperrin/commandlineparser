@@ -35,7 +35,6 @@ public static class HostBuilderExtensions
         hostBuilder.ConfigureServices(
             (context, services) =>
             {
-                services.AddScoped<ParserContext>();
                 services.AddHostedService<ParserHostedService>();
                 var builder = services.AddCommandLineParser(configureParserOptions);
                 configureParser(builder);

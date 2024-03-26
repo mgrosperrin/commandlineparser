@@ -11,7 +11,7 @@ public class Int32ConverterTests
     {
         // Arrange
         IConverter converter = new Int32Converter();
-        var expectedType = typeof (Int32);
+        var expectedType = typeof (int);
 
         // Act
         var actualType = converter.TargetType;
@@ -33,8 +33,8 @@ public class Int32ConverterTests
 
         // Assert
         Assert.NotNull(actualValue);
-        Assert.IsType<Int32>(actualValue);
-        Assert.Equal(expectedValue, (Int32) actualValue);
+        Assert.IsType<int>(actualValue);
+        Assert.Equal(expectedValue, (int) actualValue);
     }
 
     [Fact]

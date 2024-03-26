@@ -11,7 +11,7 @@ public class SingleConvertersTests
     {
         // Arrange
         IConverter converter = new SingleConverter();
-        var expectedType = typeof (Single);
+        var expectedType = typeof (float);
 
         // Act
         var actualType = converter.TargetType;
@@ -26,7 +26,7 @@ public class SingleConvertersTests
         // Arrange
         IConverter converter = new SingleConverter();
         var value = "42,1";
-        var expectedValue = (Single) 42.1;
+        var expectedValue = (float) 42.1;
 
         // Act
         using (new LangageSwitcher("fr-fr"))
@@ -35,8 +35,8 @@ public class SingleConvertersTests
 
             // Assert
             Assert.NotNull(actualValue);
-            Assert.IsType<Single>(actualValue);
-            Assert.Equal(expectedValue, (Single) actualValue);
+            Assert.IsType<float>(actualValue);
+            Assert.Equal(expectedValue, (float) actualValue);
         }
     }
 

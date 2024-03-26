@@ -10,10 +10,10 @@ namespace MGR.CommandLineParser;
 /// </summary>
 public sealed class ParsingResult
 {
-    internal ParsingResult(ICommandObject commandObject, IEnumerable<ValidationResult> validationResults, CommandParsingResultCode parsingResultCode)
+    internal ParsingResult(ICommandObject? commandObject, IEnumerable<ValidationResult>? validationResults, CommandParsingResultCode parsingResultCode)
     {
         CommandObject = commandObject;
-        ValidationResults = validationResults ?? Enumerable.Empty<ValidationResult>();
+        ValidationResults = validationResults ?? [];
         ParsingResultCode = parsingResultCode;
     }
 
@@ -25,7 +25,7 @@ public sealed class ParsingResult
     /// <summary>
     /// Defines if the command is in a valid state (parsing and validating the options).
     /// </summary>
-    public bool IsValid => ParsingResultCode == CommandParsingResultCode.Success && !ValidationResults.Any();
+    public bool IsValid => CommandObject != null && ParsingResultCode == CommandParsingResultCode.Success && !ValidationResults.Any();
 
     /// <summary>
     /// The return code of the parsing operation.
@@ -35,7 +35,7 @@ public sealed class ParsingResult
     /// <summary>
     /// Gets the raw command object;
     /// </summary>
-    public ICommandObject CommandObject { get; }
+    public ICommandObject? CommandObject { get; }
 
     /// <summary>
     /// Executes the command.

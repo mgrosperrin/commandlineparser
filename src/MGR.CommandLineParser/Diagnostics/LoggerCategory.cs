@@ -1,5 +1,4 @@
-﻿
-namespace MGR.CommandLineParser.Diagnostics;
+﻿namespace MGR.CommandLineParser.Diagnostics;
 
 internal static class LoggerCategory
 {

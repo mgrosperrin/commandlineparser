@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyModel;
 
 namespace MGR.CommandLineParser.Extensibility.ClassBased;
@@ -18,7 +16,7 @@ public abstract class AssemblyProviderBase : IAssemblyProvider
     /// Gets the recursively options for browsing the current folder.
     /// </summary>
     protected abstract SearchOption SearchOption { get; }
-    [ItemNotNull]
+
     private IEnumerable<string> GetFilesToLoad()
     {
         var thisDirectory = Environment.CurrentDirectory;
@@ -33,9 +31,12 @@ public abstract class AssemblyProviderBase : IAssemblyProvider
     }
 
     /// <inheritdoc />
-    [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
     public IEnumerable<Assembly> GetAssembliesToBrowse()
     {
+        if(DependencyContext.Default == null)
+        {
+            return [];
+        }
         var alreadyLoadedLibraries = DependencyContext.Default.RuntimeLibraries;
         foreach (var assemblyFile in GetFilesToLoad())
         {
@@ -49,17 +50,10 @@ public abstract class AssemblyProviderBase : IAssemblyProvider
             {
                 Assembly.LoadFile(assemblyFile);
             }
-
-            // ReSharper disable once EmptyGeneralCatchClause
-#pragma warning disable CC0004 // Catch block cannot be empty
-#pragma warning disable S2486 // Generic exceptions should not be ignored
             catch
-#pragma warning disable S108 // Nested blocks of code should not be left empty
             {
+                // ignored
             }
-#pragma warning restore S108 // Nested blocks of code should not be left empty
-#pragma warning restore CC0004 // Catch block cannot be empty
-#pragma warning restore S2486 // Generic exceptions should not be ignored
         }
 
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();

@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser", "src\MGR.CommandLineParser\MGR.CommandLineParser.csproj", "{EF6019C2-2C4D-4874-BBBF-D76CA30F7E8D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{569ED12A-DA23-4457-B304-6B00C0CB335E}"
+	ProjectSection(SolutionItems) = preProject
+		tests\Directory.Build.props = tests\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.UnitTests", "tests\MGR.CommandLineParser.UnitTests\MGR.CommandLineParser.UnitTests.csproj", "{22F60D05-F6DB-4410-80AD-E558EF1BDF6F}"
 EndProject

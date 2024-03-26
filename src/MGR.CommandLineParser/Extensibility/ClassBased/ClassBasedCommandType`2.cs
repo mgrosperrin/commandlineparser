@@ -27,7 +27,7 @@ internal sealed class ClassBasedCommandType<TCommandHandler, TCommandData> : ICo
 
     public IEnumerable<ICommandOptionMetadata> Options => _commandOptions.Value;
 
-    public ICommandObjectBuilder CreateCommandObjectBuilder(IServiceProvider serviceProvider)
+    public ICommandObjectBuilder? CreateCommandObjectBuilder(IServiceProvider serviceProvider)
     {
         Guard.NotNull(serviceProvider, nameof(serviceProvider));
 
@@ -39,12 +39,7 @@ internal sealed class ClassBasedCommandType<TCommandHandler, TCommandData> : ICo
         }
         var commandData = new TCommandData();
         var commandObject = new ClassBasedCommandObjectBuilder<TCommandHandler, TCommandData>(Metadata, _commandOptions.Value, commandHandler, commandData);
-
-        var helpedCommandData = commandData as HelpedCommandData;
-        if (helpedCommandData != null)
-        {
-            helpedCommandData.Configure(this);
-        }
+        commandData.Configure(this);
         return commandObject;
     }
 
