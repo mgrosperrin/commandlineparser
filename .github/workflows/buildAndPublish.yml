@@ -42,7 +42,7 @@ jobs:
         run: dotnet build -c Release -p:Version=${{ steps.version.outputs.version}}
 
       - name: Run tests
-        run: dotnet test -c Release --no-build
+        run: dotnet test -c Release --no-build -l trx --results-directory TestResults
 
       - name: Upload dotnet test results
         uses: dorny/test-reporter@v1.8.0
