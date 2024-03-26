@@ -5,17 +5,17 @@ using MGR.CommandLineParser.Tests.Commands;
 using MGR.CommandLineParser.UnitTests;
 using Xunit;
 
-namespace MGR.CommandLineParser.IntegrationTests.Help
+namespace MGR.CommandLineParser.IntegrationTests.Help;
+
+public class AsOptionsTests : ConsoleLoggingTestsBase
 {
-    public class AsOptionsTests : ConsoleLoggingTestsBase
+    [Fact]
+    public async Task ParseWithValidArgs()
     {
-        [Fact]
-        public async Task ParseWithValidArgs()
-        {
-            // Arrange
-            IEnumerable<string> args = new[] { "--help" };
-            var expectedReturnCode = CommandParsingResultCode.Success;
-            var expectedHelpMessage = @"Integration Tests
+        // Arrange
+        IEnumerable<string> args = new[] { "--help" };
+        var expectedReturnCode = CommandParsingResultCode.Success;
+        var expectedHelpMessage = @"Integration Tests
 Usage: test.exe <command> [options] [args]
 Type 'test.exe help <command>' for help on a specific command.
 
@@ -29,25 +29,23 @@ Options:
  --int-list-value+ (il)  A list of integer value
  --help            (?)   Help
 ";
-            //var expectedNbOfArguments = 1;
-            //var expectedArgumentsValue = "Custom argument value";
-            //var expectedIntValue = 42;
+        //var expectedNbOfArguments = 1;
+        //var expectedArgumentsValue = "Custom argument value";
+        //var expectedIntValue = 42;
 
-            // Act
-            var actual = await CallParseWithDefaultCommand<IntTestCommand>(args);
+        // Act
+        var actual = await CallParseWithDefaultCommand<IntTestCommand, IntTestCommand.IntTestCommandData>(args);
 
-            // Assert
-            Assert.True(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-            Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-            Assert.IsType<IntTestCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-            var rawCommand = (IntTestCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
+        // Assert
+        Assert.True(actual.IsValid);
+        Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<IntTestCommand, IntTestCommand.IntTestCommandData>>(actual.CommandObject);
+        var rawCommand = classBasedCommandObject.Command;
 
-            Assert.Equal(0, await rawCommand.ExecuteAsync());
-            var message = Assert.Single(Console.Messages);
+        Assert.Equal(0, await rawCommand.ExecuteAsync(classBasedCommandObject.CommandData));
+        var message = Assert.Single(Console.Messages);
 
-            Assert.IsType< FakeConsole.InformationMessage>(message);
-            Assert.Equal(expectedHelpMessage, message.ToString());
-        }
+        Assert.IsType< FakeConsole.InformationMessage>(message);
+        Assert.Equal(expectedHelpMessage, message.ToString());
     }
 }

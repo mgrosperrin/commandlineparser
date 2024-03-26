@@ -4,10 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Tests.Commands
+namespace MGR.CommandLineParser.Tests.Commands;
+
+[Command(Description = "InstallCommandDescription", Usage = "InstallCommandUsageSummary")]
+public class InstallCommand : CommandBase<InstallCommand.InstallCommandData>
 {
-    [Command(Description = "InstallCommandDescription", Usage = "InstallCommandUsageSummary")]
-    public class InstallCommand : CommandBase
+    public class InstallCommandData : HelpedCommandData
     {
         private readonly ICollection<string> _sources = new List<string>();
 
@@ -46,11 +48,10 @@ namespace MGR.CommandLineParser.Tests.Commands
         [IgnoreOptionProperty]
         // ReSharper disable once UnusedMember.Local
         private bool AllowMultipleVersions => !ExcludeVersion;
+    }
+    protected override Task<int> ExecuteCommandAsync(InstallCommandData commandData) => Task.FromResult(0);
 
-        protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
-
-        public InstallCommand(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
-        }
+    public InstallCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+    {
     }
 }

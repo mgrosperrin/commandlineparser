@@ -16,24 +16,27 @@ public class InternalTypesTests : ConsoleLoggingTestsBase
         var expectedReturnCode = CommandParsingResultCode.Success;
 
         // Act
-        var actual = await CallParseWithDefaultCommand<Test.InternalCommand>(args);
+        var actual = await CallParseWithDefaultCommand<Test.InternalCommand, Test.InternalCommand.InternalCommandData>(args);
 
         // Assert
         Assert.True(actual.IsValid);
         Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-        var rawCommand = Assert.IsType<Test.InternalCommand>(classBasedCommandObject.Command);
-        Assert.Equal(123, await rawCommand.ExecuteAsync());
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<Test.InternalCommand, Test.InternalCommand.InternalCommandData>>(actual.CommandObject);
+        var rawCommand = classBasedCommandObject.Command;
+        Assert.Equal(123, await rawCommand.ExecuteAsync(classBasedCommandObject.CommandData));
     }
 }
 internal class Test
 {
-    internal class InternalCommand : CommandBase
+    internal class InternalCommand : CommandBase<Test.InternalCommand.InternalCommandData>
     {
+        internal class InternalCommandData : HelpedCommandData
+        {
+        }
         public InternalCommand(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
 
-        protected override Task<int> ExecuteCommandAsync() => Task.FromResult(123);
+        protected override Task<int> ExecuteCommandAsync(InternalCommandData commandData) => Task.FromResult(123);
     }
 }

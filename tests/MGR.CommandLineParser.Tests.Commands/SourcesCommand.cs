@@ -3,10 +3,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Tests.Commands
+namespace MGR.CommandLineParser.Tests.Commands;
+
+[Command(Description = "SourcesCommandDescription", Usage = "SourcesCommandUsageSummary")]
+public class SourcesCommand : CommandBase<SourcesCommand.SourcesCommandData>
 {
-    [Command(Description = "SourcesCommandDescription", Usage = "SourcesCommandUsageSummary")]
-    public class SourcesCommand : CommandBase
+    public class SourcesCommandData : HelpedCommandData
     {
         [Display(Description = "SourcesCommandNameDescription")]
         public string Name { get; set; }
@@ -19,11 +21,10 @@ namespace MGR.CommandLineParser.Tests.Commands
 
         [Display(Description = "SourcesCommandPasswordDescription")]
         public string Password { get; set; }
+    }
+    protected override Task<int> ExecuteCommandAsync(SourcesCommandData commandData) => Task.FromResult(0);
 
-        protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
-
-        public SourcesCommand(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
-        }
+    public SourcesCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+    {
     }
 }

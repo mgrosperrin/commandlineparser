@@ -3,10 +3,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Tests.Commands
+namespace MGR.CommandLineParser.Tests.Commands;
+
+[Command(Description = "SpecCommandDescription", Usage = "SpecCommandUsageSummary")]
+public class SpecCommand : CommandBase<SpecCommand.SpecCommandData>
 {
-    [Command(Description = "SpecCommandDescription", Usage = "SpecCommandUsageSummary")]
-    public class SpecCommand : CommandBase
+    public class SpecCommandData : HelpedCommandData
     {
         internal static readonly string SampleProjectUrl = "http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE";
         internal static readonly string SampleLicenseUrl = "http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE";
@@ -20,11 +22,11 @@ namespace MGR.CommandLineParser.Tests.Commands
 
         [Display(Description = "SpecCommandForceDescription")]
         public bool Force { get; set; }
+    }
 
-        protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
+    protected override Task<int> ExecuteCommandAsync(SpecCommandData commandData) => Task.FromResult(0);
 
-        public SpecCommand(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
-        }
+    public SpecCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+    {
     }
 }

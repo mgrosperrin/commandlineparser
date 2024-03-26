@@ -1,23 +1,22 @@
-﻿namespace MGR.CommandLineParser.Extensibility.Command
+﻿namespace MGR.CommandLineParser.Extensibility.Command;
+
+/// <summary>
+/// The different types of collection that an command's option can be.
+/// </summary>
+public enum CommandOptionCollectionType
 {
     /// <summary>
-    ///     The different types of collection that an command's option can be.
+    /// Not a collection.
     /// </summary>
-    public enum CommandOptionCollectionType
-    {
-        /// <summary>
-        ///     Not a collection.
-        /// </summary>
-        None = 0,
+    None = 0,
 
-        /// <summary>
-        ///     A simple collection.
-        /// </summary>
-        Collection = 1,
+    /// <summary>
+    /// A simple collection.
+    /// </summary>
+    Collection = 1,
 
-        /// <summary>
-        ///     A dictionary.
-        /// </summary>
-        Dictionary = 2
-    }
+    /// <summary>
+    /// A dictionary.
+    /// </summary>
+    Dictionary = 2
 }

@@ -1,19 +1,19 @@
-﻿using System;
-using JetBrains.Annotations;
-using MGR.CommandLineParser.Command;
+﻿using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Extensibility.ClassBased
+namespace MGR.CommandLineParser.Extensibility.ClassBased;
+
+/// <summary>
+/// Defines the contract for the activator of <see cref="ICommandHandler{TCommandData}" />.
+/// </summary>
+public interface IClassBasedCommandActivator
 {
     /// <summary>
-    ///     Defines the contract for the activator of <see cref="ICommand" />.
+    /// Activates (create an instance) of a <typeparamref name="TCommandHandler"/>.
     /// </summary>
-    public interface IClassBasedCommandActivator
-    {
-        /// <summary>
-        ///     Activates (create an instance) of a <see cref="ICommand" />.
-        /// </summary>
-        /// <param name="commandType">The type of the command.</param>
-        /// <returns>The command.</returns>
-        ICommand ActivateCommand([NotNull] Type commandType);
-    }
+    /// <typeparam name="TCommandHandler">The type of the command handler.</typeparam>
+    /// <typeparam name="TCommandData">The type of the command data.</typeparam>
+    /// <returns>The command handler.</returns>
+    TCommandHandler ActivateCommand<TCommandHandler, TCommandData>()
+        where TCommandHandler : class, ICommandHandler<TCommandData>
+        where TCommandData : CommandData, new();
 }
