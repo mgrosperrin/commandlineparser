@@ -10,7 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build documenation site
-        uses: nunit/docfx-action@v3.1.0
+        uses: nunit/docfx-action@v3.2.0
         with:
           args: docs/docfx.json
       - name: Upload documentation archive
