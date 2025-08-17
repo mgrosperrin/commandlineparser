@@ -19,6 +19,8 @@ namespace MGR.CommandLineParser
 
             internal static readonly Func<object, string, string> FormatParserOptionNotFoundForCommand =
                 (commandName, optionName) => string.Format(CultureInfo.InvariantCulture, "There is no option '{1}' for the command '{0}'.", commandName, optionName);
+            internal static readonly Func<object, string, string> FormatParserOptionValueNotFoundForCommand =
+                (commandName, optionName) => string.Format(CultureInfo.InvariantCulture, "A value should be provided for option '{1}' for the command '{0}'.", commandName, optionName);
 
             internal static readonly Func<object, string, string> FormatParserOptionValueRequired =
                 (commandName, optionName) => string.Format(CultureInfo.InvariantCulture, "You should specified a value for the option '{1}' of the command '{0}'.", commandName, optionName);
