@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Tests.Commands
+namespace MGR.CommandLineParser.Tests.Commands;
+
+[Command(Description = "ListCommandDescription", Usage = "ListCommandUsageDescription", Samples = new[] { "List sample 1", "List sample number 2" })]
+public class ListCommand : CommandBase<ListCommand.ListCommandData>
 {
-    [Command(Description = "ListCommandDescription", Usage = "ListCommandUsageDescription", Samples = new []{"List sample 1", "List sample number 2"})]
-    public class ListCommand : CommandBase
+    public class ListCommandData : HelpedCommandData
     {
         private readonly List<string> _sources = new List<string>();
 
@@ -24,17 +23,16 @@ namespace MGR.CommandLineParser.Tests.Commands
         public bool Prerelease { get; set; }
 
         [IgnoreOptionProperty]
-        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public object RepositoryFactory { get; }
 
         [IgnoreOptionProperty]
-        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public object SourceProvider { get; }
 
-        protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
 
-        public ListCommand(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
-        }
+    }
+    protected override Task<int> ExecuteCommandAsync(ListCommandData commandData, CancellationToken cancellationToken) => Task.FromResult(0);
+
+    public ListCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+    {
     }
 }

@@ -1,29 +1,24 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Tests.Commands
-{
-    [Command(Description = "PackageCommandDescription", Usage = "PackageCommandUsageSummary")]
-    public class PackCommand : CommandBase
-    {
-        // ReSharper disable once UnusedMember.Local
-        // ReSharper disable once InconsistentNaming
-        private static readonly string[] _libPackageExcludes = new[]
-                                                                   {
-                                                                       @"**\*.pdb",
-                                                                       @"src\**\*"
-                                                                   };
+namespace MGR.CommandLineParser.Tests.Commands;
 
-        // ReSharper disable once InconsistentNaming
-        // ReSharper disable once UnusedMember.Local
-        private static readonly string[] _symbolPackageExcludes = new[]
-                                                                      {
-                                                                          @"content\**\*",
-                                                                          @"tools\**\*.ps1"
-                                                                      };
+[Command(Description = "PackageCommandDescription", Usage = "PackageCommandUsageSummary")]
+public class PackCommand : CommandBase<PackCommand.PackCommandData>
+{
+    public class PackCommandData : HelpedCommandData
+    {
+        private static readonly string[] _libPackageExcludes =
+                                                                   [
+                                                                   @"**\*.pdb",
+                                                                   @"src\**\*"
+                                                               ];
+
+        private static readonly string[] _symbolPackageExcludes =
+                                                                      [
+                                                                      @"content\**\*",
+                                                                      @"tools\**\*.ps1"
+                                                                  ];
 
         private readonly HashSet<string> _excludes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, string> _properties = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -52,8 +47,6 @@ namespace MGR.CommandLineParser.Tests.Commands
         [Display(Description = "PackageCommandBuildDescription", ShortName = "b")]
         public bool Build { get; set; }
         [Display(Description = "CommandMSBuildVersion")]
-        // ReSharper disable once UnusedMember.Global
-        // ReSharper disable once InconsistentNaming
         public string MSBuildVersion { get; set; }
         [Display(Description = "PackageCommandNoDefaultExcludes")]
         public bool NoDefaultExcludes { get; set; }
@@ -66,11 +59,10 @@ namespace MGR.CommandLineParser.Tests.Commands
 
         [IgnoreOptionProperty]
         public IEnumerable<object> Rules { get; set; }
+    }
+    protected override Task<int> ExecuteCommandAsync(PackCommandData commandData, CancellationToken cancellationToken) => Task.FromResult(0);
 
-        protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
-
-        public PackCommand(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
-        }
+    public PackCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+    {
     }
 }

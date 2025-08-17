@@ -1,19 +1,17 @@
-﻿using System;
-using System.Threading.Tasks;
-using MGR.CommandLineParser.Command;
+﻿using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Tests.Commands
+namespace MGR.CommandLineParser.Tests.Commands;
+
+[Command(Description = "HiddenCommandDescription", Usage = "HiddenCommandUsage", HideFromHelpListing = true)]
+public class HiddenCommand : CommandBase<HiddenCommand.HiddenCommandData>
 {
-    [Command(Description = "HiddenCommandDescription", Usage = "HiddenCommandUsage", HideFromHelpListing = true)]
-    public class HiddenCommand : CommandBase
+    public class HiddenCommandData : HelpedCommandData { }
+    protected override Task<int> ExecuteCommandAsync(HiddenCommandData commandData, CancellationToken cancellationToken)
     {
-        protected override Task<int> ExecuteCommandAsync()
-        {
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
+    }
 
-        public HiddenCommand(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
-        }
+    public HiddenCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+    {
     }
 }

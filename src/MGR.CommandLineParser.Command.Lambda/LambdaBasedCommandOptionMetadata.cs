@@ -1,12 +1,10 @@
-﻿using System;
-using MGR.CommandLineParser.Extensibility.Command;
+﻿using MGR.CommandLineParser.Extensibility.Command;
 
-namespace MGR.CommandLineParser.Command.Lambda
+namespace MGR.CommandLineParser.Command.Lambda;
+
+internal class LambdaBasedCommandOptionMetadata : CommandOptionMetadataBase
 {
-    internal class LambdaBasedCommandOptionMetadata : CommandOptionMetadataBase
-    {
-        public LambdaBasedCommandOptionMetadata(LambdaBasedOptionDisplayInfo optionDisplayInfo, string defaultValue, bool isRequired, Type optionType)
-        : base(isRequired, GetMultiValueIndicator(optionType), optionDisplayInfo, defaultValue)
-        { }
-    }
+    public LambdaBasedCommandOptionMetadata(LambdaBasedOptionDisplayInfo optionDisplayInfo, string defaultValue, bool isRequired, Type optionType)
+    : base(isRequired, GetMultiValueIndicator(optionType), optionDisplayInfo, defaultValue)
+    { }
 }

@@ -1,66 +1,63 @@
-﻿using System;
-using MGR.CommandLineParser.Command;
+﻿using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 using Xunit;
 
-namespace MGR.CommandLineParser.UnitTests.Extensions
+namespace MGR.CommandLineParser.UnitTests.Extensions;
+
+public partial class ConverterAttributeExtensionsTests
 {
-    public partial class ConverterAttributeExtensionsTests
+    public class BuildValueConverter
     {
-        public class BuildValueConverter
+        [Fact]
+        public void Int32ConverterActivation()
         {
-            [Fact]
-            public void Int32ConverterActivation()
-            {
-                // Arrange
-                var keyConverterType = typeof (GuidConverter);
-                var expected = typeof (Int32Converter);
+            // Arrange
+            var keyConverterType = typeof(GuidConverter);
+            var expected = typeof(Int32Converter);
 #pragma warning disable CS0618 // Type or member is obsolete
-                var converterAttribute = new ConverterKeyValueAttribute(expected, keyConverterType);
+            var converterAttribute = new ConverterKeyValueAttribute(expected, keyConverterType);
 #pragma warning restore CS0618 // Type or member is obsolete
 
-                // Act
-                var actual = converterAttribute.BuildValueConverter();
+            // Act
+            var actual = converterAttribute.BuildValueConverter();
 
-                // Assert
-                Assert.NotNull(actual);
-                Assert.IsType<Int32Converter>(actual);
-            }
+            // Assert
+            Assert.NotNull(actual);
+            Assert.IsType<Int32Converter>(actual);
+        }
 
-            [Fact]
-            public void DefaultStringConverterActivation()
-            {
-                // Arrange
-                var expected = typeof (Int32Converter);
+        [Fact]
+        public void DefaultStringConverterActivation()
+        {
+            // Arrange
+            var expected = typeof(Int32Converter);
 #pragma warning disable CS0618 // Type or member is obsolete
-                var converterAttribute = new ConverterKeyValueAttribute(expected);
+            var converterAttribute = new ConverterKeyValueAttribute(expected);
 #pragma warning restore CS0618 // Type or member is obsolete
 
-                // Act
-                var actual = converterAttribute.BuildValueConverter();
+            // Act
+            var actual = converterAttribute.BuildValueConverter();
 
-                // Assert
-                Assert.NotNull(actual);
-                Assert.IsType<Int32Converter>(actual);
-            }
+            // Assert
+            Assert.NotNull(actual);
+            Assert.IsType<Int32Converter>(actual);
+        }
 
-            [Fact]
-            public void NullConverterAttributeException()
-            {
-                // Arrange
+        [Fact]
+        public void NullConverterAttributeException()
+        {
+            // Arrange
 #pragma warning disable CS0618 // Type or member is obsolete
-                ConverterKeyValueAttribute converterAttribute = null;
+            ConverterKeyValueAttribute converterAttribute = null;
 #pragma warning restore CS0618 // Type or member is obsolete
-                var expectedExceptionMessage = SourceParameterName;
+            var expectedExceptionMessage = SourceParameterName;
 
-                // Act
-                var actualException =
-                    // ReSharper disable once ExpressionIsAlwaysNull
-                    Assert.Throws<ArgumentNullException>(() => converterAttribute.BuildValueConverter());
+            // Act
+            var actualException =
+                Assert.Throws<ArgumentNullException>(() => converterAttribute.BuildValueConverter());
 
-                // Assert
-                Assert.Equal(expectedExceptionMessage, actualException.ParamName);
-            }
+            // Assert
+            Assert.Equal(expectedExceptionMessage, actualException.ParamName);
         }
     }
 }

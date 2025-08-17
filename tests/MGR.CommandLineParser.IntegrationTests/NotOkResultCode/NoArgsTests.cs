@@ -1,23 +1,21 @@
-﻿using System.Threading.Tasks;
-using Xunit;
+﻿using Xunit;
 
-namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode
+namespace MGR.CommandLineParser.IntegrationTests.NotOkResultCode;
+
+public class NoArgsTests : ConsoleLoggingTestsBase
 {
-    public class NoArgsTests : ConsoleLoggingTestsBase
+    [Fact]
+    public async Task ParseWithoutParameter()
     {
-        [Fact]
-        public async Task ParseWithoutParameter()
-        {
-            // Arrange
-            var expectedReturnCode = CommandParsingResultCode.NoArgumentsProvided;
+        // Arrange
+        var expectedReturnCode = CommandParsingResultCode.NoArgumentsProvided;
 
-            // Act
-            var actual = await CallParse(null);
+        // Act
+        var actual = await CallParse(null);
 
-            // Assert
-            Assert.False(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-            Assert.Null(actual.CommandObject);
-        }
+        // Assert
+        Assert.False(actual.IsValid);
+        Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
+        Assert.Null(actual.CommandObject);
     }
 }

@@ -1,28 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace MGR.CommandLineParser.Extensibility.Command;
 
-namespace MGR.CommandLineParser.Extensibility.Command
+/// <summary>
+/// Represents a type of command.
+/// </summary>
+public interface ICommandType
 {
     /// <summary>
-    /// Represents a type of command.
+    /// Gets the metadata of the command.
     /// </summary>
-    public interface ICommandType
-    {
-        /// <summary>
-        /// Gets the metadata of the command.
-        /// </summary>
-        ICommandMetadata Metadata { get; }
+    ICommandMetadata Metadata { get; }
 
-        /// <summary>
-        /// Gets the option's metadata of the command type.
-        /// </summary>
-        IEnumerable<ICommandOptionMetadata> Options { get; }
+    /// <summary>
+    /// Gets the option's metadata of the command type.
+    /// </summary>
+    IEnumerable<ICommandOptionMetadata> Options { get; }
 
-        /// <summary>
-        /// Create the command from its type.
-        /// </summary>
-        /// <param name="serviceProvider">The scoped dependency resolver.</param>
-        /// <returns></returns>
-        ICommandObjectBuilder CreateCommandObjectBuilder(IServiceProvider serviceProvider);
-    }
+    /// <summary>
+    /// Create the command from its type.
+    /// </summary>
+    /// <param name="serviceProvider">The scoped dependency resolver.</param>
+    /// <returns></returns>
+    ICommandObjectBuilder? CreateCommandObjectBuilder(IServiceProvider serviceProvider);
 }

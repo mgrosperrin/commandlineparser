@@ -1,22 +1,20 @@
-﻿using System.Threading.Tasks;
-using MGR.CommandLineParser.Extensibility.Command;
+﻿using MGR.CommandLineParser.Extensibility.Command;
 
-namespace MGR.CommandLineParser.Extensibility
+namespace MGR.CommandLineParser.Extensibility;
+
+/// <summary>
+/// Display the help.
+/// </summary>
+public interface IHelpWriter
 {
     /// <summary>
-    ///     Display the help.
+    /// Write command listing.
     /// </summary>
-    public interface IHelpWriter
-    {
-        /// <summary>
-        ///     Write command listing.
-        /// </summary>
-        Task WriteCommandListing();
+    Task WriteCommandListing();
 
-        /// <summary>
-        ///     Write the help for some commands.
-        /// </summary>
-        /// <param name="commandTypes">The <see cref="ICommandType"/> of the commands to display help.</param>
-        void WriteHelpForCommand(params ICommandType[] commandTypes);
-    }
+    /// <summary>
+    /// Write the help for some commands.
+    /// </summary>
+    /// <param name="commandTypes">The <see cref="ICommandType"/> of the commands to display help.</param>
+    void WriteHelpForCommand(params ICommandType[] commandTypes);
 }

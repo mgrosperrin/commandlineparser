@@ -1,63 +1,60 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using MGR.CommandLineParser.Command;
 using Xunit;
 
-namespace MGR.CommandLineParser.UnitTests.Extensions
+namespace MGR.CommandLineParser.UnitTests.Extensions;
+
+public partial class PropertyInfoExtensionsTests
 {
-    public partial class PropertyInfoExtensionsTests
+    public class ShouldBeIgnored
     {
-        public class ShouldBeIgnored
+        public int WritableProperty { get; set; }
+
+        [IgnoreOptionProperty]
+        public int WritableIgnoredProperty { get; set; }
+
+        [Fact]
+        public void WritableTest()
         {
-            public int WritableProperty { get; set; }
+            // Arrange
+            var propertyToTest =
+                GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => WritableProperty));
+            var expected = false;
 
-            [IgnoreOptionProperty]
-            public int WritableIgnoredProperty { get; set; }
+            // Act
+            var actual = propertyToTest.ShouldBeIgnored();
 
-            [Fact]
-            public void WritableTest()
-            {
-                // Arrange
-                var propertyToTest =
-                    GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => WritableProperty));
-                var expected = false;
+            // Assert
+            Assert.Equal(expected, actual);
+        }
 
-                // Act
-                var actual = propertyToTest.ShouldBeIgnored();
+        [Fact]
+        public void NonWritableTest()
+        {
+            // Arrange
+            var propertyToTest =
+                GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => WritableIgnoredProperty));
+            var expected = true;
 
-                // Assert
-                Assert.Equal(expected, actual);
-            }
+            // Act
+            var actual = propertyToTest.ShouldBeIgnored();
 
-            [Fact]
-            public void NonWritableTest()
-            {
-                // Arrange
-                var propertyToTest =
-                    GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => WritableIgnoredProperty));
-                var expected = true;
+            // Assert
+            Assert.Equal(expected, actual);
+        }
 
-                // Act
-                var actual = propertyToTest.ShouldBeIgnored();
+        [Fact]
+        public void NullPropertyInfoException()
+        {
+            // Arrange
+            PropertyInfo testedProperty = null;
+            var expectedExceptionMessage = SourceParameterName;
 
-                // Assert
-                Assert.Equal(expected, actual);
-            }
+            // Act
+            var actualException = Assert.Throws<ArgumentNullException>(() => testedProperty.ShouldBeIgnored());
 
-            [Fact]
-            public void NullPropertyInfoException()
-            {
-                // Arrange
-                PropertyInfo testedProperty = null;
-                var expectedExceptionMessage = SourceParameterName;
-
-                // Act
-                // ReSharper disable once ExpressionIsAlwaysNull
-                var actualException = Assert.Throws<ArgumentNullException>(() => testedProperty.ShouldBeIgnored());
-
-                // Assert
-                Assert.Equal(expectedExceptionMessage, actualException.ParamName);
-            }
+            // Assert
+            Assert.Equal(expectedExceptionMessage, actualException.ParamName);
         }
     }
 }

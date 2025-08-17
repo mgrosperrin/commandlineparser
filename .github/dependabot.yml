@@ -27,3 +27,19 @@ updates:
       dotnet:
         patterns:
         - "*"
+        exclude-patterns:
+        - "Microsoft.Extensions.*"
+        
+  - package-ecosystem: "dotnet-sdk" # See documentation for possible values
+    directory: "/" # Location of SDK manifests
+    schedule:
+      interval: "weekly"
+    assignees:
+      - "mgrosperrin"
+    commit-message:
+      prefix: "[.NET SDK update] "
+      include: "scope"
+    groups:
+      dotnet:
+        patterns:
+        - "*"

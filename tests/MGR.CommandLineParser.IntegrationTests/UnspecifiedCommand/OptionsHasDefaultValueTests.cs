@@ -1,34 +1,29 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using MGR.CommandLineParser.Extensibility.ClassBased;
+﻿using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
-namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand
+namespace MGR.CommandLineParser.IntegrationTests.UnspecifiedCommand;
+
+public class OptionsHasDefaultValueTests : ConsoleLoggingTestsBase
 {
-    public class OptionsHasDefaultValueTests : ConsoleLoggingTestsBase
+    [Fact]
+    public async Task ParseWithValidArgsAndDefaultValue()
     {
-        [Fact]
-        public async Task ParseWithValidArgsAndDefaultValue()
-        {
-            // Arrange
-            IEnumerable<string> args = new[]
-                {"SetApiKey"};
-            var expectedReturnCode = CommandParsingResultCode.Success;
-            var expectedSource = "DefaultSource";
-            var expectedNbOfArguments = 0;
+        // Arrange
+        IEnumerable<string> args = ["SetApiKey"];
+        var expectedReturnCode = CommandParsingResultCode.Success;
+        var expectedSource = "DefaultSource";
+        var expectedNbOfArguments = 0;
 
-            // Act
-            var actual = await CallParse(args);
+        // Act
+        var actual = await CallParse(args);
 
-            // Assert
-            Assert.True(actual.IsValid);
-            Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-            Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-            Assert.IsType<SetApiKeyCommand>(((IClassBasedCommandObject)actual.CommandObject).Command);
-            var rawCommand = (SetApiKeyCommand)((IClassBasedCommandObject)actual.CommandObject).Command;
-            Assert.Equal(expectedSource, rawCommand.Source);
-            Assert.Equal(expectedNbOfArguments, rawCommand.Arguments.Count);
-        }
+        // Assert
+        Assert.True(actual.IsValid);
+        Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<SetApiKeyCommand, SetApiKeyCommand.SetApiKeyCommandData>>(actual.CommandObject);
+        var rawCommandData = classBasedCommandObject.CommandData;
+        Assert.Equal(expectedSource, rawCommandData.Source);
+        Assert.Equal(expectedNbOfArguments, rawCommandData.Arguments.Count);
     }
 }

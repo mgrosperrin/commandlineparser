@@ -1,136 +1,132 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using MGR.CommandLineParser.Extensibility.ClassBased;
 using Xunit;
 
-namespace MGR.CommandLineParser.UnitTests.Extensions
+namespace MGR.CommandLineParser.UnitTests.Extensions;
+
+public partial class PropertyInfoExtensionsTests
 {
-    public partial class PropertyInfoExtensionsTests
+    public class ExtractOptionDisplayInfoMetadata
     {
-        public class ExtractOptionDisplayInfoMetadata
+        public int OriginalProperty { get; set; }
+
+        [Display(Name = "CustomName")]
+        public int CustomNameProperty { get; set; }
+
+        [Display(ShortName = "csnp")]
+        public int CustomShortNameProperty { get; set; }
+
+        [Display(Name = "CustomName", ShortName = "csnp")]
+        public int CustomNameAndShortNameProperty { get; set; }
+
+        [Display(Name = "CustomName", ShortName = "csnp", Description = "My custom description")]
+        public int CustomNameAndShortNameDescriptionProperty { get; set; }
+
+        [Fact]
+        public void OriginalTest()
         {
-            public int OriginalProperty { get; set; }
+            // Arrange
+            var propertyName = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
+            var expected = "original-property";
+            var propertyInfo = GetType().GetProperty(propertyName);
 
-            [Display(Name = "CustomName")]
-            public int CustomNameProperty { get; set; }
+            // Act
+            var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
 
-            [Display(ShortName = "csnp")]
-            public int CustomShortNameProperty { get; set; }
+            // Assert
+            Assert.Equal(expected, actual.Name);
+            Assert.Equal(string.Empty, actual.ShortName);
+            Assert.True(string.IsNullOrEmpty(actual.Description));
+        }
 
-            [Display(Name = "CustomName", ShortName = "csnp")]
-            public int CustomNameAndShortNameProperty { get; set; }
+        [Fact]
+        public void CustomNameTest()
+        {
+            // Arrange
+            var expectedName = "CustomName";
+            var expectedShortName = expectedName;
+            var propertyInfo =
+                GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameProperty));
 
-            [Display(Name = "CustomName", ShortName = "csnp", Description = "My custom description")]
-            public int CustomNameAndShortNameDescriptionProperty { get; set; }
+            // Act
+            var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
 
-            [Fact]
-            public void OriginalTest()
-            {
-                // Arrange
-                var propertyName = TypeHelpers.ExtractPropertyName(() => OriginalProperty);
-                var expected = "original-property";
-                var propertyInfo = GetType().GetProperty(propertyName);
+            // Assert
+            Assert.Equal(expectedName, actual.Name);
+            Assert.Equal(expectedShortName, actual.ShortName);
+            Assert.True(string.IsNullOrEmpty(actual.Description));
+        }
 
-                // Act
-                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
+        [Fact]
+        public void CustomShortNameTest()
+        {
+            // Arrange
+            var propertyName = TypeHelpers.ExtractPropertyName(() => CustomShortNameProperty);
+            var expectedName = "custom-short-name-property";
+            var expectedShortName = "csnp";
+            var propertyInfo = GetType().GetProperty(propertyName);
 
-                // Assert
-                Assert.Equal(expected, actual.Name);
-                Assert.Equal(string.Empty, actual.ShortName);
-                Assert.True(string.IsNullOrEmpty(actual.Description));
-            }
+            // Act
+            var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
 
-            [Fact]
-            public void CustomNameTest()
-            {
-                // Arrange
-                var expectedName = "CustomName";
-                var expectedShortName = expectedName;
-                var propertyInfo =
-                    GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameProperty));
+            // Assert
+            Assert.Equal(expectedName, actual.Name);
+            Assert.Equal(expectedShortName, actual.ShortName);
+            Assert.True(string.IsNullOrEmpty(actual.Description));
+        }
 
-                // Act
-                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
+        [Fact]
+        public void CustomNameAndShortNameTest()
+        {
+            // Arrange
+            var expectedName = "CustomName";
+            var expectedShortName = "csnp";
+            var propertyInfo =
+                GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameAndShortNameProperty));
 
-                // Assert
-                Assert.Equal(expectedName, actual.Name);
-                Assert.Equal(expectedShortName, actual.ShortName);
-                Assert.True(string.IsNullOrEmpty(actual.Description));
-            }
+            // Act
+            var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
 
-            [Fact]
-            public void CustomShortNameTest()
-            {
-                // Arrange
-                var propertyName = TypeHelpers.ExtractPropertyName(() => CustomShortNameProperty);
-                var expectedName = "custom-short-name-property";
-                var expectedShortName = "csnp";
-                var propertyInfo = GetType().GetProperty(propertyName);
+            // Assert
+            Assert.Equal(expectedName, actual.Name);
+            Assert.Equal(expectedShortName, actual.ShortName);
+            Assert.True(string.IsNullOrEmpty(actual.Description));
+        }
 
-                // Act
-                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
+        [Fact]
+        public void CustomNameShortNameAndDescriptionTest()
+        {
+            // Arrange
+            var expectedName = "CustomName";
+            var expectedShortName = "csnp";
+            var expectedDescription = "My custom description";
+            var propertyInfo =
+                GetType()
+                    .GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameAndShortNameDescriptionProperty));
 
-                // Assert
-                Assert.Equal(expectedName, actual.Name);
-                Assert.Equal(expectedShortName, actual.ShortName);
-                Assert.True(string.IsNullOrEmpty(actual.Description));
-            }
+            // Act
+            var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
 
-            [Fact]
-            public void CustomNameAndShortNameTest()
-            {
-                // Arrange
-                var expectedName = "CustomName";
-                var expectedShortName = "csnp";
-                var propertyInfo =
-                    GetType().GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameAndShortNameProperty));
+            // Assert
+            Assert.Equal(expectedName, actual.Name);
+            Assert.Equal(expectedShortName, actual.ShortName);
+            Assert.Equal(expectedDescription, actual.Description);
+        }
 
-                // Act
-                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
+        [Fact]
+        public void NullPropertyInfoException()
+        {
+            // Arrange
+            PropertyInfo propertyInfo = null;
+            var expectedExceptionMessage = SourceParameterName;
 
-                // Assert
-                Assert.Equal(expectedName, actual.Name);
-                Assert.Equal(expectedShortName, actual.ShortName);
-                Assert.True(string.IsNullOrEmpty(actual.Description));
-            }
+            // Act
+            var actualException =
+                Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>()));
 
-            [Fact]
-            public void CustomNameShortNameAndDescriptionTest()
-            {
-                // Arrange
-                var expectedName = "CustomName";
-                var expectedShortName = "csnp";
-                var expectedDescription = "My custom description";
-                var propertyInfo =
-                    GetType()
-                        .GetProperty(TypeHelpers.ExtractPropertyName(() => CustomNameAndShortNameDescriptionProperty));
-
-                // Act
-                var actual = propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>());
-
-                // Assert
-                Assert.Equal(expectedName, actual.Name);
-                Assert.Equal(expectedShortName, actual.ShortName);
-                Assert.Equal(expectedDescription, actual.Description);
-            }
-
-            [Fact]
-            public void NullPropertyInfoException()
-            {
-                // Arrange
-                PropertyInfo propertyInfo = null;
-                var expectedExceptionMessage = SourceParameterName;
-
-                // Act
-                var actualException =
-                    // ReSharper disable once ExpressionIsAlwaysNull
-                    Assert.Throws<ArgumentNullException>(() => propertyInfo.ExtractOptionDisplayInfoMetadata(new List<IPropertyOptionAlternateNameGenerator>()));
-
-                // Assert
-                Assert.Equal(expectedExceptionMessage, actualException.ParamName);
-            }
+            // Assert
+            Assert.Equal(expectedExceptionMessage, actualException.ParamName);
         }
     }
 }

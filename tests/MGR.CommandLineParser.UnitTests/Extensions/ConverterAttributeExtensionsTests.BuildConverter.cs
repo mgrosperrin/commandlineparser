@@ -1,47 +1,44 @@
-﻿using System;
-using MGR.CommandLineParser.Command;
+﻿using MGR.CommandLineParser.Command;
 using MGR.CommandLineParser.Extensibility.Converters;
 using Xunit;
 
-namespace MGR.CommandLineParser.UnitTests.Extensions
+namespace MGR.CommandLineParser.UnitTests.Extensions;
+
+public partial class ConverterAttributeExtensionsTests
 {
-    public partial class ConverterAttributeExtensionsTests
+    public class BuildConverter
     {
-        public class BuildConverter
+        [Fact]
+        public void Int32ConverterActivation()
         {
-            [Fact]
-            public void Int32ConverterActivation()
-            {
-                // Arrange
-                var expected = typeof (Int32Converter);
+            // Arrange
+            var expected = typeof(Int32Converter);
 #pragma warning disable CS0618 // Type or member is obsolete
-                var converterAttribute = new ConverterAttribute(expected);
+            var converterAttribute = new ConverterAttribute(expected);
 #pragma warning restore CS0618 // Type or member is obsolete
 
-                // Act
-                var actual = converterAttribute.BuildConverter();
+            // Act
+            var actual = converterAttribute.BuildConverter();
 
-                // Assert
-                Assert.NotNull(actual);
-                Assert.IsType<Int32Converter>(actual);
-            }
+            // Assert
+            Assert.NotNull(actual);
+            Assert.IsType<Int32Converter>(actual);
+        }
 
-            [Fact]
-            public void NullConverterAttributeException()
-            {
-                // Arrange
+        [Fact]
+        public void NullConverterAttributeException()
+        {
+            // Arrange
 #pragma warning disable CS0618 // Type or member is obsolete
-                ConverterAttribute converterAttribute = null;
+            ConverterAttribute converterAttribute = null;
 #pragma warning restore CS0618 // Type or member is obsolete
-                var expectedExceptionMessage = SourceParameterName;
+            var expectedExceptionMessage = SourceParameterName;
 
-                // Act
-                // ReSharper disable once ExpressionIsAlwaysNull
-                var actualException = Assert.Throws<ArgumentNullException>(() => converterAttribute.BuildConverter());
+            // Act
+            var actualException = Assert.Throws<ArgumentNullException>(() => converterAttribute.BuildConverter());
 
-                // Assert
-                Assert.Equal(expectedExceptionMessage, actualException.ParamName);
-            }
+            // Assert
+            Assert.Equal(expectedExceptionMessage, actualException.ParamName);
         }
     }
 }

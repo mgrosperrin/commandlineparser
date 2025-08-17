@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MGR.CommandLineParser.Extensibility.ClassBased;
+﻿using MGR.CommandLineParser.Extensibility.ClassBased;
 using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
@@ -12,18 +9,18 @@ public class EnumTests : ConsoleLoggingTestsBase
     public async Task ParseWithValidArgs()
     {
         // Arrange
-        IEnumerable<string> args = new[] { "--target:Assembly" };
+        IEnumerable<string> args = ["--target:Assembly"];
         var expectedReturnCode = CommandParsingResultCode.Success;
         var expectedTargets = AttributeTargets.Assembly;
 
         // Act
-        var actual = await CallParse<EnumCommand>(args);
+        var actual = await CallParse<EnumCommand, EnumCommand.EnumCommandData>(args);
 
         // Assert
         Assert.True(actual.IsValid);
         Assert.Equal(expectedReturnCode, actual.ParsingResultCode);
-        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject>(actual.CommandObject);
-        var rawCommand = Assert.IsType<EnumCommand>(classBasedCommandObject.Command);
-        Assert.Equal(expectedTargets, rawCommand.Target);
+        var classBasedCommandObject = Assert.IsAssignableFrom<IClassBasedCommandObject<EnumCommand, EnumCommand.EnumCommandData>>(actual.CommandObject);
+        var rawCommandData = classBasedCommandObject.CommandData;
+        Assert.Equal(expectedTargets, rawCommandData.Target);
     }
 }

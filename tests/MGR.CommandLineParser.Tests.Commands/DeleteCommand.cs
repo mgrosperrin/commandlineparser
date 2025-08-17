@@ -1,12 +1,12 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Tests.Commands
+namespace MGR.CommandLineParser.Tests.Commands;
+
+[Command(Description = "DeleteCommandDescription", Usage = "DeleteCommandUsageDescription")]
+public class DeleteCommand : CommandBase<DeleteCommand.DeleteCommandData>
 {
-    [Command(Description = "DeleteCommandDescription", Usage = "DeleteCommandUsageDescription")]
-    public class DeleteCommand : CommandBase
+    public class DeleteCommandData : HelpedCommandData
     {
         [Display(Description = "DeleteCommandSourceDescription", ShortName = "src")]
         public string Source { get; set; }
@@ -18,17 +18,14 @@ namespace MGR.CommandLineParser.Tests.Commands
         public string ApiKey { get; set; }
 
         [IgnoreOptionProperty]
-        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public object SourceProvider { get; }
 
         [IgnoreOptionProperty]
-        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public object Settings { get; }
+    }
+    protected override Task<int> ExecuteCommandAsync(DeleteCommandData commandData, CancellationToken cancellationToken) => Task.FromResult(0);
 
-        protected override Task<int> ExecuteCommandAsync() => Task.FromResult(0);
-
-        public DeleteCommand(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
-        }
+    public DeleteCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+    {
     }
 }

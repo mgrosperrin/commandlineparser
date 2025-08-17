@@ -1,8 +1,7 @@
-﻿namespace MGR.CommandLineParser.Command.Lambda
+﻿namespace MGR.CommandLineParser.Command.Lambda;
+
+internal interface ILambdaBasedCommandOptionValueAssigner
 {
-    internal interface ILambdaBasedCommandOptionValueAssigner
-    {
-        object GetValue();
-        void AssignValue(object value);
-    }
+    object? GetValue();
+    void AssignValue(object value);
 }

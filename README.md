@@ -3,9 +3,8 @@ MGR.Commandlineparser
 
 _**Build status**_
 
-| dev        | [![Build status][build-status_dev_img]][build-status_dev_url] |
-|------------|---------------------------------------------------------|
-| **master** | [![Build status][build-status_master_img]][build-status_master_url] |
+[![CI][build-ci-status_img]][build-ci-status_url]
+[![CodeQL][build-codeql-status_img]][build-codeql-status_url]
 
 
 ***MyGet*** *(preview bits)*:
@@ -133,10 +132,10 @@ Depending on the value of `args`, the result will be (when not providing the typ
 |`HelloWorld --name Matthias` or `HelloWorld -n Matthias`|return code is `CommandResultCode.Ok` (0) and `Hello world Matthias !` is printed to the console|
 
 
-   [build-status_dev_img]: https://dev.azure.com/mgrosperrin/github/_apis/build/status/MGR.CommandLineParser?branchName=dev
-   [build-status_dev_url]: https://dev.azure.com/mgrosperrin/github/_build?definitionId=14&_a=summary&repositoryFilter=4&branchFilter=22
-   [build-status_master_img]: https://dev.azure.com/mgrosperrin/github/_apis/build/status/MGR.CommandLineParser?branchName=master
-   [build-status_master_url]: https://dev.azure.com/mgrosperrin/github/_build?definitionId=14&_a=summary&repositoryFilter=4&branchFilter=39
+   [build-ci-status_img]: https://github.com/mgrosperrin/commandlineparser/actions/workflows/ci.yml/badge.svg?branch=main
+   [build-ci-status_url]: https://github.com/mgrosperrin/commandlineparser/actions/workflows/ci.yml
+   [build-codeql-status_img]: https://github.com/mgrosperrin/commandlineparser/actions/workflows/codeql-analysis.yml/badge.svg?branch=main
+   [build-codeql-status_url]: https://github.com/mgrosperrin/commandlineparser/actions/workflows/codeql-analysis.yml
    [myget_commandlineparser_img]: https://img.shields.io/myget/mgrosperrin/vpre/MGR.CommandLineParser.svg
    [myget_commandlineparser_url]: https://www.myget.org/feed/mgrosperrin/package/nuget/MGR.CommandLineParser/
    [myget-download_commandlineparser_img]: https://img.shields.io/myget/mgrosperrin/dt/MGR.CommandLineParser.svg

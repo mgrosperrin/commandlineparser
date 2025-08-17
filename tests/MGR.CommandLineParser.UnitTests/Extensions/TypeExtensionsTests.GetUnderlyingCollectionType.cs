@@ -1,85 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
-using Xunit;
+﻿using Xunit;
 
-namespace MGR.CommandLineParser.UnitTests.Extensions
+namespace MGR.CommandLineParser.UnitTests.Extensions;
+
+public partial class TypeExtensionsTests
 {
-    public partial class TypeExtensionsTests
+    public class GetUnderlyingCollectionType
     {
-        public class GetUnderlyingCollectionType
+        [Fact]
+        public void ListIntTest()
         {
-            [Fact]
-            public void ListIntTest()
-            {
-                // Arrange
-                var testedType = typeof (List<int>);
-                var expected = typeof (int);
+            // Arrange
+            var testedType = typeof(List<int>);
+            var expected = typeof(int);
 
-                // Act
-                var actual = testedType.GetUnderlyingCollectionType();
+            // Act
+            var actual = testedType.GetUnderlyingCollectionType();
 
-                // Assert
-                Assert.Equal(expected, actual);
-            }
+            // Assert
+            Assert.Equal(expected, actual);
+        }
 
-            [Fact]
-            // ReSharper disable once InconsistentNaming
-            public void ICollectionIntTest()
-            {
-                // Arrange
-                var testedType = typeof (ICollection<int>);
-                var expected = typeof (int);
+        [Fact]
+        public void ICollectionIntTest()
+        {
+            // Arrange
+            var testedType = typeof(ICollection<int>);
+            var expected = typeof(int);
 
-                // Act
-                var actual = testedType.GetUnderlyingCollectionType();
+            // Act
+            var actual = testedType.GetUnderlyingCollectionType();
 
-                // Assert
-                Assert.Equal(expected, actual);
-            }
+            // Assert
+            Assert.Equal(expected, actual);
+        }
 
-            [Fact]
-            public void TupleInt()
-            {
-                // Arrange
-                var testedType = typeof (Tuple<int>);
-                Type expected = null;
+        [Fact]
+        public void TupleInt()
+        {
+            // Arrange
+            var testedType = typeof(Tuple<int>);
+            Type expected = null;
 
-                // Act
-                var actual = testedType.GetUnderlyingCollectionType();
+            // Act
+            var actual = testedType.GetUnderlyingCollectionType();
 
-                // Assert
-                Assert.Equal(expected, actual);
-            }
+            // Assert
+            Assert.Equal(expected, actual);
+        }
 
-            [Fact]
-            public void DictionaryStringInt()
-            {
-                // Arrange
-                var testedType = typeof (Dictionary<string, int>);
-                var expected = typeof (KeyValuePair<string, int>);
+        [Fact]
+        public void DictionaryStringInt()
+        {
+            // Arrange
+            var testedType = typeof(Dictionary<string, int>);
+            var expected = typeof(KeyValuePair<string, int>);
 
-                // Act
-                var actual = testedType.GetUnderlyingCollectionType();
+            // Act
+            var actual = testedType.GetUnderlyingCollectionType();
 
-                // Assert
-                Assert.Equal(expected, actual);
-            }
+            // Assert
+            Assert.Equal(expected, actual);
+        }
 
-            [Fact]
-            public void NullTypeException()
-            {
-                // Arrange
-                Type testedType = null;
-                var expectedExceptionMessage = SourceParameterName;
+        [Fact]
+        public void NullTypeException()
+        {
+            // Arrange
+            Type testedType = null;
+            var expectedExceptionMessage = SourceParameterName;
 
-                // Act
-                var actualException =
-                    // ReSharper disable once ExpressionIsAlwaysNull
-                    Assert.Throws<ArgumentNullException>(() => testedType.GetUnderlyingCollectionType());
+            // Act
+            var actualException =
+                Assert.Throws<ArgumentNullException>(() => testedType.GetUnderlyingCollectionType());
 
-                // Assert
-                Assert.Equal(expectedExceptionMessage, actualException.ParamName);
-            }
+            // Assert
+            Assert.Equal(expectedExceptionMessage, actualException.ParamName);
         }
     }
 }

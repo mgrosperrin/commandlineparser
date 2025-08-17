@@ -1,43 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Reflection;
 using MGR.CommandLineParser.Extensibility.Command;
 
-namespace MGR.CommandLineParser.Extensibility.ClassBased
+namespace MGR.CommandLineParser.Extensibility.ClassBased;
+
+[DebuggerDisplay("ClassBased:Name={Name};ShortName={ShortName}")]
+internal sealed class ClassBasedOptionDisplayInfo : IOptionDisplayInfo
 {
-    [DebuggerDisplay("ClassBased:Name={Name};ShortName={ShortName}")]
-    internal sealed class ClassBasedOptionDisplayInfo : IOptionDisplayInfo
+    internal ClassBasedOptionDisplayInfo(PropertyInfo propertyInfo, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
     {
-        internal ClassBasedOptionDisplayInfo(PropertyInfo propertyInfo, IEnumerable<IPropertyOptionAlternateNameGenerator> optionAlternateNameGenerators)
-        {
-            Guard.NotNull(propertyInfo, nameof(propertyInfo));
-            var displayAttribute = propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
-            Name = displayAttribute?.GetName() ?? propertyInfo.Name.AsKebabCase();
-            ShortName = displayAttribute?.GetShortName() ?? string.Empty;
-            Description = displayAttribute?.GetDescription() ?? string.Empty;
+        Guard.NotNull(propertyInfo, nameof(propertyInfo));
+        var displayAttribute = propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
+        Name = displayAttribute?.GetName() ?? propertyInfo.Name.AsKebabCase();
+        ShortName = displayAttribute?.GetShortName() ?? string.Empty;
+        Description = displayAttribute?.GetDescription() ?? string.Empty;
 
-            AlternateNames = optionAlternateNameGenerators.SelectMany(
-                    generator => generator.GenerateAlternateNames(propertyInfo))
-                .Distinct(StringComparer.CurrentCultureIgnoreCase)
-                .Where(alternateName => !alternateName.Equals(Name, StringComparison.CurrentCultureIgnoreCase))
-                .ToList();
-        }
-
-        /// <inheritdoc />
-        public string Name { get; }
-
-        /// <inheritdoc />
-        [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
-        public IEnumerable<string> AlternateNames { get; }
-
-        /// <inheritdoc />
-        public string ShortName { get; }
-
-        /// <inheritdoc />
-        public string Description { get; }
+        AlternateNames = optionAlternateNameGenerators.SelectMany(
+                generator => generator.GenerateAlternateNames(propertyInfo))
+            .Distinct(StringComparer.CurrentCultureIgnoreCase)
+            .Where(alternateName => !alternateName.Equals(Name, StringComparison.CurrentCultureIgnoreCase))
+            .ToList();
     }
+
+    /// <inheritdoc />
+    public string Name { get; }
+
+    /// <inheritdoc />
+    public IEnumerable<string> AlternateNames { get; }
+
+    /// <inheritdoc />
+    public string ShortName { get; }
+
+    /// <inheritdoc />
+    public string Description { get; }
 }

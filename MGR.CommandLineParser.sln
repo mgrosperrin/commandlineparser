@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser", "src\MGR.CommandLineParser\MGR.CommandLineParser.csproj", "{EF6019C2-2C4D-4874-BBBF-D76CA30F7E8D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{569ED12A-DA23-4457-B304-6B00C0CB335E}"
+	ProjectSection(SolutionItems) = preProject
+		tests\Directory.Build.props = tests\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.UnitTests", "tests\MGR.CommandLineParser.UnitTests\MGR.CommandLineParser.UnitTests.csproj", "{22F60D05-F6DB-4410-80AD-E558EF1BDF6F}"
 EndProject
@@ -40,6 +43,20 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGR.CommandLineParser.Hosting", "src\MGR.CommandLineParser.Hosting\MGR.CommandLineParser.Hosting.csproj", "{40EAA8E2-7AFE-4ED1-A961-35BD7E424985}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "docs", "docs\docs.csproj", "{405858FA-1E78-48C7-9915-B558D0F15CAE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{AF37E9B0-D41E-4CC2-8641-61FA6B28362B}"
+	ProjectSection(SolutionItems) = preProject
+		.github\dependabot.yml = .github\dependabot.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{BCD738AE-36C9-4CD9-B0F5-EAB942B193DC}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\buildAndPublish.yml = .github\workflows\buildAndPublish.yml
+		.github\workflows\ci.yml = .github\workflows\ci.yml
+		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		.github\workflows\generateDocs.yml = .github\workflows\generateDocs.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +109,8 @@ Global
 		{9F5A0142-E0A1-45A2-961E-55611B4440AD} = {FB795A12-C939-492F-9377-4C468D01EF3C}
 		{40EAA8E2-7AFE-4ED1-A961-35BD7E424985} = {FB795A12-C939-492F-9377-4C468D01EF3C}
 		{405858FA-1E78-48C7-9915-B558D0F15CAE} = {172E24C2-BF99-4DA9-A7DF-8C0BB44C138D}
+		{AF37E9B0-D41E-4CC2-8641-61FA6B28362B} = {EF849FD3-293F-4CC8-B227-9680CF929A66}
+		{BCD738AE-36C9-4CD9-B0F5-EAB942B193DC} = {AF37E9B0-D41E-4CC2-8641-61FA6B28362B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {827031C5-AE76-4B4C-9503-E13F15B497E9}

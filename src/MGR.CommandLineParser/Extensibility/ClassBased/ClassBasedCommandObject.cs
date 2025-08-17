@@ -1,16 +1,18 @@
-﻿using System.Threading.Tasks;
-using MGR.CommandLineParser.Command;
+﻿using MGR.CommandLineParser.Command;
 
-namespace MGR.CommandLineParser.Extensibility.ClassBased
+namespace MGR.CommandLineParser.Extensibility.ClassBased;
+
+internal class ClassBasedCommandObject<TCommandHandler, TCommandData> : ICommandObject, IClassBasedCommandObject<TCommandHandler, TCommandData>
+    where TCommandHandler : class, ICommandHandler<TCommandData>
+    where TCommandData : CommandData, new()
 {
-    internal class ClassBasedCommandObject: ICommandObject, IClassBasedCommandObject
+    internal ClassBasedCommandObject(TCommandHandler commandHandler, TCommandData commandData)
     {
-        internal ClassBasedCommandObject(ICommand command)
-        {
-            Command = command;
-        }
-        public Task<int> ExecuteAsync() => Command.ExecuteAsync();
-
-        public ICommand Command { get; }
+        Command = commandHandler;
+        CommandData = commandData;
     }
+    public Task<int> ExecuteAsync(CancellationToken cancellationToken) => Command.ExecuteAsync(CommandData, cancellationToken);
+
+    public TCommandHandler Command { get; }
+    public TCommandData CommandData { get; }
 }

@@ -1,6 +1,5 @@
-﻿namespace MGR.CommandLineParser.UnitTests.Extensions
+﻿namespace MGR.CommandLineParser.UnitTests.Extensions;
+
+public partial class EnumeratorExtensionsTests
 {
-    public partial class EnumeratorExtensionsTests
-    {
-    }
 }
