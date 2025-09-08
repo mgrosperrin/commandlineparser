@@ -38,7 +38,7 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name: Setup dotnet ${{ env.DOTNET_VERSION }}
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
   
