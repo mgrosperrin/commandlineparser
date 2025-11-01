@@ -125,6 +125,7 @@ internal class ParserEngine
             return null;
         }
         var alwaysPutInArgumentList = false;
+        var subCommandIsAllowed = true;
         while (true)
         {
             var argument = argumentsEnumerator.GetNextCommandLineItem();
@@ -134,16 +135,26 @@ internal class ParserEngine
             }
             if (argument.Equals(Constants.EndOfOptions))
             {
+                subCommandIsAllowed = false;
                 alwaysPutInArgumentList = true;
                 continue;
             }
 
             if (alwaysPutInArgumentList || !argument.StartsWith(StringComparison.OrdinalIgnoreCase, Constants.OptionStarter))
             {
-                commandObjectBuilder.AddArguments(argument);
+                var argumentIsSubCommand = subCommandIsAllowed && false;
+                if (argumentIsSubCommand)
+                {
+
+                }
+                else
+                {
+                    subCommandIsAllowed = false;
+                    commandObjectBuilder.AddArguments(argument);
+                }
                 continue;
             }
-
+            subCommandIsAllowed = false;
             var starterLength = 2;
             Func<ICommandObjectBuilder, string, ICommandOption?> commandOptionFinder = (co, optionName) => co.FindOption(optionName);
             if (!argument.StartsWith(Constants.LongNameOptionStarter))
