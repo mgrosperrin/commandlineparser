@@ -27,8 +27,13 @@ updates:
       dotnet:
         patterns:
         - "*"
-        exclude-patterns:
-        - "Microsoft.Extensions.*"
+    ignore:
+    - dependency-name: "Microsoft.Extensions.DependencyInjection"
+    - dependency-name: "Microsoft.Extensions.DependencyModel"
+    - dependency-name: "Microsoft.Extensions.Hosting"
+    - dependency-name: "Microsoft.Extensions.Logging"
+    - dependency-name: "Microsoft.Extensions.Logging.Abstractions"
+    - dependency-name: "Microsoft.Extensions.Logging.Console"
         
   - package-ecosystem: "dotnet-sdk" # See documentation for possible values
     directory: "/" # Location of SDK manifests
