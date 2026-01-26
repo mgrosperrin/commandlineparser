@@ -21,13 +21,13 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Git Semantic Version
         id: version
-        uses: PaulHatch/semantic-version@v5.4.0
+        uses: PaulHatch/semantic-version@v6.0.1
         with:
           tag_prefix: ""
           version_format: "${major}.${minor}.${patch}${{ !inputs.forRelease && '-preview${increment}' || '' }}"
@@ -45,7 +45,7 @@ jobs:
         run: dotnet test -c Release --no-build -l trx --results-directory TestResults
 
       - name: Upload dotnet test results
-        uses: dorny/test-reporter@v2.1.1
+        uses: dorny/test-reporter@v2.5.0
         if: ${{ !cancelled() }}
         with:
           name: .NET Tests
