@@ -9,27 +9,30 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  DOTNET_VERSION: "9.0.x"
-
 permissions:
   checks: write
   contents: read
 
 jobs:
-  call_buildAndPublish:
-    uses: ./.github/workflows/buildAndPublish.yml
+  build:
+    uses: ./.github/workflows/build.yml
     with:
-      feedUrl: https://api.nuget.org/v3/index.json
       forRelease: true
-    secrets:
-      feedAPIKey: ${{ secrets.NUGET_API_KEY }}
 
   generate_docs:
-    uses: ./.github/workflows/generateDocs.yml
+    uses: ./.github/workflows/generate-docs.yml
+    
+  publish_package:
+    needs: [build, generate_docs]
+    uses: ./.github/workflows/publish-packages-nuget.yml
+    with:
+      environmentName: nuget
+    secrets:
+      owner: ${{ secrets.NUGET_OWNER }}
+    if: github.event_name == 'push'
     
   publish_docs:
-    needs: [call_buildAndPublish, generate_docs]
+    needs: [publish_package, generate_docs]
     permissions:
       pages: write
       id-token: write
@@ -39,5 +42,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Publish documentation
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
         id: deployment

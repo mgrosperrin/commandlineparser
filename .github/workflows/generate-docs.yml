@@ -1,19 +1,21 @@
 on:
   workflow_call:
     inputs: {}
+
 jobs:
   build:
-    strategy:
-      fail-fast: false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
-      - name: Build documenation site
-        uses: nunit/docfx-action@v4.1.0
+        uses: actions/checkout@v7
+
+      - name: Build documentation site
+        uses: wechooz/docfx-action@v10.0.0
         with:
           args: docs/docfx.json
+
       - name: Upload documentation archive
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: artifacts/_site
+  

@@ -1,0 +1,33 @@
+on:
+  workflow_call:
+    inputs:
+      environmentName:
+        description: "Name of the environment"
+        required: true
+        type: string
+    secrets:
+      owner:
+        description: 'NuGet feed owner'
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environmentName }}
+    permissions:
+      id-token: write
+    steps:
+      - name: Download package artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: packages
+      
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.owner }}
+    
+      - name: Push to NuGet package feed
+        run: dotnet nuget push '**/*.nupkg' --source https://api.nuget.org/v3/index.json --api-key ${{steps.login.outputs.NUGET_API_KEY}}
