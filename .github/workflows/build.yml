@@ -32,7 +32,7 @@ jobs:
       run: dotnet build -c Release -p:Version=${{ steps.version.outputs.version}}
 
     - name: Run tests
-      run: dotnet test -c Release --no-build --report-trx --report-trx-filename "{asm}_report.trx"" --coverage --coverage-output-format cobertura
+      run: dotnet test -c Release --no-build --report-trx --report-trx-filename "{asm}_report.trx" --coverage --coverage-output-format cobertura
 
     - name: Upload dotnet test results
       uses: dorny/test-reporter@v3.0.0
