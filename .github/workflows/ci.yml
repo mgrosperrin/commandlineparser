@@ -12,21 +12,25 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
-env:
-    DOTNET_VERSION: '9.0.x'
-
 permissions:
   checks: write
   contents: read
 
 jobs:
-  call_buildAndPublish:
-    uses: ./.github/workflows/buildAndPublish.yml
+  build:
+    uses: ./.github/workflows/build.yml
     with:
-      feedUrl: https://www.myget.org/F/mgrosperrin/api/v3/index.json
       forRelease: false
-    secrets:
-      feedAPIKey: ${{ secrets.MYGET_CI_API_KEY }}
 
   generate_docs:
-    uses: ./.github/workflows/generateDocs.yml
+    uses: ./.github/workflows/generate-docs.yml
+    
+  publish_package:
+    needs: build
+    uses: ./.github/workflows/publish-packages-myget.yml
+    with:
+      feedUrl: https://www.myget.org/F/mgrosperrin/api/v3/index.json
+      environmentName: myget
+    secrets:
+      feedAPIKey: ${{ secrets.MYGET_CI_API_KEY }}
+    if: github.event_name == 'push'

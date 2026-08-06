@@ -10,9 +10,9 @@ public class SimpleOptionsWithArgumentsTests : ConsoleLoggingTestsBase
     public async Task ParseWithValidArgs()
     {
         // Arrange
-        var fileArgument = @"C:\temp\file.txt";
-        var expectedOutputDirectory = @"C:\Temp";
-        var expectedOutputFile = @"C:\Temp\otherfile.txt";
+        var fileArgument = Path.GetTempFileName();
+        var expectedOutputDirectory = Path.GetTempPath();
+        var expectedOutputFile = Path.GetTempFileName();
         IEnumerable<string> args = ["import", fileArgument, "-p:50", @"-o:" + expectedOutputDirectory, @"-of:" + expectedOutputFile];
         var expectedReturnCode = CommandParsingResultCode.Success;
         var expectedMaxParallel = 50;

@@ -3,6 +3,7 @@ using MGR.CommandLineParser.Extensibility.ClassBased;
 using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.SpecificCommand;
+
 public class InternalTypesTests : ConsoleLoggingTestsBase
 {
     [Fact]

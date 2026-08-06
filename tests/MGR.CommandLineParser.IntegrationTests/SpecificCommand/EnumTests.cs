@@ -3,6 +3,7 @@ using MGR.CommandLineParser.Tests.Commands;
 using Xunit;
 
 namespace MGR.CommandLineParser.IntegrationTests.SpecificCommand;
+
 public class EnumTests : ConsoleLoggingTestsBase
 {
     [Fact]

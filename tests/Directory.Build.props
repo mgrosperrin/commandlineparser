@@ -1,8 +1,7 @@
 ﻿<Project>
 	<Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 	<PropertyGroup>
-		<TargetFramework />
-		<TargetFrameworks>net8.0;net48</TargetFrameworks>
+		<TargetFramework>net8.0</TargetFramework>
 		<IsPackable>false</IsPackable>
 		<DocumentationFile />
 		<OutputType>Exe</OutputType>

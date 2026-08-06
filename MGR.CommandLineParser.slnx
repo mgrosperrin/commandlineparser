@@ -1,0 +1,42 @@
+<Solution>
+  <Folder Name="/docs/">
+    <Project Path="docs/docs.csproj" />
+  </Folder>
+  <Folder Name="/Samples/">
+    <Project Path="samples/SimpleApp/SimpleApp.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="LICENSE" />
+    <File Path="MGR.CommandLineParser.lutconfig" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/">
+    <File Path=".github/dependabot.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/workflows/">
+    <File Path=".github/workflows/build.yml" />
+    <File Path=".github/workflows/ci.yml" />
+    <File Path=".github/workflows/codeql-analysis.yml" />
+    <File Path=".github/workflows/generate-docs.yml" />
+    <File Path=".github/workflows/publish-packages-myget.yml" />
+    <File Path=".github/workflows/publish-packages-nuget.yml" />
+    <File Path=".github/workflows/release.yml" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/MGR.CommandLineParser.Command.Lambda/MGR.CommandLineParser.Command.Lambda.csproj" />
+    <Project Path="src/MGR.CommandLineParser.Hosting/MGR.CommandLineParser.Hosting.csproj" />
+    <Project Path="src/MGR.CommandLineParser/MGR.CommandLineParser.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <File Path="tests/Directory.Build.props" />
+    <Project Path="tests/MGR.CommandLineParser.IntegrationTests/MGR.CommandLineParser.IntegrationTests.csproj" />
+    <Project Path="tests/MGR.CommandLineParser.Tests.Commands/MGR.CommandLineParser.Tests.Commands.csproj" />
+    <Project Path="tests/MGR.CommandLineParser.UnitTests/MGR.CommandLineParser.UnitTests.csproj" />
+  </Folder>
+</Solution>

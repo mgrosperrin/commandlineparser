@@ -24,7 +24,7 @@ public class FileSystemInfoConverterTests
     {
         // Arrange
         IConverter converter = new FileSystemInfoConverter();
-        var value = @"C:\temp\file.txt";
+        var value = Path.GetTempFileName();
 
         // Act
         var actual = converter.Convert(value, typeof(FileInfo));
@@ -40,7 +40,7 @@ public class FileSystemInfoConverterTests
     {
         // Arrange
         IConverter converter = new FileSystemInfoConverter();
-        var value = @"C:\temp\file.txt";
+        var value = Path.GetTempPath();
 
         // Act
         var actual = converter.Convert(value, typeof(DirectoryInfo));
