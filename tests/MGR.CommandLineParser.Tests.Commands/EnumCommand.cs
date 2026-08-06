@@ -1,6 +1,7 @@
 ﻿using MGR.CommandLineParser.Command;
 
 namespace MGR.CommandLineParser.Tests.Commands;
+
 public class EnumCommand : CommandBase<EnumCommand.EnumCommandData>
 {
     public class EnumCommandData : HelpedCommandData
