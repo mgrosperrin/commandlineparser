@@ -11,20 +11,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       with:
         fetch-depth: 0
 
     - name: Git Semantic Version
       id: version
-      uses: PaulHatch/semantic-version@v6.0.3
+      uses: PaulHatch/semantic-version@4d6da96a9bc3116da3613309a11ff75fba58eb8d # v6.0.3
       with:
         tag_prefix: ''
         version_format: "${major}.${minor}.${patch}${{ !inputs.forRelease && '-preview${increment}' || '' }}"
         search_commit_body: true
 
     - name: Setup dotnet from global.json
-      uses: actions/setup-dotnet@v6
+      uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
       with:
         global-json-file: global.json
 
@@ -35,7 +35,7 @@ jobs:
       run: dotnet test -c Release --no-build --report-trx --report-trx-filename "{asm}_report.trx" --coverage --coverage-output-format cobertura
 
     - name: Upload dotnet test results
-      uses: dorny/test-reporter@v3.0.0
+      uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
       if: ${{ !cancelled() }}
       with:
         name: .NET Tests
@@ -57,13 +57,13 @@ jobs:
       run: cat codecoveragereport/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
 
     - name: Upload code coverage report
-      uses: actions/upload-artifact@v7
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
       with:
         name: code-coverage-report
         path: codecoveragereport
 
     - name: Upload package artifact
-      uses: actions/upload-artifact@v7
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
       with:
         name: packages
         path: "**/*.nupkg"
