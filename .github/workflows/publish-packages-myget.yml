@@ -21,7 +21,7 @@ jobs:
       name: ${{ inputs.environmentName }}
     steps:
       - name: Download package artifact
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           name: packages
     
